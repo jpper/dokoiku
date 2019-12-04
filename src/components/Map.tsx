@@ -2,9 +2,9 @@ import React from "react";
 import GoogleMapReact from "google-map-react";
 require("dotenv").config();
 
-const AnyReactComponent = ({ text }: any) => <div>{text}</div>;
+const TemporaryComponent = ({ text }: any) => <div>{text}</div>;
 
-const Map = (props: any) => {
+const Map: React.FC = () => {
   const center = { lat: 35.6762, lng: 139.6503 };
   const zoom = 5;
   return (
@@ -14,7 +14,7 @@ const Map = (props: any) => {
         defaultCenter={center}
         defaultZoom={zoom}
       >
-        <AnyReactComponent lat={11.0168} lng={76.9558} text="My Marker" />
+        <TemporaryComponent lat={35.6762} lng={139.6503} name="My Marker" />
       </GoogleMapReact>
     </div>
   );
