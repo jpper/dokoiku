@@ -1,7 +1,5 @@
 import { createStore } from "redux";
 
-//This is a work in progress
-
 const initialState = {
   trips: [],
   currentTrip: 0,
@@ -20,14 +18,61 @@ const reducer = (state = initialState, action: Action): any => {
       //Call the DB, get the trips, and change the state
       return; //this is a placeholder, don't actually do this
     }
-    case "PRINT": {
-      console.log("HOWDY");
+    case "NEXT_TRIP": {
+      let nextIndex: number;
+      if (state.currentTrip + 1 >= state.trips.length) {
+        nextIndex = 0;
+      } else {
+        nextIndex = state.currentTrip + 1;
+      }
       return {
         trips: [...state.trips],
-        currentTrip: state.currentTrip,
+        currentTrip: nextIndex,
         showProfile: state.showProfile,
         showChat: state.showChat
       };
+    }
+    case "PREVIOUS_TRIP": {
+      let nextIndex: number;
+      if (state.currentTrip - 1 < 0) {
+        nextIndex = state.trips.length - 1;
+      } else {
+        nextIndex = state.currentTrip + 1;
+      }
+      return {
+        trips: [...state.trips],
+        currentTrip: nextIndex,
+        showProfile: state.showProfile,
+        showChat: state.showChat
+      };
+    }
+    case "SHOW_PROFILE": {
+      return {
+        trips: [...state.trips],
+        currentTrip: state.currentTrip,
+        showProfile: true,
+        showChat: false
+      };
+    }
+    case "SHOW_CHAT": {
+      return {
+        trips: [...state.trips],
+        currentTrip: state.currentTrip,
+        showProfile: false,
+        showChat: true
+      };
+    }
+    case "CLOSE_POPUP": {
+      return {
+        trips: [...state.trips],
+        currentTrip: state.currentTrip,
+        showProfile: false,
+        showChat: false
+      };
+    }
+    case "ADD_TRIP": {
+      //Add some logic to add trip to Firebase
+      return state;
     }
     default: {
       return state;
