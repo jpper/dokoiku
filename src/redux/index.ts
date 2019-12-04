@@ -1,4 +1,4 @@
-import { combineReducers, createStore } from "redux";
+import { createStore } from "redux";
 
 //This is a work in progress
 
@@ -9,12 +9,17 @@ const initialState = {
   showChat: false
 };
 
-type Action = {
+interface Action {
   type: string;
-};
+  [key: string]: any;
+}
 
-const reducer = (state = initialState, action: Action) => {
+const reducer = (state = initialState, action: Action): any => {
   switch (action.type) {
+    case "GET_TRIPS": {
+      //Call the DB, get the trips, and change the state
+      return; //this is a placeholder, don't actually do this
+    }
     case "PRINT": {
       console.log("HOWDY");
       return {
@@ -30,4 +35,4 @@ const reducer = (state = initialState, action: Action) => {
   }
 };
 
-export const rootReducer = combineReducers({});
+export const store = createStore(reducer);
