@@ -1,22 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
 
-// type ProfileProps = {
-//   name: string;
-//   URL: string;
-// };
+type myProps = {
+  trips: any;
+  currentTrip: number;
+};
 
-class Profile extends React.Component {
+class Profile extends React.Component<myProps, {}> {
   render() {
     return (
       <div className="Profile">
         <img
-          src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png"
+          src={this.props.trips[this.props.currentTrip].members[0].propic}
           alt="fb-propic"
         />
-        {/* make image src image info */}
-        <p>Name: </p> {/* populate with name info */}
-        <p>Facebook: </p> {/* populate with FB link */}
+        <p>Name: {this.props.trips[this.props.currentTrip].members[0].name}</p>
       </div>
     );
   }

@@ -1,7 +1,59 @@
 import { createStore } from "redux";
 
 const initialState = {
-  trips: [],
+  trips: [
+    {
+      startDate: "Dec 25",
+      endDate: "Dec 31",
+      locations: [
+        {
+          name: "Great Wall of China",
+          lat: 10,
+          lon: 400
+        },
+        {
+          name: "Code Chrysalis",
+          lat: 150,
+          lon: 150
+        }
+      ],
+      budget: 1000,
+      members: [
+        {
+          username: "followdiallo",
+          name: "Diallo Spears",
+          propic:
+            "http://www.taiwan-america.org/uploads/2/5/5/5/25556575/_1453420708.png"
+        },
+        {
+          username: "nlandon2",
+          name: "Nate Landon",
+          propic:
+            "https://secure.meetupstatic.com/photos/event/8/e/0/9/600_486996361.jpeg"
+        }
+      ]
+    },
+    {
+      startDate: "Jan 1",
+      endDate: "Dec 31",
+      locations: [
+        {
+          name: "Olive Garden",
+          lat: 1,
+          lon: 1
+        }
+      ],
+      budget: 25,
+      members: [
+        {
+          username: "followdiallo",
+          name: "Diallo Spears",
+          propic:
+            "http://www.taiwan-america.org/uploads/2/5/5/5/25556575/_1453420708.png"
+        }
+      ]
+    }
+  ],
   currentTrip: 0,
   showProfile: false,
   showChat: false
@@ -34,10 +86,10 @@ const reducer = (state = initialState, action: Action): any => {
     }
     case "PREVIOUS_TRIP": {
       let nextIndex: number;
-      if (state.currentTrip - 1 < 0) {
+      if (state.currentTrip === 0) {
         nextIndex = state.trips.length - 1;
       } else {
-        nextIndex = state.currentTrip + 1;
+        nextIndex = state.currentTrip - 1;
       }
       return {
         trips: [...state.trips],
