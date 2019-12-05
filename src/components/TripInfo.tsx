@@ -1,20 +1,83 @@
 import React from "react";
+import { connect } from "react-redux";
 
-type TripInfoProps = {
-  name: string;
-  URL: string;
+type myProps = {
+  trips: any;
+  currentTrip: number;
+  onShowChat: any;
+  onShowProfile: any;
+  onPreviousTrip: any;
+  onNextTrip: any;
 };
 
-export const TripInfo: React.FC<TripInfoProps> = props => {
-  return (
-    <div className="TripInfo">
-      <h1>Trip Details</h1>
-      <p>Start Date: </p>
-      <p>End Date: </p>
-      <p>Locations: </p>
-      <p>Budget: </p>
-      <p>Notes: </p>
-      <p>Members: </p>
-    </div>
-  );
+class TripInfo extends React.Component<myProps, {}> {
+  render() {
+    return (
+      <div>
+        <div className="TripInfo">
+          <h1>Trip Details</h1>
+          <p>
+            Start Date: {this.props.trips[this.props.currentTrip].startDate}
+          </p>
+          <p>End Date: {this.props.trips[this.props.currentTrip].endDate}</p>
+          <div>
+            Locations:{" "}
+            {this.props.trips[this.props.currentTrip].locations.map(
+              (l: any, i: number) => {
+                return <p key={i}>{l.name}</p>;
+              }
+            )}
+          </div>
+          <p>Budget: {this.props.trips[this.props.currentTrip].budget}</p>
+          <p>Notes: </p>
+          <div>
+            Members:{" "}
+            {this.props.trips[this.props.currentTrip].members.map(
+              (m: any, i: number) => {
+                return (
+                  <div>
+                    <p key={i} onClick={this.props.onShowProfile}>
+                      username: {m.username}
+                    </p>
+                  </div>
+                );
+              }
+            )}
+          </div>
+        </div>
+        <button onClick={this.props.onPreviousTrip}>Previous</button>
+        <button onClick={this.props.onNextTrip}>Next</button>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state: any) => {
+  return {
+    trips: state.trips,
+    currentTrip: state.currentTrip
+  };
 };
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    onShowChat: () =>
+      dispatch({
+        type: "SHOW_CHAT"
+      }),
+    onShowProfile: () =>
+      dispatch({
+        type: "SHOW_PROFILE"
+      }),
+    onPreviousTrip: () =>
+      dispatch({
+        type: "PREVIOUS_TRIP"
+      }),
+    onNextTrip: () =>
+      dispatch({
+        type: "NEXT_TRIP"
+      })
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TripInfo);

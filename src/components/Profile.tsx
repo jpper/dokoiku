@@ -1,20 +1,30 @@
 import React from "react";
+import { connect } from "react-redux";
 
-type ProfileProps = {
-  name: string;
-  URL: string;
+type myProps = {
+  trips: any;
+  currentTrip: number;
 };
 
-export const Profile: React.FC<ProfileProps> = props => {
-  return (
-    <div className="Profile">
-      <img
-        src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png"
-        alt="fb-propic"
-      />
-      {/* make image src image info */}
-      <p>Name: </p> {/* populate with name info */}
-      <p>Facebook: </p> {/* populate with FB link */}
-    </div>
-  );
+class Profile extends React.Component<myProps, {}> {
+  render() {
+    return (
+      <div className="Profile">
+        <img
+          src={this.props.trips[this.props.currentTrip].members[0].propic}
+          alt="fb-propic"
+        />
+        <p>Name: {this.props.trips[this.props.currentTrip].members[0].name}</p>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state: any) => {
+  return {
+    trips: state.trips,
+    currentTrip: state.currentTrip
+  };
 };
+
+export default connect(mapStateToProps)(Profile);

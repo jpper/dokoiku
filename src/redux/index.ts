@@ -1,9 +1,59 @@
 import { createStore } from "redux";
 
-//This is a work in progress
-
 const initialState = {
-  trips: [],
+  trips: [
+    {
+      startDate: "Dec 25",
+      endDate: "Dec 31",
+      locations: [
+        {
+          name: "Great Wall of China",
+          lat: 10,
+          lon: 400
+        },
+        {
+          name: "Code Chrysalis",
+          lat: 150,
+          lon: 150
+        }
+      ],
+      budget: 1000,
+      members: [
+        {
+          username: "followdiallo",
+          name: "Diallo Spears",
+          propic:
+            "http://www.taiwan-america.org/uploads/2/5/5/5/25556575/_1453420708.png"
+        },
+        {
+          username: "nlandon2",
+          name: "Nate Landon",
+          propic:
+            "https://secure.meetupstatic.com/photos/event/8/e/0/9/600_486996361.jpeg"
+        }
+      ]
+    },
+    {
+      startDate: "Jan 1",
+      endDate: "Dec 31",
+      locations: [
+        {
+          name: "Olive Garden",
+          lat: 1,
+          lon: 1
+        }
+      ],
+      budget: 25,
+      members: [
+        {
+          username: "followdiallo",
+          name: "Diallo Spears",
+          propic:
+            "http://www.taiwan-america.org/uploads/2/5/5/5/25556575/_1453420708.png"
+        }
+      ]
+    }
+  ],
   currentTrip: 0,
   showProfile: false,
   showChat: false
@@ -20,14 +70,61 @@ const reducer = (state = initialState, action: Action): any => {
       //Call the DB, get the trips, and change the state
       return; //this is a placeholder, don't actually do this
     }
-    case "PRINT": {
-      console.log("HOWDY");
+    case "NEXT_TRIP": {
+      let nextIndex: number;
+      if (state.currentTrip + 1 >= state.trips.length) {
+        nextIndex = 0;
+      } else {
+        nextIndex = state.currentTrip + 1;
+      }
       return {
         trips: [...state.trips],
-        currentTrip: state.currentTrip,
+        currentTrip: nextIndex,
         showProfile: state.showProfile,
         showChat: state.showChat
       };
+    }
+    case "PREVIOUS_TRIP": {
+      let nextIndex: number;
+      if (state.currentTrip === 0) {
+        nextIndex = state.trips.length - 1;
+      } else {
+        nextIndex = state.currentTrip - 1;
+      }
+      return {
+        trips: [...state.trips],
+        currentTrip: nextIndex,
+        showProfile: state.showProfile,
+        showChat: state.showChat
+      };
+    }
+    case "SHOW_PROFILE": {
+      return {
+        trips: [...state.trips],
+        currentTrip: state.currentTrip,
+        showProfile: true,
+        showChat: false
+      };
+    }
+    case "SHOW_CHAT": {
+      return {
+        trips: [...state.trips],
+        currentTrip: state.currentTrip,
+        showProfile: false,
+        showChat: true
+      };
+    }
+    case "CLOSE_POPUP": {
+      return {
+        trips: [...state.trips],
+        currentTrip: state.currentTrip,
+        showProfile: false,
+        showChat: false
+      };
+    }
+    case "ADD_TRIP": {
+      //Add some logic to add trip to Firebase
+      return state;
     }
     default: {
       return state;
