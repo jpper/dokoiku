@@ -56,7 +56,8 @@ const initialState = {
   ],
   currentTrip: 0,
   showProfile: false,
-  showChat: false
+  showChat: false,
+  currentProfile: 0
 };
 
 interface Action {
@@ -80,8 +81,9 @@ const reducer = (state = initialState, action: Action): any => {
       return {
         trips: [...state.trips],
         currentTrip: nextIndex,
-        showProfile: state.showProfile,
-        showChat: state.showChat
+        showProfile: false,
+        showChat: false,
+        currentProfile: state.currentProfile
       };
     }
     case "PREVIOUS_TRIP": {
@@ -94,8 +96,9 @@ const reducer = (state = initialState, action: Action): any => {
       return {
         trips: [...state.trips],
         currentTrip: nextIndex,
-        showProfile: state.showProfile,
-        showChat: state.showChat
+        showProfile: false,
+        showChat: false,
+        currentProfile: state.currentProfile
       };
     }
     case "SHOW_PROFILE": {
@@ -103,7 +106,8 @@ const reducer = (state = initialState, action: Action): any => {
         trips: [...state.trips],
         currentTrip: state.currentTrip,
         showProfile: true,
-        showChat: false
+        showChat: false,
+        currentProfile: action.index
       };
     }
     case "SHOW_CHAT": {
@@ -111,7 +115,8 @@ const reducer = (state = initialState, action: Action): any => {
         trips: [...state.trips],
         currentTrip: state.currentTrip,
         showProfile: false,
-        showChat: true
+        showChat: true,
+        currentProfile: state.currentProfile
       };
     }
     case "CLOSE_POPUP": {
@@ -119,7 +124,8 @@ const reducer = (state = initialState, action: Action): any => {
         trips: [...state.trips],
         currentTrip: state.currentTrip,
         showProfile: false,
-        showChat: false
+        showChat: false,
+        currentProfile: state.currentProfile
       };
     }
     case "ADD_TRIP": {
