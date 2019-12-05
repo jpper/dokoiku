@@ -30,6 +30,7 @@ class TripInfo extends React.Component<myProps, {}> {
           </div>
           <p>Budget: {this.props.trips[this.props.currentTrip].budget}</p>
           <p>Notes: </p>
+          <p>Messages: </p>
           <div>
             Members:{" "}
             {this.props.trips[this.props.currentTrip].members.map(

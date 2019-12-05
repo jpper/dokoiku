@@ -1,6 +1,9 @@
 import { createStore } from "redux";
 
 const initialState = {
+  userId: "",
+  userName: "",
+  userPhoto: "",
   trips: [
     {
       startDate: "Dec 25",
@@ -79,6 +82,9 @@ const reducer = (state = initialState, action: Action): any => {
         nextIndex = state.currentTrip + 1;
       }
       return {
+        userId: state.userId,
+        userName: state.userName,
+        userPhoto: state.userPhoto,
         trips: [...state.trips],
         currentTrip: nextIndex,
         showProfile: false,
@@ -94,6 +100,9 @@ const reducer = (state = initialState, action: Action): any => {
         nextIndex = state.currentTrip - 1;
       }
       return {
+        userId: state.userId,
+        userName: state.userName,
+        userPhoto: state.userPhoto,
         trips: [...state.trips],
         currentTrip: nextIndex,
         showProfile: false,
@@ -103,6 +112,9 @@ const reducer = (state = initialState, action: Action): any => {
     }
     case "SHOW_PROFILE": {
       return {
+        userId: state.userId,
+        userName: state.userName,
+        userPhoto: state.userPhoto,
         trips: [...state.trips],
         currentTrip: state.currentTrip,
         showProfile: true,
@@ -112,6 +124,9 @@ const reducer = (state = initialState, action: Action): any => {
     }
     case "SHOW_CHAT": {
       return {
+        userId: state.userId,
+        userName: state.userName,
+        userPhoto: state.userPhoto,
         trips: [...state.trips],
         currentTrip: state.currentTrip,
         showProfile: false,
@@ -121,6 +136,9 @@ const reducer = (state = initialState, action: Action): any => {
     }
     case "CLOSE_POPUP": {
       return {
+        userId: state.userId,
+        userName: state.userName,
+        userPhoto: state.userPhoto,
         trips: [...state.trips],
         currentTrip: state.currentTrip,
         showProfile: false,
@@ -131,6 +149,17 @@ const reducer = (state = initialState, action: Action): any => {
     case "ADD_TRIP": {
       //Add some logic to add trip to Firebase
       return state;
+    }
+    case "SET_USER_INFO": {
+      return {
+        userId: action.userId,
+        userName: action.userName,
+        userPhoto: action.userPhoto,
+        trips: [...state.trips],
+        currentTrip: state.currentTrip,
+        showProfile: false,
+        showChat: false
+      };
     }
     default: {
       return state;
