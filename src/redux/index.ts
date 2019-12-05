@@ -5,18 +5,23 @@ const initialState = {
     {
       startDate: "Dec 25",
       endDate: "Dec 31",
-      locations: [
+      startLocation: {
+        name: "Tokyo",
+        location: { lat: 35.689722, lng: 139.692222 }
+      },
+      waypoints: [
         {
-          name: "Great Wall of China",
-          lat: 10,
-          lon: 400
+          name: "Kyoto",
+          location: { lat: 35.011667, lng: 135.768333 },
+          stopover: true
         },
         {
-          name: "Code Chrysalis",
-          lat: 150,
-          lon: 150
+          name: "Kanazawa",
+          location: { lat: 36.561056, lng: 136.656417 },
+          stopover: true
         }
       ],
+      travelMode: "DRIVING",
       budget: 1000,
       members: [
         {
@@ -36,11 +41,20 @@ const initialState = {
     {
       startDate: "Jan 1",
       endDate: "Dec 31",
-      locations: [
+      startLocation: {
+        name: "Tokyo",
+        location: { lat: 35.689722, lng: 139.692222 }
+      },
+      waypoints: [
         {
-          name: "Olive Garden",
-          lat: 1,
-          lon: 1
+          name: "Akita",
+          location: { lat: 39.720028, lng: 140.102583 },
+          stopover: true
+        },
+        {
+          name: "Niigata",
+          location: { lat: 37.916111, lng: 139.036389 },
+          stopover: true
         }
       ],
       budget: 25,
