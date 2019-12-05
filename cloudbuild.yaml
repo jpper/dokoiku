@@ -29,5 +29,5 @@ steps:
       - "app"
       - "deploy"
       - "--project"
-      - "gopherdor-frontend"
+      - "gopherdor-frontend-101"
     timeout: "600s"
