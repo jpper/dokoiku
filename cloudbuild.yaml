@@ -18,7 +18,6 @@ steps:
       - "REACT_APP_FIREBASE_APP_ID=${_FIREBASE_APP_ID}"
       - "REACT_APP_FIREBASE_MEASUREMENT_ID=${_FIREBASE_MEASUREMENT_ID}"
       - "REACT_APP_GOOGLE_MAPS_API=${_GOOGLE_MAPS_API}"
-    dir: "client"
 
   - name: "node:10.15.1"
     entrypoint: yarn
@@ -30,5 +29,5 @@ steps:
       - "app"
       - "deploy"
       - "--project"
-      - "gcp-react-101"
+      - "gopherdor-frontend"
     timeout: "600s"
