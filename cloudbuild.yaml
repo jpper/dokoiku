@@ -3,7 +3,6 @@ steps:
     entrypoint: yarn
     args:
       - "install"
-    dir: "client"
 
   - name: node:10.15.1
     entrypoint: yarn
@@ -25,7 +24,6 @@ steps:
     entrypoint: yarn
     args:
       - "build"
-    dir: "client"
 
   - name: "gcr.io/cloud-builders/gcloud"
     args:
@@ -33,5 +31,4 @@ steps:
       - "deploy"
       - "--project"
       - "gcp-react-101"
-    dir: "client"
     timeout: "600s"
