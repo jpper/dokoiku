@@ -23,17 +23,20 @@ class TripInfo extends React.Component<myProps, {}> {
           <div>
             <p>
               Starting Location:
-              {this.props.trips[this.props.currentTrip].startLocation.name}
+              {this.props.trips[this.props.currentTrip].startLocation}
             </p>
           </div>
           <div>
             Waypoints:{" "}
             {this.props.trips[this.props.currentTrip].waypoints.map(
               (l: any, i: number) => {
-                return <p key={i}>{l.name}</p>;
+                return <p key={i}>{l.location}</p>;
               }
             )}
           </div>
+          <p>
+            Transport: {this.props.trips[this.props.currentTrip].travelMode}
+          </p>
           <p>Budget: {this.props.trips[this.props.currentTrip].budget}</p>
           <p>Notes: </p>
           <div>

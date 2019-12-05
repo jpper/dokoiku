@@ -26,7 +26,7 @@ class Map extends React.Component<MapProps, MapState> {
     this.directionsCallback = this.directionsCallback.bind(this);
   }
   directionsCallback(response: any | null) {
-    console.log(response);
+    console.log("loaded!");
     if (response !== null) {
       if (response.status === "OK") {
         this.setState(() => ({
@@ -57,22 +57,19 @@ class Map extends React.Component<MapProps, MapState> {
         >
           <DirectionsService
             options={{
-              origin: this.props.trips[this.props.currentTrip].startLocation
-                .location,
+              origin: this.props.trips[this.props.currentTrip].startLocation,
               destination: this.props.trips[this.props.currentTrip]
-                .startLocation.location,
+                .startLocation,
               waypoints: this.props.trips[this.props.currentTrip].waypoints,
               travelMode: this.props.trips[this.props.currentTrip].travelMode
             }}
             callback={this.directionsCallback}
           />
-          {this.state.response !== null && (
-            <DirectionsRenderer
-              options={{
-                directions: this.state.response
-              }}
-            ></DirectionsRenderer>
-          )}
+          <DirectionsRenderer
+            options={{
+              directions: this.state.response
+            }}
+          ></DirectionsRenderer>
         </GoogleMap>
       </LoadScript>
     );

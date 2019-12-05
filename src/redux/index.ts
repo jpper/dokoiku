@@ -5,19 +5,14 @@ const initialState = {
     {
       startDate: "Dec 25",
       endDate: "Dec 31",
-      startLocation: {
-        name: "Tokyo",
-        location: { lat: 35.689722, lng: 139.692222 }
-      },
+      startLocation: "Tokyo, Japan",
       waypoints: [
         {
-          name: "Kyoto",
-          location: { lat: 35.011667, lng: 135.768333 },
+          location: "Kyoto, Japan",
           stopover: true
         },
         {
-          name: "Kanazawa",
-          location: { lat: 36.561056, lng: 136.656417 },
+          location: "Kanazawa, Japan",
           stopover: true
         }
       ],
@@ -41,22 +36,18 @@ const initialState = {
     {
       startDate: "Jan 1",
       endDate: "Dec 31",
-      startLocation: {
-        name: "Tokyo",
-        location: { lat: 35.689722, lng: 139.692222 }
-      },
+      startLocation: "Tokyo, Japan",
       waypoints: [
         {
-          name: "Akita",
-          location: { lat: 39.720028, lng: 140.102583 },
+          location: "Akita, Japan",
           stopover: true
         },
         {
-          name: "Niigata",
-          location: { lat: 37.916111, lng: 139.036389 },
+          location: "Niigata, Japan",
           stopover: true
         }
       ],
+      travelMode: "DRIVING",
       budget: 25,
       members: [
         {
@@ -68,7 +59,7 @@ const initialState = {
       ]
     }
   ],
-  currentTrip: 0,
+  currentTrip: 1,
   showProfile: false,
   showChat: false
 };
