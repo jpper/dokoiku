@@ -1,4 +1,5 @@
 import React from "react";
+import Login from "./Login";
 import TripInfo from "./TripInfo";
 import Profile from "./Profile";
 import "../styles/App.css";
@@ -18,6 +19,7 @@ class App extends React.Component<myProps, {}> {
   render() {
     return (
       <div className="App">
+        <Login />
         <TripInfo />
         {this.props.showProfile ? <Profile /> : null}
         <Map />
