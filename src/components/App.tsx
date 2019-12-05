@@ -13,6 +13,7 @@ type myProps = {
   showProfile: boolean;
   onShowChat?: any;
   onShowProfile?: any;
+  currentProfile: number;
 };
 
 class App extends React.Component<myProps, {}> {
@@ -33,7 +34,8 @@ const mapStateToProps = (state: any) => {
     trips: state.trips,
     currentTrip: state.currentTrip,
     showChat: state.showChat,
-    showProfile: state.showProfile
+    showProfile: state.showProfile,
+    currentProfile: state.currentProfile
   };
 };
 
@@ -43,9 +45,10 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "SHOW_CHAT"
       }),
-    onShowProfile: () =>
+    onShowProfile: (index: number) =>
       dispatch({
-        type: "SHOW_PROFILE"
+        type: "SHOW_PROFILE",
+        index
       })
   };
 };

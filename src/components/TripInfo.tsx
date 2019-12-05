@@ -30,13 +30,14 @@ class TripInfo extends React.Component<myProps, {}> {
           </div>
           <p>Budget: {this.props.trips[this.props.currentTrip].budget}</p>
           <p>Notes: </p>
+          <p>Messages: </p>
           <div>
             Members:{" "}
             {this.props.trips[this.props.currentTrip].members.map(
               (m: any, i: number) => {
                 return (
                   <div>
-                    <p key={i} onClick={this.props.onShowProfile}>
+                    <p key={i} onClick={() => this.props.onShowProfile(i)}>
                       username: {m.username}
                     </p>
                   </div>
@@ -65,9 +66,10 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "SHOW_CHAT"
       }),
-    onShowProfile: () =>
+    onShowProfile: (index: number) =>
       dispatch({
-        type: "SHOW_PROFILE"
+        type: "SHOW_PROFILE",
+        index
       }),
     onPreviousTrip: () =>
       dispatch({
