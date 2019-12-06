@@ -3,6 +3,7 @@ import Login from "./Login";
 import TripInfo from "./TripInfo";
 import BuildTrip from "./BuildTrip";
 import Profile from "./Profile";
+import ChatBoard from "./ChatBoard";
 import "../styles/App.css";
 import Map from "./Map";
 import { connect } from "react-redux";
@@ -25,6 +26,7 @@ class App extends React.Component<myProps, {}> {
       <div className="App">
         <Login />
         <BuildTrip />
+        <ChatBoard />
         <TripInfo />
         {this.props.showProfile ? <Profile /> : null}
         <Map />

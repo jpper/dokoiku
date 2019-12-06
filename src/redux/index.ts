@@ -1,11 +1,15 @@
 import { createStore } from "redux";
 
-const initialState = {
+const initialState: any = {
   userId: "",
   userName: "",
   userPhoto: "",
+  currentTripMemberInfo: [],
+  currentTripMessages: [],
   trips: [
     {
+      tripId: "5kzUrGkzztrKyoc6tBBA",
+      tripMemberIds: [],
       startDate: "Dec 25",
       endDate: "Dec 31",
       startLocation: "Tokyo, Japan",
@@ -21,20 +25,7 @@ const initialState = {
       ],
       travelMode: "DRIVING",
       budget: 1000,
-      members: [
-        {
-          username: "followdiallo",
-          name: "Diallo Spears",
-          propic:
-            "http://www.taiwan-america.org/uploads/2/5/5/5/25556575/_1453420708.png"
-        },
-        {
-          username: "nlandon2",
-          name: "Nate Landon",
-          propic:
-            "https://secure.meetupstatic.com/photos/event/8/e/0/9/600_486996361.jpeg"
-        }
-      ]
+      memberIds: []
     },
     {
       startDate: "Jan 1",
@@ -52,17 +43,10 @@ const initialState = {
       ],
       travelMode: "DRIVING",
       budget: 25,
-      members: [
-        {
-          username: "followdiallo",
-          name: "Diallo Spears",
-          propic:
-            "http://www.taiwan-america.org/uploads/2/5/5/5/25556575/_1453420708.png"
-        }
-      ]
+      memberIds: []
     }
   ],
-  currentTrip: 1,
+  currentTrip: 0,
   showProfile: false,
   showChat: false,
   showBuild: false,
@@ -74,7 +58,7 @@ interface Action {
   [key: string]: any;
 }
 
-const reducer = (state = initialState, action: Action): any => {
+const reducer = (state: any = initialState, action: Action): any => {
   switch (action.type) {
     case "GET_TRIPS": {
       //Call the DB, get the trips, and change the state
@@ -88,15 +72,8 @@ const reducer = (state = initialState, action: Action): any => {
         nextIndex = state.currentTrip + 1;
       }
       return {
-        userId: state.userId,
-        userName: state.userName,
-        userPhoto: state.userPhoto,
-        trips: [...state.trips],
-        currentTrip: nextIndex,
-        showProfile: false,
-        showChat: false,
-        showBuild: false,
-        currentProfile: state.currentProfile
+        ...state,
+        currentTrip: nextIndex
       };
     }
     case "PREVIOUS_TRIP": {
@@ -107,24 +84,13 @@ const reducer = (state = initialState, action: Action): any => {
         nextIndex = state.currentTrip - 1;
       }
       return {
-        userId: state.userId,
-        userName: state.userName,
-        userPhoto: state.userPhoto,
-        trips: [...state.trips],
-        currentTrip: nextIndex,
-        showProfile: false,
-        showChat: false,
-        showBuild: false,
-        currentProfile: state.currentProfile
+        ...state,
+        currentTrip: nextIndex
       };
     }
     case "SHOW_PROFILE": {
       return {
-        userId: state.userId,
-        userName: state.userName,
-        userPhoto: state.userPhoto,
-        trips: [...state.trips],
-        currentTrip: state.currentTrip,
+        ...state,
         showProfile: true,
         showChat: false,
         showBuild: false,
@@ -133,28 +99,16 @@ const reducer = (state = initialState, action: Action): any => {
     }
     case "SHOW_CHAT": {
       return {
-        userId: state.userId,
-        userName: state.userName,
-        userPhoto: state.userPhoto,
-        trips: [...state.trips],
-        currentTrip: state.currentTrip,
+        ...state,
         showProfile: false,
-        showChat: true,
-        showBuild: false,
-        currentProfile: state.currentProfile
+        showChat: true
       };
     }
     case "CLOSE_POPUP": {
       return {
-        userId: state.userId,
-        userName: state.userName,
-        userPhoto: state.userPhoto,
-        trips: [...state.trips],
-        currentTrip: state.currentTrip,
+        ...state,
         showProfile: false,
-        showChat: false,
-        showBuild: false,
-        currentProfile: state.currentProfile
+        showChat: false
       };
     }
     case "SHOW_BUILD": {
@@ -173,6 +127,7 @@ const reducer = (state = initialState, action: Action): any => {
     }
     case "SET_USER_INFO": {
       return {
+        ...state,
         userId: action.userId,
         userName: action.userName,
         userPhoto: action.userPhoto,
@@ -185,14 +140,15 @@ const reducer = (state = initialState, action: Action): any => {
     }
     case "ADD_TRIP": {
       return {
-        userId: state.userId,
-        userName: state.userName,
-        userPhoto: state.userPhoto,
-        trips: [...state.trips, action.trip],
-        currentTrip: state.currentTrip,
-        showProfile: state.showProfile,
-        showChat: state.showChat,
-        showBuild: state.showBuild
+        ...state,
+        trips: [...state.trips, action.trip]
+      };
+    }
+    case "SET_MESSAGES": {
+      // console.log(action.messages);
+      return {
+        ...state,
+        currentTripMessages: [...state.currentTripMessages, action.messages]
       };
     }
     default: {
