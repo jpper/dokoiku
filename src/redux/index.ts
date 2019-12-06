@@ -65,6 +65,7 @@ const initialState = {
   currentTrip: 1,
   showProfile: false,
   showChat: false,
+  showBuild: false,
   currentProfile: 0
 };
 
@@ -94,6 +95,7 @@ const reducer = (state = initialState, action: Action): any => {
         currentTrip: nextIndex,
         showProfile: false,
         showChat: false,
+        showBuild: false,
         currentProfile: state.currentProfile
       };
     }
@@ -112,6 +114,7 @@ const reducer = (state = initialState, action: Action): any => {
         currentTrip: nextIndex,
         showProfile: false,
         showChat: false,
+        showBuild: false,
         currentProfile: state.currentProfile
       };
     }
@@ -124,6 +127,7 @@ const reducer = (state = initialState, action: Action): any => {
         currentTrip: state.currentTrip,
         showProfile: true,
         showChat: false,
+        showBuild: false,
         currentProfile: action.index
       };
     }
@@ -136,6 +140,7 @@ const reducer = (state = initialState, action: Action): any => {
         currentTrip: state.currentTrip,
         showProfile: false,
         showChat: true,
+        showBuild: false,
         currentProfile: state.currentProfile
       };
     }
@@ -148,12 +153,23 @@ const reducer = (state = initialState, action: Action): any => {
         currentTrip: state.currentTrip,
         showProfile: false,
         showChat: false,
+        showBuild: false,
         currentProfile: state.currentProfile
       };
     }
-    case "ADD_TRIP": {
+    case "SHOW_BUILD": {
       //Add some logic to add trip to Firebase
-      return state;
+      return {
+        userId: state.userId,
+        userName: state.userName,
+        userPhoto: state.userPhoto,
+        trips: [...state.trips],
+        currentTrip: state.currentTrip,
+        showProfile: false,
+        showChat: false,
+        showBuild: true,
+        currentProfile: state.currentProfile
+      };
     }
     case "SET_USER_INFO": {
       return {
@@ -163,8 +179,12 @@ const reducer = (state = initialState, action: Action): any => {
         trips: [...state.trips],
         currentTrip: state.currentTrip,
         showProfile: false,
-        showChat: false
+        showChat: false,
+        showBuild: false
       };
+    }
+    case "ADD_TRIP": {
+      return state.trips.concat(action.trip);
     }
     default: {
       return state;

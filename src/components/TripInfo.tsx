@@ -34,9 +34,6 @@ class TripInfo extends React.Component<myProps, {}> {
               }
             )}
           </div>
-          <p>
-            Transport: {this.props.trips[this.props.currentTrip].travelMode}
-          </p>
           <p>Budget: {this.props.trips[this.props.currentTrip].budget}</p>
           <p>Notes: </p>
           <p>Messages: </p>
