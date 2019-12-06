@@ -184,7 +184,16 @@ const reducer = (state = initialState, action: Action): any => {
       };
     }
     case "ADD_TRIP": {
-      return state.trips.concat(action.trip);
+      return {
+        userId: state.userId,
+        userName: state.userName,
+        userPhoto: state.userPhoto,
+        trips: [...state.trips, action.trip],
+        currentTrip: state.currentTrip,
+        showProfile: state.showProfile,
+        showChat: state.showChat,
+        showBuild: state.showBuild
+      };
     }
     default: {
       return state;

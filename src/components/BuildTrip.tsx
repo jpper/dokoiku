@@ -9,10 +9,36 @@ type BuildProps = {
   onShowBuild: any;
   onAddTrip: any;
 };
-
-type BuildState = {};
+type BuildState = {
+  trip: any;
+};
 
 class BuildTrip extends React.Component<BuildProps, BuildState> {
+  private startDateInput: React.RefObject<HTMLInputElement>;
+  private endDateInput: React.RefObject<HTMLInputElement>;
+  private startLocationInput: React.RefObject<HTMLInputElement>;
+  private budgetInput: React.RefObject<HTMLInputElement>;
+  constructor(props: BuildProps) {
+    super(props);
+    this.startDateInput = React.createRef();
+    this.endDateInput = React.createRef();
+    this.startLocationInput = React.createRef();
+    this.budgetInput = React.createRef();
+    this.state = {
+      trip: {
+        startDate: null,
+        endDate: null,
+        startLocation: "",
+        waypoints: [],
+        budget: 0,
+        members: []
+      }
+    };
+  }
+  handleSubmit = (e: any) => {
+    e.preventDefault();
+  };
+
   render() {
     return (
       <div>
@@ -27,24 +53,24 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
           <div>
             <div className="BuildTrip">
               <h1>Build Trip</h1>
-              <form onSubmit={this.props.onAddTrip}>
+              <form onSubmit={this.handleSubmit}>
                 <label>
                   Start Date:
-                  <input type="date" name="start" />
+                  <input type="date" ref={this.startDateInput} />
                 </label>
                 <br />
                 <label>
                   End Date:
-                  <input type="date" name="end" />
+                  <input type="date" ref={this.endDateInput} />
                 </label>
                 <br />
                 <label>
                   Start Location:
-                  <input type="text" name="location" />
+                  <input type="text" ref={this.startLocationInput} />
                 </label>
                 <br />
                 <br />
-                <label>Waypoints:</label>
+                <label>Waypoints: {this.state.trip.waypoints}</label>
                 <br />
                 <br />
                 <label>
@@ -56,7 +82,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 <br />
                 <label>
                   Budget:
-                  <input type="number" name="budget" />
+                  <input type="number" ref={this.budgetInput} />
                 </label>
                 <br />
                 <br />
@@ -64,7 +90,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 <br />
                 <br />
                 <label>
-                  Add Members:
+                  Add Members: {this.state.trip.members}
                   <input type="text" name="username" />
                   <button>Add member</button>
                 </label>
@@ -100,10 +126,10 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "CLOSE_POPUP"
       }),
-    onAddTrip: (index: number) =>
+    onAddTrip: (trip: any) =>
       dispatch({
         type: "ADD_TRIP",
-        index
+        trip
       })
   };
 };
