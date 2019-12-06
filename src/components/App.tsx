@@ -6,6 +6,7 @@ import Profile from "./Profile";
 import ChatBoard from "./ChatBoard";
 import "../styles/App.css";
 import Map from "./Map";
+import Notes from "./Notes";
 import { connect } from "react-redux";
 
 type myProps = {
@@ -26,10 +27,11 @@ class App extends React.Component<myProps, {}> {
       <div className="App">
         <Login />
         <BuildTrip />
-        <ChatBoard />
-        <TripInfo />
+        <Notes />
+        {/* <ChatBoard /> */}
+        {/* <TripInfo />
         {this.props.showProfile ? <Profile /> : null}
-        <Map />
+        <Map /> */}
       </div>
     );
   }
