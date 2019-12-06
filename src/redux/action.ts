@@ -1,5 +1,3 @@
-import { Action } from "redux";
-
 export const setUserInfo = (
   userName: string,
   userId: string,

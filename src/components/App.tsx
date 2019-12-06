@@ -1,6 +1,7 @@
 import React from "react";
 import Login from "./Login";
 import TripInfo from "./TripInfo";
+import BuildTrip from "./BuildTrip";
 import Profile from "./Profile";
 import ChatBoard from "./ChatBoard";
 import "../styles/App.css";
@@ -12,8 +13,10 @@ type myProps = {
   currentTrip: number;
   showChat: boolean;
   showProfile: boolean;
+  showBuild: boolean;
   onShowChat?: any;
   onShowProfile?: any;
+  onShowBuild?: any;
   currentProfile: number;
 };
 
@@ -22,6 +25,7 @@ class App extends React.Component<myProps, {}> {
     return (
       <div className="App">
         <Login />
+        <BuildTrip />
         <ChatBoard />
         <TripInfo />
         {this.props.showProfile ? <Profile /> : null}
@@ -37,6 +41,7 @@ const mapStateToProps = (state: any) => {
     currentTrip: state.currentTrip,
     showChat: state.showChat,
     showProfile: state.showProfile,
+    showBuild: state.showBuild,
     currentProfile: state.currentProfile
   };
 };
@@ -50,6 +55,11 @@ const mapDispatchToProps = (dispatch: any) => {
     onShowProfile: (index: number) =>
       dispatch({
         type: "SHOW_PROFILE",
+        index
+      }),
+    onShowBuild: (index: number) =>
+      dispatch({
+        type: "SHOW_BUILD",
         index
       })
   };

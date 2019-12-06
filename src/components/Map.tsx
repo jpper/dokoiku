@@ -26,7 +26,6 @@ class Map extends React.Component<MapProps, MapState> {
     this.directionsCallback = this.directionsCallback.bind(this);
   }
   directionsCallback(response: any | null) {
-    console.log("loaded!");
     if (response !== null) {
       if (response.status === "OK") {
         this.setState(() => ({

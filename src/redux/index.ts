@@ -49,6 +49,7 @@ const initialState: any = {
   currentTrip: 0,
   showProfile: false,
   showChat: false,
+  showBuild: false,
   currentProfile: 0
 };
 
@@ -92,6 +93,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         ...state,
         showProfile: true,
         showChat: false,
+        showBuild: false,
         currentProfile: action.index
       };
     }
@@ -109,16 +111,37 @@ const reducer = (state: any = initialState, action: Action): any => {
         showChat: false
       };
     }
-    case "ADD_TRIP": {
+    case "SHOW_BUILD": {
       //Add some logic to add trip to Firebase
-      return state;
+      return {
+        userId: state.userId,
+        userName: state.userName,
+        userPhoto: state.userPhoto,
+        trips: [...state.trips],
+        currentTrip: state.currentTrip,
+        showProfile: false,
+        showChat: false,
+        showBuild: true,
+        currentProfile: state.currentProfile
+      };
     }
     case "SET_USER_INFO": {
       return {
         ...state,
         userId: action.userId,
         userName: action.userName,
-        userPhoto: action.userPhoto
+        userPhoto: action.userPhoto,
+        trips: [...state.trips],
+        currentTrip: state.currentTrip,
+        showProfile: false,
+        showChat: false,
+        showBuild: false
+      };
+    }
+    case "ADD_TRIP": {
+      return {
+        ...state,
+        trips: [...state.trips, action.trip]
       };
     }
     case "SET_MESSAGES": {
