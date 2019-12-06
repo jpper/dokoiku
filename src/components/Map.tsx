@@ -8,6 +8,13 @@ import {
 import { connect } from "react-redux";
 require("dotenv").config();
 
+const mapStateToProps = (state: any) => {
+  return {
+    trips: state.trips,
+    currentTrip: state.currentTrip
+  };
+};
+
 type MapProps = {
   trips: any;
   currentTrip: number;
@@ -74,12 +81,5 @@ class Map extends React.Component<MapProps, MapState> {
     );
   }
 }
-
-const mapStateToProps = (state: any) => {
-  return {
-    trips: state.trips,
-    currentTrip: state.currentTrip
-  };
-};
 
 export default connect(mapStateToProps)(Map);
