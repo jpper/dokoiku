@@ -4,20 +4,15 @@ import firebase, { firestore } from "firebase";
 import React, { Component } from "react";
 // import ReactLoading from "react-loading";
 import { myFirebase, myFirestore } from "../config/firebase";
+import { connect } from "react-redux";
 
-interface Status {
-  tripId: string;
-  currentUserId: string;
-  // currentUserAvatar: string;
-  currentUserDisplayName: string;
-  currentPeerUserIds: string[];
-  groupChatId: string;
-  listMessage: firebase.firestore.DocumentData[];
-  messageListener: Function | null;
-  groupMemberListener: Function | null;
-  groupMemberInfo: any;
-  message: string;
-}
+const mapStateToProps = (state: any) => ({
+  tripId: state.tripId,
+  userId: state.currentUserId,
+  userName: state.userName,
+  tripMessages: state.tripMessages,
+  tripMemberIds: state.tripMemberIds
+});
 
 export default class ChatBoard extends Component<{}, Status> {
   constructor(props: {}) {
@@ -49,7 +44,8 @@ export default class ChatBoard extends Component<{}, Status> {
     // this.addNameToMsg();
   }
   getListHistory = () => {
-    const messageListener = myFirestore
+    const messageListener = null;
+    myFirestore
       .collection("trips")
       .doc(this.state.tripId)
       .collection("messages")
@@ -75,7 +71,9 @@ export default class ChatBoard extends Component<{}, Status> {
     // this.addNameToMsg();
   };
   getGroupMembers = () => {
-    const groupMemberListener = myFirestore
+    const groupMemberListener = null;
+
+    myFirestore
       .collection("trips")
       .doc(this.state.tripId)
       .onSnapshot(snapShot => {

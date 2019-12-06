@@ -3,7 +3,6 @@ steps:
     entrypoint: yarn
     args:
       - "install"
-    dir: "client"
 
   - name: node:10.15.1
     entrypoint: yarn
@@ -19,19 +18,16 @@ steps:
       - "REACT_APP_FIREBASE_APP_ID=${_FIREBASE_APP_ID}"
       - "REACT_APP_FIREBASE_MEASUREMENT_ID=${_FIREBASE_MEASUREMENT_ID}"
       - "REACT_APP_GOOGLE_MAPS_API=${_GOOGLE_MAPS_API}"
-    dir: "client"
 
   - name: "node:10.15.1"
     entrypoint: yarn
     args:
       - "build"
-    dir: "client"
 
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       - "app"
       - "deploy"
       - "--project"
-      - "gcp-react-101"
-    dir: "client"
+      - "gopherdor-frontend-101"
     timeout: "600s"

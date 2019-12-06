@@ -5,44 +5,28 @@ import {
   DirectionsService,
   DirectionsRenderer
 } from "@react-google-maps/api";
+import { connect } from "react-redux";
 require("dotenv").config();
 
-interface MapProps {}
+type MapProps = {
+  trips: any;
+  currentTrip: number;
+};
 
 interface MapState {
-  locations: { lat: number; lng: number }[];
   response: any;
-  travelMode: any;
-  waypoints: any;
 }
 
-export default class Map extends React.Component<MapProps, MapState> {
+class Map extends React.Component<MapProps, MapState> {
   constructor(props: MapProps) {
     super(props);
     this.state = {
-      locations: [
-        {
-          lat: 35.689722,
-          lng: 139.692222
-        }
-      ],
-      response: null,
-      travelMode: "DRIVING",
-      waypoints: [
-        {
-          location: { lat: 35.011667, lng: 135.768333 },
-          stopover: true
-        },
-        {
-          location: { lat: 36.561056, lng: 136.656417 },
-          stopover: true
-        }
-      ]
+      response: null
     };
     this.directionsCallback = this.directionsCallback.bind(this);
   }
   directionsCallback(response: any | null) {
-    console.log(response);
+    console.log("loaded!");
     if (response !== null) {
       if (response.status === "OK") {
         this.setState(() => ({
@@ -73,22 +57,30 @@ export default class Map extends React.Component<MapProps, MapState> {
         >
           <DirectionsService
             options={{
-              origin: this.state.locations[0],
-              destination: this.state.locations[0],
-              waypoints: this.state.waypoints,
-              travelMode: this.state.travelMode
+              origin: this.props.trips[this.props.currentTrip].startLocation,
+              destination: this.props.trips[this.props.currentTrip]
+                .startLocation,
+              waypoints: this.props.trips[this.props.currentTrip].waypoints,
+              travelMode: this.props.trips[this.props.currentTrip].travelMode
             }}
             callback={this.directionsCallback}
           />
-          {this.state.response !== null && (
-            <DirectionsRenderer
-              options={{
-                directions: this.state.response
-              }}
-            ></DirectionsRenderer>
-          )}
+          <DirectionsRenderer
+            options={{
+              directions: this.state.response
+            }}
+          ></DirectionsRenderer>
         </GoogleMap>
       </LoadScript>
     );
   }
 }
+
+const mapStateToProps = (state: any) => {
+  return {
+    trips: state.trips,
+    currentTrip: state.currentTrip
+  };
+};
+
+export default connect(mapStateToProps)(Map);

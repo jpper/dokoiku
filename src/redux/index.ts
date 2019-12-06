@@ -8,18 +8,18 @@ const initialState = {
     {
       startDate: "Dec 25",
       endDate: "Dec 31",
-      locations: [
+      startLocation: "Tokyo, Japan",
+      waypoints: [
         {
-          name: "Great Wall of China",
-          lat: 10,
-          lon: 400
+          location: "Kyoto, Japan",
+          stopover: true
         },
         {
-          name: "Code Chrysalis",
-          lat: 150,
-          lon: 150
+          location: "Kanazawa, Japan",
+          stopover: true
         }
       ],
+      travelMode: "DRIVING",
       budget: 1000,
       members: [
         {
@@ -39,13 +39,18 @@ const initialState = {
     {
       startDate: "Jan 1",
       endDate: "Dec 31",
-      locations: [
+      startLocation: "Tokyo, Japan",
+      waypoints: [
         {
-          name: "Olive Garden",
-          lat: 1,
-          lon: 1
+          location: "Akita, Japan",
+          stopover: true
+        },
+        {
+          location: "Niigata, Japan",
+          stopover: true
         }
       ],
+      travelMode: "DRIVING",
       budget: 25,
       members: [
         {
@@ -57,9 +62,10 @@ const initialState = {
       ]
     }
   ],
-  currentTrip: 0,
+  currentTrip: 1,
   showProfile: false,
-  showChat: false
+  showChat: false,
+  currentProfile: 0
 };
 
 interface Action {
@@ -86,8 +92,9 @@ const reducer = (state = initialState, action: Action): any => {
         userPhoto: state.userPhoto,
         trips: [...state.trips],
         currentTrip: nextIndex,
-        showProfile: state.showProfile,
-        showChat: state.showChat
+        showProfile: false,
+        showChat: false,
+        currentProfile: state.currentProfile
       };
     }
     case "PREVIOUS_TRIP": {
@@ -103,8 +110,9 @@ const reducer = (state = initialState, action: Action): any => {
         userPhoto: state.userPhoto,
         trips: [...state.trips],
         currentTrip: nextIndex,
-        showProfile: state.showProfile,
-        showChat: state.showChat
+        showProfile: false,
+        showChat: false,
+        currentProfile: state.currentProfile
       };
     }
     case "SHOW_PROFILE": {
@@ -115,7 +123,8 @@ const reducer = (state = initialState, action: Action): any => {
         trips: [...state.trips],
         currentTrip: state.currentTrip,
         showProfile: true,
-        showChat: false
+        showChat: false,
+        currentProfile: action.index
       };
     }
     case "SHOW_CHAT": {
@@ -126,7 +135,8 @@ const reducer = (state = initialState, action: Action): any => {
         trips: [...state.trips],
         currentTrip: state.currentTrip,
         showProfile: false,
-        showChat: true
+        showChat: true,
+        currentProfile: state.currentProfile
       };
     }
     case "CLOSE_POPUP": {
@@ -137,7 +147,8 @@ const reducer = (state = initialState, action: Action): any => {
         trips: [...state.trips],
         currentTrip: state.currentTrip,
         showProfile: false,
-        showChat: false
+        showChat: false,
+        currentProfile: state.currentProfile
       };
     }
     case "ADD_TRIP": {
