@@ -35,7 +35,10 @@ class Map extends React.Component<MapProps, MapState> {
   }
 
   shouldComponentUpdate(nextProps: any, nextState: any) {
-    return nextState.response != this.state.response;
+    return (
+      this.state.response === null ||
+      nextState.response.status != this.state.response.status
+    );
   }
 
   directionsCallback(response: any | null) {
