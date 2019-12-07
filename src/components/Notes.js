@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import './Notes.css'; 
 
 class Editor extends Component {
+
   componentDidMount() {
     //// Initialize Firebase.
     //// TODO: replace with your Firebase project configuration.
@@ -31,17 +32,16 @@ class Editor extends Component {
 
   // Helper to get hash from end of URL or generate a random one.
   getExampleRef() {
-    var ref = window.firebase.database().ref();
-    var hash = window.location.hash.replace(/#/g, '');
-    if (hash) {
-      ref = ref.child("Notebook1");
-    } else {
-      ref = ref.push(); // generate unique location.
-      window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
-    }
-    if (typeof console !== 'undefined') {
-      console.log('Firebase data: ', ref.toString());
-    }
+    var ref = window.firebase.database().ref()
+    ref = ref.child(this.props.tripId);
+
+    // set an asynchronous listener to retrieve realtime data
+    ref.on("value", function(snapshot) {
+      console.log(snapshot.val());
+      // ref = ref.child(this.props.tripId);
+    }, function (errorObject) {
+      console.log("The read failed: " + errorObject.code);
+    });
     return ref;
   }
 
