@@ -1,9 +1,36 @@
 import React from "react";
 import { connect } from "react-redux";
 
+const mapStateToProps = (state: any) => {
+  return {
+    trips: state.trips,
+    currentTripIndex: state.currentTripIndex,
+    showBuild: state.showBuild
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    onShowBuild: (index: number) =>
+      dispatch({
+        type: "SHOW_BUILD",
+        index
+      }),
+    onClosePopup: () =>
+      dispatch({
+        type: "CLOSE_POPUP"
+      }),
+    onAddTrip: (trip: any) =>
+      dispatch({
+        type: "ADD_TRIP",
+        trip
+      })
+  };
+};
+
 type BuildProps = {
   trips: any;
-  currentTrip: number;
+  currentTripIndex: number;
   showBuild: boolean;
   onClosePopup: any;
   onShowBuild: any;
@@ -31,7 +58,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
         startLocation: "",
         waypoints: [],
         budget: 0,
-        members: []
+        memberIds: []
       }
     };
   }
@@ -90,7 +117,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 <br />
                 <br />
                 <label>
-                  Add Members: {this.state.trip.members}
+                  Add Members: {this.state.trip.memberIds}
                   <input type="text" name="username" />
                   <button>Add member</button>
                 </label>
@@ -106,32 +133,5 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
     );
   }
 }
-
-const mapStateToProps = (state: any) => {
-  return {
-    trips: state.trips,
-    currentTrip: state.currentTrip,
-    showBuild: state.showBuild
-  };
-};
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    onShowBuild: (index: number) =>
-      dispatch({
-        type: "SHOW_BUILD",
-        index
-      }),
-    onClosePopup: () =>
-      dispatch({
-        type: "CLOSE_POPUP"
-      }),
-    onAddTrip: (trip: any) =>
-      dispatch({
-        type: "ADD_TRIP",
-        trip
-      })
-  };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(BuildTrip);

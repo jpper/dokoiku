@@ -28,7 +28,7 @@ import "../styles/ChatBoard.css";
 const mapStateToProps = (state: any) => ({
   userId: state.userId,
   userName: state.userName,
-  tripId: state.trips[state.currentTrip].tripId,
+  tripId: state.trips[state.currentTripIndex].tripId.trim(),
   tripMessages: state.currentTripMessages
 });
 
@@ -103,6 +103,7 @@ class ChatBoard extends Component<Props, ChatBoardState> {
   }
   async componentDidMount() {
     await this.props.getMessages(this.props.tripId);
+    console.log(this.props.tripId);
   }
 
   handleChange(e: any) {
