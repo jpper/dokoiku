@@ -16,8 +16,13 @@ import {
   ListItemAvatar,
   ListItemText,
   Avatar,
-  Card
+  Card,
+  BottomNavigation,
+  TextField,
+  IconButton,
+  Button
 } from "@material-ui/core";
+import SendIcon from "@material-ui/icons/Send";
 import "../styles/ChatBoard.css";
 
 const mapStateToProps = (state: any) => ({
@@ -100,7 +105,7 @@ class ChatBoard extends Component<Props, ChatBoardState> {
     await this.props.getMessages(this.props.tripId);
   }
 
-  handleChange(e: React.FormEvent<HTMLInputElement>) {
+  handleChange(e: any) {
     this.setState({
       messageToBeSent: e.currentTarget.value
     });
@@ -145,28 +150,32 @@ class ChatBoard extends Component<Props, ChatBoardState> {
             </List>
           </Card>
 
-          <form>
-            <label htmlFor="message"></label>
-            <input
-              type="text"
-              id="message"
-              value={this.state.messageToBeSent}
-              onChange={e => this.handleChange(e)}
-            ></input>
-            <button
-              type="button"
-              onClick={() => {
-                this.clearMessage();
-                this.props.sendMessage(
-                  this.props.tripId,
-                  this.props.userId,
-                  this.state.messageToBeSent
-                );
-              }}
-            >
-              Send Message!
-            </button>
-          </form>
+          <BottomNavigation showLabels className="footer">
+            <form>
+              <TextField
+                id="outlined-basic"
+                label="Outlined"
+                variant="outlined"
+                value={this.state.messageToBeSent}
+                onChange={e => this.handleChange(e)}
+              />
+
+              <Button
+                type="button"
+                onClick={() => {
+                  this.clearMessage();
+                  this.props.sendMessage(
+                    this.props.tripId,
+                    this.props.userId,
+                    this.state.messageToBeSent
+                  );
+                }}
+              >
+                <SendIcon />
+                Send Message!
+              </Button>
+            </form>
+          </BottomNavigation>
         </Container>
       </div>
     );

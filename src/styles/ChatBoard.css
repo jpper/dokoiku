@@ -1,14 +1,14 @@
 .card {
   min-width: 275;
+  margin-bottom: 50px;
 }
-.bullet {
-  display: inline-block;
-  margin: 0 2px;
-  transform: "scale(0.8)";
-}
-.title {
-  font-size: 14;
-}
-.pos {
-  margin-bottom: 12;
+
+.footer {
+  position: fixed;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  text-align: center;
 }
