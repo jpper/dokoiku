@@ -107,9 +107,14 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
     case "SET_MESSAGES": {
       // console.log(action.messages);
+      const tmpMessages = [...state.currentTripMessages, action.messages].sort(
+        (a: any, b: any) => a.moment.seconds - b.moment.seconds
+      );
+      console.log("TESTTSTSYSYUSI");
+      console.log(tmpMessages);
       return {
         ...state,
-        currentTripMessages: [...state.currentTripMessages, action.messages]
+        currentTripMessages: tmpMessages
       };
     }
     case "SET_TRIPS": {
