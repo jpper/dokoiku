@@ -8,6 +8,34 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { setMessages } from "../redux/action";
 
+// TODO: for mui test
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import "../styles/ChatBoard.css";
+
+// const useStyles = makeStyles(() => {
+//   createStyles({
+//       card: {
+//         minWidth: 275,
+//       },
+//       bullet: {
+//         display: 'inline-block',
+//         margin: '0 2px',
+//         transform: 'scale(0.8)',
+//       },
+//       title: {
+//         fontSize: 14,
+//       },
+//       pos: {
+//         marginBottom: 12,
+//       },
+//   })
+// });
+
 const mapStateToProps = (state: any) => ({
   userId: state.userId,
   userName: state.userName,
@@ -210,8 +238,41 @@ class ChatBoard extends Component<Props, ChatBoardState> {
   //   console.log(this.state.listMessage);
   // }
   render() {
+    // const classes = useStyles({});
+    const bull = <span className="bullet">•</span>;
+
     return (
       <div className="ChatBoard">
+        <Card>
+          <CardContent>test</CardContent>
+        </Card>
+
+        <Card className="card">
+          <CardContent>
+            <Typography className="title" color="textSecondary" gutterBottom>
+              Word of the Day
+            </Typography>
+            <Typography variant="h5" component="h2">
+              be
+              {bull}
+              nev
+              {bull}o{bull}
+              lent
+            </Typography>
+            <Typography className="pos" color="textSecondary">
+              adjective
+            </Typography>
+            <Typography variant="body2" component="p">
+              well meaning and kindly.
+              <br />
+              {'"a benevolent smile"'}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small">Learn More</Button>
+          </CardActions>
+        </Card>
+
         {this.props.tripMessages.length ? (
           this.props.tripMessages
             .sort((a: any, b: any) => a.moment.seconds - b.moment.seconds)
