@@ -40,8 +40,8 @@ class App extends React.Component<myProps, {}> {
         <Login />
         {/* <BuildTrip /> */}
         {this.props.trips.length ? <ChatBoard /> : null}
-        {/* <TripInfo />
-        {this.props.showProfile ? <Profile /> : null}  */}
+        <TripInfo />
+        {this.props.showProfile ? <Profile /> : null} */}
         {/* <Map /> */}
       </div>
     );
