@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 const mapStateToProps = (state: any) => {
   return {
     trips: state.trips,
-    currentTrip: state.currentTrip,
+    currentTripIndex: state.currentTripIndex,
     showBuild: state.showBuild
   };
 };
@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch: any) => {
 
 type BuildProps = {
   trips: any;
-  currentTrip: number;
+  currentTripIndex: number;
   showBuild: boolean;
   onClosePopup: any;
   onShowBuild: any;

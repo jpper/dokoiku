@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 type myProps = {
   trips: any;
-  currentTrip: number;
+  currentTripIndex: number;
   currentProfile: number;
   onClosePopup: any;
 };
@@ -14,7 +14,7 @@ class Profile extends React.Component<myProps, {}> {
       <div className="Profile">
         <img
           src={
-            this.props.trips[this.props.currentTrip].members[
+            this.props.trips[this.props.currentTripIndex].members[
               this.props.currentProfile
             ].propic
           }
@@ -23,7 +23,7 @@ class Profile extends React.Component<myProps, {}> {
         <p>
           Name:{" "}
           {
-            this.props.trips[this.props.currentTrip].members[
+            this.props.trips[this.props.currentTripIndex].members[
               this.props.currentProfile
             ].name
           }
@@ -37,7 +37,7 @@ class Profile extends React.Component<myProps, {}> {
 const mapStateToProps = (state: any) => {
   return {
     trips: state.trips,
-    currentTrip: state.currentTrip,
+    currentTripIndex: state.currentTripIndex,
     currentProfile: state.currentProfile
   };
 };

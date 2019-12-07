@@ -7,7 +7,7 @@ const initialState: any = {
   currentTripMemberInfo: [],
   currentTripMessages: [],
   trips: [],
-  currentTrip: 0,
+  currentTripIndex: 0,
   showProfile: false,
   showChat: false,
   showBuild: false,
@@ -27,26 +27,26 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
     case "NEXT_TRIP": {
       let nextIndex: number;
-      if (state.currentTrip + 1 >= state.trips.length) {
+      if (state.currentTripIndex + 1 >= state.trips.length) {
         nextIndex = 0;
       } else {
-        nextIndex = state.currentTrip + 1;
+        nextIndex = state.currentTripIndex + 1;
       }
       return {
         ...state,
-        currentTrip: nextIndex
+        currentTripIndex: nextIndex
       };
     }
     case "PREVIOUS_TRIP": {
       let nextIndex: number;
-      if (state.currentTrip === 0) {
+      if (state.currentTripIndex === 0) {
         nextIndex = state.trips.length - 1;
       } else {
         nextIndex = state.currentTrip - 1;
       }
       return {
         ...state,
-        currentTrip: nextIndex
+        currentTripIndex: nextIndex
       };
     }
     case "SHOW_PROFILE": {
@@ -79,7 +79,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         userName: state.userName,
         userPhoto: state.userPhoto,
         trips: [...state.trips],
-        currentTrip: state.currentTrip,
+        currentTripIndex: state.currentTripIndex,
         showProfile: false,
         showChat: false,
         showBuild: true,
@@ -93,7 +93,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         userName: action.userName,
         userPhoto: action.userPhoto,
         trips: [...state.trips],
-        currentTrip: state.currentTrip,
+        currentTripIndex: state.currentTripIndex,
         showProfile: false,
         showChat: false,
         showBuild: false
