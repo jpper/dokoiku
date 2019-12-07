@@ -20,7 +20,9 @@ import {
   BottomNavigation,
   TextField,
   IconButton,
-  Button
+  Button,
+  FormControl,
+  Grid
 } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import "../styles/ChatBoard.css";
@@ -93,6 +95,8 @@ type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 class ChatBoard extends Component<Props, ChatBoardState> {
+  private messagesEnd: any;
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -101,9 +105,19 @@ class ChatBoard extends Component<Props, ChatBoardState> {
       messageToBeSent: ""
     };
   }
+
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  };
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
   async componentDidMount() {
     await this.props.getMessages(this.props.tripId);
     console.log(this.props.tripId);
+
+    this.scrollToBottom();
   }
 
   handleChange(e: any) {
@@ -125,57 +139,72 @@ class ChatBoard extends Component<Props, ChatBoardState> {
           <Card className="card">
             <List>
               {this.props.tripMessages.length ? (
-                this.props.tripMessages
-                  .sort((a: any, b: any) => a.moment.seconds - b.moment.seconds)
-                  .map((msg: any) => (
-                    <>
-                      <ListItem alignItems="flex-start">
-                        <ListItemAvatar>
-                          <Avatar alt="Remy Sharp" src={msg.photoUrl} />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={msg.content}
-                          secondary={
-                            <React.Fragment>
-                              <div>{msg.nickname}</div>
-                              <div>{moment(msg.moment.toDate()).fromNow()}</div>
-                            </React.Fragment>
-                          }
-                        />
-                      </ListItem>
-                    </>
-                  ))
+                this.props.tripMessages.map((msg: any) => (
+                  <div key={msg.moment.seconds}>
+                    <ListItem alignItems="flex-start">
+                      <ListItemAvatar>
+                        <Avatar alt="Remy Sharp" src={msg.photoUrl} />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={msg.content}
+                        secondary={
+                          <React.Fragment>
+                            <div>{msg.nickname}</div>
+                            <div>{moment(msg.moment.toDate()).fromNow()}</div>
+                          </React.Fragment>
+                        }
+                      />
+                    </ListItem>
+                  </div>
+                ))
               ) : (
                 <div></div>
               )}
             </List>
           </Card>
 
-          <BottomNavigation showLabels className="footer">
-            <form>
-              <TextField
-                id="outlined-basic"
-                label="Outlined"
-                variant="outlined"
-                value={this.state.messageToBeSent}
-                onChange={e => this.handleChange(e)}
-              />
+          <div
+            style={{ float: "left", clear: "both" }}
+            ref={el => {
+              this.messagesEnd = el;
+            }}
+          ></div>
 
-              <Button
-                type="button"
-                onClick={() => {
-                  this.clearMessage();
-                  this.props.sendMessage(
-                    this.props.tripId,
-                    this.props.userId,
-                    this.state.messageToBeSent
-                  );
-                }}
-              >
-                <SendIcon />
-                Send Message!
-              </Button>
-            </form>
+          <BottomNavigation showLabels className="footer">
+            <Grid container>
+              <Grid item xs={10}>
+                <TextField
+                  id="outlined-basic"
+                  label="Message"
+                  variant="outlined"
+                  autoFocus
+                  value={this.state.messageToBeSent}
+                  onChange={e => this.handleChange(e)}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Button
+                  type="button"
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  fullWidth
+                  className="button"
+                  onClick={() => {
+                    this.clearMessage();
+                    this.props.sendMessage(
+                      this.props.tripId,
+                      this.props.userId,
+                      this.state.messageToBeSent
+                    );
+                  }}
+                >
+                  <SendIcon />
+                  Send
+                </Button>
+              </Grid>
+            </Grid>
           </BottomNavigation>
         </Container>
       </div>
