@@ -11,7 +11,7 @@ import { setMessages } from "../redux/action";
 const mapStateToProps = (state: any) => ({
   userId: state.userId,
   userName: state.userName,
-  tripId: state.trips[state.currentTrip].tripId,
+  tripId: state.trips[state.currentTrip].tripId.trim(),
   tripMessages: state.currentTripMessages
 });
 
@@ -87,6 +87,8 @@ class ChatBoard extends Component<Props, ChatBoardState> {
   async componentDidMount() {
     // Get memberIds
     await this.props.getMessages(this.props.tripId);
+    console.log(this.props.tripId);
+
     //await this.getGroupMemberInfo(this.state.currentUserId);
     // console.log(this.state.currentPeerUserIds);
     // await this.state.currentPeerUserIds.forEach(id => {
