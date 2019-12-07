@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 type myProps = {
   trips: any;
-  currentTrip: number;
+  currentTripIndex: number;
   onShowChat: any;
   onShowProfile: any;
   onPreviousTrip: any;
@@ -17,29 +17,29 @@ class TripInfo extends React.Component<myProps, {}> {
         <div className="TripInfo">
           <h1>Trip Details</h1>
           <p>
-            Start Date: {this.props.trips[this.props.currentTrip].startDate}
+            Start Date: {this.props.trips[this.props.currentTripIndex].startDate}
           </p>
-          <p>End Date: {this.props.trips[this.props.currentTrip].endDate}</p>
+          <p>End Date: {this.props.trips[this.props.currentTripIndex].endDate}</p>
           <div>
             <p>
               Starting Location:
-              {this.props.trips[this.props.currentTrip].startLocation}
+              {this.props.trips[this.props.currentTripIndex].startLocation}
             </p>
           </div>
           <div>
             Waypoints:{" "}
-            {this.props.trips[this.props.currentTrip].waypoints.map(
+            {this.props.trips[this.props.currentTripIndex].waypoints.map(
               (l: any, i: number) => {
                 return <p key={i}>{l.location}</p>;
               }
             )}
           </div>
-          <p>Budget: {this.props.trips[this.props.currentTrip].budget}</p>
+          <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
           <p>Notes: </p>
           <p>Messages: </p>
           <div>
             Members:{" "}
-            {this.props.trips[this.props.currentTrip].members.map(
+            {this.props.trips[this.props.currentTripIndex].members.map(
               (m: any, i: number) => {
                 return (
                   <div>
@@ -62,7 +62,7 @@ class TripInfo extends React.Component<myProps, {}> {
 const mapStateToProps = (state: any) => {
   return {
     trips: state.trips,
-    currentTrip: state.currentTrip
+    currentTripIndex: state.currentTripIndex
   };
 };
 

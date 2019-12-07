@@ -11,7 +11,7 @@ import { setMessages } from "../redux/action";
 const mapStateToProps = (state: any) => ({
   userId: state.userId,
   userName: state.userName,
-  tripId: state.trips[state.currentTrip].tripId.trim(),
+  tripId: state.trips[state.currentTripIndex].tripId.trim(),
   tripMessages: state.currentTripMessages
 });
 

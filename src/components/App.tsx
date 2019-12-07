@@ -20,7 +20,7 @@ type myProps = {
   currentTripMemberInfo: any;
   currentTripMessages: any;
   trips: any;
-  currentTrip: number;
+  currentTripIndex: number;
   getTrips: any;
   showChat: boolean;
   showProfile: boolean;
@@ -40,10 +40,12 @@ class App extends React.Component<myProps, {}> {
       <div className="App">
         <Login />
         {/* <BuildTrip /> */}
-        {this.props.trips.length ? <ChatBoard /> : null}
-        <TripInfo />
+        {/* {this.props.userId.length && this.props.trips.length ? (
+          <ChatBoard />
+        ) : null} */}
+        {/* <TripInfo /> */}
         {this.props.showProfile ? <Profile /> : null} */}
-        {/* <Map /> */}
+        {this.props.trips.length ? <Map /> : null}
       </div>
     );
   }
@@ -57,7 +59,7 @@ const mapStateToProps = (state: any) => {
     currentTripMemberInfo: state.currentTripMemberInfo,
     currentTripMessages: state.currentTripMessages,
     trips: state.trips,
-    currentTrip: state.currentTrip,
+    currentTripIndex: state.currentTripIndex,
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
