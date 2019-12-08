@@ -2,6 +2,7 @@ import React from "react";
 import { myFirebase, myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 import uuidv4 from "uuid/v4";
+import { FormControl, TextField, Button } from "@material-ui/core";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -29,6 +30,7 @@ const mapDispatchToProps = (dispatch: any) => {
       startDate: string,
       endDate: string,
       startLocation: string,
+      waypoints: any,
       budget: string
     ) => {
       const tripId = uuidv4();
@@ -44,11 +46,11 @@ const mapDispatchToProps = (dispatch: any) => {
           startDate,
           endDate,
           startLocation,
-          waypoints: [],
+          waypoints,
           budget,
           memberIds: []
         })
-        .then(data => {
+        .then(() => {
           dispatch({
             type: "ADD_TRIP"
           });
@@ -102,113 +104,111 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
   render() {
     return (
       <div>
-        <button
-          className="btnBuild"
-          type="submit"
+        <Button
+          variant="contained"
+          color="primary"
           onClick={this.props.onShowBuild}
         >
           BUILD TRIP
-        </button>
+        </Button>
         {this.props.showBuild ? (
           <div>
             <div className="BuildTrip">
               <h1>Build Trip</h1>
-              <form>
-                <label>
-                  Name:
-                  <input
-                    type="text"
-                    value={this.state.name}
-                    onChange={(e: any) => {
-                      this.setState({ name: e.currentTarget.value });
-                    }}
-                  />
-                </label>
+              <FormControl>
+                <TextField
+                  id="name"
+                  label="Name"
+                  variant="outlined"
+                  value={this.state.name}
+                  onChange={(e: any) => {
+                    this.setState({ name: e.currentTarget.value });
+                  }}
+                />
                 <br />
-                <label>
-                  Start Date:
-                  <input
-                    type="date"
-                    value={this.state.startDate}
-                    onChange={(e: any) => {
-                      console.log(e.currentTarget.value);
-                      this.setState({ startDate: e.currentTarget.value });
-                    }}
-                  />
-                </label>
+                <TextField
+                  id="start-date"
+                  label="Start Date"
+                  variant="outlined"
+                  type="date"
+                  InputLabelProps={{ shrink: true }}
+                  value={this.state.startDate}
+                  onChange={(e: any) => {
+                    this.setState({ startDate: e.currentTarget.value });
+                  }}
+                />
                 <br />
-                <label>
-                  End Date:
-                  <input
-                    type="date"
-                    value={this.state.endDate}
-                    onChange={(e: any) => {
-                      this.setState({ endDate: e.currentTarget.value });
-                    }}
-                  />
-                </label>
+                <TextField
+                  id="end-date"
+                  label="End Date"
+                  variant="outlined"
+                  type="date"
+                  InputLabelProps={{ shrink: true }}
+                  value={this.state.endDate}
+                  onChange={(e: any) => {
+                    this.setState({ endDate: e.currentTarget.value });
+                  }}
+                />
                 <br />
-                <label>
-                  Start Location:
-                  <input
-                    type="text"
-                    value={this.state.startLocation}
-                    onChange={(e: any) => {
-                      this.setState({ startLocation: e.currentTarget.value });
-                    }}
-                  />
-                </label>
-                <br />
+                <TextField
+                  id="start-location"
+                  label="Start Location"
+                  variant="outlined"
+                  value={this.state.startLocation}
+                  onChange={(e: any) => {
+                    this.setState({ startLocation: e.currentTarget.value });
+                  }}
+                />
                 <br />
                 <label>Places:</label>
                 {this.state.waypoints.length
-                  ? this.state.waypoints.map((waypoint: string) => (
-                      <div>{waypoint}</div>
+                  ? this.state.waypoints.map((waypoint: any) => (
+                      <div>{waypoint.location}</div>
                     ))
                   : null}
                 <br />
+                <TextField
+                  id="places"
+                  label="Places"
+                  variant="outlined"
+                  value={this.state.addedWaypoint}
+                  onChange={(e: any) => {
+                    this.setState({ addedWaypoint: e.currentTarget.value });
+                  }}
+                />
                 <br />
-                <label>
-                  Add Places:
-                  <input
-                    type="text"
-                    value={this.state.addedWaypoint}
-                    onChange={e =>
-                      this.setState({
-                        addedWaypoint: e.currentTarget.value
-                      })
-                    }
-                    name="waypoint"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      this.setState({
-                        waypoints: this.state.waypoints.concat([
-                          this.state.addedWaypoint
-                        ]),
-                        addedWaypoint: ""
-                      });
-                    }}
-                  >
-                    Add place
-                  </button>
-                </label>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    this.setState({
+                      waypoints: this.state.waypoints.concat([
+                        {
+                          location: this.state.addedWaypoint,
+                          stopover: true
+                        }
+                      ]),
+                      addedWaypoint: ""
+                    });
+                  }}
+                >
+                  Add Place
+                </Button>
                 <br />
+                <TextField
+                  id="budget"
+                  label="My Budget"
+                  type="number"
+                  variant="outlined"
+                  value={this.state.budget}
+                  onChange={(e: any) => {
+                    this.setState({ budget: e.currentTarget.value });
+                  }}
+                />
                 <br />
-                <label>
-                  My Budget:
-                  <input
-                    type="number"
-                    value={this.state.budget}
-                    onChange={(e: any) => {
-                      this.setState({ budget: e.currentTarget.value });
-                    }}
-                  />
-                </label>
-                <br />
-                <button
-                  type="button"
+                <Button
+                  variant="contained"
+                  color="primary"
                   onClick={() => {
                     this.props.onAddTrip(
                       this.state.name,
@@ -216,15 +216,23 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                       this.state.startDate,
                       this.state.endDate,
                       this.state.startLocation,
+                      this.state.waypoints,
                       this.state.budget
                     );
                     this.props.onClosePopup();
                   }}
                 >
-                  Submit Trip
-                </button>
-              </form>
-              <button onClick={this.props.onClosePopup}>Close</button>
+                  Submit My Trip
+                </Button>
+                <br />
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={this.props.onClosePopup}
+                >
+                  Close
+                </Button>
+              </FormControl>
             </div>
           </div>
         ) : null}

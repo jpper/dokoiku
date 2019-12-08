@@ -74,15 +74,8 @@ const reducer = (state: any = initialState, action: Action): any => {
     case "SHOW_BUILD": {
       //Add some logic to add trip to Firebase
       return {
-        userId: state.userId,
-        userName: state.userName,
-        userPhoto: state.userPhoto,
-        trips: [...state.trips],
-        currentTripIndex: state.currentTripIndex,
-        showProfile: false,
-        showChat: false,
-        showBuild: true,
-        currentProfile: state.currentProfile
+        ...state,
+        showBuild: true
       };
     }
     case "SET_USER_INFO": {
