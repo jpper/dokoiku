@@ -109,6 +109,12 @@ const reducer = (state: any = initialState, action: Action): any => {
         currentTripMessages: tmpMessages
       };
     }
+    case "CLEAR_MESSAGES": {
+      return {
+        ...state,
+        currentTripMessages: []
+      };
+    }
     case "SET_TRIPS": {
       return {
         ...state,

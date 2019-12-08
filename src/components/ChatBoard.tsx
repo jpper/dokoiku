@@ -6,7 +6,7 @@ import React, { Component } from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { setMessages } from "../redux/action";
+import { setMessages, clearMessages } from "../redux/action";
 
 // Material UI & Styles
 import {
@@ -35,6 +35,9 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
+  clearMessage: () => {
+    dispatch(clearMessages());
+  },
   getMessages: (tripId: string) => {
     myFirestore
       .collection("trips")
@@ -114,6 +117,7 @@ class ChatBoard extends Component<Props, ChatBoardState> {
     this.scrollToBottom();
   }
   async componentDidMount() {
+    await this.props.clearMessage();
     await this.props.getMessages(this.props.tripId);
     console.log(this.props.tripId);
 
