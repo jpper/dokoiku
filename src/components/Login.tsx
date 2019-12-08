@@ -147,7 +147,7 @@ class Login extends Component<Props, Status> {
                         type="submit"
                         onClick={this.onlogoutPress}
                       >
-                        SIGN OUT WITH GOOGLE
+                        SIGN OUT
                       </Button>
                       <div>{this.props.userName}</div>
                     </div>

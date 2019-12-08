@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(clearMessages());
   },
   getMessages: (tripId: string) => {
-    myFirestore
+    const unsubMessages = myFirestore
       .collection("trips")
       .doc(tripId)
       .collection("messages")
@@ -188,25 +188,39 @@ class ChatBoard extends Component<Props, ChatBoardState> {
                 />
               </Grid>
               <Grid item xs={2}>
-                <Button
-                  type="button"
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  fullWidth
-                  className="button"
-                  onClick={() => {
-                    this.clearMessage();
-                    this.props.sendMessage(
-                      this.props.tripId,
-                      this.props.userId,
-                      this.state.messageToBeSent
-                    );
-                  }}
-                >
-                  <SendIcon />
-                  Send
-                </Button>
+                {this.state.messageToBeSent === "" ? (
+                  <Button
+                    type="button"
+                    variant="contained"
+                    size="large"
+                    disabled
+                    fullWidth
+                    className="button"
+                  >
+                    <SendIcon />
+                    Send
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                    className="button"
+                    onClick={() => {
+                      this.clearMessage();
+                      this.props.sendMessage(
+                        this.props.tripId,
+                        this.props.userId,
+                        this.state.messageToBeSent
+                      );
+                    }}
+                  >
+                    <SendIcon />
+                    Send
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </BottomNavigation>
