@@ -6,7 +6,11 @@ import React, { Component } from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { setMessages, clearMessages } from "../redux/action";
+import {
+  setMessages,
+  clearMessages,
+  setMessageListener
+} from "../redux/action";
 
 // Material UI & Styles
 import {
@@ -31,15 +35,23 @@ const mapStateToProps = (state: any) => ({
   userId: state.userId,
   userName: state.userName,
   tripId: state.trips[state.currentTripIndex].tripId.trim(),
-  tripMessages: state.currentTripMessages
+  tripMessages: state.currentTripMessages,
+  messageListener: state.messageListener
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
   clearMessage: () => {
     dispatch(clearMessages());
   },
+  clearListener: (listener: any) => {
+    if (listener !== undefined) {
+      // Stop listening for changes
+      listener();
+      dispatch(setMessageListener(undefined));
+    }
+  },
   getMessages: (tripId: string) => {
-    const unsubMessages = myFirestore
+    const messageListener = myFirestore
       .collection("trips")
       .doc(tripId)
       .collection("messages")
@@ -64,6 +76,7 @@ const mapDispatchToProps = (dispatch: any) => ({
           console.log(err.toString());
         }
       );
+    dispatch(setMessageListener(messageListener));
   },
   sendMessage: (tripId: string, userId: string, messageToBeSent: string) => {
     // const moment = firestore.FieldValue.serverTimestamp();
@@ -118,6 +131,8 @@ class ChatBoard extends Component<Props, ChatBoardState> {
   }
   async componentDidMount() {
     await this.props.clearMessage();
+    await this.props.clearListener(this.props.messageListener);
+
     await this.props.getMessages(this.props.tripId);
     console.log(this.props.tripId);
 

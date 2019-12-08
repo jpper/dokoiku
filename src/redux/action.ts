@@ -18,6 +18,11 @@ export const clearMessages = () => ({
   type: "CLEAR_MESSAGES"
 });
 
+export const setMessageListener = (listener: any) => ({
+  type: "SET_MESSAGE_LISTENER",
+  listener
+});
+
 export const setTrips = (trips: any) => ({
   type: "SET_TRIPS",
   trips
