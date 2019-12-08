@@ -6,6 +6,19 @@ import { myFirebase, myFirestore } from "../config/firebase";
 import { setUserInfo } from "../redux/action";
 import { connect } from "react-redux";
 
+// Material UI & Styles
+import {
+  Avatar,
+  Container,
+  Paper,
+  Typography,
+  Grid,
+  Button
+} from "@material-ui/core";
+import LockIcon from "@material-ui/icons/Lock";
+import MailIcon from "@material-ui/icons/Mail";
+import "../styles/Login.css";
+
 const mapStateToProps = (state: any) => ({
   userName: state.userName,
   userId: state.userId,
@@ -85,7 +98,7 @@ class Login extends Component<Props, Status> {
   constructor(props: any) {
     super(props);
     this.state = {
-      isLoading: true,
+      isLoading: false,
       user: null,
       uid: "",
       displayName: "",
@@ -110,36 +123,65 @@ class Login extends Component<Props, Status> {
 
   render() {
     return (
-      <div className="viewRoot">
-        <div className="header">CHAT DEMO</div>
+      <div className="container">
+        <Container>
+          <Grid container direction="row" justify="center" alignItems="center">
+            <Grid item xs={6}>
+              <Paper>
+                <div className="wrapper">
+                  <div className="titleWrapper">
+                    <Avatar>
+                      <LockIcon />
+                    </Avatar>
+                    <Typography variant="h5" className="header">
+                      Sign in
+                    </Typography>
+                  </div>
 
-        {this.props.userName ? (
-          <div>
-            <button
-              className="btnLogin"
-              type="submit"
-              onClick={this.onlogoutPress}
-            >
-              SIGN OUT WITH GOOGLE
-            </button>
-            <div>{this.props.userName}</div>
-          </div>
-        ) : (
-          <button className="btnLogin" type="submit" onClick={this.props.login}>
-            SIGN IN WITH GOOGLE
-          </button>
-        )}
+                  {this.props.userName ? (
+                    <div className="buttonWrapper">
+                      <Button
+                        className="button"
+                        variant="contained"
+                        color="secondary"
+                        type="submit"
+                        onClick={this.onlogoutPress}
+                      >
+                        SIGN OUT WITH GOOGLE
+                      </Button>
+                      <div>{this.props.userName}</div>
+                    </div>
+                  ) : (
+                    <div className="buttonWrapper">
+                      <Button
+                        className="button"
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        onClick={this.props.login}
+                      >
+                        <MailIcon />
+                        &nbsp; Sign In with &nbsp;
+                        <b>Google</b>
+                      </Button>
+                    </div>
+                  )}
 
-        {this.state.isLoading ? (
-          <div className="viewLoading">
-            {/* <ReactLoading
+                  {this.state.isLoading ? (
+                    <div className="viewLoading">
+                      {/* <ReactLoading
               type={"spin"}
               color={"#203152"}
               height={"3%"}
               width={"3%"}
             /> */}
-          </div>
-        ) : null}
+                    </div>
+                  ) : null}
+                </div>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
       </div>
     );
   }
