@@ -1,9 +1,11 @@
 import React from "react";
 import { myFirebase, myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
+import uuidv4 from "uuid/v4";
 
 const mapStateToProps = (state: any) => {
   return {
+    userId: state.userId,
     trips: state.trips,
     currentTripIndex: state.currentTripIndex,
     showBuild: state.showBuild
@@ -21,27 +23,37 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "CLOSE_POPUP"
       }),
-    onAddTrip: () =>
+    onAddTrip: (
+      name: string,
+      userId: string,
+      startDate: string,
+      endDate: string,
+      startLocation: string,
+      budget: string
+    ) => {
+      const tripId = uuidv4();
       myFirestore
         .collection("trips")
-        .add({
-          name: "",
+        .doc(tripId)
+        .set({
+          name,
           notes: "",
-          ownerId: "",
-          tripId: "",
+          ownerId: userId,
+          tripId,
           travelMode: "DRIVING",
-          startDate: null,
-          endDate: null,
-          startLocation: "",
+          startDate,
+          endDate,
+          startLocation,
           waypoints: [],
-          budget: 0,
+          budget,
           memberIds: []
         })
         .then(data => {
           dispatch({
             type: "ADD_TRIP"
           });
-        })
+        });
+    }
   };
 };
 
@@ -52,6 +64,7 @@ type BuildProps = {
   onClosePopup: any;
   onShowBuild: any;
   onAddTrip: any;
+  userId: string;
 };
 type BuildState = {
   name: string;
@@ -59,27 +72,18 @@ type BuildState = {
   ownerId: string;
   tripId: string;
   travelMode: string;
-  startDate: Date | null;
-  endDate: Date | null;
+  startDate: string | null;
+  endDate: string | null;
   startLocation: string;
   waypoints: any;
+  addedWaypoint: string;
   budget: number;
   memberIds: any;
 };
 
 class BuildTrip extends React.Component<BuildProps, BuildState> {
-  private startDateInput: React.RefObject<HTMLInputElement>;
-  private endDateInput: React.RefObject<HTMLInputElement>;
-  private startLocationInput: React.RefObject<HTMLInputElement>;
-  private budgetInput: React.RefObject<HTMLInputElement>;
-  private nameInput: React.RefObject<HTMLInputElement>;
   constructor(props: BuildProps) {
     super(props);
-    this.startDateInput = React.createRef();
-    this.endDateInput = React.createRef();
-    this.startLocationInput = React.createRef();
-    this.budgetInput = React.createRef();
-    this.nameInput = React.createRef();
     this.state = {
       name: "",
       notes: "",
@@ -90,14 +94,11 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
       endDate: null,
       startLocation: "",
       waypoints: [],
+      addedWaypoint: "",
       budget: 0,
       memberIds: []
     };
   }
-  handleSubmit = (e: any) => {
-    e.preventDefault();
-  };
-
   render() {
     return (
       <div>
@@ -115,52 +116,111 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               <form>
                 <label>
                   Name:
-                  <input type="date" ref={this.nameInput} />
+                  <input
+                    type="text"
+                    value={this.state.name}
+                    onChange={(e: any) => {
+                      this.setState({ name: e.currentTarget.value });
+                    }}
+                  />
                 </label>
                 <br />
                 <label>
                   Start Date:
-                  <input type="date" ref={this.startDateInput} />
+                  <input
+                    type="date"
+                    value={this.state.startDate}
+                    onChange={(e: any) => {
+                      console.log(e.currentTarget.value);
+                      this.setState({ startDate: e.currentTarget.value });
+                    }}
+                  />
                 </label>
                 <br />
                 <label>
                   End Date:
-                  <input type="date" ref={this.endDateInput} />
+                  <input
+                    type="date"
+                    value={this.state.endDate}
+                    onChange={(e: any) => {
+                      this.setState({ endDate: e.currentTarget.value });
+                    }}
+                  />
                 </label>
                 <br />
                 <label>
                   Start Location:
-                  <input type="text" ref={this.startLocationInput} />
+                  <input
+                    type="text"
+                    value={this.state.startLocation}
+                    onChange={(e: any) => {
+                      this.setState({ startLocation: e.currentTarget.value });
+                    }}
+                  />
                 </label>
                 <br />
                 <br />
-                <label>Waypoints: {this.state.waypoints}</label>
+                <label>Places:</label>
+                {this.state.waypoints.length
+                  ? this.state.waypoints.map((waypoint: string) => (
+                      <div>{waypoint}</div>
+                    ))
+                  : null}
                 <br />
                 <br />
                 <label>
-                  Add Waypoints:
-                  <input type="text" name="waypoint" />
-                  <button>Add waypoint</button>
+                  Add Places:
+                  <input
+                    type="text"
+                    value={this.state.addedWaypoint}
+                    onChange={e =>
+                      this.setState({
+                        addedWaypoint: e.currentTarget.value
+                      })
+                    }
+                    name="waypoint"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      this.setState({
+                        waypoints: this.state.waypoints.concat([
+                          this.state.addedWaypoint
+                        ]),
+                        addedWaypoint: ""
+                      });
+                    }}
+                  >
+                    Add place
+                  </button>
                 </label>
                 <br />
                 <br />
                 <label>
-                  Budget:
-                  <input type="number" ref={this.budgetInput} />
+                  My Budget:
+                  <input
+                    type="number"
+                    value={this.state.budget}
+                    onChange={(e: any) => {
+                      this.setState({ budget: e.currentTarget.value });
+                    }}
+                  />
                 </label>
                 <br />
-                <br />
-                <label>Members:</label>
-                <br />
-                <br />
-                <label>
-                  Add Members: {this.state.memberIds}
-                  <input type="text" name="username" />
-                  <button>Add member</button>
-                </label>
-                <br />
-                <br />
-                <button type="button" onClick={this.props.onAddTrip}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    this.props.onAddTrip(
+                      this.state.name,
+                      this.props.userId,
+                      this.state.startDate,
+                      this.state.endDate,
+                      this.state.startLocation,
+                      this.state.budget
+                    );
+                    this.props.onClosePopup();
+                  }}
+                >
                   Submit Trip
                 </button>
               </form>
