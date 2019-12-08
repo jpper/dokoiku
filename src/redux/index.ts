@@ -68,8 +68,7 @@ const reducer = (state: any = initialState, action: Action): any => {
     case "CLOSE_POPUP": {
       return {
         ...state,
-        showProfile: false,
-        showChat: false
+        showBuild: false
       };
     }
     case "SHOW_BUILD": {
@@ -118,7 +117,6 @@ const reducer = (state: any = initialState, action: Action): any => {
       };
     }
     case "SET_TRIPS": {
-      console.log(action.trips);
       return {
         ...state,
         trips: action.trips

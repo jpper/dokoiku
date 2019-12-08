@@ -6,7 +6,6 @@ import {
   DirectionsRenderer
 } from "@react-google-maps/api";
 import { connect } from "react-redux";
-import axios from "axios";
 require("dotenv").config();
 
 const mapStateToProps = (state: any) => {

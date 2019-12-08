@@ -1,4 +1,5 @@
 import React from "react";
+import { myFirebase, myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state: any) => {
@@ -20,11 +21,27 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "CLOSE_POPUP"
       }),
-    onAddTrip: (trip: any) =>
-      dispatch({
-        type: "ADD_TRIP",
-        trip
-      })
+    onAddTrip: () =>
+      myFirestore
+        .collection("trips")
+        .add({
+          name: "",
+          notes: "",
+          ownerId: "",
+          tripId: "",
+          travelMode: "DRIVING",
+          startDate: null,
+          endDate: null,
+          startLocation: "",
+          waypoints: [],
+          budget: 0,
+          memberIds: []
+        })
+        .then(data => {
+          dispatch({
+            type: "ADD_TRIP"
+          });
+        })
   };
 };
 
@@ -37,7 +54,17 @@ type BuildProps = {
   onAddTrip: any;
 };
 type BuildState = {
-  trip: any;
+  name: string;
+  notes: string;
+  ownerId: string;
+  tripId: string;
+  travelMode: string;
+  startDate: Date | null;
+  endDate: Date | null;
+  startLocation: string;
+  waypoints: any;
+  budget: number;
+  memberIds: any;
 };
 
 class BuildTrip extends React.Component<BuildProps, BuildState> {
@@ -45,21 +72,26 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
   private endDateInput: React.RefObject<HTMLInputElement>;
   private startLocationInput: React.RefObject<HTMLInputElement>;
   private budgetInput: React.RefObject<HTMLInputElement>;
+  private nameInput: React.RefObject<HTMLInputElement>;
   constructor(props: BuildProps) {
     super(props);
     this.startDateInput = React.createRef();
     this.endDateInput = React.createRef();
     this.startLocationInput = React.createRef();
     this.budgetInput = React.createRef();
+    this.nameInput = React.createRef();
     this.state = {
-      trip: {
-        startDate: null,
-        endDate: null,
-        startLocation: "",
-        waypoints: [],
-        budget: 0,
-        memberIds: []
-      }
+      name: "",
+      notes: "",
+      ownerId: "",
+      tripId: "",
+      travelMode: "DRIVING",
+      startDate: null,
+      endDate: null,
+      startLocation: "",
+      waypoints: [],
+      budget: 0,
+      memberIds: []
     };
   }
   handleSubmit = (e: any) => {
@@ -80,7 +112,12 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
           <div>
             <div className="BuildTrip">
               <h1>Build Trip</h1>
-              <form onSubmit={this.handleSubmit}>
+              <form>
+                <label>
+                  Name:
+                  <input type="date" ref={this.nameInput} />
+                </label>
+                <br />
                 <label>
                   Start Date:
                   <input type="date" ref={this.startDateInput} />
@@ -97,7 +134,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 </label>
                 <br />
                 <br />
-                <label>Waypoints: {this.state.trip.waypoints}</label>
+                <label>Waypoints: {this.state.waypoints}</label>
                 <br />
                 <br />
                 <label>
@@ -117,13 +154,15 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 <br />
                 <br />
                 <label>
-                  Add Members: {this.state.trip.memberIds}
+                  Add Members: {this.state.memberIds}
                   <input type="text" name="username" />
                   <button>Add member</button>
                 </label>
                 <br />
                 <br />
-                <input type="submit" value="Submit Trip" />
+                <button type="button" onClick={this.props.onAddTrip}>
+                  Submit Trip
+                </button>
               </form>
               <button onClick={this.props.onClosePopup}>Close</button>
             </div>
