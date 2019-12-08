@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
 
 type myProps = {
   trips: any;
@@ -14,17 +16,21 @@ class TripInfo extends React.Component<myProps, {}> {
   render() {
     return (
       <div>
-        <div className="TripInfo">
-          <h1>Trip Details</h1>
-          <p>
+        <Paper className="TripInfo">
+          <Typography variant="h5" component="h3">
+            Trip Details
+          </Typography>
+          <Paper>
             Start Date: {this.props.trips[this.props.currentTrip].startDate}
-          </p>
-          <p>End Date: {this.props.trips[this.props.currentTrip].endDate}</p>
+          </Paper>
+          <Paper>
+            End Date: {this.props.trips[this.props.currentTrip].endDate}
+          </Paper>
           <div>
-            <p>
+            <Paper>
               Starting Location:
               {this.props.trips[this.props.currentTrip].startLocation}
-            </p>
+            </Paper>
           </div>
           <div>
             Waypoints:{" "}
@@ -34,12 +40,14 @@ class TripInfo extends React.Component<myProps, {}> {
               }
             )}
           </div>
-          <p>Budget: {this.props.trips[this.props.currentTrip].budget}</p>
-          <p>Notes: </p>
-          <p>Messages: </p>
+          <Paper>
+            Budget: {this.props.trips[this.props.currentTrip].budget}
+          </Paper>
+          <Paper>Notes: </Paper>
+          <Paper>Messages: </Paper>
           <div>
             Members:{" "}
-            {this.props.trips[this.props.currentTrip].members.map(
+            {this.props.trips[this.props.currentTrip].memberIds.map(
               (m: any, i: number) => {
                 return (
                   <div>
@@ -51,7 +59,7 @@ class TripInfo extends React.Component<myProps, {}> {
               }
             )}
           </div>
-        </div>
+        </Paper>
         <button onClick={this.props.onPreviousTrip}>Previous</button>
         <button onClick={this.props.onNextTrip}>Next</button>
       </div>

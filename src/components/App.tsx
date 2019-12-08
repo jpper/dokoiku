@@ -40,9 +40,9 @@ class App extends React.Component<myProps, {}> {
       <div className="App">
         <Login />
         {/* <BuildTrip /> */}
-        {this.props.trips.length ? <ChatBoard /> : null}
+        {/* {this.props.trips.length ? <ChatBoard /> : null} */}
         <TripInfo />
-        {this.props.showProfile ? <Profile /> : null} */}
+        {this.props.showProfile ? <Profile /> : null}
         {/* <Map /> */}
       </div>
     );
@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch: any) => {
         .then(snapShot => {
           const trips = snapShot.docs.map(doc => doc.data());
           console.log(trips);
-          dispatch(setTrips(trips));
+          //dispatch(setTrips(trips));
         })
         .catch(err => {
           console.log(err.toString());
