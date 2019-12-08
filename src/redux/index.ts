@@ -4,8 +4,8 @@ const initialState: any = {
   userId: "",
   userName: "",
   userPhoto: "",
-  currentTripMemberInfo: [],
   currentTripMessages: [],
+  messageListener: undefined,
   trips: [],
   currentTripIndex: 0,
   showProfile: false,
@@ -107,6 +107,18 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         currentTripMessages: tmpMessages
+      };
+    }
+    case "CLEAR_MESSAGES": {
+      return {
+        ...state,
+        currentTripMessages: []
+      };
+    }
+    case "SET_MESSAGE_LISTENER": {
+      return {
+        ...state,
+        messageListener: action.listener
       };
     }
     case "SET_TRIPS": {

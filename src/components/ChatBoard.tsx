@@ -6,7 +6,11 @@ import React, { Component } from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { setMessages } from "../redux/action";
+import {
+  setMessages,
+  clearMessages,
+  setMessageListener
+} from "../redux/action";
 
 // Material UI & Styles
 import {
@@ -31,12 +35,23 @@ const mapStateToProps = (state: any) => ({
   userId: state.userId,
   userName: state.userName,
   tripId: state.trips[state.currentTripIndex].tripId.trim(),
-  tripMessages: state.currentTripMessages
+  tripMessages: state.currentTripMessages,
+  messageListener: state.messageListener
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
+  clearMessage: () => {
+    dispatch(clearMessages());
+  },
+  clearListener: (listener: any) => {
+    if (listener !== undefined) {
+      // Stop listening for changes
+      listener();
+      dispatch(setMessageListener(undefined));
+    }
+  },
   getMessages: (tripId: string) => {
-    myFirestore
+    const messageListener = myFirestore
       .collection("trips")
       .doc(tripId)
       .collection("messages")
@@ -61,6 +76,7 @@ const mapDispatchToProps = (dispatch: any) => ({
           console.log(err.toString());
         }
       );
+    dispatch(setMessageListener(messageListener));
   },
   sendMessage: (tripId: string, userId: string, messageToBeSent: string) => {
     // const moment = firestore.FieldValue.serverTimestamp();
@@ -114,6 +130,9 @@ class ChatBoard extends Component<Props, ChatBoardState> {
     this.scrollToBottom();
   }
   async componentDidMount() {
+    await this.props.clearMessage();
+    await this.props.clearListener(this.props.messageListener);
+
     await this.props.getMessages(this.props.tripId);
     console.log(this.props.tripId);
 
@@ -184,25 +203,39 @@ class ChatBoard extends Component<Props, ChatBoardState> {
                 />
               </Grid>
               <Grid item xs={2}>
-                <Button
-                  type="button"
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  fullWidth
-                  className="button"
-                  onClick={() => {
-                    this.clearMessage();
-                    this.props.sendMessage(
-                      this.props.tripId,
-                      this.props.userId,
-                      this.state.messageToBeSent
-                    );
-                  }}
-                >
-                  <SendIcon />
-                  Send
-                </Button>
+                {this.state.messageToBeSent === "" ? (
+                  <Button
+                    type="button"
+                    variant="contained"
+                    size="large"
+                    disabled
+                    fullWidth
+                    className="button"
+                  >
+                    <SendIcon />
+                    Send
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                    className="button"
+                    onClick={() => {
+                      this.clearMessage();
+                      this.props.sendMessage(
+                        this.props.tripId,
+                        this.props.userId,
+                        this.state.messageToBeSent
+                      );
+                    }}
+                  >
+                    <SendIcon />
+                    Send
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </BottomNavigation>
