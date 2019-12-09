@@ -40,7 +40,7 @@ type myProps = {
   userName: string;
   userPhoto: string;
   trips: any;
-  currentTrip: number;
+  currentTripIndex: number;
   showChat: boolean;
   showProfile: boolean;
   showBuild: boolean;
@@ -68,7 +68,7 @@ const mapStateToProps = (state: any) => {
     userName: state.userName,
     userPhoto: state.userPhoto,
     trips: state.trips,
-    currentTrip: state.currentTrip,
+    currentTripIndex: state.currentTripIndex,
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
@@ -298,7 +298,10 @@ class Contents extends React.Component<myProps, any> {
                     <TripInfo />
                   </Grid>
                   <Grid item xs={7}>
-                    {/* <Map /> */}
+                    <Map
+                      trips={this.props.trips}
+                      currentTripIndex={this.props.currentTripIndex}
+                    />
                   </Grid>
                 </Grid>
               </>
@@ -317,7 +320,10 @@ class Contents extends React.Component<myProps, any> {
                     <TripInfo />
                   </Grid>
                   <Grid item xs={7}>
-                    {/* <Map /> */}
+                    <Map
+                      trips={this.props.trips}
+                      currentTripIndex={this.props.currentTripIndex}
+                    />
                   </Grid>
                 </Grid>
               </>
@@ -347,10 +353,7 @@ class Contents extends React.Component<myProps, any> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Contents);
+export default connect(mapStateToProps, mapDispatchToProps)(Contents);
 
 //TODO Q: how do we set up general (app wide) colors
 //TODO Q: mapDispatchToProps doesnt work if not commented out. How to connect it and make everything work together
