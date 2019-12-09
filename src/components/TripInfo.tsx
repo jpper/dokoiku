@@ -4,6 +4,7 @@ import { Button, Paper } from "@material-ui/core";
 import moment from "moment";
 import firebase from "firebase";
 import { myFirebase, myFirestore } from "../config/firebase";
+import Map from "./Map";
 
 type myProps = {
   trips: any;
@@ -25,6 +26,7 @@ class TripInfo extends React.Component<myProps, {}> {
   // }
 
   render() {
+    console.log(this.props.currentTripIndex);
     return (
       <div>
         <div className="TripInfo">
@@ -112,6 +114,12 @@ class TripInfo extends React.Component<myProps, {}> {
             </Button>
           </div>
         </div>
+        {this.props.trips.length ? (
+          <Map
+            trips={this.props.trips}
+            currentTripIndex={this.props.currentTripIndex}
+          />
+        ) : null}
       </div>
     );
   }
