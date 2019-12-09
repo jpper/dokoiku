@@ -36,10 +36,6 @@ class App extends React.Component<myProps, {}> {
   render() {
     return (
       <div className="App">
-        {/* <Login />
-        <BuildTrip /> */}
-        {/* <Notes tripId="TestTrip1" /> */}
-        {/* {this.props.userId.length && this.props.trips.length ? ( */}
         {/* <BuildTrip /> */}
         <Contents />
         {/* <Notes tripId="TestTrip1" /> */}
@@ -51,8 +47,7 @@ class App extends React.Component<myProps, {}> {
           <TripInfo />
         ) : null} */}
 
-        {/* {this.props.showProfile ? <Profile /> : null}
-        {this.props.trips.length ? <Map /> : null} */}
+        {this.props.showProfile ? <Profile /> : null}
       </div>
     );
   }
