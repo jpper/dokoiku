@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./Notes.css";
+import "../styles/Notes.css";
 import { config } from "../config/firebase";
 
 class Editor extends Component {

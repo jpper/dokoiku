@@ -7,6 +7,7 @@ import ChatBoard from "./ChatBoard";
 import "../styles/App.css";
 import Map from "./Map";
 import Notes from "./Notes";
+import Header from "./Header";
 import { connect } from "react-redux";
 
 type myProps = {
@@ -27,8 +28,9 @@ class App extends React.Component<myProps, {}> {
       <div className="App">
         <Login />
         <BuildTrip />
+        <Header />
         {/* <Notes tripId="TestTrip1" /> */}
-        <ChatBoard />
+        {/* <ChatBoard /> */}
         {/* {/* <TripInfo /> 
         {this.props.showProfile ? <Profile /> : null}
         <Map /> */}

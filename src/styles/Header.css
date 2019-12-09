@@ -1,0 +1,30 @@
+/* const useStyles = makeStyles((theme: Theme) =>
+createStyles({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+}),
+); */
+
+.MuiToolbar-root {
+  background-color: white;
+}
+
+.root {
+  flex-grow: inherit;
+  justify-content: space-around;
+  background-color: white;
+}
+
+
+.menuButton {
+  margin-right: 2%;
+  margin-left: 2%;
+  color: white;
+} 
+.MuiButton-label {
+  background-color: pink;
+}
