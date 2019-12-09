@@ -48,8 +48,8 @@ class App extends React.Component<myProps, {}> {
           <TripInfo />
         ) : null}
 
-        {/* {this.props.showProfile ? <Profile /> : null}
-        {this.props.trips.length ? <Map /> : null} */}
+        {this.props.showProfile ? <Profile /> : null}
+        {this.props.trips.length ? <Map /> : null}
       </div>
     );
   }

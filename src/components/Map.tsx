@@ -35,6 +35,7 @@ class Map extends React.Component<MapProps, MapState> {
 
   shouldComponentUpdate(nextProps: any, nextState: any) {
     return (
+      nextProps.currentTripIndex != this.props.currentTripIndex ||
       this.state.response === null ||
       nextState.response.status != this.state.response.status
     );

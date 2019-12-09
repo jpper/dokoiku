@@ -97,6 +97,22 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
       memberIds: []
     };
   }
+  clearState() {
+    this.setState({
+      name: "",
+      notes: "",
+      ownerId: "",
+      tripId: "",
+      travelMode: "DRIVING",
+      startDate: null,
+      endDate: null,
+      startLocation: "",
+      waypoints: [],
+      addedWaypoint: "",
+      budget: 0,
+      memberIds: []
+    });
+  }
   render() {
     return (
       <div>
@@ -196,30 +212,44 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   label="My Budget"
                   type="number"
                   variant="outlined"
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={this.state.budget}
                   onChange={(e: any) => {
                     this.setState({ budget: e.currentTarget.value });
                   }}
                 />
                 <br />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    this.props.onAddTrip(
-                      this.state.name,
-                      this.props.userId,
-                      this.state.startDate,
-                      this.state.endDate,
-                      this.state.startLocation,
-                      this.state.waypoints,
-                      this.state.budget
-                    );
-                    this.props.onClosePopup();
-                  }}
-                >
-                  Submit My Trip
-                </Button>
+                {this.state.name &&
+                this.state.travelMode &&
+                this.state.startDate &&
+                this.state.endDate &&
+                this.state.startLocation &&
+                this.state.waypoints.length &&
+                this.state.budget ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      this.props.onAddTrip(
+                        this.state.name,
+                        this.props.userId,
+                        this.state.startDate,
+                        this.state.endDate,
+                        this.state.startLocation,
+                        this.state.waypoints,
+                        this.state.budget
+                      );
+                      this.clearState();
+                      this.props.onClosePopup();
+                    }}
+                  >
+                    Submit My Trip
+                  </Button>
+                ) : (
+                  <Button variant="contained" disabled>
+                    Please Fill Out the Form
+                  </Button>
+                )}
                 <br />
                 <Button
                   variant="contained"
