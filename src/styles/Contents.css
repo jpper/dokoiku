@@ -2,3 +2,8 @@
   background-color: white;
   color: black;
 }
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

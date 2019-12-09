@@ -1,5 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import TripInfo from "./TripInfo";
+import Map from "./Map";
+import ChatBoard from "./ChatBoard";
+import About from "./About";
+import BuildTrip from "./BuildTrip";
+import Login from "./Login";
+import firebase from "firebase";
 
 // Material UI & Styles
 import "../styles/Contents.css";
@@ -12,7 +19,10 @@ import {
   Tab,
   Tabs,
   Box,
-  Grid
+  Grid,
+  Avatar,
+  Menu,
+  MenuItem
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import CardTravelIcon from "@material-ui/icons/CardTravel";
@@ -20,13 +30,10 @@ import SearchIcon from "@material-ui/icons/Search";
 import BuildIcon from "@material-ui/icons/Build";
 import ChatIcon from "@material-ui/icons/Chat";
 import InfoIcon from "@material-ui/icons/Info";
-import TripInfo from "./TripInfo";
-import Map from "./Map";
-import ChatBoard from "./ChatBoard";
-import About from "./About";
-import BuildTrip from "./BuildTrip";
+import PersonIcon from "@material-ui/icons/Person";
 
 type myProps = {
+  userId: string;
   trips: any;
   currentTrip: number;
   showChat: boolean;
@@ -50,6 +57,7 @@ type myProps = {
 
 const mapStateToProps = (state: any) => {
   return {
+    userId: state.userId,
     trips: state.trips,
     currentTrip: state.currentTrip,
     showChat: state.showChat,
@@ -106,7 +114,7 @@ function TabPanel(props: TabPanelProps) {
 type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
-class Header extends React.Component<myProps, any> {
+class Contents extends React.Component<myProps, any> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -115,10 +123,29 @@ class Header extends React.Component<myProps, any> {
   }
 
   handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    console.log("VALUE: ", newValue);
+    // Change the target tab
     this.setState({
-      value: newValue
+      value: newValue,
+      anchorEl: null
     });
+  };
+
+  handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    this.setState({
+      anchorEl: event.currentTarget
+    });
+  };
+
+  handleClose = () => {
+    this.setState({
+      anchorEl: null
+    });
+  };
+
+  onLogout = () => {
+    this.handleClose();
+    firebase.auth().signOut();
+    console.log("LOGOUT!!!");
   };
 
   render() {
@@ -139,7 +166,27 @@ class Header extends React.Component<myProps, any> {
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
             <Tab label="Search Trip" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
-            <Tab label="Social" icon={<ChatIcon />} />
+            {/* <Tab label="Social" icon={<ChatIcon />} /> */}
+            <div className="iconWrapper">
+              <IconButton
+                color="inherit"
+                aria-controls="personalMenu"
+                aria-haspopup="true"
+                onClick={this.handleClick}
+              >
+                <PersonIcon />
+              </IconButton>
+              <Menu
+                id="personalMenu"
+                anchorEl={this.state.anchorEl}
+                open={Boolean(this.state.anchorEl)}
+                onClose={this.handleClose}
+              >
+                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                <MenuItem onClick={this.onLogout}>Logout</MenuItem>
+              </Menu>
+            </div>
           </Tabs>
 
           {/* About */}
@@ -149,41 +196,59 @@ class Header extends React.Component<myProps, any> {
 
           {/* Ongoing Trips */}
           <TabPanel value={this.state.value} index={1}>
-            <p>Ongoing Trips</p>
-            <Grid container>
-              <Grid item xs={5}>
-                <TripInfo />
-              </Grid>
-              <Grid item xs={7}>
-                <Map />
-              </Grid>
-            </Grid>
+            {this.props.userId === "" ? (
+              <Login />
+            ) : (
+              <>
+                <p>Ongoing Trips</p>
+                <Grid container>
+                  <Grid item xs={5}>
+                    <TripInfo />
+                  </Grid>
+                  <Grid item xs={7}>
+                    <Map />
+                  </Grid>
+                </Grid>
+              </>
+            )}
           </TabPanel>
 
           {/* Search Trip */}
           <TabPanel value={this.state.value} index={2}>
-            <p>Search Trip</p>
-            <Grid container>
-              <Grid item xs={5}>
-                <TripInfo />
-              </Grid>
-              <Grid item xs={7}>
-                <Map />
-              </Grid>
-            </Grid>
+            {this.props.userId === "" ? (
+              <Login />
+            ) : (
+              <>
+                <p>Search Trip</p>
+                <Grid container>
+                  <Grid item xs={5}>
+                    <TripInfo />
+                  </Grid>
+                  <Grid item xs={7}>
+                    <Map />
+                  </Grid>
+                </Grid>
+              </>
+            )}
           </TabPanel>
 
           {/* Build Trip */}
           <TabPanel value={this.state.value} index={3}>
-            <p>Build Trip</p>
-            <BuildTrip />
+            {this.props.userId === "" ? (
+              <Login />
+            ) : (
+              <>
+                <p>Build Trip</p>
+                <BuildTrip />
+              </>
+            )}
           </TabPanel>
 
           {/* Social */}
-          <TabPanel value={this.state.value} index={4}>
+          {/* <TabPanel value={this.state.value} index={4}>
             <p>Social</p>
             <ChatBoard />
-          </TabPanel>
+          </TabPanel> */}
         </AppBar>
       </div>
     );
@@ -193,7 +258,7 @@ class Header extends React.Component<myProps, any> {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Header);
+)(Contents);
 
 //TODO Q: how do we set up general (app wide) colors
 //TODO Q: mapDispatchToProps doesnt work if not commented out. How to connect it and make everything work together
