@@ -114,12 +114,12 @@ class TripInfo extends React.Component<myProps, {}> {
             </Button>
           </div>
         </div>
-        {this.props.trips.length ? (
+        {/* {this.props.trips.length ? (
           <Map
             trips={this.props.trips}
             currentTripIndex={this.props.currentTripIndex}
           />
-        ) : null}
+        ) : null} */}
       </div>
     );
   }
