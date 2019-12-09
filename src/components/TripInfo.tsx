@@ -18,7 +18,31 @@ type myProps = {
 
 // I will style this more later -- just wanted it functional for now
 
-class TripInfo extends React.Component<myProps, {}> {
+class TripInfo extends React.Component<myProps, { members: any; photos: any }> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      members: [],
+      photos: []
+    };
+  }
+
+  componentWillMount() {
+    const populatedMembers: any = [];
+    const populatedPhotos: any = [];
+    this.props.trips[this.props.currentTripIndex].memberIds.forEach(
+      async (m: any) => {
+        const username = await myFirestore
+          .collection("users")
+          .doc(m)
+          .get()
+          .then(doc => doc.data().nickname);
+        populatedMembers.push(username);
+      }
+    );
+    this.setState({ members: populatedMembers, photos: populatedPhotos });
+  }
+
   // componentDidMount() {
   //   console.log(this.props.trips);
   //   console.log(this.props.currentTripIndex);
@@ -47,13 +71,13 @@ class TripInfo extends React.Component<myProps, {}> {
           </p>
           <div>
             Waypoints:{" "}
-            <div className="waypointsContainer">
+            <ul className="waypointsContainer">
               {this.props.trips[this.props.currentTripIndex].waypoints.map(
                 (l: any, i: number) => {
-                  return <p key={i}>{l.location}</p>;
+                  return <li key={i}>{l.location}</li>;
                 }
               )}
-            </div>
+            </ul>
           </div>
           <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
           <Button variant="outlined" color="secondary" size="small">
@@ -65,20 +89,20 @@ class TripInfo extends React.Component<myProps, {}> {
           </Button>
           <div>
             Members:{" "}
-            <div className="memberContainer">
+            <ul className="memberContainer">
               {this.props.trips[this.props.currentTripIndex].memberIds.map(
                 (m: any, i: number) => {
                   return (
-                    <div>
+                    <li>
                       <p key={i} onClick={() => this.props.onShowProfile(i)}>
-                        Member: {m}
+                        {this.state.members[i]}
                         {/* Need a function to map member ID to member name */}
                       </p>
-                    </div>
+                    </li>
                   );
                 }
               )}
-            </div>
+            </ul>
           </div>
           <Button
             onClick={() =>
