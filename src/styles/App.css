@@ -33,17 +33,29 @@
   width: 100px;
 }
 
+/* I will move the TripInfo CSS to a separate file once it's working */
 .TripInfo {
   border-style: solid;
   border-width: 4px;
   border-radius: 10px;
-  width: 200px;
+  width: 30%;
 }
 
 .TripInfo p {
   border-style: solid;
   border-radius: 10px;
   border-width: 1px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.waypointsContainer {
+  overflow-x: scroll;
+}
+
+.memberContainer {
+  overflow-x: scroll;
+  size: 30px;
 }
 
 .BuildTrip {

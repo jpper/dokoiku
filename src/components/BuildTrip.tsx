@@ -1,8 +1,12 @@
 import React from "react";
-import { myFirebase, myFirestore } from "../config/firebase";
+import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 import uuidv4 from "uuid/v4";
-import { FormControl, TextField, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import { firestore } from "firebase";
+import "../styles/BuildTrip.css";
+import moment from "moment";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -43,17 +47,12 @@ const mapDispatchToProps = (dispatch: any) => {
           ownerId: userId,
           tripId,
           travelMode: "DRIVING",
-          startDate,
-          endDate,
+          startDate: firestore.Timestamp.fromDate(new Date(startDate)),
+          endDate: firestore.Timestamp.fromDate(new Date(endDate)),
           startLocation,
           waypoints,
           budget,
           memberIds: []
-        })
-        .then(() => {
-          dispatch({
-            type: "ADD_TRIP"
-          });
         });
     }
   };
@@ -101,6 +100,40 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
       memberIds: []
     };
   }
+  componentWillMount() {
+    ValidatorForm.addValidationRule("startDateValidator", (value: string) => {
+      const startDate = new Date(value);
+      const today = new Date();
+      return startDate.getDate() >= today.getDate();
+    });
+    ValidatorForm.addValidationRule("startDateValidator2", (value: string) => {
+      if (this.state.endDate === null) return true;
+      const startDate = new Date(value);
+      const endDate = new Date(this.state.endDate);
+      return endDate >= startDate;
+    });
+    ValidatorForm.addValidationRule("endDateValidator", (value: string) => {
+      const endDate = new Date(value);
+      const startDate = new Date(this.state.startDate);
+      return endDate >= startDate;
+    });
+  }
+  clearState() {
+    this.setState({
+      name: "",
+      notes: "",
+      ownerId: "",
+      tripId: "",
+      travelMode: "DRIVING",
+      startDate: null,
+      endDate: null,
+      startLocation: "",
+      waypoints: [],
+      addedWaypoint: "",
+      budget: 0,
+      memberIds: []
+    });
+  }
   render() {
     return (
       <div>
@@ -115,22 +148,51 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
           <div>
             <div className="BuildTrip">
               <h1>Build Trip</h1>
-              <FormControl>
-                <TextField
-                  id="name"
+              <ValidatorForm
+                onSubmit={() => {
+                  this.props.onAddTrip(
+                    this.state.name,
+                    this.props.userId,
+                    this.state.startDate,
+                    this.state.endDate,
+                    this.state.startLocation,
+                    this.state.waypoints,
+                    this.state.budget
+                  );
+                  this.clearState();
+                  this.props.onClosePopup();
+                }}
+                onError={errors => console.log(errors)}
+              >
+                <TextValidator
+                  name="name"
                   label="Name"
                   variant="outlined"
+                  validators={["required"]}
+                  errorMessages={["this field is required"]}
                   value={this.state.name}
                   onChange={(e: any) => {
                     this.setState({ name: e.currentTarget.value });
                   }}
                 />
                 <br />
-                <TextField
-                  id="start-date"
+                <br />
+                <br />
+                <TextValidator
+                  name="start-date"
                   label="Start Date"
                   variant="outlined"
                   type="date"
+                  validators={[
+                    "required",
+                    "startDateValidator",
+                    "startDateValidator2"
+                  ]}
+                  errorMessages={[
+                    "this field is required",
+                    "start date must be from today",
+                    "start date must not be after end date"
+                  ]}
                   InputLabelProps={{ shrink: true }}
                   value={this.state.startDate}
                   onChange={(e: any) => {
@@ -138,11 +200,18 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   }}
                 />
                 <br />
-                <TextField
-                  id="end-date"
+                <br />
+                <br />
+                <TextValidator
+                  name="end-date"
                   label="End Date"
                   variant="outlined"
                   type="date"
+                  validators={["required", "endDateValidator"]}
+                  errorMessages={[
+                    "this field is required",
+                    "end date must not be before start date"
+                  ]}
                   InputLabelProps={{ shrink: true }}
                   value={this.state.endDate}
                   onChange={(e: any) => {
@@ -150,15 +219,21 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   }}
                 />
                 <br />
-                <TextField
-                  id="start-location"
+                <br />
+                <br />
+                <TextValidator
+                  name="start-location"
                   label="Start Location"
                   variant="outlined"
+                  validators={["required"]}
+                  errorMessages={["this field is required"]}
                   value={this.state.startLocation}
                   onChange={(e: any) => {
                     this.setState({ startLocation: e.currentTarget.value });
                   }}
                 />
+                <br />
+                <br />
                 <br />
                 <label>Places:</label>
                 {this.state.waypoints.length
@@ -167,8 +242,10 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                     ))
                   : null}
                 <br />
-                <TextField
-                  id="places"
+                <br />
+                <br />
+                <TextValidator
+                  name="places"
                   label="Places"
                   variant="outlined"
                   value={this.state.addedWaypoint}
@@ -176,6 +253,8 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                     this.setState({ addedWaypoint: e.currentTarget.value });
                   }}
                 />
+                <br />
+                <br />
                 <br />
                 <Button
                   variant="contained"
@@ -195,35 +274,44 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   Add Place
                 </Button>
                 <br />
-                <TextField
-                  id="budget"
+                <br />
+                <br />
+                <TextValidator
+                  name="budget"
                   label="My Budget"
                   type="number"
                   variant="outlined"
+                  validators={["minNumber:0", "required"]}
+                  errorMessages={[
+                    "cannot be negative",
+                    "this field is required"
+                  ]}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={this.state.budget}
                   onChange={(e: any) => {
                     this.setState({ budget: e.currentTarget.value });
                   }}
                 />
                 <br />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    this.props.onAddTrip(
-                      this.state.name,
-                      this.props.userId,
-                      this.state.startDate,
-                      this.state.endDate,
-                      this.state.startLocation,
-                      this.state.waypoints,
-                      this.state.budget
-                    );
-                    this.props.onClosePopup();
-                  }}
-                >
-                  Submit My Trip
-                </Button>
+                <br />
+                <br />
+                {this.state.name &&
+                this.state.travelMode &&
+                this.state.startDate &&
+                this.state.endDate &&
+                this.state.startLocation &&
+                this.state.waypoints.length &&
+                this.state.budget > 0 ? (
+                  <Button variant="contained" color="primary" type="submit">
+                    Submit My Trip
+                  </Button>
+                ) : (
+                  <Button variant="contained" disabled>
+                    Please Fill Out the Form
+                  </Button>
+                )}
+                <br />
+                <br />
                 <br />
                 <Button
                   variant="contained"
@@ -232,7 +320,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 >
                   Close
                 </Button>
-              </FormControl>
+              </ValidatorForm>
             </div>
           </div>
         ) : null}

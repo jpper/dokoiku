@@ -66,7 +66,7 @@ const mapDispatchToProps = (dispatch: any) => ({
                   const msg = change.doc.data();
                   msg.nickname = doc.data().nickname;
                   msg.photoUrl = doc.data().photoUrl;
-                  console.log(msg);
+                  // console.log(msg);
                   dispatch(setMessages(msg));
                 });
             }

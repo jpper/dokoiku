@@ -35,25 +35,26 @@ class Map extends React.Component<MapProps, MapState> {
 
   shouldComponentUpdate(nextProps: any, nextState: any) {
     return (
+      nextProps.currentTripIndex !== this.props.currentTripIndex ||
       this.state.response === null ||
-      nextState.response.status != this.state.response.status
+      nextState.response.status !== this.state.response.status
     );
   }
 
   directionsCallback(response: any | null) {
     if (response !== null) {
       if (response.status === "OK") {
-        console.log(response);
+        //console.log(response);
         this.setState(() => ({
           response
         }));
       } else {
-        console.log("response: ", response);
+        //console.log("response: ", response);
       }
     }
   }
   render() {
-    console.log(this.props.trips);
+    //console.log(this.props.trips);
     return (
       <LoadScript
         id="script-loader"
