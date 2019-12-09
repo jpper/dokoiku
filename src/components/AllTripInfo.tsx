@@ -25,14 +25,6 @@ class AllTripInfo extends React.Component<
   myProps,
   { members: any; previousLength: number }
 > {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      members: [],
-      previousLength: 0
-    };
-  }
-
   componentWillMount() {
     const populatedMembers: any = [];
     this.props.trips[this.props.currentTripIndex].memberIds.forEach(
@@ -48,28 +40,7 @@ class AllTripInfo extends React.Component<
     this.setState({ members: populatedMembers });
   }
 
-  async componentDidUpdate() {
-    if (this.state.members.length !== this.state.previousLength) {
-      const populatedMembers: any = [];
-      this.props.trips[this.props.currentTripIndex].memberIds.forEach(
-        async (m: any) => {
-          const username = await myFirestore
-            .collection("users")
-            .doc(m)
-            .get()
-            .then(doc => doc.data().nickname);
-          populatedMembers.push(username);
-        }
-      );
-      this.setState({
-        members: populatedMembers,
-        previousLength: populatedMembers.length
-      });
-    }
-  }
-
   render() {
-    console.log(this.props.currentTripIndex);
     return (
       <div>
         <div className="TripInfo">
@@ -107,10 +78,10 @@ class AllTripInfo extends React.Component<
               {this.props.trips[this.props.currentTripIndex].memberIds.map(
                 (m: any, i: number) => {
                   return (
-                    <li>
-                      <p key={i} onClick={() => this.props.onShowProfile(i)}>
-                        {this.state.members[i]}
-                      </p>
+                    <li key={i} onClick={() => this.props.onShowProfile(i)}>
+                      {this.state.members[i]
+                        ? this.state.members[i]
+                        : "Haven't loaded yet :)"}
                     </li>
                   );
                 }

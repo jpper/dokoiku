@@ -165,7 +165,7 @@ type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 class Contents extends React.Component<myProps, any> {
-  constructor(props: Props) {
+  constructor(props: myProps) {
     super(props);
     this.state = {
       value: 0

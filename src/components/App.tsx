@@ -29,10 +29,33 @@ type myProps = {
   currentProfile: number;
 };
 
-class App extends React.Component<myProps, {}> {
+class App extends React.Component<myProps, { nicknames: any; photos: any }> {
   componentDidMount() {
     this.props.getTrips();
   }
+
+  // getNamesAndPhotos = async () => {
+  //   const populatedNicknames: any = [];
+  //   const populatedPhotos: any = [];
+  //   this.props.trips[this.props.currentTripIndex].memberIds.forEach(
+  //     async (m: any) => {
+  //       const username = await myFirestore
+  //         .collection("users")
+  //         .doc(m)
+  //         .get()
+  //         .then(doc => doc.data().nickname);
+  //       populatedNicknames.push(username);
+  //       const photo = await myFirestore
+  //         .collection("users")
+  //         .doc(m)
+  //         .get()
+  //         .then(doc => doc.data().photoUrl);
+  //       populatedPhotos.push(photo);
+  //     }
+  //   );
+  //   this.setState({ nicknames: populatedNicknames, photos: populatedPhotos });
+  // };
+
   render() {
     return (
       <div className="App">
