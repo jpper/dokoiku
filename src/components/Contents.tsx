@@ -298,7 +298,7 @@ class Contents extends React.Component<myProps, any> {
                     <TripInfo />
                   </Grid>
                   <Grid item xs={7}>
-                    <Map />
+                    {/* <Map /> */}
                   </Grid>
                 </Grid>
               </>
@@ -317,7 +317,7 @@ class Contents extends React.Component<myProps, any> {
                     <TripInfo />
                   </Grid>
                   <Grid item xs={7}>
-                    <Map />
+                    {/* <Map /> */}
                   </Grid>
                 </Grid>
               </>
