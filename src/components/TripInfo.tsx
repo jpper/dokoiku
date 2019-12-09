@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Button, Paper } from "@material-ui/core";
+import moment from "moment";
 
 type myProps = {
   trips: any;
-  currentTrip: number;
+  currentTripIndex: number;
   onShowChat: any;
   onShowProfile: any;
   onPreviousTrip: any;
@@ -13,41 +14,50 @@ type myProps = {
 
 class TripInfo extends React.Component<myProps, {}> {
   render() {
+    console.log(this.props.trips);
     return (
       <div>
         <div className="TripInfo">
           <h1>Trip Details</h1>
-          <div>
-            Start Date: {this.props.trips[this.props.currentTrip].startDate}
-          </div>
-          <div>
-            End Date: {this.props.trips[this.props.currentTrip].endDate}
-          </div>
+          <p>
+            Start Date:{" "}
+            {moment(
+              this.props.trips[this.props.currentTripIndex].startDate.toDate()
+            ).format("MMMM Do YYYY")}
+          </p>
+          <p>
+            End Date:{" "}
+            {moment(
+              this.props.trips[this.props.currentTripIndex].endDate.toDate()
+            ).format("MMMM Do YYYY")}
+          </p>
           <div>
             <div>
               Starting Location:
-              {` ${this.props.trips[this.props.currentTrip].startLocation}`}
+              {` ${
+                this.props.trips[this.props.currentTripIndex].startLocation
+              }`}
             </div>
           </div>
           <div>
             Waypoints:{" "}
-            {this.props.trips[this.props.currentTrip].waypoints.map(
+            {this.props.trips[this.props.currentTripIndex].waypoints.map(
               (l: any, i: number) => {
                 return <p key={i}>{l.location}</p>;
               }
             )}
           </div>
-          <div>Budget: {this.props.trips[this.props.currentTrip].budget}</div>
-          <div>Notes: </div>
-          <div>Messages: </div>
+          <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
+          <p>Notes: </p>
+          <p>Messages: </p>
           <div>
             Members:{" "}
-            {this.props.trips[this.props.currentTrip].memberIds.map(
+            {this.props.trips[this.props.currentTripIndex].memberIds.map(
               (m: any, i: number) => {
                 return (
                   <div>
                     <p key={i} onClick={() => this.props.onShowProfile(i)}>
-                      username: {m.username}
+                      memberIds: {m.memberIds}
                     </p>
                   </div>
                 );
@@ -84,7 +94,7 @@ class TripInfo extends React.Component<myProps, {}> {
 const mapStateToProps = (state: any) => {
   return {
     trips: state.trips,
-    currentTrip: state.currentTrip
+    currentTripIndex: state.currentTripIndex
   };
 };
 

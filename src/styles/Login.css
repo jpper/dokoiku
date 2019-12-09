@@ -1,0 +1,23 @@
+.container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.wrapper {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.titleWrapper {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.buttonWrapper {
+  padding-bottom: 10px;
+}
+.button {
+  padding-bottom: 5px;
+  text-transform: none;
+}

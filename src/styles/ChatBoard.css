@@ -1,0 +1,18 @@
+.card {
+  min-width: 275;
+  margin-bottom: 50px;
+}
+
+.footer {
+  position: fixed;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  text-align: center;
+}
+.button {
+  text-align: center;
+  height: 100%;
+}
