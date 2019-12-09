@@ -34,6 +34,7 @@ const reducer = (state: any = initialState, action: Action): any => {
       }
       return {
         ...state,
+        showProfile: false,
         currentTripIndex: nextIndex
       };
     }
@@ -46,6 +47,7 @@ const reducer = (state: any = initialState, action: Action): any => {
       }
       return {
         ...state,
+        showProfile: false,
         currentTripIndex: nextIndex
       };
     }

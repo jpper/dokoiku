@@ -21,11 +21,52 @@ type myProps = {
 
 // I will style this more later -- just wanted it functional for now
 
-class TripInfo extends React.Component<myProps, {}> {
-  // componentDidMount() {
-  //   console.log(this.props.trips);
-  //   console.log(this.props.currentTripIndex);
-  // }
+class TripInfo extends React.Component<
+  myProps,
+  { members: any; previousLength: number }
+> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      members: [],
+      previousLength: 0
+    };
+  }
+
+  componentWillMount() {
+    const populatedMembers: any = [];
+    this.props.trips[this.props.currentTripIndex].memberIds.forEach(
+      async (m: any) => {
+        const username = await myFirestore
+          .collection("users")
+          .doc(m)
+          .get()
+          .then(doc => doc.data().nickname);
+        populatedMembers.push(username);
+      }
+    );
+    this.setState({ members: populatedMembers });
+  }
+
+  async componentDidUpdate() {
+    if (this.state.members.length !== this.state.previousLength) {
+      const populatedMembers: any = [];
+      this.props.trips[this.props.currentTripIndex].memberIds.forEach(
+        async (m: any) => {
+          const username = await myFirestore
+            .collection("users")
+            .doc(m)
+            .get()
+            .then(doc => doc.data().nickname);
+          populatedMembers.push(username);
+        }
+      );
+      this.setState({
+        members: populatedMembers,
+        previousLength: populatedMembers.length
+      });
+    }
+  }
 
   render() {
     console.log(this.props.currentTripIndex);
@@ -51,13 +92,13 @@ class TripInfo extends React.Component<myProps, {}> {
           </p>
           <div>
             Waypoints:{" "}
-            <div className="waypointsContainer">
+            <ul className="waypointsContainer">
               {this.props.trips[this.props.currentTripIndex].waypoints.map(
                 (l: any, i: number) => {
-                  return <p key={i}>{l.location}</p>;
+                  return <li key={i}>{l.location}</li>;
                 }
               )}
-            </div>
+            </ul>
           </div>
           <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
           <Button variant="outlined" color="secondary" size="small">
@@ -69,20 +110,19 @@ class TripInfo extends React.Component<myProps, {}> {
           </Button>
           <div>
             Members:{" "}
-            <div className="memberContainer">
+            <ul className="memberContainer">
               {this.props.trips[this.props.currentTripIndex].memberIds.map(
                 (m: any, i: number) => {
                   return (
-                    <div>
+                    <li>
                       <p key={i} onClick={() => this.props.onShowProfile(i)}>
-                        Member: {m}
-                        {/* Need a function to map member ID to member name */}
+                        {this.state.members[i]}
                       </p>
-                    </div>
+                    </li>
                   );
                 }
               )}
-            </div>
+            </ul>
           </div>
           <Button
             onClick={() =>
