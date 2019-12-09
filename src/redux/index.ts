@@ -102,8 +102,8 @@ const reducer = (state: any = initialState, action: Action): any => {
       const tmpMessages = [...state.currentTripMessages, action.messages].sort(
         (a: any, b: any) => a.moment.seconds - b.moment.seconds
       );
-      console.log("TESTTSTSYSYUSI");
-      console.log(tmpMessages);
+      // console.log("TESTTSTSYSYUSI");
+      // console.log(tmpMessages);
       return {
         ...state,
         currentTripMessages: tmpMessages
