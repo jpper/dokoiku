@@ -19,10 +19,10 @@ type myProps = {
 // I will style this more later -- just wanted it functional for now
 
 class TripInfo extends React.Component<myProps, {}> {
-  componentDidMount() {
-    console.log(this.props.trips);
-    console.log(this.props.currentTripIndex);
-  }
+  // componentDidMount() {
+  //   console.log(this.props.trips);
+  //   console.log(this.props.currentTripIndex);
+  // }
 
   render() {
     return (

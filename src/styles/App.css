@@ -50,11 +50,11 @@
 }
 
 .waypointsContainer {
-  overflow-y: scroll;
+  overflow-x: scroll;
 }
 
 .memberContainer {
-  overflow-y: scroll;
+  overflow-x: scroll;
   size: 30px;
 }
 

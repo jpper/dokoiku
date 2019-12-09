@@ -43,17 +43,17 @@ class Map extends React.Component<MapProps, MapState> {
   directionsCallback(response: any | null) {
     if (response !== null) {
       if (response.status === "OK") {
-        console.log(response);
+        //console.log(response);
         this.setState(() => ({
           response
         }));
       } else {
-        console.log("response: ", response);
+        //console.log("response: ", response);
       }
     }
   }
   render() {
-    console.log(this.props.trips);
+    //console.log(this.props.trips);
     return (
       <LoadScript
         id="script-loader"

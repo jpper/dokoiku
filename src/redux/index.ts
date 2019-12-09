@@ -68,7 +68,8 @@ const reducer = (state: any = initialState, action: Action): any => {
     case "CLOSE_POPUP": {
       return {
         ...state,
-        showBuild: false
+        showBuild: false,
+        showProfile: false
       };
     }
     case "SHOW_BUILD": {
@@ -125,6 +126,11 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         trips: action.trips
+      };
+    }
+    case "JOIN_TRIP": {
+      return {
+        ...state
       };
     }
     default: {
