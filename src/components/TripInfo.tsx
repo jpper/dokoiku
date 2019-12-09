@@ -19,6 +19,7 @@ type myProps = {
   userId: string;
   toggleNotes: any;
   toggleMessages: any;
+  mapTripMessage: any;
 };
 
 // I will style this more later -- just wanted it functional for now
@@ -104,14 +105,13 @@ class TripInfo extends React.Component<
           </div>
           <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
           <Button variant="outlined" color="secondary" size="small"
-          onClick={this.props.toggleNotes}
+          onClick={this.props.toggleNotes(this.props.mapTripMessage)}
           >
             Notes
-            
           </Button>
           <br></br>
           <Button variant="outlined" color="secondary" size="small"
-          onClick={this.props.toggleMessages}
+          onClick={this.props.toggleMessages(this.props.mapTripMessage)}
           >
             Messages
           </Button>

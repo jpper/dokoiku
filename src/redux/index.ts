@@ -12,7 +12,7 @@ const initialState: any = {
   showChat: false,
   showBuild: false,
   currentProfile: 0,
-  ongoingTripToggle: 0
+  mapTripMessage: 0
 };
 
 interface Action {
@@ -142,24 +142,26 @@ const reducer = (state: any = initialState, action: Action): any => {
       if (action.value === 0) {
       return {
         ...state,
-        ongoingTripToggle: 1
+        mapTripMessage: 1
       };
     }
-      return {
-        ...state,
-        ongoingTripToggle: 0
-      };
+      if (action.value === 1) {
+        return {
+          ...state,
+          mapTripMessage: 0
+        };
+    }
     }
     case "TOGGLE_MESSAGES": {
       if (action.value === 0) {
         return {
           ...state,
-          ongoingTripToggle: 2
+          mapTripMessage: 2
         };
       }
         return {
           ...state,
-          ongoingTripToggle: 0
+          mapTripMessage: 0
         };
     }
     default: {

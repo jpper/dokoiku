@@ -51,7 +51,7 @@ type myProps = {
   currentProfile: number;
   setUserInfo: any;
   login: any;
-  ongoingTripToggle: number;
+  mapTripMessage: number;
 };
 
 // class Header extends React.Component<myProps, {}> {
@@ -75,7 +75,7 @@ const mapStateToProps = (state: any) => {
     showProfile: state.showProfile,
     showBuild: state.showBuild,
     currentProfile: state.currentProfile,
-    ongoingTripToggle: 0
+    mapTripMessage: state.mapTripMessage
   };
 };
 
@@ -302,14 +302,14 @@ class Contents extends React.Component<myProps, any> {
                   </Grid>
                   {/* {if statement and changing props value here} */}
                   <Grid item xs={7}>
-                    {this.props.ongoingTripToggle === 0 &&
+                    {this.props.mapTripMessage === 0 &&
                       <Map
                       trips={this.props.trips}
                       currentTripIndex={this.props.currentTripIndex}
                     />
-                    || this.props.ongoingTripToggle === 1 &&
+                    || this.props.mapTripMessage === 1 &&
                       <Editor />
-                    || this.props.ongoingTripToggle === 2 &&
+                    || this.props.mapTripMessage === 2 &&
                       <ChatBoard />
                     }
                   </Grid>
