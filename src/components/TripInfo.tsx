@@ -6,6 +6,8 @@ import firebase from "firebase";
 import { myFirebase, myFirestore } from "../config/firebase";
 import Map from "./Map";
 
+import { Grid } from "@material-ui/core";
+
 type myProps = {
   trips: any;
   currentTripIndex: number;
@@ -114,12 +116,6 @@ class TripInfo extends React.Component<myProps, {}> {
             </Button>
           </div>
         </div>
-        {this.props.trips.length ? (
-          <Map
-            trips={this.props.trips}
-            currentTripIndex={this.props.currentTripIndex}
-          />
-        ) : null}
       </div>
     );
   }
@@ -162,4 +158,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TripInfo);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TripInfo);

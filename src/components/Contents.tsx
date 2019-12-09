@@ -353,7 +353,10 @@ class Contents extends React.Component<myProps, any> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Contents);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Contents);
 
 //TODO Q: how do we set up general (app wide) colors
 //TODO Q: mapDispatchToProps doesnt work if not commented out. How to connect it and make everything work together
