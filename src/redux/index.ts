@@ -4,49 +4,10 @@ const initialState: any = {
   userId: "",
   userName: "",
   userPhoto: "",
-  currentTripMemberInfo: [],
   currentTripMessages: [],
-  trips: [
-    {
-      tripId: "5kzUrGkzztrKyoc6tBBA",
-      tripMemberIds: [],
-      startDate: "Dec 25",
-      endDate: "Dec 31",
-      startLocation: "Tokyo, Japan",
-      waypoints: [
-        {
-          location: "Kyoto, Japan",
-          stopover: true
-        },
-        {
-          location: "Kanazawa, Japan",
-          stopover: true
-        }
-      ],
-      travelMode: "DRIVING",
-      budget: 1000,
-      memberIds: []
-    },
-    {
-      startDate: "Jan 1",
-      endDate: "Dec 31",
-      startLocation: "Tokyo, Japan",
-      waypoints: [
-        {
-          location: "Akita, Japan",
-          stopover: true
-        },
-        {
-          location: "Niigata, Japan",
-          stopover: true
-        }
-      ],
-      travelMode: "DRIVING",
-      budget: 25,
-      memberIds: []
-    }
-  ],
-  currentTrip: 0,
+  messageListener: undefined,
+  trips: [],
+  currentTripIndex: 0,
   showProfile: false,
   showChat: false,
   showBuild: false,
@@ -66,26 +27,26 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
     case "NEXT_TRIP": {
       let nextIndex: number;
-      if (state.currentTrip + 1 >= state.trips.length) {
+      if (state.currentTripIndex + 1 >= state.trips.length) {
         nextIndex = 0;
       } else {
-        nextIndex = state.currentTrip + 1;
+        nextIndex = state.currentTripIndex + 1;
       }
       return {
         ...state,
-        currentTrip: nextIndex
+        currentTripIndex: nextIndex
       };
     }
     case "PREVIOUS_TRIP": {
       let nextIndex: number;
-      if (state.currentTrip === 0) {
+      if (state.currentTripIndex === 0) {
         nextIndex = state.trips.length - 1;
       } else {
         nextIndex = state.currentTrip - 1;
       }
       return {
         ...state,
-        currentTrip: nextIndex
+        currentTripIndex: nextIndex
       };
     }
     case "SHOW_PROFILE": {
@@ -107,22 +68,14 @@ const reducer = (state: any = initialState, action: Action): any => {
     case "CLOSE_POPUP": {
       return {
         ...state,
-        showProfile: false,
-        showChat: false
+        showBuild: false
       };
     }
     case "SHOW_BUILD": {
       //Add some logic to add trip to Firebase
       return {
-        userId: state.userId,
-        userName: state.userName,
-        userPhoto: state.userPhoto,
-        trips: [...state.trips],
-        currentTrip: state.currentTrip,
-        showProfile: false,
-        showChat: false,
-        showBuild: true,
-        currentProfile: state.currentProfile
+        ...state,
+        showBuild: true
       };
     }
     case "SET_USER_INFO": {
@@ -132,7 +85,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         userName: action.userName,
         userPhoto: action.userPhoto,
         trips: [...state.trips],
-        currentTrip: state.currentTrip,
+        currentTripIndex: state.currentTripIndex,
         showProfile: false,
         showChat: false,
         showBuild: false
@@ -146,9 +99,32 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
     case "SET_MESSAGES": {
       // console.log(action.messages);
+      const tmpMessages = [...state.currentTripMessages, action.messages].sort(
+        (a: any, b: any) => a.moment.seconds - b.moment.seconds
+      );
+      console.log("TESTTSTSYSYUSI");
+      console.log(tmpMessages);
       return {
         ...state,
-        currentTripMessages: [...state.currentTripMessages, action.messages]
+        currentTripMessages: tmpMessages
+      };
+    }
+    case "CLEAR_MESSAGES": {
+      return {
+        ...state,
+        currentTripMessages: []
+      };
+    }
+    case "SET_MESSAGE_LISTENER": {
+      return {
+        ...state,
+        messageListener: action.listener
+      };
+    }
+    case "SET_TRIPS": {
+      return {
+        ...state,
+        trips: action.trips
       };
     }
     default: {

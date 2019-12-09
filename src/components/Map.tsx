@@ -8,9 +8,16 @@ import {
 import { connect } from "react-redux";
 require("dotenv").config();
 
+const mapStateToProps = (state: any) => {
+  return {
+    trips: state.trips,
+    currentTripIndex: state.currentTripIndex
+  };
+};
+
 type MapProps = {
   trips: any;
-  currentTrip: number;
+  currentTripIndex: number;
 };
 
 interface MapState {
@@ -25,9 +32,18 @@ class Map extends React.Component<MapProps, MapState> {
     };
     this.directionsCallback = this.directionsCallback.bind(this);
   }
+
+  shouldComponentUpdate(nextProps: any, nextState: any) {
+    return (
+      this.state.response === null ||
+      nextState.response.status != this.state.response.status
+    );
+  }
+
   directionsCallback(response: any | null) {
     if (response !== null) {
       if (response.status === "OK") {
+        console.log(response);
         this.setState(() => ({
           response
         }));
@@ -37,6 +53,7 @@ class Map extends React.Component<MapProps, MapState> {
     }
   }
   render() {
+    console.log(this.props.trips);
     return (
       <LoadScript
         id="script-loader"
@@ -56,11 +73,14 @@ class Map extends React.Component<MapProps, MapState> {
         >
           <DirectionsService
             options={{
-              origin: this.props.trips[this.props.currentTrip].startLocation,
-              destination: this.props.trips[this.props.currentTrip]
+              origin: this.props.trips[this.props.currentTripIndex]
                 .startLocation,
-              waypoints: this.props.trips[this.props.currentTrip].waypoints,
-              travelMode: this.props.trips[this.props.currentTrip].travelMode
+              destination: this.props.trips[this.props.currentTripIndex]
+                .startLocation,
+              waypoints: this.props.trips[this.props.currentTripIndex]
+                .waypoints,
+              travelMode: this.props.trips[this.props.currentTripIndex]
+                .travelMode
             }}
             callback={this.directionsCallback}
           />
@@ -74,12 +94,5 @@ class Map extends React.Component<MapProps, MapState> {
     );
   }
 }
-
-const mapStateToProps = (state: any) => {
-  return {
-    trips: state.trips,
-    currentTrip: state.currentTrip
-  };
-};
 
 export default connect(mapStateToProps)(Map);
