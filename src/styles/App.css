@@ -34,12 +34,12 @@
 }
 
 /* I will move the TripInfo CSS to a separate file once it's working */
-.TripInfo {
+/* .TripInfo {
   border-style: solid;
   border-width: 4px;
   border-radius: 10px;
   width: 30%;
-}
+} */
 
 .TripInfo p {
   border-style: solid;

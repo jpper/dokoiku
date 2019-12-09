@@ -22,3 +22,6 @@
   justify-content: center;
   align-items: center;
 }
+.tripInfo {
+  border: solid 2px black;
+}

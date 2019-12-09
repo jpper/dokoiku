@@ -24,7 +24,9 @@ import {
   Grid,
   Avatar,
   Menu,
-  MenuItem
+  MenuItem,
+  Card,
+  Container
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import CardTravelIcon from "@material-ui/icons/CardTravel";
@@ -295,7 +297,11 @@ class Contents extends React.Component<myProps, any> {
                 <p>Ongoing Trips</p>
                 <Grid container>
                   <Grid item xs={5}>
-                    <TripInfo />
+                    <Container>
+                      <Card className="tripInfo">
+                        <TripInfo />
+                      </Card>
+                    </Container>
                   </Grid>
                   <Grid item xs={7}>
                     <Map
@@ -353,10 +359,7 @@ class Contents extends React.Component<myProps, any> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Contents);
+export default connect(mapStateToProps, mapDispatchToProps)(Contents);
 
 //TODO Q: how do we set up general (app wide) colors
 //TODO Q: mapDispatchToProps doesnt work if not commented out. How to connect it and make everything work together
