@@ -7,6 +7,8 @@ import About from "./About";
 import BuildTrip from "./BuildTrip";
 import Login from "./Login";
 import firebase from "firebase";
+import { myFirebase, myFirestore } from "../config/firebase";
+import { setUserInfo } from "../redux/action";
 
 // Material UI & Styles
 import "../styles/Contents.css";
@@ -34,6 +36,8 @@ import PersonIcon from "@material-ui/icons/Person";
 
 type myProps = {
   userId: string;
+  userName: string;
+  userPhoto: string;
   trips: any;
   currentTrip: number;
   showChat: boolean;
@@ -43,6 +47,8 @@ type myProps = {
   onShowProfile?: any;
   onShowBuild?: any;
   currentProfile: number;
+  setUserInfo: any;
+  login: any;
 };
 
 // class Header extends React.Component<myProps, {}> {
@@ -58,6 +64,8 @@ type myProps = {
 const mapStateToProps = (state: any) => {
   return {
     userId: state.userId,
+    userName: state.userName,
+    userPhoto: state.userPhoto,
     trips: state.trips,
     currentTrip: state.currentTrip,
     showChat: state.showChat,
@@ -68,20 +76,61 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  // onShowChat: () =>
-  //   dispatch({
-  //     type: "SHOW_CHAT"
-  //   }),
-  // onShowProfile: (index: number) =>
-  //   dispatch({
-  //     type: "SHOW_PROFILE",
-  //     index
-  //   }),
-  // onShowBuild: (index: number) =>
-  //   dispatch({
-  //     type: "SHOW_BUILD",
-  //     index
-  //   })
+  login: () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    // this.setState({ isLoading: true });
+    myFirebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(async result => {
+        let userResult = result.user;
+        if (userResult) {
+          const result = await myFirestore
+            .collection("users")
+            .where("id", "==", userResult.uid)
+            .get();
+
+          if (result.docs.length === 0) {
+            // Set new data since this is a new user
+            myFirestore
+              .collection("users")
+              .doc(userResult.uid)
+              .set({
+                id: userResult.uid,
+                nickname: userResult.displayName,
+                aboutMe: "",
+                photoUrl: userResult.photoURL
+              })
+              .then(data => {
+                // Write user info to local
+                dispatch(
+                  setUserInfo(
+                    userResult.displayName,
+                    userResult.uid,
+                    userResult.photoURL
+                  )
+                );
+              });
+          } else {
+            // Write user info to local
+            dispatch(
+              setUserInfo(
+                userResult.displayName,
+                userResult.uid,
+                userResult.photoURL
+              )
+            );
+          }
+        } else {
+          console.log("User info not available");
+        }
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  },
+  setUserInfo: (userName: string, userId: string, userPhoto: string) =>
+    dispatch(setUserInfo(userName, userId, userPhoto))
 });
 
 interface TabPanelProps {
@@ -122,6 +171,18 @@ class Contents extends React.Component<myProps, any> {
     };
   }
 
+  componentDidMount() {
+    this.checkLogin();
+  }
+
+  checkLogin = () => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user !== null) {
+        this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+      }
+    });
+  };
+
   handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     // Change the target tab
     this.setState({
@@ -144,8 +205,14 @@ class Contents extends React.Component<myProps, any> {
 
   onLogout = () => {
     this.handleClose();
+    this.props.setUserInfo("", "", "");
     firebase.auth().signOut();
     console.log("LOGOUT!!!");
+  };
+
+  onLogin = () => {
+    this.handleClose();
+    this.props.login();
   };
 
   render() {
@@ -174,7 +241,15 @@ class Contents extends React.Component<myProps, any> {
                 aria-haspopup="true"
                 onClick={this.handleClick}
               >
-                <PersonIcon />
+                {this.props.userPhoto === "" ? (
+                  <>
+                    <PersonIcon />
+                  </>
+                ) : (
+                  <>
+                    <Avatar alt="User Photo" src={this.props.userPhoto} />
+                  </>
+                )}
               </IconButton>
               <Menu
                 id="personalMenu"
@@ -182,9 +257,23 @@ class Contents extends React.Component<myProps, any> {
                 open={Boolean(this.state.anchorEl)}
                 onClose={this.handleClose}
               >
-                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                <MenuItem onClick={this.onLogout}>Logout</MenuItem>
+                {this.props.userId === "" ? (
+                  <>
+                    <p className="textUsername">
+                      Hello, <b>Anonymous</b>
+                    </p>
+                    <MenuItem onClick={this.onLogin}>Login</MenuItem>
+                  </>
+                ) : (
+                  <>
+                    <p className="textUsername">
+                      Hello, <b>{this.props.userName}</b>
+                    </p>
+                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                    <MenuItem onClick={this.onLogout}>Logout</MenuItem>
+                  </>
+                )}
               </Menu>
             </div>
           </Tabs>
