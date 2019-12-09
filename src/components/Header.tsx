@@ -89,19 +89,19 @@ class Header extends React.Component<myProps> {
           {/* <Button className="menuButton" color="inherit" aria-label="menu">
             Button
           </Button> */}
-          <Button className="menuButton">
+          <Button className="headerButton">
             About
           </Button>
-          <Button className="menuButton">
+          <Button className="headerButton">
             Ongoing trips
           </Button>
-          <Button className="menuButton">
+          <Button className="headerButton">
             Search trip
           </Button>
-          <Button className="menuButton">
+          <Button className="headerButton">
             Build trip
           </Button>
-          <Button className="menuButton">
+          <Button className="headerButton">
             Social
           </Button>
 
