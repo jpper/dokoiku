@@ -6,8 +6,10 @@ const initialState: any = {
   userPhoto: "",
   currentTripMessages: [],
   messageListener: undefined,
-  trips: [],
-  currentTripIndex: 0,
+  ongoingTrips: [],
+  searchTrips: [],
+  currentOngoingTripIndex: 0,
+  currentSearchTripIndex: 0,
   showProfile: false,
   showChat: false,
   showBuild: false,
@@ -25,28 +27,56 @@ const reducer = (state: any = initialState, action: Action): any => {
       //Call the DB, get the trips, and change the state
       return; //this is a placeholder, don't actually do this
     }
-    case "NEXT_TRIP": {
+    case "NEXT_SEARCH_TRIP": {
       let nextIndex: number;
-      if (state.currentTripIndex + 1 >= state.trips.length) {
+      if (state.currentSearchTripIndex + 1 >= state.searchTrips.length) {
         nextIndex = 0;
       } else {
-        nextIndex = state.currentTripIndex + 1;
+        nextIndex = state.currentSearchTripIndex + 1;
       }
       return {
         ...state,
-        currentTripIndex: nextIndex
+        showProfile: false,
+        currentSearchTripIndex: nextIndex
       };
     }
-    case "PREVIOUS_TRIP": {
+    case "PREVIOUS_SEARCH_TRIP": {
       let nextIndex: number;
-      if (state.currentTripIndex === 0) {
-        nextIndex = state.trips.length - 1;
+      if (state.currentSearchTripIndex === 0) {
+        nextIndex = state.searchTrips.length - 1;
       } else {
-        nextIndex = state.currentTripIndex - 1;
+        nextIndex = state.currentSearchTripIndex - 1;
       }
       return {
         ...state,
-        currentTripIndex: nextIndex
+        showProfile: false,
+        currentSearchTripIndex: nextIndex
+      };
+    }
+    case "NEXT_ONGOING_TRIP": {
+      let nextIndex: number;
+      if (state.currentOngoingTripIndex + 1 >= state.ongoingTrips.length) {
+        nextIndex = 0;
+      } else {
+        nextIndex = state.currentOngoingTripIndex + 1;
+      }
+      return {
+        ...state,
+        showProfile: false,
+        currentOngoingTripIndex: nextIndex
+      };
+    }
+    case "PREVIOUS_ONGOING_TRIP": {
+      let nextIndex: number;
+      if (state.currentTripIndex === 0) {
+        nextIndex = state.ongoingTrips.length - 1;
+      } else {
+        nextIndex = state.currentOngoingTripIndex - 1;
+      }
+      return {
+        ...state,
+        showProfile: false,
+        currentOngoingTripIndex: nextIndex
       };
     }
     case "SHOW_PROFILE": {
@@ -85,17 +115,21 @@ const reducer = (state: any = initialState, action: Action): any => {
         userId: action.userId,
         userName: action.userName,
         userPhoto: action.userPhoto,
-        trips: [...state.trips],
-        currentTripIndex: state.currentTripIndex,
         showProfile: false,
         showChat: false,
         showBuild: false
       };
     }
-    case "ADD_TRIP": {
+    case "ADD_SEARCH_TRIP": {
       return {
         ...state,
-        trips: [...state.trips, action.trip]
+        searchTrips: [...state.searchTrips, action.searchTrip]
+      };
+    }
+    case "ADD_ONGOING_TRIP": {
+      return {
+        ...state,
+        ongoingTrips: [...state.ongoingTrips, action.ongoingTrip]
       };
     }
     case "SET_MESSAGES": {
@@ -120,12 +154,6 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         messageListener: action.listener
-      };
-    }
-    case "SET_TRIPS": {
-      return {
-        ...state,
-        trips: action.trips
       };
     }
     case "JOIN_TRIP": {

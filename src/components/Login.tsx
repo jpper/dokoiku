@@ -80,7 +80,33 @@ const mapDispatchToProps = (dispatch: any) => ({
       });
   },
   setUserInfo: (userName: string, userId: string, userPhoto: string) =>
-    dispatch(setUserInfo(userName, userId, userPhoto))
+    dispatch(setUserInfo(userName, userId, userPhoto)),
+  getTrips: (userId: string) => {
+    //console.log("called");
+    myFirestore.collection("trips").onSnapshot(snapShot => {
+      snapShot.docChanges().forEach(change => {
+        if (change.type === "added") {
+          if (change.doc.data().memberIds.indexOf(userId) === -1) {
+            console.log("dispatching ADD_SEARCH_TRIP");
+            console.log(change.doc.data().memberIds);
+            console.log(userId);
+            console.log(change.doc.data());
+            dispatch({
+              type: "ADD_SEARCH_TRIP",
+              searchTrip: change.doc.data()
+            });
+          } else {
+            console.log("dispatching ADD_ONGOING_TRIP");
+            console.log(change.doc.data());
+            dispatch({
+              type: "ADD_ONGOING_TRIP",
+              ongoingTrip: change.doc.data()
+            });
+          }
+        }
+      });
+    });
+  }
 });
 
 interface Status {
@@ -114,6 +140,8 @@ class Login extends Component<Props, Status> {
     firebase.auth().onAuthStateChanged(user => {
       if (user !== null) {
         this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        console.log(this.props.userId);
+        this.props.getTrips(this.props.userId);
       }
     });
   };
@@ -189,7 +217,4 @@ class Login extends Component<Props, Status> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

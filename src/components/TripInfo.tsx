@@ -6,6 +6,8 @@ import firebase from "firebase";
 import { myFirebase, myFirestore } from "../config/firebase";
 import Map from "./Map";
 
+import { Grid } from "@material-ui/core";
+
 type myProps = {
   trips: any;
   currentTripIndex: number;
@@ -19,14 +21,55 @@ type myProps = {
 
 // I will style this more later -- just wanted it functional for now
 
-class TripInfo extends React.Component<myProps, {}> {
-  // componentDidMount() {
-  //   console.log(this.props.trips);
-  //   console.log(this.props.currentTripIndex);
-  // }
+class TripInfo extends React.Component<
+  myProps,
+  { members: any; previousLength: number }
+> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      members: [],
+      previousLength: 0
+    };
+  }
+
+  componentWillMount() {
+    console.log(this.props.trips);
+    const populatedMembers: any = [];
+    this.props.trips[this.props.currentTripIndex].memberIds.forEach(
+      async (m: any) => {
+        const username = await myFirestore
+          .collection("users")
+          .doc(m)
+          .get()
+          .then(doc => doc.data().nickname);
+        populatedMembers.push(username);
+      }
+    );
+    this.setState({ members: populatedMembers });
+  }
+
+  async componentDidUpdate() {
+    if (this.state.members.length !== this.state.previousLength) {
+      const populatedMembers: any = [];
+      this.props.trips[this.props.currentTripIndex].memberIds.forEach(
+        async (m: any) => {
+          const username = await myFirestore
+            .collection("users")
+            .doc(m)
+            .get()
+            .then(doc => doc.data().nickname);
+          populatedMembers.push(username);
+        }
+      );
+      this.setState({
+        members: populatedMembers,
+        previousLength: populatedMembers.length
+      });
+    }
+  }
 
   render() {
-    console.log(this.props.currentTripIndex);
     return (
       <div>
         <div className="TripInfo">
@@ -49,13 +92,13 @@ class TripInfo extends React.Component<myProps, {}> {
           </p>
           <div>
             Waypoints:{" "}
-            <div className="waypointsContainer">
+            <ul className="waypointsContainer">
               {this.props.trips[this.props.currentTripIndex].waypoints.map(
                 (l: any, i: number) => {
-                  return <p key={i}>{l.location}</p>;
+                  return <li key={i}>{l.location}</li>;
                 }
               )}
-            </div>
+            </ul>
           </div>
           <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
           <Button variant="outlined" color="secondary" size="small">
@@ -67,20 +110,19 @@ class TripInfo extends React.Component<myProps, {}> {
           </Button>
           <div>
             Members:{" "}
-            <div className="memberContainer">
+            <ul className="memberContainer">
               {this.props.trips[this.props.currentTripIndex].memberIds.map(
                 (m: any, i: number) => {
                   return (
-                    <div>
+                    <li>
                       <p key={i} onClick={() => this.props.onShowProfile(i)}>
-                        Member: {m}
-                        {/* Need a function to map member ID to member name */}
+                        {this.state.members[i]}
                       </p>
-                    </div>
+                    </li>
                   );
                 }
               )}
-            </div>
+            </ul>
           </div>
           <Button
             onClick={() =>
@@ -114,27 +156,15 @@ class TripInfo extends React.Component<myProps, {}> {
             </Button>
           </div>
         </div>
-        {/* {this.props.trips.length ? (
-          <Map
-            trips={this.props.trips}
-            currentTripIndex={this.props.currentTripIndex}
-          />
-        ) : null} */}
       </div>
     );
   }
 }
-
 const mapStateToProps = (state: any) => {
   return {
-    userId: state.userId,
-    trips: state.trips.filter(
-      (trip: any) => trip.memberIds.indexOf(state.userId) == -1
-    ),
-    currentTripIndex: state.currentTripIndex
+    userId: state.userId
   };
 };
-
 const mapDispatchToProps = (dispatch: any) => {
   return {
     onShowChat: () =>
@@ -148,11 +178,11 @@ const mapDispatchToProps = (dispatch: any) => {
       }),
     onPreviousTrip: () =>
       dispatch({
-        type: "PREVIOUS_TRIP"
+        type: "PREVIOUS_SEARCH_TRIP"
       }),
     onNextTrip: () =>
       dispatch({
-        type: "NEXT_TRIP"
+        type: "NEXT_SEARCH_TRIP"
       }),
     onJoinTrip: (trip: string, user: string) => {
       myFirestore

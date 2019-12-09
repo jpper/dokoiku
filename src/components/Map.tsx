@@ -75,7 +75,7 @@ class Map extends React.Component<MapProps, MapState> {
     }
   }
   render() {
-    console.log(this.state.positions);
+    console.log(this.props.trips);
     return (
       <LoadScript
         id="script-loader"

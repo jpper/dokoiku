@@ -39,8 +39,10 @@ type myProps = {
   userId: string;
   userName: string;
   userPhoto: string;
-  trips: any;
-  currentTripIndex: number;
+  ongoingTrips: any;
+  searchTrips: any;
+  currentOngoingTripIndex: number;
+  currentSearchTripIndex: number;
   showChat: boolean;
   showProfile: boolean;
   showBuild: boolean;
@@ -50,6 +52,7 @@ type myProps = {
   currentProfile: number;
   setUserInfo: any;
   login: any;
+  getTrips: any;
 };
 
 // class Header extends React.Component<myProps, {}> {
@@ -67,8 +70,10 @@ const mapStateToProps = (state: any) => {
     userId: state.userId,
     userName: state.userName,
     userPhoto: state.userPhoto,
-    trips: state.trips,
-    currentTripIndex: state.currentTripIndex,
+    ongoingTrips: state.ongoingTrips,
+    searchTrips: state.searchTrips,
+    currentOngoingTripIndex: state.currentOngoingTripIndex,
+    currentSearchTripIndex: state.currentSearchTripIndex,
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
@@ -131,7 +136,33 @@ const mapDispatchToProps = (dispatch: any) => ({
       });
   },
   setUserInfo: (userName: string, userId: string, userPhoto: string) =>
-    dispatch(setUserInfo(userName, userId, userPhoto))
+    dispatch(setUserInfo(userName, userId, userPhoto)),
+  getTrips: (userId: string) => {
+    //console.log("called");
+    myFirestore.collection("trips").onSnapshot(snapShot => {
+      snapShot.docChanges().forEach(change => {
+        if (change.type === "added") {
+          if (change.doc.data().memberIds.indexOf(userId) === -1) {
+            console.log("dispatching ADD_SEARCH_TRIP");
+            console.log(change.doc.data().memberIds);
+            console.log(userId);
+            console.log(change.doc.data());
+            dispatch({
+              type: "ADD_SEARCH_TRIP",
+              searchTrip: change.doc.data()
+            });
+          } else {
+            console.log("dispatching ADD_ONGOING_TRIP");
+            console.log(change.doc.data());
+            dispatch({
+              type: "ADD_ONGOING_TRIP",
+              ongoingTrip: change.doc.data()
+            });
+          }
+        }
+      });
+    });
+  }
 });
 
 interface TabPanelProps {
@@ -214,9 +245,13 @@ class Contents extends React.Component<myProps, any> {
   onLogin = () => {
     this.handleClose();
     this.props.login();
+    console.log(this.props.userId);
+    this.props.getTrips(this.props.userId);
   };
 
   render() {
+    console.log(this.props.searchTrips);
+    console.log(this.props.userId);
     return (
       <div className="contents">
         <AppBar position="static">
@@ -293,17 +328,26 @@ class Contents extends React.Component<myProps, any> {
             ) : (
               <>
                 <p>Ongoing Trips</p>
-                <Grid container>
-                  <Grid item xs={5}>
-                    <TripInfo />
+                {this.props.ongoingTrips.length ? (
+                  <Grid container>
+                    <Grid item xs={5}>
+                      <TripInfo
+                        trips={this.props.ongoingTrips}
+                        currentTripIndex={this.props.currentOngoingTripIndex}
+                      />
+                    </Grid>
+                    <Grid item xs={7}>
+                      {this.props.ongoingTrips.length ? (
+                        <Map
+                          trips={this.props.ongoingTrips}
+                          currentTripIndex={this.props.currentOngoingTripIndex}
+                        />
+                      ) : null}
+                    </Grid>
                   </Grid>
-                  <Grid item xs={7}>
-                    <Map
-                      trips={this.props.trips}
-                      currentTripIndex={this.props.currentTripIndex}
-                    />
-                  </Grid>
-                </Grid>
+                ) : (
+                  <div>Go join some trips or build your own</div>
+                )}
               </>
             )}
           </TabPanel>
@@ -317,13 +361,18 @@ class Contents extends React.Component<myProps, any> {
                 <p>Search Trip</p>
                 <Grid container>
                   <Grid item xs={5}>
-                    <TripInfo />
+                    <TripInfo
+                      trips={this.props.searchTrips}
+                      currentTripIndex={this.props.currentSearchTripIndex}
+                    />
                   </Grid>
                   <Grid item xs={7}>
-                    <Map
-                      trips={this.props.trips}
-                      currentTripIndex={this.props.currentTripIndex}
-                    />
+                    {this.props.searchTrips.length ? (
+                      <Map
+                        trips={this.props.searchTrips}
+                        currentTripIndex={this.props.currentSearchTripIndex}
+                      />
+                    ) : null}
                   </Grid>
                 </Grid>
               </>

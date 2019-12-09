@@ -1,13 +1,10 @@
 import React from "react";
-import Login from "./Login";
-import TripInfo from "./TripInfo";
-import BuildTrip from "./BuildTrip";
+
 import Profile from "./Profile";
-import ChatBoard from "./ChatBoard";
+
 import { myFirestore } from "../config/firebase";
 import "../styles/App.css";
-import Map from "./Map";
-import Notes from "./Notes";
+
 import Contents from "./Contents";
 import { connect } from "react-redux";
 
@@ -17,9 +14,10 @@ type myProps = {
   userPhoto: string;
   currentTripMemberInfo: any;
   currentTripMessages: any;
-  trips: any;
-  currentTripIndex: number;
-  getTrips: any;
+  ongoingTrips: any;
+  searchTrips: any;
+  currentOngoingTripIndex: number;
+  currentSearchTripIndex: number;
   showChat: boolean;
   showProfile: boolean;
   showBuild: boolean;
@@ -30,9 +28,6 @@ type myProps = {
 };
 
 class App extends React.Component<myProps, {}> {
-  componentDidMount() {
-    this.props.getTrips();
-  }
   render() {
     return (
       <div className="App">
@@ -60,8 +55,10 @@ const mapStateToProps = (state: any) => {
     userPhoto: state.userPhoto,
     currentTripMemberInfo: state.currentTripMemberInfo,
     currentTripMessages: state.currentTripMessages,
-    trips: state.trips,
-    currentTripIndex: state.currentTripIndex,
+    ongoingTrips: state.ongoingTrips,
+    searchTrips: state.searchTrips,
+    currentOngoingTripIndex: state.currentOngoingTripIndex,
+    currentSearchTripIndex: state.currentSearchTripIndex,
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
@@ -84,18 +81,7 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "SHOW_BUILD",
         index
-      }),
-    getTrips: () => {
-      //console.log("called");
-      myFirestore.collection("trips").onSnapshot(snapShot => {
-        snapShot.docChanges().forEach(change => {
-          if (change.type === "added") {
-            //console.log(change.doc.data());
-            dispatch({ type: "ADD_TRIP", trip: change.doc.data() });
-          }
-        });
-      });
-    }
+      })
   };
 };
 
