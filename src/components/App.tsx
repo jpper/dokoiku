@@ -41,21 +41,14 @@ class App extends React.Component<myProps, {}> {
       <div className="App">
         <Login />
         <BuildTrip />
-<<<<<<< HEAD
         <Header />
         {/* <Notes tripId="TestTrip1" /> */}
-        {/* <ChatBoard /> */}
-        {/* {/* <TripInfo /> 
-        {this.props.showProfile ? <Profile /> : null}
-        <Map /> */}
-=======
         {this.props.userId.length && this.props.trips.length ? (
           <ChatBoard />
         ) : null}
         {/* <TripInfo /> */}
         {/* {this.props.showProfile ? <Profile /> : null}
         {this.props.trips.length ? <Map /> : null} */}
->>>>>>> 9326ed443cda8e8bf93c0f38d54aa73c473faead
       </div>
     );
   }

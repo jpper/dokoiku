@@ -48,8 +48,7 @@ const mapStateToProps = (state: any) => {
 };
 
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
+const mapDispatchToProps = (dispatch: any) => ({
     // onShowChat: () =>
     //   dispatch({
     //     type: "SHOW_CHAT"
@@ -64,8 +63,8 @@ const mapDispatchToProps = (dispatch: any) => {
     //     type: "SHOW_BUILD",
     //     index
     //   })
-  };
-};
+  });
+
 
 
 
