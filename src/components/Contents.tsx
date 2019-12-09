@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import "../styles/Header.css";
 
 // Material UI & Styles
+import "../styles/Contents.css";
 import {
   AppBar,
   Toolbar,
@@ -18,6 +18,7 @@ import CardTravelIcon from "@material-ui/icons/CardTravel";
 import SearchIcon from "@material-ui/icons/Search";
 import BuildIcon from "@material-ui/icons/Build";
 import ChatIcon from "@material-ui/icons/Chat";
+import InfoIcon from "@material-ui/icons/Info";
 
 type myProps = {
   trips: any;
@@ -123,6 +124,7 @@ class Header extends React.Component<myProps, any> {
             // textColor="primary"
             aria-label="scrollable force tabs example"
           >
+            <Tab label="About" icon={<InfoIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
             <Tab label="Search Trip" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
@@ -130,6 +132,7 @@ class Header extends React.Component<myProps, any> {
           </Tabs>
           <TabPanel value={this.state.value} index={0}>
             Item One
+            <p>TEST!!!!</p>
           </TabPanel>
           <TabPanel value={this.state.value} index={1}>
             Item Two
@@ -139,6 +142,11 @@ class Header extends React.Component<myProps, any> {
           </TabPanel>
           <TabPanel value={this.state.value} index={3}>
             Item Four
+            {/* <ChatBoard /> */}
+          </TabPanel>
+          <TabPanel value={this.state.value} index={4}>
+            Item Four
+            {/* <ChatBoard /> */}
           </TabPanel>
         </AppBar>
       </div>

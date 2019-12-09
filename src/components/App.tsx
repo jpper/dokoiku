@@ -9,7 +9,7 @@ import { myFirebase, myFirestore } from "../config/firebase";
 import "../styles/App.css";
 import Map from "./Map";
 import Notes from "./Notes";
-import Header from "./Header";
+import Contents from "./Contents";
 import { connect } from "react-redux";
 import { getHeapSnapshot } from "v8";
 import { setTrips } from "../redux/action";
@@ -41,7 +41,7 @@ class App extends React.Component<myProps, {}> {
       <div className="App">
         <Login />
         {/* <BuildTrip /> */}
-        <Header />
+        <Contents />
         {/* <Notes tripId="TestTrip1" /> */}
         {/* {this.props.userId.length && this.props.trips.length ? (
           <ChatBoard />
