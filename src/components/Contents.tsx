@@ -79,8 +79,8 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  login: () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
+  login: (provider: any) => {
+    // const provider = new firebase.auth.GoogleAuthProvider();
     // this.setState({ isLoading: true });
     myFirebase
       .auth()
@@ -178,6 +178,14 @@ class Contents extends React.Component<myProps, any> {
     this.checkLogin();
   }
 
+  componentWillUpdate() {
+    if (this.state.value === -1) {
+      this.setState({
+        value: 0
+      });
+    }
+  }
+
   checkLogin = () => {
     firebase.auth().onAuthStateChanged(user => {
       if (user !== null) {
@@ -206,6 +214,13 @@ class Contents extends React.Component<myProps, any> {
     });
   };
 
+  onLogin = () => {
+    this.handleClose();
+    this.setState({
+      value: -1
+    });
+  };
+
   onLogout = () => {
     this.handleClose();
     this.props.setUserInfo("", "", "");
@@ -213,9 +228,14 @@ class Contents extends React.Component<myProps, any> {
     console.log("LOGOUT!!!");
   };
 
-  onLogin = () => {
+  onLogin4Google = () => {
     this.handleClose();
-    this.props.login();
+    this.props.login(new firebase.auth.GoogleAuthProvider());
+  };
+
+  onLogin4Facebook = () => {
+    this.handleClose();
+    this.props.login(new firebase.auth.FacebookAuthProvider());
   };
 
   render() {
@@ -354,6 +374,13 @@ class Contents extends React.Component<myProps, any> {
             <ChatBoard />
           </TabPanel> */}
         </AppBar>
+
+        {/* Click Login */}
+        {this.state.value === -1 && (
+          <div style={{ marginTop: "35px" }}>
+            <Login />
+          </div>
+        )}
       </div>
     );
   }
