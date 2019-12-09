@@ -84,11 +84,11 @@ const mapDispatchToProps = (dispatch: any) => {
         index
       }),
     getTrips: () => {
-      console.log("called");
+      //console.log("called");
       myFirestore.collection("trips").onSnapshot(snapShot => {
         snapShot.docChanges().forEach(change => {
           if (change.type === "added") {
-            console.log(change.doc.data());
+            //console.log(change.doc.data());
             dispatch({ type: "ADD_TRIP", trip: change.doc.data() });
           }
         });
