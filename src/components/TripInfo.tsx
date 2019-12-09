@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
+import { Button, Paper } from "@material-ui/core";
 
 type myProps = {
   trips: any;
@@ -16,21 +15,19 @@ class TripInfo extends React.Component<myProps, {}> {
   render() {
     return (
       <div>
-        <Paper className="TripInfo">
-          <Typography variant="h5" component="h3">
-            Trip Details
-          </Typography>
-          <Paper>
-            Start Date: {this.props.trips[this.props.currentTrip].startDate}
-          </Paper>
-          <Paper>
-            End Date: {this.props.trips[this.props.currentTrip].endDate}
-          </Paper>
+        <div className="TripInfo">
+          <h1>Trip Details</h1>
           <div>
-            <Paper>
+            Start Date: {this.props.trips[this.props.currentTrip].startDate}
+          </div>
+          <div>
+            End Date: {this.props.trips[this.props.currentTrip].endDate}
+          </div>
+          <div>
+            <div>
               Starting Location:
-              {this.props.trips[this.props.currentTrip].startLocation}
-            </Paper>
+              {` ${this.props.trips[this.props.currentTrip].startLocation}`}
+            </div>
           </div>
           <div>
             Waypoints:{" "}
@@ -40,11 +37,9 @@ class TripInfo extends React.Component<myProps, {}> {
               }
             )}
           </div>
-          <Paper>
-            Budget: {this.props.trips[this.props.currentTrip].budget}
-          </Paper>
-          <Paper>Notes: </Paper>
-          <Paper>Messages: </Paper>
+          <div>Budget: {this.props.trips[this.props.currentTrip].budget}</div>
+          <div>Notes: </div>
+          <div>Messages: </div>
           <div>
             Members:{" "}
             {this.props.trips[this.props.currentTrip].memberIds.map(
@@ -59,9 +54,28 @@ class TripInfo extends React.Component<myProps, {}> {
               }
             )}
           </div>
-        </Paper>
-        <button onClick={this.props.onPreviousTrip}>Previous</button>
-        <button onClick={this.props.onNextTrip}>Next</button>
+          <Button variant="contained" color="primary" size="large">
+            JOIN!
+          </Button>
+          <div className="navButtons">
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={this.props.onPreviousTrip}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={this.props.onNextTrip}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
