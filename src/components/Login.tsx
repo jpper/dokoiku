@@ -112,7 +112,9 @@ class Login extends Component<Props, Status> {
 
   checkLogin = () => {
     firebase.auth().onAuthStateChanged(user => {
-      this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+      if (user !== null) {
+        this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+      }
     });
   };
 
@@ -187,4 +189,7 @@ class Login extends Component<Props, Status> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

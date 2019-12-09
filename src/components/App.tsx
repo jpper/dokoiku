@@ -7,6 +7,8 @@ import ChatBoard from "./ChatBoard";
 import { myFirestore } from "../config/firebase";
 import "../styles/App.css";
 import Map from "./Map";
+import Notes from "./Notes";
+import Contents from "./Contents";
 import { connect } from "react-redux";
 
 type myProps = {
@@ -34,18 +36,18 @@ class App extends React.Component<myProps, {}> {
   render() {
     return (
       <div className="App">
-        <Login />
-        <BuildTrip />
+        {/* <BuildTrip /> */}
+        <Contents />
+        {/* <Notes tripId="TestTrip1" /> */}
         {/* {this.props.userId.length && this.props.trips.length ? (
           <ChatBoard />
         ) : null} */}
-        {this.props.trips.length &&
+        {/* {this.props.trips.length &&
         this.props.currentTripIndex !== undefined ? (
           <TripInfo />
-        ) : null}
+        ) : null} */}
 
         {this.props.showProfile ? <Profile /> : null}
-        {this.props.trips.length ? <Map /> : null}
       </div>
     );
   }

@@ -4,6 +4,9 @@ import { Button, Paper } from "@material-ui/core";
 import moment from "moment";
 import firebase from "firebase";
 import { myFirebase, myFirestore } from "../config/firebase";
+import Map from "./Map";
+
+import { Grid } from "@material-ui/core";
 
 type myProps = {
   trips: any;
@@ -66,6 +69,7 @@ class TripInfo extends React.Component<
   }
 
   render() {
+    console.log(this.props.currentTripIndex);
     return (
       <div>
         <div className="TripInfo">
@@ -194,4 +198,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TripInfo);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TripInfo);
