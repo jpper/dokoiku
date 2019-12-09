@@ -33,6 +33,7 @@ import BuildIcon from "@material-ui/icons/Build";
 import ChatIcon from "@material-ui/icons/Chat";
 import InfoIcon from "@material-ui/icons/Info";
 import PersonIcon from "@material-ui/icons/Person";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 type myProps = {
   userId: string;
@@ -234,6 +235,8 @@ class Contents extends React.Component<myProps, any> {
             <Tab label="Search Trip" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
             {/* <Tab label="Social" icon={<ChatIcon />} /> */}
+
+            {/* User Icon */}
             <div className="iconWrapper">
               <IconButton
                 color="inherit"
@@ -243,7 +246,7 @@ class Contents extends React.Component<myProps, any> {
               >
                 {this.props.userPhoto === "" ? (
                   <>
-                    <PersonIcon />
+                    <AccountCircleIcon fontSize="large" />
                   </>
                 ) : (
                   <>
