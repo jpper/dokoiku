@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import TripInfo from "./TripInfo";
 import Map from "./Map";
+import Editor from './Notes';
 import ChatBoard from "./ChatBoard";
 import About from "./About";
 import BuildTrip from "./BuildTrip";
@@ -50,6 +51,7 @@ type myProps = {
   currentProfile: number;
   setUserInfo: any;
   login: any;
+  ongoingTripToggle: number;
 };
 
 // class Header extends React.Component<myProps, {}> {
@@ -72,7 +74,8 @@ const mapStateToProps = (state: any) => {
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
-    currentProfile: state.currentProfile
+    currentProfile: state.currentProfile,
+    ongoingTripToggle: 0
   };
 };
 
@@ -297,11 +300,18 @@ class Contents extends React.Component<myProps, any> {
                   <Grid item xs={5}>
                     <TripInfo />
                   </Grid>
+                  {/* {if statement and changing props value here} */}
                   <Grid item xs={7}>
-                    <Map
+                    {this.props.ongoingTripToggle === 0 &&
+                      <Map
                       trips={this.props.trips}
                       currentTripIndex={this.props.currentTripIndex}
                     />
+                    || this.props.ongoingTripToggle === 1 &&
+                      <Editor />
+                    || this.props.ongoingTripToggle === 2 &&
+                      <ChatBoard />
+                    }
                   </Grid>
                 </Grid>
               </>

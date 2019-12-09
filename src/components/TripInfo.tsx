@@ -17,6 +17,8 @@ type myProps = {
   onNextTrip: any;
   onJoinTrip?: any;
   userId: string;
+  toggleNotes: any;
+  toggleMessages: any;
 };
 
 // I will style this more later -- just wanted it functional for now
@@ -101,11 +103,16 @@ class TripInfo extends React.Component<
             </ul>
           </div>
           <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
-          <Button variant="outlined" color="secondary" size="small">
+          <Button variant="outlined" color="secondary" size="small"
+          onClick={this.props.toggleNotes}
+          >
             Notes
+            
           </Button>
           <br></br>
-          <Button variant="outlined" color="secondary" size="small">
+          <Button variant="outlined" color="secondary" size="small"
+          onClick={this.props.toggleMessages}
+          >
             Messages
           </Button>
           <div>
@@ -165,7 +172,8 @@ const mapStateToProps = (state: any) => {
   return {
     userId: state.userId,
     trips: state.trips,
-    currentTripIndex: state.currentTripIndex
+    currentTripIndex: state.currentTripIndex,
+    ongoingTripToggle: state.ongoingTripToggle
   };
 };
 
@@ -187,6 +195,14 @@ const mapDispatchToProps = (dispatch: any) => {
     onNextTrip: () =>
       dispatch({
         type: "NEXT_TRIP"
+      }),
+    toggleNotes: () =>
+      dispatch({
+        type: "TOGGLE_NOTES"
+      }),
+    toggleMessages: () =>
+      dispatch({
+        type: "TOGGLE_MESSAGES"
       }),
     onJoinTrip: (trip: string, user: string) => {
       myFirestore
