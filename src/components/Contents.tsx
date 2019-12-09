@@ -293,14 +293,7 @@ class Contents extends React.Component<myProps, any> {
             ) : (
               <>
                 <p>Ongoing Trips</p>
-                <Grid container>
-                  <Grid item xs={5}>
-                    <TripInfo />
-                  </Grid>
-                  <Grid item xs={7}>
-                    <Map />
-                  </Grid>
-                </Grid>
+                <TripInfo />
               </>
             )}
           </TabPanel>
@@ -312,14 +305,7 @@ class Contents extends React.Component<myProps, any> {
             ) : (
               <>
                 <p>Search Trip</p>
-                <Grid container>
-                  <Grid item xs={5}>
-                    <TripInfo />
-                  </Grid>
-                  <Grid item xs={7}>
-                    <Map />
-                  </Grid>
-                </Grid>
+                <TripInfo />
               </>
             )}
           </TabPanel>
