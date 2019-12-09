@@ -94,7 +94,11 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`scrollable-force-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && (
+        <Box p={3} className="tabPanel">
+          {children}
+        </Box>
+      )}
     </Typography>
   );
 }
@@ -119,11 +123,12 @@ class Header extends React.Component<myProps, any> {
 
   render() {
     return (
-      <div className="root">
+      <div className="contents">
         <AppBar position="static">
           <Tabs
             value={this.state.value}
             onChange={this.handleChange}
+            centered
             // variant="scrollable"
             // scrollButtons="on"
             // indicatorColor="primary"
