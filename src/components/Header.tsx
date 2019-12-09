@@ -102,17 +102,25 @@ class Header extends React.Component<myProps, any> {
       value: 0
     };
   }
+
+  handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    console.log("VALUE: ", newValue);
+    this.setState({
+      value: newValue
+    });
+  };
+
   render() {
     return (
       <div className="root">
         <AppBar position="static">
           <Tabs
             value={this.state.value}
-            // onChange={handleChange}
-            variant="scrollable"
-            scrollButtons="on"
-            indicatorColor="primary"
-            textColor="primary"
+            onChange={this.handleChange}
+            // variant="scrollable"
+            // scrollButtons="on"
+            // indicatorColor="primary"
+            // textColor="primary"
             aria-label="scrollable force tabs example"
           >
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />

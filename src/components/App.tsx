@@ -40,20 +40,16 @@ class App extends React.Component<myProps, {}> {
     return (
       <div className="App">
         <Login />
-        <BuildTrip />
-<<<<<<< HEAD
+        {/* <BuildTrip /> */}
         <Header />
         {/* <Notes tripId="TestTrip1" /> */}
-        {this.props.userId.length && this.props.trips.length ? (
-=======
         {/* {this.props.userId.length && this.props.trips.length ? (
->>>>>>> 2ae33205a4567ef6ebac93f40bbdaa5576714140
           <ChatBoard />
         ) : null} */}
-        {this.props.trips.length &&
+        {/* {this.props.trips.length &&
         this.props.currentTripIndex !== undefined ? (
           <TripInfo />
-        ) : null}
+        ) : null} */}
 
         {/* {this.props.showProfile ? <Profile /> : null}
         {this.props.trips.length ? <Map /> : null} */}
@@ -108,4 +104,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
