@@ -42,7 +42,7 @@ const reducer = (state: any = initialState, action: Action): any => {
       if (state.currentTripIndex === 0) {
         nextIndex = state.trips.length - 1;
       } else {
-        nextIndex = state.currentTrip - 1;
+        nextIndex = state.currentTripIndex - 1;
       }
       return {
         ...state,
@@ -68,7 +68,8 @@ const reducer = (state: any = initialState, action: Action): any => {
     case "CLOSE_POPUP": {
       return {
         ...state,
-        showBuild: false
+        showBuild: false,
+        showProfile: false
       };
     }
     case "SHOW_BUILD": {
@@ -125,6 +126,11 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         trips: action.trips
+      };
+    }
+    case "JOIN_TRIP": {
+      return {
+        ...state
       };
     }
     default: {

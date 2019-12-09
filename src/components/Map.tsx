@@ -8,13 +8,6 @@ import {
 import { connect } from "react-redux";
 require("dotenv").config();
 
-const mapStateToProps = (state: any) => {
-  return {
-    trips: state.trips,
-    currentTripIndex: state.currentTripIndex
-  };
-};
-
 type MapProps = {
   trips: any;
   currentTripIndex: number;
@@ -35,25 +28,27 @@ class Map extends React.Component<MapProps, MapState> {
 
   shouldComponentUpdate(nextProps: any, nextState: any) {
     return (
+      nextProps.currentTripIndex !== this.props.currentTripIndex ||
       this.state.response === null ||
-      nextState.response.status != this.state.response.status
+      nextState.response.routes[0].overview_polyline !==
+        this.state.response.routes[0].overview_polyline
     );
   }
 
   directionsCallback(response: any | null) {
     if (response !== null) {
       if (response.status === "OK") {
-        console.log(response);
+        //console.log(response);
         this.setState(() => ({
           response
         }));
       } else {
-        console.log("response: ", response);
+        //console.log("response: ", response);
       }
     }
   }
   render() {
-    console.log(this.props.trips);
+    console.log(this.state.response);
     return (
       <LoadScript
         id="script-loader"
@@ -95,4 +90,4 @@ class Map extends React.Component<MapProps, MapState> {
   }
 }
 
-export default connect(mapStateToProps)(Map);
+export default Map;

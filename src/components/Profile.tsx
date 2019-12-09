@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import firebase from "firebase";
+import { myFirebase, myFirestore } from "../config/firebase";
 
 type myProps = {
   trips: any;
@@ -9,24 +11,32 @@ type myProps = {
 };
 
 class Profile extends React.Component<myProps, {}> {
+  componentDidMount() {
+    console.log(this.props.trips[this.props.currentTripIndex].memberIds[0]);
+  }
+
   render() {
     return (
       <div className="Profile">
         <img
           src={
-            this.props.trips[this.props.currentTripIndex].members[
+            this.props.trips[this.props.currentTripIndex].memberIds[
               this.props.currentProfile
             ].propic
           }
-          alt="fb-propic"
+          alt="TBD"
         />
         <p>
-          Name:{" "}
-          {
-            this.props.trips[this.props.currentTripIndex].members[
-              this.props.currentProfile
-            ].name
-          }
+          Name: TBD
+          {/* {myFirestore
+            .collection("users")
+            .doc(
+              this.props.trips[this.props.currentTripIndex].memberIds[
+                this.props.currentProfile
+              ]
+            )
+            .get()
+            .then(doc => console.log("DOC", doc))} */}
         </p>
         <button onClick={this.props.onClosePopup}>Close</button>
       </div>

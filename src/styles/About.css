@@ -1,0 +1,8 @@
+.about {
+  background-image: url(/static/img/trip.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* background-attachment: fixed; */
+  background-size: cover;
+  height: 100%;
+}

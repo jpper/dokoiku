@@ -4,15 +4,12 @@ import TripInfo from "./TripInfo";
 import BuildTrip from "./BuildTrip";
 import Profile from "./Profile";
 import ChatBoard from "./ChatBoard";
-import firebase from "firebase";
-import { myFirebase, myFirestore } from "../config/firebase";
+import { myFirestore } from "../config/firebase";
 import "../styles/App.css";
 import Map from "./Map";
 import Notes from "./Notes";
 import Contents from "./Contents";
 import { connect } from "react-redux";
-import { getHeapSnapshot } from "v8";
-import { setTrips } from "../redux/action";
 
 type myProps = {
   userId: string;
@@ -50,8 +47,7 @@ class App extends React.Component<myProps, {}> {
           <TripInfo />
         ) : null} */}
 
-        {/* {this.props.showProfile ? <Profile /> : null}
-        {this.props.trips.length ? <Map /> : null} */}
+        {this.props.showProfile ? <Profile /> : null}
       </div>
     );
   }
@@ -90,11 +86,11 @@ const mapDispatchToProps = (dispatch: any) => {
         index
       }),
     getTrips: () => {
-      console.log("called");
+      //console.log("called");
       myFirestore.collection("trips").onSnapshot(snapShot => {
         snapShot.docChanges().forEach(change => {
           if (change.type === "added") {
-            console.log(change.doc.data());
+            //console.log(change.doc.data());
             dispatch({ type: "ADD_TRIP", trip: change.doc.data() });
           }
         });
