@@ -11,7 +11,8 @@ import {
   Button,
   Tab,
   Tabs,
-  Box
+  Box,
+  Grid
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import CardTravelIcon from "@material-ui/icons/CardTravel";
@@ -19,6 +20,11 @@ import SearchIcon from "@material-ui/icons/Search";
 import BuildIcon from "@material-ui/icons/Build";
 import ChatIcon from "@material-ui/icons/Chat";
 import InfoIcon from "@material-ui/icons/Info";
+import TripInfo from "./TripInfo";
+import Map from "./Map";
+import ChatBoard from "./ChatBoard";
+import About from "./About";
+import BuildTrip from "./BuildTrip";
 
 type myProps = {
   trips: any;
@@ -130,23 +136,48 @@ class Header extends React.Component<myProps, any> {
             <Tab label="Build Trip" icon={<BuildIcon />} />
             <Tab label="Social" icon={<ChatIcon />} />
           </Tabs>
+
+          {/* About */}
           <TabPanel value={this.state.value} index={0}>
-            Item One
-            <p>TEST!!!!</p>
+            <About />
           </TabPanel>
+
+          {/* Ongoing Trips */}
           <TabPanel value={this.state.value} index={1}>
-            Item Two
+            <p>Ongoing Trips</p>
+            <Grid container>
+              <Grid item xs={5}>
+                <TripInfo />
+              </Grid>
+              <Grid item xs={7}>
+                <Map />
+              </Grid>
+            </Grid>
           </TabPanel>
+
+          {/* Search Trip */}
           <TabPanel value={this.state.value} index={2}>
-            Item Three
+            <p>Search Trip</p>
+            <Grid container>
+              <Grid item xs={5}>
+                <TripInfo />
+              </Grid>
+              <Grid item xs={7}>
+                <Map />
+              </Grid>
+            </Grid>
           </TabPanel>
+
+          {/* Build Trip */}
           <TabPanel value={this.state.value} index={3}>
-            Item Four
-            {/* <ChatBoard /> */}
+            <p>Build Trip</p>
+            <BuildTrip />
           </TabPanel>
+
+          {/* Social */}
           <TabPanel value={this.state.value} index={4}>
-            Item Four
-            {/* <ChatBoard /> */}
+            <p>Social</p>
+            <ChatBoard />
           </TabPanel>
         </AppBar>
       </div>
