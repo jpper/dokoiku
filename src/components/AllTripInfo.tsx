@@ -21,7 +21,7 @@ type myProps = {
 
 // I will style this more later -- just wanted it functional for now
 
-class TripInfo extends React.Component<
+class AllTripInfo extends React.Component<
   myProps,
   { members: any; previousLength: number }
 > {
@@ -101,13 +101,6 @@ class TripInfo extends React.Component<
             </ul>
           </div>
           <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
-          <Button variant="outlined" color="secondary" size="small">
-            Notes
-          </Button>
-          <br></br>
-          <Button variant="outlined" color="secondary" size="small">
-            Messages
-          </Button>
           <div>
             Members:{" "}
             <ul className="memberContainer">
@@ -198,7 +191,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TripInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(AllTripInfo);

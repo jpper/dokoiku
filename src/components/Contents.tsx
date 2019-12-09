@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import TripInfo from "./TripInfo";
+import AllTripInfo from "./AllTripInfo";
 import Map from "./Map";
 import ChatBoard from "./ChatBoard";
 import About from "./About";
@@ -295,7 +295,7 @@ class Contents extends React.Component<myProps, any> {
                 <p>Ongoing Trips</p>
                 <Grid container>
                   <Grid item xs={5}>
-                    <TripInfo />
+                    {/* <TripInfo /> */}
                   </Grid>
                   <Grid item xs={7}>
                     <Map
@@ -317,7 +317,7 @@ class Contents extends React.Component<myProps, any> {
                 <p>Search Trip</p>
                 <Grid container>
                   <Grid item xs={5}>
-                    <TripInfo />
+                    <AllTripInfo />
                   </Grid>
                   <Grid item xs={7}>
                     <Map
@@ -353,10 +353,7 @@ class Contents extends React.Component<myProps, any> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Contents);
+export default connect(mapStateToProps, mapDispatchToProps)(Contents);
 
 //TODO Q: how do we set up general (app wide) colors
 //TODO Q: mapDispatchToProps doesnt work if not commented out. How to connect it and make everything work together

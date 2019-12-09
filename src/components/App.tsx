@@ -1,6 +1,6 @@
 import React from "react";
 import Login from "./Login";
-import TripInfo from "./TripInfo";
+import AllTripInfo from "./AllTripInfo";
 import BuildTrip from "./BuildTrip";
 import Profile from "./Profile";
 import ChatBoard from "./ChatBoard";
