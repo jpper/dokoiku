@@ -18,18 +18,20 @@ type myProps = {
 
 // I will style this more later -- just wanted it functional for now
 
-class TripInfo extends React.Component<myProps, { members: any; photos: any }> {
+class TripInfo extends React.Component<
+  myProps,
+  { members: any; previousLength: number }
+> {
   constructor(props: any) {
     super(props);
     this.state = {
       members: [],
-      photos: []
+      previousLength: 0
     };
   }
 
   componentWillMount() {
     const populatedMembers: any = [];
-    const populatedPhotos: any = [];
     this.props.trips[this.props.currentTripIndex].memberIds.forEach(
       async (m: any) => {
         const username = await myFirestore
@@ -40,13 +42,28 @@ class TripInfo extends React.Component<myProps, { members: any; photos: any }> {
         populatedMembers.push(username);
       }
     );
-    this.setState({ members: populatedMembers, photos: populatedPhotos });
+    this.setState({ members: populatedMembers });
   }
 
-  // componentDidMount() {
-  //   console.log(this.props.trips);
-  //   console.log(this.props.currentTripIndex);
-  // }
+  async componentDidUpdate() {
+    if (this.state.members.length !== this.state.previousLength) {
+      const populatedMembers: any = [];
+      this.props.trips[this.props.currentTripIndex].memberIds.forEach(
+        async (m: any) => {
+          const username = await myFirestore
+            .collection("users")
+            .doc(m)
+            .get()
+            .then(doc => doc.data().nickname);
+          populatedMembers.push(username);
+        }
+      );
+      this.setState({
+        members: populatedMembers,
+        previousLength: populatedMembers.length
+      });
+    }
+  }
 
   render() {
     return (
@@ -96,7 +113,6 @@ class TripInfo extends React.Component<myProps, { members: any; photos: any }> {
                     <li>
                       <p key={i} onClick={() => this.props.onShowProfile(i)}>
                         {this.state.members[i]}
-                        {/* Need a function to map member ID to member name */}
                       </p>
                     </li>
                   );
