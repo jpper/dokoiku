@@ -40,7 +40,7 @@ type myProps = {
   userName: string;
   userPhoto: string;
   trips: any;
-  currentTrip: number;
+  currentTripIndex: number;
   showChat: boolean;
   showProfile: boolean;
   showBuild: boolean;
@@ -68,7 +68,7 @@ const mapStateToProps = (state: any) => {
     userName: state.userName,
     userPhoto: state.userPhoto,
     trips: state.trips,
-    currentTrip: state.currentTrip,
+    currentTripIndex: state.currentTripIndex,
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
@@ -300,7 +300,7 @@ class Contents extends React.Component<myProps, any> {
                   <Grid item xs={7}>
                     <Map
                       trips={this.props.trips}
-                      currentTripIndex={this.props.currentTrip}
+                      currentTripIndex={this.props.currentTripIndex}
                     />
                   </Grid>
                 </Grid>
@@ -322,7 +322,7 @@ class Contents extends React.Component<myProps, any> {
                   <Grid item xs={7}>
                     <Map
                       trips={this.props.trips}
-                      currentTripIndex={this.props.currentTrip}
+                      currentTripIndex={this.props.currentTripIndex}
                     />
                   </Grid>
                 </Grid>

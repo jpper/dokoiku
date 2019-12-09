@@ -70,3 +70,9 @@
   border-radius: 10px;
   border-width: 1px;
 }
+.about {
+  width: 80%;
+  text-align: left;
+  margin-left: 7%;
+  padding-left: 2%;
+}

@@ -45,12 +45,8 @@ class App extends React.Component<myProps, {}> {
         {/* {this.props.trips.length &&
         this.props.currentTripIndex !== undefined ? (
           <TripInfo />
-<<<<<<< HEAD
-        ) : null}
-=======
         ) : null} */}
 
->>>>>>> 362026336e2f7947150cf1c89b884dffa9a53228
         {this.props.showProfile ? <Profile /> : null}
       </div>
     );
@@ -103,7 +99,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
