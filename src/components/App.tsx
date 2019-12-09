@@ -48,8 +48,8 @@ class App extends React.Component<myProps, {}> {
           <TripInfo />
         ) : null}
 
-        {/* {this.props.showProfile ? <Profile /> : null}
-        {this.props.trips.length ? <Map /> : null} */}
+        {/* {this.props.showProfile ? <Profile /> : null} */}
+        {/* {this.props.trips.length ? <Map /> : null} */}
       </div>
     );
   }
@@ -88,11 +88,11 @@ const mapDispatchToProps = (dispatch: any) => {
         index
       }),
     getTrips: () => {
-      console.log("called");
+      //console.log("called");
       myFirestore.collection("trips").onSnapshot(snapShot => {
         snapShot.docChanges().forEach(change => {
           if (change.type === "added") {
-            console.log(change.doc.data());
+            //console.log(change.doc.data());
             dispatch({ type: "ADD_TRIP", trip: change.doc.data() });
           }
         });

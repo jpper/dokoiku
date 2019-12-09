@@ -42,7 +42,7 @@ const reducer = (state: any = initialState, action: Action): any => {
       if (state.currentTripIndex === 0) {
         nextIndex = state.trips.length - 1;
       } else {
-        nextIndex = state.currentTrip - 1;
+        nextIndex = state.currentTripIndex - 1;
       }
       return {
         ...state,

@@ -45,6 +45,17 @@
   border-style: solid;
   border-radius: 10px;
   border-width: 1px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.waypointsContainer {
+  overflow-y: scroll;
+}
+
+.memberContainer {
+  overflow-y: scroll;
+  size: 30px;
 }
 
 .BuildTrip {
