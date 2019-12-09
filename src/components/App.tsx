@@ -4,14 +4,10 @@ import TripInfo from "./TripInfo";
 import BuildTrip from "./BuildTrip";
 import Profile from "./Profile";
 import ChatBoard from "./ChatBoard";
-import firebase from "firebase";
-import { myFirebase, myFirestore } from "../config/firebase";
+import { myFirestore } from "../config/firebase";
 import "../styles/App.css";
 import Map from "./Map";
-import Notes from "./Notes";
 import { connect } from "react-redux";
-import { getHeapSnapshot } from "v8";
-import { setTrips } from "../redux/action";
 
 type myProps = {
   userId: string;
