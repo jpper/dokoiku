@@ -2,14 +2,22 @@ import React from "react";
 import { connect } from "react-redux";
 import "../styles/Header.css";
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
-import MenuIcon from '@material-ui/icons/Menu';
-
+// Material UI & Styles
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Button,
+  Tab,
+  Tabs,
+  Box
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
+import CardTravelIcon from "@material-ui/icons/CardTravel";
+import SearchIcon from "@material-ui/icons/Search";
+import BuildIcon from "@material-ui/icons/Build";
+import ChatIcon from "@material-ui/icons/Chat";
 
 type myProps = {
   trips: any;
@@ -23,7 +31,6 @@ type myProps = {
   currentProfile: number;
 };
 
-
 // class Header extends React.Component<myProps, {}> {
 //   render() {
 //     return (
@@ -33,8 +40,6 @@ type myProps = {
 //     );
 //   }
 // }
-
-
 
 const mapStateToProps = (state: any) => {
   return {
@@ -47,79 +52,96 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-
 const mapDispatchToProps = (dispatch: any) => ({
-    // onShowChat: () =>
-    //   dispatch({
-    //     type: "SHOW_CHAT"
-    //   }),
-    // onShowProfile: (index: number) =>
-    //   dispatch({
-    //     type: "SHOW_PROFILE",
-    //     index
-    //   }),
-    // onShowBuild: (index: number) =>
-    //   dispatch({
-    //     type: "SHOW_BUILD",
-    //     index
-    //   })
-  });
+  // onShowChat: () =>
+  //   dispatch({
+  //     type: "SHOW_CHAT"
+  //   }),
+  // onShowProfile: (index: number) =>
+  //   dispatch({
+  //     type: "SHOW_PROFILE",
+  //     index
+  //   }),
+  // onShowBuild: (index: number) =>
+  //   dispatch({
+  //     type: "SHOW_BUILD",
+  //     index
+  //   })
+});
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: any;
+  value: any;
+}
 
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
 
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-force-tabpanel-${index}`}
+      aria-labelledby={`scrollable-force-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box p={3}>{children}</Box>}
+    </Typography>
+  );
+}
 
 type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
- 
-
-class Header extends React.Component<myProps> {
+class Header extends React.Component<myProps, any> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      value: 0
+    };
   }
   render() {
-  return (
-    <div className="root">
-      <AppBar position="static">
-        <Toolbar variant="dense">
-          {/* <IconButton edge="start" className="menuButton" color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton> */}
-          {/* <Button className="menuButton" color="inherit" aria-label="menu">
-            Button
-          </Button> */}
-          <Button className="headerButton">
-            About
-          </Button>
-          <Button className="headerButton">
-            Ongoing trips
-          </Button>
-          <Button className="headerButton">
-            Search trip
-          </Button>
-          <Button className="headerButton">
-            Build trip
-          </Button>
-          <Button className="headerButton">
-            Social
-          </Button>
-
-
-          
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
-
+    return (
+      <div className="root">
+        <AppBar position="static">
+          <Tabs
+            value={this.state.value}
+            // onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="on"
+            indicatorColor="primary"
+            textColor="primary"
+            aria-label="scrollable force tabs example"
+          >
+            <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
+            <Tab label="Search Trip" icon={<SearchIcon />} />
+            <Tab label="Build Trip" icon={<BuildIcon />} />
+            <Tab label="Social" icon={<ChatIcon />} />
+          </Tabs>
+          <TabPanel value={this.state.value} index={0}>
+            Item One
+          </TabPanel>
+          <TabPanel value={this.state.value} index={1}>
+            Item Two
+          </TabPanel>
+          <TabPanel value={this.state.value} index={2}>
+            Item Three
+          </TabPanel>
+          <TabPanel value={this.state.value} index={3}>
+            Item Four
+          </TabPanel>
+        </AppBar>
+      </div>
+    );
+  }
 }
 
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
-
-
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);
 
 //TODO Q: how do we set up general (app wide) colors
 //TODO Q: mapDispatchToProps doesnt work if not commented out. How to connect it and make everything work together
