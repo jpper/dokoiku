@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import moment from "moment";
 
 type myProps = {
   trips: any;
@@ -12,14 +13,23 @@ type myProps = {
 
 class TripInfo extends React.Component<myProps, {}> {
   render() {
+    console.log(this.props.trips);
     return (
       <div>
         <div className="TripInfo">
           <h1>Trip Details</h1>
           <p>
-            Start Date: {this.props.trips[this.props.currentTripIndex].startDate}
+            Start Date:{" "}
+            {moment(
+              this.props.trips[this.props.currentTripIndex].startDate.toDate()
+            ).format("MMMM Do YYYY, h:mm:ss a")}
           </p>
-          <p>End Date: {this.props.trips[this.props.currentTripIndex].endDate}</p>
+          <p>
+            End Date:{" "}
+            {moment(
+              this.props.trips[this.props.currentTripIndex].endDate.toDate()
+            ).format("MMMM Do YYYY, h:mm:ss a")}
+          </p>
           <div>
             <p>
               Starting Location:
@@ -39,12 +49,12 @@ class TripInfo extends React.Component<myProps, {}> {
           <p>Messages: </p>
           <div>
             Members:{" "}
-            {this.props.trips[this.props.currentTripIndex].members.map(
+            {this.props.trips[this.props.currentTripIndex].memberIds.map(
               (m: any, i: number) => {
                 return (
                   <div>
                     <p key={i} onClick={() => this.props.onShowProfile(i)}>
-                      username: {m.username}
+                      memberIds: {m.memberIds}
                     </p>
                   </div>
                 );

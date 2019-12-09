@@ -40,10 +40,14 @@ class App extends React.Component<myProps, {}> {
       <div className="App">
         <Login />
         <BuildTrip />
-        {this.props.userId.length && this.props.trips.length ? (
+        {/* {this.props.userId.length && this.props.trips.length ? (
           <ChatBoard />
+        ) : null} */}
+        {this.props.trips.length &&
+        this.props.currentTripIndex !== undefined ? (
+          <TripInfo />
         ) : null}
-        {/* <TripInfo /> */}
+
         {/* {this.props.showProfile ? <Profile /> : null}
         {this.props.trips.length ? <Map /> : null} */}
       </div>
@@ -84,16 +88,15 @@ const mapDispatchToProps = (dispatch: any) => {
         index
       }),
     getTrips: () => {
-      myFirestore
-        .collection("trips")
-        .get()
-        .then(snapShot => {
-          const trips = snapShot.docs.map(doc => doc.data());
-          dispatch(setTrips(trips));
-        })
-        .catch(err => {
-          console.log(err.toString());
+      console.log("called");
+      myFirestore.collection("trips").onSnapshot(snapShot => {
+        snapShot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            console.log(change.doc.data());
+            dispatch({ type: "ADD_TRIP", trip: change.doc.data() });
+          }
         });
+      });
     }
   };
 };

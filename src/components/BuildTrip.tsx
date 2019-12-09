@@ -3,6 +3,7 @@ import { myFirebase, myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 import uuidv4 from "uuid/v4";
 import { FormControl, TextField, Button } from "@material-ui/core";
+import firebase, { firestore } from "firebase";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -43,17 +44,12 @@ const mapDispatchToProps = (dispatch: any) => {
           ownerId: userId,
           tripId,
           travelMode: "DRIVING",
-          startDate,
-          endDate,
+          startDate: firestore.Timestamp.fromDate(new Date(startDate)),
+          endDate: firestore.Timestamp.fromDate(new Date(endDate)),
           startLocation,
           waypoints,
           budget,
           memberIds: []
-        })
-        .then(() => {
-          dispatch({
-            type: "ADD_TRIP"
-          });
         });
     }
   };
