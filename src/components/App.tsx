@@ -39,7 +39,6 @@ class App extends React.Component<myProps, {}> {
   render() {
     return (
       <div className="App">
-        <Login />
         {/* <BuildTrip /> */}
         <Contents />
         {/* <Notes tripId="TestTrip1" /> */}
