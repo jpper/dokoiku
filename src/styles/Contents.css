@@ -1,12 +1,6 @@
 .tabPanel {
   background-color: white;
   color: black;
-  background-image: url(/static/img/trip.jpg);
-  background-position: center center;
-  background-repeat: no-repeat;
-  /* background-attachment: fixed; */
-  background-size: cover;
-  height: 100%;
 }
 .iconWrapper {
   display: flex;
@@ -24,4 +18,12 @@
 }
 .tripInfo {
   border: solid 2px black;
+}
+.bgImg {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: auto;
 }

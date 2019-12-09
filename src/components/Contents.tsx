@@ -37,6 +37,8 @@ import InfoIcon from "@material-ui/icons/Info";
 import PersonIcon from "@material-ui/icons/Person";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
+import backgroundImg from "../img/trip.jpg";
+
 type myProps = {
   userId: string;
   userName: string;
@@ -51,18 +53,7 @@ type myProps = {
   onShowBuild?: any;
   currentProfile: number;
   setUserInfo: any;
-  login: any;
 };
-
-// class Header extends React.Component<myProps, {}> {
-//   render() {
-//     return (
-//       <div className="Header">
-//         Baru header
-//       </div>
-//     );
-//   }
-// }
 
 const mapStateToProps = (state: any) => {
   return {
@@ -79,59 +70,6 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  login: (provider: any) => {
-    // const provider = new firebase.auth.GoogleAuthProvider();
-    // this.setState({ isLoading: true });
-    myFirebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(async result => {
-        let userResult = result.user;
-        if (userResult) {
-          const result = await myFirestore
-            .collection("users")
-            .where("id", "==", userResult.uid)
-            .get();
-
-          if (result.docs.length === 0) {
-            // Set new data since this is a new user
-            myFirestore
-              .collection("users")
-              .doc(userResult.uid)
-              .set({
-                id: userResult.uid,
-                nickname: userResult.displayName,
-                aboutMe: "",
-                photoUrl: userResult.photoURL
-              })
-              .then(data => {
-                // Write user info to local
-                dispatch(
-                  setUserInfo(
-                    userResult.displayName,
-                    userResult.uid,
-                    userResult.photoURL
-                  )
-                );
-              });
-          } else {
-            // Write user info to local
-            dispatch(
-              setUserInfo(
-                userResult.displayName,
-                userResult.uid,
-                userResult.photoURL
-              )
-            );
-          }
-        } else {
-          console.log("User info not available");
-        }
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
-  },
   setUserInfo: (userName: string, userId: string, userPhoto: string) =>
     dispatch(setUserInfo(userName, userId, userPhoto))
 });
@@ -228,16 +166,6 @@ class Contents extends React.Component<myProps, any> {
     console.log("LOGOUT!!!");
   };
 
-  onLogin4Google = () => {
-    this.handleClose();
-    this.props.login(new firebase.auth.GoogleAuthProvider());
-  };
-
-  onLogin4Facebook = () => {
-    this.handleClose();
-    this.props.login(new firebase.auth.FacebookAuthProvider());
-  };
-
   render() {
     return (
       <div className="contents">
@@ -304,9 +232,9 @@ class Contents extends React.Component<myProps, any> {
           </Tabs>
 
           {/* About */}
-          <TabPanel value={this.state.value} index={0}>
-            <About />
-          </TabPanel>
+          {/* <TabPanel value={this.state.value} index={0}> */}
+          {/* <About /> */}
+          {/* </TabPanel> */}
 
           {/* Ongoing Trips */}
           <TabPanel value={this.state.value} index={1}>
@@ -379,6 +307,14 @@ class Contents extends React.Component<myProps, any> {
         {this.state.value === -1 && (
           <div style={{ marginTop: "35px" }}>
             <Login />
+          </div>
+        )}
+
+        {/* About */}
+        {this.state.value === 0 && (
+          <div>
+            <img className="bgImg" src={backgroundImg} alt="backImg" />
+            <About />
           </div>
         )}
       </div>

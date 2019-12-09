@@ -17,6 +17,7 @@ import {
   Typography
 } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
+import "../styles/TripInfo.css";
 
 type myProps = {
   trips: any;
@@ -105,7 +106,7 @@ class TripInfo extends React.Component<
             {this.props.trips[this.props.currentTripIndex].waypoints.map(
               (l: any, i: number) => {
                 return (
-                  <ListItem key={i}>
+                  <ListItem key={i} className="tripLocation">
                     <ListItemIcon>
                       <DoubleArrowIcon />
                     </ListItemIcon>
