@@ -6,7 +6,6 @@ import Profile from "./Profile";
 import ChatBoard from "./ChatBoard";
 import { myFirestore } from "../config/firebase";
 import "../styles/App.css";
-import Map from "./Map";
 import { connect } from "react-redux";
 
 type myProps = {
@@ -45,7 +44,6 @@ class App extends React.Component<myProps, {}> {
         ) : null}
 
         {this.props.showProfile ? <Profile /> : null}
-        {this.props.trips.length ? <Map /> : null}
       </div>
     );
   }
