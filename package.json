@@ -25,6 +25,7 @@
     "dotenv": "^8.2.0",
     "env-cmd": "^10.0.1",
     "firebase": "^7.5.0",
+    "material-ui-icons": "^1.0.0-beta.36",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "react": "^16.12.0",
