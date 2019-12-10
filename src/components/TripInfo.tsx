@@ -6,7 +6,20 @@ import firebase from "firebase";
 import { myFirebase, myFirestore } from "../config/firebase";
 import Map from "./Map";
 
-import { Grid } from "@material-ui/core";
+// Material UI
+import {
+  Grid,
+  Card,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography
+} from "@material-ui/core";
+import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
+import DateRangeIcon from "@material-ui/icons/DateRange";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import "../styles/TripInfo.css";
 
 type myProps = {
   trips: any;
@@ -71,90 +84,98 @@ class TripInfo extends React.Component<
   render() {
     console.log(this.props.currentTripIndex);
     return (
-      <div>
-        <div className="TripInfo">
-          <h1>Trip Details</h1>
-          <p>
-            Start Date:{" "}
-            {moment(
-              this.props.trips[this.props.currentTripIndex].startDate.toDate()
-            ).format("MMMM Do YYYY")}
-          </p>
-          <p>
-            End Date:{" "}
-            {moment(
-              this.props.trips[this.props.currentTripIndex].endDate.toDate()
-            ).format("MMMM Do YYYY")}
-          </p>
-          <p>
-            Starting Location:
-            {` ${this.props.trips[this.props.currentTripIndex].startLocation}`}
-          </p>
-          <div>
-            Waypoints:{" "}
-            <ul className="waypointsContainer">
-              {this.props.trips[this.props.currentTripIndex].waypoints.map(
-                (l: any, i: number) => {
-                  return <li key={i}>{l.location}</li>;
-                }
-              )}
-            </ul>
-          </div>
-          <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
-          <Button variant="outlined" color="secondary" size="small">
-            Notes
-          </Button>
-          <br></br>
-          <Button variant="outlined" color="secondary" size="small">
-            Messages
-          </Button>
-          <div>
-            Members:{" "}
-            <ul className="memberContainer">
-              {this.props.trips[this.props.currentTripIndex].memberIds.map(
-                (m: any, i: number) => {
-                  return (
-                    <li>
-                      <p key={i} onClick={() => this.props.onShowProfile(i)}>
-                        {this.state.members[i]}
-                      </p>
-                    </li>
-                  );
-                }
-              )}
-            </ul>
-          </div>
+      <div className="TripInfo">
+        <h1>Trip Details</h1>
+        <p>
+          <DateRangeIcon />
+          Start Date:{" "}
+          {moment(
+            this.props.trips[this.props.currentTripIndex].startDate.toDate()
+          ).format("MMMM Do YYYY")}
+        </p>
+        <p>
+          <DateRangeIcon />
+          End Date:{" "}
+          {moment(
+            this.props.trips[this.props.currentTripIndex].endDate.toDate()
+          ).format("MMMM Do YYYY")}
+        </p>
+        <p>
+          <DoubleArrowIcon />
+          Starting Location:
+          {` ${this.props.trips[this.props.currentTripIndex].startLocation}`}
+        </p>
+        <div>
+          <List>
+            <Typography variant="h5">Waypoints:</Typography>
+            {this.props.trips[this.props.currentTripIndex].waypoints.map(
+              (l: any, i: number) => {
+                return (
+                  <ListItem key={i} className="tripLocation">
+                    <ListItemIcon>
+                      <LocationOnIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={l.location} />
+                  </ListItem>
+                );
+              }
+            )}
+          </List>
+        </div>
+        <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
+        <Button variant="outlined" color="secondary" size="small">
+          Notes
+        </Button>
+        <br></br>
+        <Button variant="outlined" color="secondary" size="small">
+          Messages
+        </Button>
+        <div>
+          Members:{" "}
+          <ul className="memberContainer">
+            {this.props.trips[this.props.currentTripIndex].memberIds.map(
+              (m: any, i: number) => {
+                return (
+                  <li>
+                    <p key={i} onClick={() => this.props.onShowProfile(i)}>
+                      {this.state.members[i]}
+                    </p>
+                  </li>
+                );
+              }
+            )}
+          </ul>
+        </div>
+        <Button
+          onClick={() =>
+            this.props.onJoinTrip(
+              this.props.trips[this.props.currentTripIndex].tripId,
+              this.props.userId
+            )
+          }
+          variant="contained"
+          color="primary"
+          size="large"
+        >
+          JOIN!
+        </Button>
+        <div className="navButtons">
           <Button
-            onClick={() =>
-              this.props.onJoinTrip(
-                this.props.trips[this.props.currentTripIndex].tripId,
-                this.props.userId
-              )
-            }
             variant="contained"
-            color="primary"
-            size="large"
+            color="secondary"
+            size="small"
+            onClick={this.props.onPreviousTrip}
           >
-            JOIN!
+            Previous
           </Button>
-          <div className="navButtons">
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              onClick={this.props.onPreviousTrip}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              onClick={this.props.onNextTrip}
-            >
-              Next
-            </Button>
-          </div>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            onClick={this.props.onNextTrip}
+          >
+            Next
+          </Button>
         </div>
       </div>
     );
@@ -198,7 +219,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TripInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(TripInfo);
