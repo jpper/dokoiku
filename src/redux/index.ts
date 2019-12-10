@@ -68,7 +68,7 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
     case "PREVIOUS_ONGOING_TRIP": {
       let nextIndex: number;
-      if (state.currentTripIndex === 0) {
+      if (state.currentOngoingTripIndex === 0) {
         nextIndex = state.ongoingTrips.length - 1;
       } else {
         nextIndex = state.currentOngoingTripIndex - 1;

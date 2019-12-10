@@ -144,16 +144,12 @@ const mapDispatchToProps = (dispatch: any) => ({
         if (change.type === "added") {
           if (change.doc.data().memberIds.indexOf(userId) === -1) {
             console.log("dispatching ADD_SEARCH_TRIP");
-            console.log(change.doc.data().memberIds);
-            console.log(userId);
-            console.log(change.doc.data());
             dispatch({
               type: "ADD_SEARCH_TRIP",
               searchTrip: change.doc.data()
             });
           } else {
             console.log("dispatching ADD_ONGOING_TRIP");
-            console.log(change.doc.data());
             dispatch({
               type: "ADD_ONGOING_TRIP",
               ongoingTrip: change.doc.data()
@@ -211,6 +207,7 @@ class Contents extends React.Component<myProps, any> {
     firebase.auth().onAuthStateChanged(user => {
       if (user !== null) {
         this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        this.props.getTrips(user.uid);
       }
     });
   };
@@ -245,13 +242,9 @@ class Contents extends React.Component<myProps, any> {
   onLogin = () => {
     this.handleClose();
     this.props.login();
-    console.log(this.props.userId);
-    this.props.getTrips(this.props.userId);
   };
 
   render() {
-    console.log(this.props.searchTrips);
-    console.log(this.props.userId);
     return (
       <div className="contents">
         <AppBar position="static">
