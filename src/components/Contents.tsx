@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import OngoingTripInfo from "./OngoingTripInfo";
 import SearchTripInfo from "./SearchTripInfo";
 import Map from "./Map";
+import Editor from "./Notes";
 import ChatBoard from "./ChatBoard";
 import About from "./About";
 import BuildTrip from "./BuildTrip";
+import EditTrip from "./EditTrip";
 import Login from "./Login";
 import firebase from "firebase";
 import { myFirebase, myFirestore } from "../config/firebase";
@@ -39,6 +41,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 import backgroundImg from "../img/trip.jpg";
+import moment from "moment";
 
 type myProps = {
   userId: string;
@@ -51,11 +54,14 @@ type myProps = {
   showChat: boolean;
   showProfile: boolean;
   showBuild: boolean;
+  showEdit: boolean;
   onShowChat?: any;
   onShowProfile?: any;
   onShowBuild?: any;
   currentProfile: number;
   setUserInfo: any;
+  login: any;
+  mapTripMessage: any;
   getTrips: any;
 };
 
@@ -71,7 +77,10 @@ const mapStateToProps = (state: any) => {
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
-    currentProfile: state.currentProfile
+    showEdit: state.showEdit,
+    currentProfile: state.currentProfile,
+    mapTripMessage: state.mapTripMessage,
+    login: state.login
   };
 };
 
@@ -109,8 +118,8 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 interface TabPanelProps {
   children?: React.ReactNode;
-  index: any;
-  value: any;
+  index?: any;
+  value?: any;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -216,7 +225,7 @@ class Contents extends React.Component<myProps, any> {
           >
             <Tab label="About" icon={<InfoIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
-            <Tab label="Browse Trips" icon={<SearchIcon />} />
+            <Tab label="Search Trip" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
             {/* <Tab label="Social" icon={<ChatIcon />} /> */}
 
@@ -266,9 +275,9 @@ class Contents extends React.Component<myProps, any> {
           </Tabs>
 
           {/* About */}
-          {/* <TabPanel value={this.state.value} index={0}> */}
-          {/* <About /> */}
-          {/* </TabPanel> */}
+          {/* <TabPanel value={this.state.value} index={0}>
+            <About />
+          </TabPanel> */}
 
           {/* Ongoing Trips */}
           <TabPanel value={this.state.value} index={1}>
@@ -280,22 +289,80 @@ class Contents extends React.Component<myProps, any> {
                 {this.props.ongoingTrips.length ? (
                   <Grid container>
                     <Grid item xs={5}>
-                      <OngoingTripInfo
-                        trips={this.props.ongoingTrips}
-                        currentTripIndex={this.props.currentOngoingTripIndex}
-                      />
+                      <Container>
+                        <Card className="tripInfo">
+                          <OngoingTripInfo />
+                        </Card>
+                      </Container>
                     </Grid>
+                    {/* {if statement and changing props value here} */}
                     <Grid item xs={7}>
-                      {this.props.ongoingTrips.length ? (
-                        <Map
-                          trips={this.props.ongoingTrips}
-                          currentTripIndex={this.props.currentOngoingTripIndex}
+                      {!this.props.showChat &&
+                        !this.props.showEdit &&
+                        this.props.ongoingTrips.length &&
+                        this.props.mapTripMessage === 0 && (
+                          <Map
+                            trips={this.props.ongoingTrips}
+                            currentTripIndex={
+                              this.props.currentOngoingTripIndex
+                            }
+                          />
+                        )}
+                      {this.props.mapTripMessage === 1 && (
+                        <Editor
+                          tripId={
+                            this.props.ongoingTrips[
+                              this.props.currentOngoingTripIndex
+                            ].tripId
+                          }
+                        />
+                      )}
+
+                      {this.props.mapTripMessage === 2 && <ChatBoard />}
+
+                      {this.props.showEdit ? (
+                        <EditTrip
+                          name={
+                            this.props.ongoingTrips[
+                              this.props.currentOngoingTripIndex
+                            ].name
+                          }
+                          startDate={moment(
+                            this.props.ongoingTrips[
+                              this.props.currentOngoingTripIndex
+                            ].startDate.toDate()
+                          ).format("YYYY-MM-DD")}
+                          endDate={moment(
+                            this.props.ongoingTrips[
+                              this.props.currentOngoingTripIndex
+                            ].endDate.toDate()
+                          ).format("YYYY-MM-DD")}
+                          startLocation={
+                            this.props.ongoingTrips[
+                              this.props.currentOngoingTripIndex
+                            ].startLocation
+                          }
+                          budget={
+                            this.props.ongoingTrips[
+                              this.props.currentOngoingTripIndex
+                            ].budget
+                          }
+                          waypoints={
+                            this.props.ongoingTrips[
+                              this.props.currentOngoingTripIndex
+                            ].waypoints
+                          }
+                          tripId={
+                            this.props.ongoingTrips[
+                              this.props.currentOngoingTripIndex
+                            ].tripId
+                          }
                         />
                       ) : null}
                     </Grid>
                   </Grid>
                 ) : (
-                  <div>Go join some trips or build your own</div>
+                  <div>Please join a trip or create your own</div>
                 )}
               </>
             )}
@@ -307,18 +374,20 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Browse Trip</p>
+                {/* <p>Search Trip</p> */}
                 <Grid container>
                   <Grid item xs={5}>
-                    <SearchTripInfo />
+                    <Container>
+                      <Card className="tripInfo">
+                        <SearchTripInfo />
+                      </Card>
+                    </Container>
                   </Grid>
                   <Grid item xs={7}>
-                    {this.props.searchTrips.length ? (
-                      <Map
-                        trips={this.props.searchTrips}
-                        currentTripIndex={this.props.currentSearchTripIndex}
-                      />
-                    ) : null}
+                    <Map
+                      trips={this.props.searchTrips}
+                      currentTripIndex={this.props.currentSearchTripIndex}
+                    />
                   </Grid>
                 </Grid>
               </>
@@ -331,7 +400,7 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Build Trip</p>
+                {/* <p>Build Trip</p> */}
                 <BuildTrip />
               </>
             )}
@@ -342,20 +411,19 @@ class Contents extends React.Component<myProps, any> {
             <p>Social</p>
             <ChatBoard />
           </TabPanel> */}
+          {/* About */}
+          {this.state.value === 0 && (
+            <div>
+              <img className="bgImg" src={backgroundImg} alt="backImg" />
+              <About />
+            </div>
+          )}
         </AppBar>
 
         {/* Click Login */}
         {this.state.value === -1 && (
           <div style={{ marginTop: "35px" }}>
             <Login />
-          </div>
-        )}
-
-        {/* About */}
-        {this.state.value === 0 && (
-          <div>
-            <img className="bgImg" src={backgroundImg} alt="backImg" />
-            <About />
           </div>
         )}
       </div>

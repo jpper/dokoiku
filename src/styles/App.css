@@ -33,16 +33,9 @@
   width: 100px;
 }
 
-/* I will move the TripInfo CSS to a separate file once it's working */
-/* .TripInfo {
-  border-style: solid;
-  border-width: 4px;
-  border-radius: 10px;
-  width: 30%;
-} */
-
 .TripInfo p {
   border-style: solid;
+  border-color: rgb(180, 178, 178);
   border-radius: 10px;
   border-width: 1px;
   margin-left: 3px;
@@ -59,9 +52,6 @@
 }
 
 .BuildTrip {
-  border-style: solid;
-  border-width: 4px;
-  border-radius: 10px;
   width: 300px;
 }
 

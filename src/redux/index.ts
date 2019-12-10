@@ -14,7 +14,9 @@ const initialState: any = {
   showProfile: false,
   showChat: false,
   showBuild: false,
-  currentProfile: 0
+  showEdit: false,
+  currentProfile: 0,
+  mapTripMessage: 0
 };
 
 interface Action {
@@ -100,7 +102,8 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         showBuild: false,
-        showProfile: false
+        showProfile: false,
+        showEdit: false
       };
     }
     case "SHOW_BUILD": {
@@ -108,6 +111,13 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         showBuild: true
+      };
+    }
+    case "SHOW_EDIT": {
+      //Add some logic to add trip to Firebase
+      return {
+        ...state,
+        showEdit: true
       };
     }
     case "SET_USER_INFO": {
@@ -166,6 +176,66 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         users: action.users
+      };
+    }
+    //toggle notes and messages for ongoing trip view
+    //0 = map, 1 = notes, 2 = msg
+    case "TOGGLE_NOTES": {
+      if (state.mapTripMessage === 0) {
+        console.log("Toggle notes 0");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 1
+        };
+      }
+      if (state.mapTripMessage === 1) {
+        console.log("Toggle notes 1");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 0
+        };
+      }
+      if (state.mapTripMessage === 2) {
+        console.log("Toggle notes 2");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 1
+        };
+      }
+    }
+    case "TOGGLE_MESSAGES": {
+      if (state.mapTripMessage === 0) {
+        console.log("Toggle messeges: 1");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 2
+        };
+      }
+      if (state.mapTripMessage === 1) {
+        console.log("Toggle messeges: 1");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 2
+        };
+      }
+      if (state.mapTripMessage === 2) {
+        console.log("Toggle messeges: 1");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 0
+        };
+      }
+    }
+    case "RESET_TOGGLE_MESSAGES": {
+      return {
+        ...state,
+        mapTripMessage: 0
       };
     }
     case "GET_USERS": {

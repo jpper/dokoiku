@@ -17,7 +17,7 @@
   align-items: center;
 }
 .tripInfo {
-  border: solid 2px black;
+  padding-bottom: 10px;
 }
 .bgImg {
   position: absolute;
