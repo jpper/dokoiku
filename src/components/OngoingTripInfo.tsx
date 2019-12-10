@@ -70,14 +70,26 @@ class OngoingTripInfo extends React.Component<
     }
   }
 
-  deleteTrip(tripId: string, userId: string, memberIds: string[]) {
-    const newMemberIds = memberIds.filter(
-      (memberId: string) => memberId !== userId
-    );
-    myFirestore
-      .collection("trips")
-      .doc(tripId)
-      .update({ memberIds: newMemberIds });
+  deleteTrip(
+    tripId: string,
+    userId: string,
+    memberIds: string[],
+    ownerId: string
+  ) {
+    if (userId === ownerId) {
+      myFirestore
+        .collection("trips")
+        .doc(tripId)
+        .delete();
+    } else {
+      const newMemberIds = memberIds.filter(
+        (memberId: string) => memberId !== userId
+      );
+      myFirestore
+        .collection("trips")
+        .doc(tripId)
+        .update({ memberIds: newMemberIds });
+    }
   }
 
   render() {
@@ -141,7 +153,24 @@ class OngoingTripInfo extends React.Component<
               this.deleteTrip(
                 this.props.trips[this.props.currentTripIndex].tripId,
                 this.props.userId,
-                this.props.trips[this.props.currentTripIndex].memberIds
+                this.props.trips[this.props.currentTripIndex].memberIds,
+                this.props.trips[this.props.currentTripIndex].ownerId
+              )
+            }
+            variant="contained"
+            color="secondary"
+            size="large"
+          >
+            UPDATE!
+          </Button>
+
+          <Button
+            onClick={() =>
+              this.deleteTrip(
+                this.props.trips[this.props.currentTripIndex].tripId,
+                this.props.userId,
+                this.props.trips[this.props.currentTripIndex].memberIds,
+                this.props.trips[this.props.currentTripIndex].ownerId
               )
             }
             variant="contained"
