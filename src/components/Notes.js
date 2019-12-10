@@ -29,6 +29,7 @@ class Editor extends Component {
   }
 
   componentDidUpdate() {
+    console.log("UPDATED!!!!!!!!!!!");
     const firepadRef = this.getExampleRef();
     //// Create CodeMirror (with lineWrapping on).
     const codeMirror = window.CodeMirror(

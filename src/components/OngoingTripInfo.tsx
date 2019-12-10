@@ -238,14 +238,22 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "SHOW_PROFILE",
         index
       }),
-    onPreviousTrip: () =>
+    onPreviousTrip: () => {
+      dispatch({
+        type: "RESET_TOGGLE_MESSAGES"
+      });
       dispatch({
         type: "PREVIOUS_ONGOING_TRIP"
-      }),
-    onNextTrip: () =>
+      });
+    },
+    onNextTrip: () => {
+      dispatch({
+        type: "RESET_TOGGLE_MESSAGES"
+      });
       dispatch({
         type: "NEXT_ONGOING_TRIP"
-      }),
+      });
+    },
     onJoinTrip: (trip: string, user: string) => {
       myFirestore
         .collection("trips")
