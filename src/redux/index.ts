@@ -168,6 +168,12 @@ const reducer = (state: any = initialState, action: Action): any => {
         users: action.users
       };
     }
+    case "GET_USERS": {
+      return {
+        ...state,
+        users: action.users
+      };
+    }
     default: {
       return state;
     }

@@ -57,6 +57,7 @@ const mapStateToProps = (state: any) => {
     searchTrips: state.searchTrips,
     currentOngoingTripIndex: state.currentOngoingTripIndex,
     currentSearchTripIndex: state.currentSearchTripIndex,
+    users: state.users,
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
@@ -79,7 +80,23 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "SHOW_BUILD",
         index
-      })
+      }),
+    getTrips: async () => {
+      //console.log("called");
+      myFirestore.collection("trips").onSnapshot(snapShot => {
+        snapShot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            //console.log(change.doc.data());
+            dispatch({ type: "ADD_TRIP", trip: change.doc.data() });
+          }
+        });
+      });
+      const users = await myFirestore
+        .collection("users")
+        .get()
+        .then(query => query.docs.map(user => user.data()));
+      dispatch({ type: "GET_USERS", users });
+    }
   };
 };
 
