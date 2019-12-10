@@ -271,9 +271,9 @@ class Contents extends React.Component<myProps, any> {
           </Tabs>
 
           {/* About */}
-          <TabPanel value={this.state.value} index={0}>
+          {/* <TabPanel value={this.state.value} index={0}>
             <About />
-          </TabPanel>
+          </TabPanel> */}
 
           {/* Ongoing Trips */}
           <TabPanel value={this.state.value} index={1}>
@@ -355,6 +355,21 @@ class Contents extends React.Component<myProps, any> {
             <p>Social</p>
             <ChatBoard />
           </TabPanel> */}
+
+          {/* Click Login */}
+          {this.state.value === -1 && (
+            <div style={{ marginTop: "35px" }}>
+              <Login />
+            </div>
+          )}
+
+          {/* About */}
+          {this.state.value === 0 && (
+            <div>
+              <img className="bgImg" src={backgroundImg} alt="backImg" />
+              <About />
+            </div>
+          )}
         </AppBar>
       </div>
     );
