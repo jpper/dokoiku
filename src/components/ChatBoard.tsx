@@ -34,7 +34,7 @@ import "../styles/ChatBoard.css";
 const mapStateToProps = (state: any) => ({
   userId: state.userId,
   userName: state.userName,
-  tripId: state.trips[state.currentTripIndex].tripId.trim(),
+  tripId: state.ongoingTrips[state.currentOngoingTripIndex].tripId.trim(),
   tripMessages: state.currentTripMessages,
   messageListener: state.messageListener
 });

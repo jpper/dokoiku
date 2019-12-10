@@ -1,13 +1,8 @@
 import React from "react";
-import Login from "./Login";
-import AllTripInfo from "./AllTripInfo";
-import BuildTrip from "./BuildTrip";
 import Profile from "./Profile";
-import ChatBoard from "./ChatBoard";
 import { myFirestore } from "../config/firebase";
 import "../styles/App.css";
-import Map from "./Map";
-import Notes from "./Notes";
+
 import Contents from "./Contents";
 import { connect } from "react-redux";
 
@@ -17,10 +12,10 @@ type myProps = {
   userPhoto: string;
   currentTripMemberInfo: any;
   currentTripMessages: any;
-  trips: any;
-  users: any;
-  currentTripIndex: number;
-  getTrips: any;
+  ongoingTrips: any;
+  searchTrips: any;
+  currentOngoingTripIndex: number;
+  currentSearchTripIndex: number;
   showChat: boolean;
   showProfile: boolean;
   showBuild: boolean;
@@ -31,32 +26,6 @@ type myProps = {
 };
 
 class App extends React.Component<myProps, {}> {
-  componentDidMount() {
-    this.props.getTrips();
-  }
-
-  // getNamesAndPhotos = async () => {
-  //   const populatedNicknames: any = [];
-  //   const populatedPhotos: any = [];
-  //   this.props.trips[this.props.currentTripIndex].memberIds.forEach(
-  //     async (m: any) => {
-  //       const username = await myFirestore
-  //         .collection("users")
-  //         .doc(m)
-  //         .get()
-  //         .then(doc => doc.data().nickname);
-  //       populatedNicknames.push(username);
-  //       const photo = await myFirestore
-  //         .collection("users")
-  //         .doc(m)
-  //         .get()
-  //         .then(doc => doc.data().photoUrl);
-  //       populatedPhotos.push(photo);
-  //     }
-  //   );
-  //   this.setState({ nicknames: populatedNicknames, photos: populatedPhotos });
-  // };
-
   render() {
     return (
       <div className="App">
@@ -84,9 +53,11 @@ const mapStateToProps = (state: any) => {
     userPhoto: state.userPhoto,
     currentTripMemberInfo: state.currentTripMemberInfo,
     currentTripMessages: state.currentTripMessages,
-    trips: state.trips,
+    ongoingTrips: state.ongoingTrips,
+    searchTrips: state.searchTrips,
+    currentOngoingTripIndex: state.currentOngoingTripIndex,
+    currentSearchTripIndex: state.currentSearchTripIndex,
     users: state.users,
-    currentTripIndex: state.currentTripIndex,
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
