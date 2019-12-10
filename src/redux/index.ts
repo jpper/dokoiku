@@ -140,12 +140,14 @@ const reducer = (state: any = initialState, action: Action): any => {
     //0 = map, 1 = notes, 2 = msg
     case "TOGGLE_NOTES": {
       if (action.value === 0) {
+        console.log("Toggle notes 0")
       return {
         ...state,
         mapTripMessage: 1
       };
     }
       if (action.value === 1) {
+        console.log("Toggle notes 1")
         return {
           ...state,
           mapTripMessage: 0
@@ -153,13 +155,17 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
     }
     case "TOGGLE_MESSAGES": {
-      if (action.value === 0) {
+      if (state.mapTripMessage === 0) {
+        console.log("Toggle messeges: 2")
         return {
           ...state,
           mapTripMessage: 2
         };
       }
-        return {
+      console.log("Toggle messeges: 0")
+      console.log("VALUE: ", action.value)
+      console.log("STATE: ", state.mapTripMessage)
+      return {
           ...state,
           mapTripMessage: 0
         };

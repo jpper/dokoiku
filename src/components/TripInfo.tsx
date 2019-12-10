@@ -105,13 +105,13 @@ class TripInfo extends React.Component<
           </div>
           <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
           <Button variant="outlined" color="secondary" size="small"
-          onClick={this.props.toggleNotes(this.props.mapTripMessage)}
+          onClick={() => this.props.toggleNotes(this.props.mapTripMessage)}
           >
             Notes
           </Button>
           <br></br>
           <Button variant="outlined" color="secondary" size="small"
-          onClick={this.props.toggleMessages(this.props.mapTripMessage)}
+          onClick={() => this.props.toggleMessages(this.props.mapTripMessage)}
           >
             Messages
           </Button>
@@ -173,7 +173,7 @@ const mapStateToProps = (state: any) => {
     userId: state.userId,
     trips: state.trips,
     currentTripIndex: state.currentTripIndex,
-    ongoingTripToggle: state.ongoingTripToggle
+    mapTripMessage: state.mapTripMessage
   };
 };
 

@@ -51,7 +51,7 @@ type myProps = {
   currentProfile: number;
   setUserInfo: any;
   login: any;
-  mapTripMessage: number;
+  mapTripMessage: any;
 };
 
 // class Header extends React.Component<myProps, {}> {
@@ -139,8 +139,8 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 interface TabPanelProps {
   children?: React.ReactNode;
-  index: any;
-  value: any;
+  index?: any;
+  value?: any;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -306,10 +306,11 @@ class Contents extends React.Component<myProps, any> {
                       <Map
                       trips={this.props.trips}
                       currentTripIndex={this.props.currentTripIndex}
-                    />
-                    || this.props.mapTripMessage === 1 &&
-                      <Editor />
-                    || this.props.mapTripMessage === 2 &&
+                    />}
+                    {this.props.mapTripMessage === 1 &&
+                      <Editor />}
+                    
+                    {this.props.mapTripMessage === 2 &&
                       <ChatBoard />
                     }
                   </Grid>
