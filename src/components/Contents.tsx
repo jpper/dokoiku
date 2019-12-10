@@ -308,8 +308,8 @@ class Contents extends React.Component<myProps, any> {
                       currentTripIndex={this.props.currentTripIndex}
                     />}
                     {this.props.mapTripMessage === 1 &&
-                      // <Editor />
-                      <ChatBoard />
+                      <Editor />
+                      // <ChatBoard />
                     }
                     
                     {this.props.mapTripMessage === 2 &&
