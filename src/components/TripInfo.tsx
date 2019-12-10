@@ -36,20 +36,20 @@ class TripInfo extends React.Component<
     };
   }
 
-  componentWillMount() {
-    const populatedMembers: any = [];
-    this.props.trips[this.props.currentTripIndex].memberIds.forEach(
-      async (m: any) => {
-        const username = await myFirestore
-          .collection("users")
-          .doc(m)
-          .get()
-          .then(doc => doc.data().nickname);
-        populatedMembers.push(username);
-      }
-    );
-    this.setState({ members: populatedMembers });
-  }
+  // componentWillMount() {
+  //   const populatedMembers: any = [];
+  //   this.props.trips[this.props.currentTripIndex].memberIds.forEach(
+  //     async (m: any) => {
+  //       const username = await myFirestore
+  //         .collection("users")
+  //         .doc(m)
+  //         .get()
+  //         .then(doc => doc.data().nickname);
+  //       populatedMembers.push(username);
+  //     }
+  //   );
+  //   this.setState({ members: populatedMembers });
+  // }
 
   async componentDidUpdate() {
     if (this.state.members.length !== this.state.previousLength) {
@@ -72,7 +72,7 @@ class TripInfo extends React.Component<
   }
 
   render() {
-    console.log(this.props.currentTripIndex);
+    //console.log(this.props.currentTripIndex);
     return (
       <div>
         <div className="TripInfo">
@@ -105,13 +105,13 @@ class TripInfo extends React.Component<
           </div>
           <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
           <Button variant="outlined" color="secondary" size="small"
-          onClick={() => this.props.toggleNotes(this.props.mapTripMessage)}
+          onClick={() => this.props.toggleNotes()}
           >
             Notes
           </Button>
           <br></br>
           <Button variant="outlined" color="secondary" size="small"
-          onClick={() => this.props.toggleMessages(this.props.mapTripMessage)}
+          onClick={() => this.props.toggleMessages()}
           >
             Messages
           </Button>

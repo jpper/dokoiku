@@ -12,7 +12,7 @@ const initialState: any = {
   showChat: false,
   showBuild: false,
   currentProfile: 0,
-  mapTripMessage: 0
+  mapTripMessage: 1
 };
 
 interface Action {
@@ -139,14 +139,14 @@ const reducer = (state: any = initialState, action: Action): any => {
     //toggle notes and messages for ongoing trip view
     //0 = map, 1 = notes, 2 = msg
     case "TOGGLE_NOTES": {
-      if (action.value === 0) {
+      if (state.mapTripMessage === 0) {
         console.log("Toggle notes 0")
       return {
         ...state,
         mapTripMessage: 1
       };
     }
-      if (action.value === 1) {
+      if (state.mapTripMessage === 1) {
         console.log("Toggle notes 1")
         return {
           ...state,
