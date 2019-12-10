@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import OngoingTripInfo from "./OngoingTripInfo";
 import SearchTripInfo from "./SearchTripInfo";
 import Map from "./Map";
+import Editor from './Notes';
 import ChatBoard from "./ChatBoard";
 import About from "./About";
 import BuildTrip from "./BuildTrip";
@@ -56,6 +57,8 @@ type myProps = {
   onShowBuild?: any;
   currentProfile: number;
   setUserInfo: any;
+  login: any;
+  mapTripMessage: any;
   getTrips: any;
 };
 
@@ -71,7 +74,9 @@ const mapStateToProps = (state: any) => {
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
-    currentProfile: state.currentProfile
+    currentProfile: state.currentProfile,
+    mapTripMessage: state.mapTripMessage,
+    login: state.login
   };
 };
 
@@ -109,8 +114,8 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 interface TabPanelProps {
   children?: React.ReactNode;
-  index: any;
-  value: any;
+  index?: any;
+  value?: any;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -216,7 +221,7 @@ class Contents extends React.Component<myProps, any> {
           >
             <Tab label="About" icon={<InfoIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
-            <Tab label="Browse Trips" icon={<SearchIcon />} />
+            <Tab label="Search Trip" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
             {/* <Tab label="Social" icon={<ChatIcon />} /> */}
 
@@ -266,9 +271,9 @@ class Contents extends React.Component<myProps, any> {
           </Tabs>
 
           {/* About */}
-          {/* <TabPanel value={this.state.value} index={0}> */}
-          {/* <About /> */}
-          {/* </TabPanel> */}
+          <TabPanel value={this.state.value} index={0}>
+            <About />
+          </TabPanel>
 
           {/* Ongoing Trips */}
           <TabPanel value={this.state.value} index={1}>
@@ -277,26 +282,27 @@ class Contents extends React.Component<myProps, any> {
             ) : (
               <>
                 <p>Ongoing Trips</p>
-                {this.props.ongoingTrips.length ? (
-                  <Grid container>
-                    <Grid item xs={5}>
-                      <OngoingTripInfo
-                        trips={this.props.ongoingTrips}
-                        currentTripIndex={this.props.currentOngoingTripIndex}
-                      />
-                    </Grid>
-                    <Grid item xs={7}>
-                      {this.props.ongoingTrips.length ? (
-                        <Map
-                          trips={this.props.ongoingTrips}
-                          currentTripIndex={this.props.currentOngoingTripIndex}
-                        />
-                      ) : null}
-                    </Grid>
+                <Grid container>
+                  <Grid item xs={5}>
+                    <OngoingTripInfo />
                   </Grid>
-                ) : (
-                  <div>Go join some trips or build your own</div>
-                )}
+                  {/* {if statement and changing props value here} */}
+                  <Grid item xs={7}>
+                    {this.props.mapTripMessage === 0 &&
+                      <Map
+                      trips={this.props.ongoingTrips}
+                      currentTripIndex={this.props.currentOngoingTripIndex}
+                    />}
+                    {this.props.mapTripMessage === 1 &&
+                      // <Editor />
+                      <ChatBoard />
+                    }
+                    
+                    {this.props.mapTripMessage === 2 &&
+                      <ChatBoard />
+                    }
+                  </Grid>
+                </Grid>
               </>
             )}
           </TabPanel>
@@ -307,18 +313,16 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Browse Trip</p>
+                <p>Search Trip</p>
                 <Grid container>
                   <Grid item xs={5}>
                     <SearchTripInfo />
                   </Grid>
                   <Grid item xs={7}>
-                    {this.props.searchTrips.length ? (
-                      <Map
-                        trips={this.props.searchTrips}
-                        currentTripIndex={this.props.currentSearchTripIndex}
-                      />
-                    ) : null}
+                    <Map
+                      trips={this.props.searchTrips}
+                      currentTripIndex={this.props.currentSearchTripIndex}
+                    />
                   </Grid>
                 </Grid>
               </>
@@ -343,21 +347,6 @@ class Contents extends React.Component<myProps, any> {
             <ChatBoard />
           </TabPanel> */}
         </AppBar>
-
-        {/* Click Login */}
-        {this.state.value === -1 && (
-          <div style={{ marginTop: "35px" }}>
-            <Login />
-          </div>
-        )}
-
-        {/* About */}
-        {this.state.value === 0 && (
-          <div>
-            <img className="bgImg" src={backgroundImg} alt="backImg" />
-            <About />
-          </div>
-        )}
       </div>
     );
   }
