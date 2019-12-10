@@ -226,7 +226,7 @@ class Contents extends React.Component<myProps, any> {
           >
             <Tab label="About" icon={<InfoIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
-            <Tab label="Search Trip" icon={<SearchIcon />} />
+            <Tab label="Search Trips" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
             {/* <Tab label="Social" icon={<ChatIcon />} /> */}
 
@@ -275,7 +275,7 @@ class Contents extends React.Component<myProps, any> {
                     >
                       Profile
                     </MenuItem>
-                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                    {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
                     <MenuItem onClick={this.onLogout}>Logout</MenuItem>
                   </>
                 )}
@@ -294,7 +294,7 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Ongoing Trips</p>
+                {/* <p>Ongoing Trips</p> */}
                 {this.props.ongoingTrips.length ? (
                   <Grid container>
                     <Grid item xs={5}>
