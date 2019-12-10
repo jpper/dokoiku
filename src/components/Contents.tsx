@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import AllTripInfo from "./AllTripInfo";
+import OngoingTripInfo from "./OngoingTripInfo";
+import SearchTripInfo from "./SearchTripInfo";
 import Map from "./Map";
 import Editor from './Notes';
 import ChatBoard from "./ChatBoard";
@@ -44,8 +45,10 @@ type myProps = {
   userId: string;
   userName: string;
   userPhoto: string;
-  trips: any;
-  currentTripIndex: number;
+  ongoingTrips: any;
+  searchTrips: any;
+  currentOngoingTripIndex: number;
+  currentSearchTripIndex: number;
   showChat: boolean;
   showProfile: boolean;
   showBuild: boolean;
@@ -56,6 +59,7 @@ type myProps = {
   setUserInfo: any;
   login: any;
   mapTripMessage: any;
+  getTrips: any;
 };
 
 const mapStateToProps = (state: any) => {
@@ -63,19 +67,49 @@ const mapStateToProps = (state: any) => {
     userId: state.userId,
     userName: state.userName,
     userPhoto: state.userPhoto,
-    trips: state.trips,
-    currentTripIndex: state.currentTripIndex,
+    ongoingTrips: state.ongoingTrips,
+    searchTrips: state.searchTrips,
+    currentOngoingTripIndex: state.currentOngoingTripIndex,
+    currentSearchTripIndex: state.currentSearchTripIndex,
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
     currentProfile: state.currentProfile,
-    mapTripMessage: state.mapTripMessage
+    mapTripMessage: state.mapTripMessage,
+    login: state.login
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
   setUserInfo: (userName: string, userId: string, userPhoto: string) =>
-    dispatch(setUserInfo(userName, userId, userPhoto))
+    dispatch(setUserInfo(userName, userId, userPhoto)),
+  getTrips: async (userId: string) => {
+    //console.log("called");
+    myFirestore.collection("trips").onSnapshot(snapShot => {
+      snapShot.docChanges().forEach(change => {
+        if (change.type === "added") {
+          if (change.doc.data().memberIds.indexOf(userId) === -1) {
+            console.log("dispatching ADD_SEARCH_TRIP");
+            dispatch({
+              type: "ADD_SEARCH_TRIP",
+              searchTrip: change.doc.data()
+            });
+          } else {
+            console.log("dispatching ADD_ONGOING_TRIP");
+            dispatch({
+              type: "ADD_ONGOING_TRIP",
+              ongoingTrip: change.doc.data()
+            });
+          }
+        }
+      });
+    });
+    const users = await myFirestore
+      .collection("users")
+      .get()
+      .then(query => query.docs.map(user => user.data()));
+    dispatch({ type: "GET_USERS", users });
+  }
 });
 
 interface TabPanelProps {
@@ -132,6 +166,7 @@ class Contents extends React.Component<myProps, any> {
     firebase.auth().onAuthStateChanged(user => {
       if (user !== null) {
         this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        this.props.getTrips(user.uid);
       }
     });
   };
@@ -186,7 +221,7 @@ class Contents extends React.Component<myProps, any> {
           >
             <Tab label="About" icon={<InfoIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
-            <Tab label="Browse Trips" icon={<SearchIcon />} />
+            <Tab label="Search Trip" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
             {/* <Tab label="Social" icon={<ChatIcon />} /> */}
 
@@ -236,9 +271,9 @@ class Contents extends React.Component<myProps, any> {
           </Tabs>
 
           {/* About */}
-          {/* <TabPanel value={this.state.value} index={0}> */}
-          {/* <About /> */}
-          {/* </TabPanel> */}
+          <TabPanel value={this.state.value} index={0}>
+            <About />
+          </TabPanel>
 
           {/* Ongoing Trips */}
           <TabPanel value={this.state.value} index={1}>
@@ -249,23 +284,18 @@ class Contents extends React.Component<myProps, any> {
                 <p>Ongoing Trips</p>
                 <Grid container>
                   <Grid item xs={5}>
-                    {/* <TripInfo /> */}
-                    <Container>
-                      <Card className="tripInfo">
-                        <AllTripInfo />
-                      </Card>
-                    </Container>
+                    <OngoingTripInfo />
                   </Grid>
                   {/* {if statement and changing props value here} */}
                   <Grid item xs={7}>
                     {this.props.mapTripMessage === 0 &&
                       <Map
-                      trips={this.props.trips}
-                      currentTripIndex={this.props.currentTripIndex}
+                      trips={this.props.ongoingTrips}
+                      currentTripIndex={this.props.currentOngoingTripIndex}
                     />}
                     {this.props.mapTripMessage === 1 &&
-                      <Editor />
-                      // <ChatBoard />
+                      // <Editor />
+                      <ChatBoard />
                     }
                     
                     {this.props.mapTripMessage === 2 &&
@@ -283,15 +313,15 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Browse Trip</p>
+                <p>Search Trip</p>
                 <Grid container>
                   <Grid item xs={5}>
-                    <AllTripInfo />
+                    <SearchTripInfo />
                   </Grid>
                   <Grid item xs={7}>
                     <Map
-                      trips={this.props.trips}
-                      currentTripIndex={this.props.currentTripIndex}
+                      trips={this.props.searchTrips}
+                      currentTripIndex={this.props.currentSearchTripIndex}
                     />
                   </Grid>
                 </Grid>
@@ -317,21 +347,6 @@ class Contents extends React.Component<myProps, any> {
             <ChatBoard />
           </TabPanel> */}
         </AppBar>
-
-        {/* Click Login */}
-        {this.state.value === -1 && (
-          <div style={{ marginTop: "35px" }}>
-            <Login />
-          </div>
-        )}
-
-        {/* About */}
-        {this.state.value === 0 && (
-          <div>
-            <img className="bgImg" src={backgroundImg} alt="backImg" />
-            <About />
-          </div>
-        )}
       </div>
     );
   }

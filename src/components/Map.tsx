@@ -47,9 +47,6 @@ class Map extends React.Component<MapProps, MapState> {
         this.setState(() => ({
           response
         }));
-        console.log(
-          response.geocoded_waypoints.map((value: any) => value.place_id)
-        );
         const responses = response.geocoded_waypoints
           .map((value: any) => value.place_id)
           .map((placeId: string) => {
@@ -75,7 +72,6 @@ class Map extends React.Component<MapProps, MapState> {
     }
   }
   render() {
-    //console.log(this.state.positions);
     return (
       <LoadScript
         id="script-loader"

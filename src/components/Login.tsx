@@ -81,7 +81,34 @@ const mapDispatchToProps = (dispatch: any) => ({
       });
   },
   setUserInfo: (userName: string, userId: string, userPhoto: string) =>
-    dispatch(setUserInfo(userName, userId, userPhoto))
+    dispatch(setUserInfo(userName, userId, userPhoto)),
+  getTrips: async (userId: string) => {
+    //console.log("called");
+    myFirestore.collection("trips").onSnapshot(snapShot => {
+      snapShot.docChanges().forEach(change => {
+        if (change.type === "added") {
+          if (change.doc.data().memberIds.indexOf(userId) === -1) {
+            console.log("dispatching ADD_SEARCH_TRIP");
+            dispatch({
+              type: "ADD_SEARCH_TRIP",
+              searchTrip: change.doc.data()
+            });
+          } else {
+            console.log("dispatching ADD_ONGOING_TRIP");
+            dispatch({
+              type: "ADD_ONGOING_TRIP",
+              ongoingTrip: change.doc.data()
+            });
+          }
+        }
+      });
+    });
+    const users = await myFirestore
+      .collection("users")
+      .get()
+      .then(query => query.docs.map(user => user.data()));
+    dispatch({ type: "GET_USERS", users });
+  }
 });
 
 interface Status {
@@ -115,6 +142,7 @@ class Login extends Component<Props, Status> {
     firebase.auth().onAuthStateChanged(user => {
       if (user !== null) {
         this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        this.props.getTrips(user.uid);
       }
     });
   };

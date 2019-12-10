@@ -11,8 +11,6 @@ import moment from "moment";
 const mapStateToProps = (state: any) => {
   return {
     userId: state.userId,
-    trips: state.trips,
-    currentTripIndex: state.currentTripIndex,
     showBuild: state.showBuild
   };
 };
@@ -52,15 +50,13 @@ const mapDispatchToProps = (dispatch: any) => {
           startLocation,
           waypoints,
           budget,
-          memberIds: []
+          memberIds: [userId]
         });
     }
   };
 };
 
 type BuildProps = {
-  trips: any;
-  currentTripIndex: number;
   showBuild: boolean;
   onClosePopup: any;
   onShowBuild: any;
