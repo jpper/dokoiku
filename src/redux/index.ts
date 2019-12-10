@@ -14,7 +14,8 @@ const initialState: any = {
   showProfile: false,
   showChat: false,
   showBuild: false,
-  currentProfile: 0
+  currentProfile: 0,
+  mapTripMessage: 1
 };
 
 interface Action {
@@ -167,6 +168,40 @@ const reducer = (state: any = initialState, action: Action): any => {
         ...state,
         users: action.users
       };
+    }
+    //toggle notes and messages for ongoing trip view
+    //0 = map, 1 = notes, 2 = msg
+    case "TOGGLE_NOTES": {
+      if (state.mapTripMessage === 0) {
+        console.log("Toggle notes 0")
+      return {
+        ...state,
+        mapTripMessage: 1
+      };
+    }
+      if (state.mapTripMessage === 1) {
+        console.log("Toggle notes 1")
+        return {
+          ...state,
+          mapTripMessage: 0
+        };
+    }
+    }
+    case "TOGGLE_MESSAGES": {
+      if (state.mapTripMessage === 0) {
+        console.log("Toggle messeges: 2")
+        return {
+          ...state,
+          mapTripMessage: 2
+        };
+      }
+      console.log("Toggle messeges: 0")
+      console.log("VALUE: ", action.value)
+      console.log("STATE: ", state.mapTripMessage)
+      return {
+          ...state,
+          mapTripMessage: 0
+        };
     }
     case "GET_USERS": {
       return {
