@@ -292,12 +292,12 @@ class Contents extends React.Component<myProps, any> {
                   </Grid>
                   {/* {if statement and changing props value here} */}
                   <Grid item xs={7}>
-                    {this.props.ongoingTrips.length ? (
+                    {this.props.ongoingTrips.length && this.props.mapTripMessage === 0 && (
                       <Map
                         trips={this.props.ongoingTrips}
                         currentTripIndex={this.props.currentOngoingTripIndex}
                       />
-                    ) : null}
+                    )}
                     {this.props.mapTripMessage === 1 &&
                       <Editor />
                       //<ChatBoard />
