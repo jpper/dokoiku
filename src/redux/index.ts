@@ -7,6 +7,7 @@ const initialState: any = {
   currentTripMessages: [],
   messageListener: undefined,
   trips: [],
+  users: [],
   currentTripIndex: 0,
   showProfile: false,
   showChat: false,
@@ -169,6 +170,12 @@ const reducer = (state: any = initialState, action: Action): any => {
           ...state,
           mapTripMessage: 0
         };
+    }
+    case "GET_USERS": {
+      return {
+        ...state,
+        users: action.users
+      };
     }
     default: {
       return state;
