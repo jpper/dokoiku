@@ -34,7 +34,7 @@ import "../styles/ChatBoard.css";
 const mapStateToProps = (state: any) => ({
   userId: state.userId,
   userName: state.userName,
-  tripId: state.trips[state.currentTripIndex].tripId.trim(),
+  tripId: state.ongoingTrips[state.currentOngoingTripIndex].tripId.trim(),
   tripMessages: state.currentTripMessages,
   messageListener: state.messageListener
 });
@@ -66,7 +66,7 @@ const mapDispatchToProps = (dispatch: any) => ({
                   const msg = change.doc.data();
                   msg.nickname = doc.data().nickname;
                   msg.photoUrl = doc.data().photoUrl;
-                  console.log(msg);
+                  // console.log(msg);
                   dispatch(setMessages(msg));
                 });
             }

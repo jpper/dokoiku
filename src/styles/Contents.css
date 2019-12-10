@@ -1,0 +1,29 @@
+.tabPanel {
+  background-color: white;
+  color: black;
+}
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.textUsername {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tripInfo {
+  border: solid 2px black;
+}
+.bgImg {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: auto;
+}

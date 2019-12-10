@@ -17,6 +17,7 @@ import {
 } from "@material-ui/core";
 import LockIcon from "@material-ui/icons/Lock";
 import MailIcon from "@material-ui/icons/Mail";
+import FacebookIcon from "@material-ui/icons/Facebook";
 import "../styles/Login.css";
 
 const mapStateToProps = (state: any) => ({
@@ -26,8 +27,8 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  login: () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
+  login: (provider: any) => {
+    // const provider = new firebase.auth.GoogleAuthProvider();
     // this.setState({ isLoading: true });
     myFirebase
       .auth()
@@ -80,7 +81,34 @@ const mapDispatchToProps = (dispatch: any) => ({
       });
   },
   setUserInfo: (userName: string, userId: string, userPhoto: string) =>
-    dispatch(setUserInfo(userName, userId, userPhoto))
+    dispatch(setUserInfo(userName, userId, userPhoto)),
+  getTrips: async (userId: string) => {
+    //console.log("called");
+    myFirestore.collection("trips").onSnapshot(snapShot => {
+      snapShot.docChanges().forEach(change => {
+        if (change.type === "added") {
+          if (change.doc.data().memberIds.indexOf(userId) === -1) {
+            console.log("dispatching ADD_SEARCH_TRIP");
+            dispatch({
+              type: "ADD_SEARCH_TRIP",
+              searchTrip: change.doc.data()
+            });
+          } else {
+            console.log("dispatching ADD_ONGOING_TRIP");
+            dispatch({
+              type: "ADD_ONGOING_TRIP",
+              ongoingTrip: change.doc.data()
+            });
+          }
+        }
+      });
+    });
+    const users = await myFirestore
+      .collection("users")
+      .get()
+      .then(query => query.docs.map(user => user.data()));
+    dispatch({ type: "GET_USERS", users });
+  }
 });
 
 interface Status {
@@ -112,8 +140,19 @@ class Login extends Component<Props, Status> {
 
   checkLogin = () => {
     firebase.auth().onAuthStateChanged(user => {
-      this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+      if (user !== null) {
+        this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        this.props.getTrips(user.uid);
+      }
     });
+  };
+
+  onLogin4Google = () => {
+    this.props.login(new firebase.auth.GoogleAuthProvider());
+  };
+
+  onLogin4Facebook = () => {
+    this.props.login(new firebase.auth.FacebookAuthProvider());
   };
 
   onlogoutPress = () => {
@@ -149,21 +188,47 @@ class Login extends Component<Props, Status> {
                       >
                         SIGN OUT
                       </Button>
-                      <div>{this.props.userName}</div>
+                      {/* <div>{this.props.userName}</div> */}
                     </div>
                   ) : (
-                    <div className="buttonWrapper">
-                      <Button
-                        className="button"
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        onClick={this.props.login}
-                      >
-                        <MailIcon />
-                        &nbsp; Sign In with &nbsp;
-                        <b>Google</b>
-                      </Button>
+                    <div>
+                      <Grid container>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={10} className="buttonWrapper">
+                          {/* Google */}
+                          <Button
+                            className="button"
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            fullWidth
+                            onClick={this.onLogin4Google}
+                          >
+                            <MailIcon />
+                            &nbsp; Sign In with &nbsp;
+                            <b>Google</b>
+                          </Button>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={10} className="buttonWrapper">
+                          {/* Facebook */}
+                          <Button
+                            className="button"
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            fullWidth
+                            onClick={this.onLogin4Facebook}
+                          >
+                            <FacebookIcon />
+                            &nbsp; Sign In with &nbsp;
+                            <b>Facebook</b>
+                          </Button>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                      </Grid>
                     </div>
                   )}
 

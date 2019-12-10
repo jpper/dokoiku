@@ -1,17 +1,10 @@
 import React from "react";
-import Login from "./Login";
-import TripInfo from "./TripInfo";
-import BuildTrip from "./BuildTrip";
 import Profile from "./Profile";
-import ChatBoard from "./ChatBoard";
-import firebase from "firebase";
-import { myFirebase, myFirestore } from "../config/firebase";
+import { myFirestore } from "../config/firebase";
 import "../styles/App.css";
-import Map from "./Map";
-import Notes from "./Notes";
+
+import Contents from "./Contents";
 import { connect } from "react-redux";
-import { getHeapSnapshot } from "v8";
-import { setTrips } from "../redux/action";
 
 type myProps = {
   userId: string;
@@ -19,9 +12,10 @@ type myProps = {
   userPhoto: string;
   currentTripMemberInfo: any;
   currentTripMessages: any;
-  trips: any;
-  currentTripIndex: number;
-  getTrips: any;
+  ongoingTrips: any;
+  searchTrips: any;
+  currentOngoingTripIndex: number;
+  currentSearchTripIndex: number;
   showChat: boolean;
   showProfile: boolean;
   showBuild: boolean;
@@ -32,20 +26,21 @@ type myProps = {
 };
 
 class App extends React.Component<myProps, {}> {
-  componentDidMount() {
-    this.props.getTrips();
-  }
   render() {
     return (
       <div className="App">
-        <Login />
-        <BuildTrip />
-        {this.props.userId.length && this.props.trips.length ? (
+        {/* <BuildTrip /> */}
+        <Contents />
+        {/* <Notes tripId="TestTrip1" /> */}
+        {/* {this.props.userId.length && this.props.trips.length ? (
           <ChatBoard />
-        ) : null}
-        <TripInfo />
+        ) : null} */}
+        {/* {this.props.trips.length &&
+        this.props.currentTripIndex !== undefined ? (
+          <TripInfo />
+        ) : null} */}
+
         {this.props.showProfile ? <Profile /> : null}
-        {this.props.trips.length ? <Map /> : null}
       </div>
     );
   }
@@ -58,8 +53,11 @@ const mapStateToProps = (state: any) => {
     userPhoto: state.userPhoto,
     currentTripMemberInfo: state.currentTripMemberInfo,
     currentTripMessages: state.currentTripMessages,
-    trips: state.trips,
-    currentTripIndex: state.currentTripIndex,
+    ongoingTrips: state.ongoingTrips,
+    searchTrips: state.searchTrips,
+    currentOngoingTripIndex: state.currentOngoingTripIndex,
+    currentSearchTripIndex: state.currentSearchTripIndex,
+    users: state.users,
     showChat: state.showChat,
     showProfile: state.showProfile,
     showBuild: state.showBuild,
@@ -83,17 +81,21 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "SHOW_BUILD",
         index
       }),
-    getTrips: () => {
-      myFirestore
-        .collection("trips")
-        .get()
-        .then(snapShot => {
-          const trips = snapShot.docs.map(doc => doc.data());
-          dispatch(setTrips(trips));
-        })
-        .catch(err => {
-          console.log(err.toString());
+    getTrips: async () => {
+      //console.log("called");
+      myFirestore.collection("trips").onSnapshot(snapShot => {
+        snapShot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            //console.log(change.doc.data());
+            dispatch({ type: "ADD_TRIP", trip: change.doc.data() });
+          }
         });
+      });
+      const users = await myFirestore
+        .collection("users")
+        .get()
+        .then(query => query.docs.map(user => user.data()));
+      dispatch({ type: "GET_USERS", users });
     }
   };
 };

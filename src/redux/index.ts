@@ -6,8 +6,11 @@ const initialState: any = {
   userPhoto: "",
   currentTripMessages: [],
   messageListener: undefined,
-  trips: [],
-  currentTripIndex: 0,
+  ongoingTrips: [],
+  searchTrips: [],
+  currentOngoingTripIndex: 0,
+  currentSearchTripIndex: 0,
+  users: [],
   showProfile: false,
   showChat: false,
   showBuild: false,
@@ -25,28 +28,56 @@ const reducer = (state: any = initialState, action: Action): any => {
       //Call the DB, get the trips, and change the state
       return; //this is a placeholder, don't actually do this
     }
-    case "NEXT_TRIP": {
+    case "NEXT_SEARCH_TRIP": {
       let nextIndex: number;
-      if (state.currentTripIndex + 1 >= state.trips.length) {
+      if (state.currentSearchTripIndex + 1 >= state.searchTrips.length) {
         nextIndex = 0;
       } else {
-        nextIndex = state.currentTripIndex + 1;
+        nextIndex = state.currentSearchTripIndex + 1;
       }
       return {
         ...state,
-        currentTripIndex: nextIndex
+        showProfile: false,
+        currentSearchTripIndex: nextIndex
       };
     }
-    case "PREVIOUS_TRIP": {
+    case "PREVIOUS_SEARCH_TRIP": {
       let nextIndex: number;
-      if (state.currentTripIndex === 0) {
-        nextIndex = state.trips.length - 1;
+      if (state.currentSearchTripIndex === 0) {
+        nextIndex = state.searchTrips.length - 1;
       } else {
-        nextIndex = state.currentTrip - 1;
+        nextIndex = state.currentSearchTripIndex - 1;
       }
       return {
         ...state,
-        currentTripIndex: nextIndex
+        showProfile: false,
+        currentSearchTripIndex: nextIndex
+      };
+    }
+    case "NEXT_ONGOING_TRIP": {
+      let nextIndex: number;
+      if (state.currentOngoingTripIndex + 1 >= state.ongoingTrips.length) {
+        nextIndex = 0;
+      } else {
+        nextIndex = state.currentOngoingTripIndex + 1;
+      }
+      return {
+        ...state,
+        showProfile: false,
+        currentOngoingTripIndex: nextIndex
+      };
+    }
+    case "PREVIOUS_ONGOING_TRIP": {
+      let nextIndex: number;
+      if (state.currentOngoingTripIndex === 0) {
+        nextIndex = state.ongoingTrips.length - 1;
+      } else {
+        nextIndex = state.currentOngoingTripIndex - 1;
+      }
+      return {
+        ...state,
+        showProfile: false,
+        currentOngoingTripIndex: nextIndex
       };
     }
     case "SHOW_PROFILE": {
@@ -68,7 +99,8 @@ const reducer = (state: any = initialState, action: Action): any => {
     case "CLOSE_POPUP": {
       return {
         ...state,
-        showBuild: false
+        showBuild: false,
+        showProfile: false
       };
     }
     case "SHOW_BUILD": {
@@ -84,17 +116,21 @@ const reducer = (state: any = initialState, action: Action): any => {
         userId: action.userId,
         userName: action.userName,
         userPhoto: action.userPhoto,
-        trips: [...state.trips],
-        currentTripIndex: state.currentTripIndex,
         showProfile: false,
         showChat: false,
         showBuild: false
       };
     }
-    case "ADD_TRIP": {
+    case "ADD_SEARCH_TRIP": {
       return {
         ...state,
-        trips: [...state.trips, action.trip]
+        searchTrips: [...state.searchTrips, action.searchTrip]
+      };
+    }
+    case "ADD_ONGOING_TRIP": {
+      return {
+        ...state,
+        ongoingTrips: [...state.ongoingTrips, action.ongoingTrip]
       };
     }
     case "SET_MESSAGES": {
@@ -102,8 +138,8 @@ const reducer = (state: any = initialState, action: Action): any => {
       const tmpMessages = [...state.currentTripMessages, action.messages].sort(
         (a: any, b: any) => a.moment.seconds - b.moment.seconds
       );
-      console.log("TESTTSTSYSYUSI");
-      console.log(tmpMessages);
+      // console.log("TESTTSTSYSYUSI");
+      // console.log(tmpMessages);
       return {
         ...state,
         currentTripMessages: tmpMessages
@@ -121,10 +157,21 @@ const reducer = (state: any = initialState, action: Action): any => {
         messageListener: action.listener
       };
     }
-    case "SET_TRIPS": {
+    case "JOIN_TRIP": {
+      return {
+        ...state
+      };
+    }
+    case "GET_USERS": {
       return {
         ...state,
-        trips: action.trips
+        users: action.users
+      };
+    }
+    case "GET_USERS": {
+      return {
+        ...state,
+        users: action.users
       };
     }
     default: {
