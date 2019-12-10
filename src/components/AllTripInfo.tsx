@@ -10,6 +10,7 @@ import { Grid } from "@material-ui/core";
 
 type myProps = {
   trips: any;
+  users: any;
   currentTripIndex: number;
   onShowChat: any;
   onShowProfile: any;
@@ -79,9 +80,10 @@ class AllTripInfo extends React.Component<
                 (m: any, i: number) => {
                   return (
                     <li key={i} onClick={() => this.props.onShowProfile(i)}>
-                      {this.state.members[i]
-                        ? this.state.members[i]
-                        : "Haven't loaded yet :)"}
+                      {
+                        this.props.users.find((u: { id: any }) => u.id === m)
+                          .nickname
+                      }
                     </li>
                   );
                 }
@@ -129,6 +131,7 @@ const mapStateToProps = (state: any) => {
   return {
     userId: state.userId,
     trips: state.trips,
+    users: state.users,
     currentTripIndex: state.currentTripIndex
   };
 };

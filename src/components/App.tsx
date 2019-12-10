@@ -18,6 +18,7 @@ type myProps = {
   currentTripMemberInfo: any;
   currentTripMessages: any;
   trips: any;
+  users: any;
   currentTripIndex: number;
   getTrips: any;
   showChat: boolean;
@@ -29,7 +30,7 @@ type myProps = {
   currentProfile: number;
 };
 
-class App extends React.Component<myProps, { nicknames: any; photos: any }> {
+class App extends React.Component<myProps, {}> {
   componentDidMount() {
     this.props.getTrips();
   }
@@ -84,6 +85,7 @@ const mapStateToProps = (state: any) => {
     currentTripMemberInfo: state.currentTripMemberInfo,
     currentTripMessages: state.currentTripMessages,
     trips: state.trips,
+    users: state.users,
     currentTripIndex: state.currentTripIndex,
     showChat: state.showChat,
     showProfile: state.showProfile,
@@ -108,7 +110,7 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "SHOW_BUILD",
         index
       }),
-    getTrips: () => {
+    getTrips: async () => {
       //console.log("called");
       myFirestore.collection("trips").onSnapshot(snapShot => {
         snapShot.docChanges().forEach(change => {
@@ -118,6 +120,11 @@ const mapDispatchToProps = (dispatch: any) => {
           }
         });
       });
+      const users = await myFirestore
+        .collection("users")
+        .get()
+        .then(query => query.docs.map(user => user.data()));
+      dispatch({ type: "GET_USERS", users });
     }
   };
 };
