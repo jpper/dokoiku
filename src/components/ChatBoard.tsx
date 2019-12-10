@@ -26,7 +26,8 @@ import {
   IconButton,
   Button,
   FormControl,
-  Grid
+  Grid,
+  GridList
 } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import "../styles/ChatBoard.css";
@@ -154,42 +155,43 @@ class ChatBoard extends Component<Props, ChatBoardState> {
   render() {
     return (
       <div className="ChatBoard">
-        <Container>
-          <Card className="card">
-            <List>
-              {this.props.tripMessages.length ? (
-                this.props.tripMessages.map((msg: any) => (
-                  <div key={msg.moment.seconds}>
-                    <ListItem alignItems="flex-start">
-                      <ListItemAvatar>
-                        <Avatar alt="Remy Sharp" src={msg.photoUrl} />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={msg.content}
-                        secondary={
-                          <React.Fragment>
-                            <div>{msg.nickname}</div>
-                            <div>{moment(msg.moment.toDate()).fromNow()}</div>
-                          </React.Fragment>
-                        }
-                      />
-                    </ListItem>
-                  </div>
-                ))
-              ) : (
-                <div></div>
-              )}
-            </List>
-          </Card>
+        <GridList cellHeight={700} cols={1}>
+          <Container>
+            <Card className="card">
+              <List>
+                {this.props.tripMessages.length ? (
+                  this.props.tripMessages.map((msg: any) => (
+                    <div key={msg.moment.seconds}>
+                      <ListItem alignItems="flex-start">
+                        <ListItemAvatar>
+                          <Avatar alt="Remy Sharp" src={msg.photoUrl} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={msg.content}
+                          secondary={
+                            <React.Fragment>
+                              <div>{msg.nickname}</div>
+                              <div>{moment(msg.moment.toDate()).fromNow()}</div>
+                            </React.Fragment>
+                          }
+                        />
+                      </ListItem>
+                    </div>
+                  ))
+                ) : (
+                  <div></div>
+                )}
+              </List>
+            </Card>
 
-          <div
-            style={{ float: "left", clear: "both" }}
-            ref={el => {
-              this.messagesEnd = el;
-            }}
-          ></div>
+            <div
+              style={{ float: "left", clear: "both" }}
+              ref={el => {
+                this.messagesEnd = el;
+              }}
+            ></div>
 
-          <BottomNavigation showLabels className="footer">
+            {/* <BottomNavigation showLabels className="footer"> */}
             <Grid container>
               <Grid item xs={10}>
                 <TextField
@@ -238,8 +240,9 @@ class ChatBoard extends Component<Props, ChatBoardState> {
                 )}
               </Grid>
             </Grid>
-          </BottomNavigation>
-        </Container>
+            {/* </BottomNavigation> */}
+          </Container>
+        </GridList>
       </div>
     );
   }
