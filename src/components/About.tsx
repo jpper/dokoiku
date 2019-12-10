@@ -49,7 +49,8 @@ class About extends React.Component<{}, {}> {
         </ul>
         <ul>
           Technology used:
-          <li>Google Cloud Platform</li>
+          <li>Google Cloud Platform (Google App Engine, Cloud Build)</li>
+          <li>Firebase Authentication</li>
           <li>Firebase Cloud FireStore</li>
           <li>Firebase RealTime Database</li>
           <li>React</li>

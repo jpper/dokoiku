@@ -17,6 +17,8 @@ import {
   Typography
 } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
+import DateRangeIcon from "@material-ui/icons/DateRange";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
 import "../styles/TripInfo.css";
 
 type myProps = {
@@ -85,18 +87,21 @@ class TripInfo extends React.Component<
       <div className="TripInfo">
         <h1>Trip Details</h1>
         <p>
+          <DateRangeIcon />
           Start Date:{" "}
           {moment(
             this.props.trips[this.props.currentTripIndex].startDate.toDate()
           ).format("MMMM Do YYYY")}
         </p>
         <p>
+          <DateRangeIcon />
           End Date:{" "}
           {moment(
             this.props.trips[this.props.currentTripIndex].endDate.toDate()
           ).format("MMMM Do YYYY")}
         </p>
         <p>
+          <DoubleArrowIcon />
           Starting Location:
           {` ${this.props.trips[this.props.currentTripIndex].startLocation}`}
         </p>
@@ -108,7 +113,7 @@ class TripInfo extends React.Component<
                 return (
                   <ListItem key={i} className="tripLocation">
                     <ListItemIcon>
-                      <DoubleArrowIcon />
+                      <LocationOnIcon />
                     </ListItemIcon>
                     <ListItemText primary={l.location} />
                   </ListItem>
