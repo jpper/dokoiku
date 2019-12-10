@@ -2,7 +2,8 @@ import React from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 import uuidv4 from "uuid/v4";
-import { Button } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { firestore } from "firebase";
 import "../styles/BuildTrip.css";
@@ -98,9 +99,9 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
   }
   componentWillMount() {
     ValidatorForm.addValidationRule("startDateValidator", (value: string) => {
-      const startDate = new Date(value);
-      const today = new Date();
-      return startDate.getDate() >= today.getDate();
+      const startDate = new Date(value).setHours(0, 0, 0, 0);
+      const today = new Date().setHours(0, 0, 0, 0);
+      return startDate >= today;
     });
     ValidatorForm.addValidationRule("startDateValidator2", (value: string) => {
       if (this.state.endDate === null) return true;
@@ -233,8 +234,22 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 <br />
                 <label>Places:</label>
                 {this.state.waypoints.length
-                  ? this.state.waypoints.map((waypoint: any) => (
-                      <div>{waypoint.location}</div>
+                  ? this.state.waypoints.map((waypoint: any, index: number) => (
+                      <div>
+                        <div>{waypoint.location}</div>
+                        <IconButton
+                          onClick={() =>
+                            this.setState({
+                              waypoints: [
+                                ...this.state.waypoints.slice(0, index),
+                                ...this.state.waypoints.slice(index + 1)
+                              ]
+                            })
+                          }
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </div>
                     ))
                   : null}
                 <br />

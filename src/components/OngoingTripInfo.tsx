@@ -20,6 +20,14 @@ import {
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import PersonIcon from "@material-ui/icons/Person";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import UpdateIcon from "@material-ui/icons/Update";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import ChatIcon from "@material-ui/icons/Chat";
+import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/TripInfo.css";
 
 type myProps = {
@@ -28,6 +36,7 @@ type myProps = {
   onShowChat: any;
   onShowProfile: any;
   onPreviousTrip: any;
+  onShowEdit: any;
   onNextTrip: any;
   onJoinTrip?: any;
   userId: string;
@@ -51,14 +60,14 @@ class OngoingTripInfo extends React.Component<
     };
   }
 
-  deleteTrip(
+  async deleteTrip(
     tripId: string,
     userId: string,
     memberIds: string[],
     ownerId: string
   ) {
     if (userId === ownerId) {
-      myFirestore
+      await myFirestore
         .collection("trips")
         .doc(tripId)
         .delete();
@@ -66,18 +75,24 @@ class OngoingTripInfo extends React.Component<
       const newMemberIds = memberIds.filter(
         (memberId: string) => memberId !== userId
       );
-      myFirestore
+      await myFirestore
         .collection("trips")
         .doc(tripId)
         .update({ memberIds: newMemberIds });
     }
+    window.location.reload();
   }
 
   render() {
     return (
       <div className="TripInfo">
-        <h1>Trip Details</h1>
-        <p>
+        {/* Title */}
+        <Typography variant="h3" className="typoH3">
+          <b>Trip Details</b>
+        </Typography>
+
+        {/* Start Date */}
+        <Typography className="iconWrapper">
           <DateRangeIcon />
           Start Date:{" "}
           {moment(
@@ -85,8 +100,10 @@ class OngoingTripInfo extends React.Component<
               this.props.currentOngoingTripIndex
             ].startDate.toDate()
           ).format("MMMM Do YYYY")}
-        </p>
-        <p>
+        </Typography>
+
+        {/* End Date */}
+        <Typography className="iconWrapper">
           <DateRangeIcon />
           End Date:{" "}
           {moment(
@@ -94,15 +111,19 @@ class OngoingTripInfo extends React.Component<
               this.props.currentOngoingTripIndex
             ].endDate.toDate()
           ).format("MMMM Do YYYY")}
-        </p>
-        <p>
+        </Typography>
+
+        {/* Starting Location */}
+        <Typography className="iconWrapper">
           <DoubleArrowIcon />
           Starting Location:
           {` ${
             this.props.ongoingTrips[this.props.currentOngoingTripIndex]
               .startLocation
           }`}
-        </p>
+        </Typography>
+
+        {/* WayPoints */}
         <div>
           <List>
             <Typography variant="h5">Waypoints:</Typography>
@@ -120,29 +141,44 @@ class OngoingTripInfo extends React.Component<
             })}
           </List>
         </div>
-        <p>
+
+        {/* Budget */}
+        <Typography className="iconWrapper">
+          <MonetizationOnIcon />
           Budget:{" "}
           {this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget}
-        </p>
+        </Typography>
+
+        <div className="spacer10"></div>
+
+        {/* Notes & Messages */}
         <Button
           variant="outlined"
-          color="secondary"
-          size="small"
+          color="primary"
+          size="medium"
+          fullWidth
           onClick={() => this.props.toggleNotes()}
         >
+          <DescriptionIcon className="iconSpacer" />
           Notes
         </Button>
         <br></br>
         <Button
           variant="outlined"
-          color="secondary"
-          size="small"
+          color="primary"
+          size="medium"
+          fullWidth
           onClick={() => this.props.toggleMessages()}
         >
+          <ChatIcon className="iconSpacer" />
           Messages
         </Button>
+
+        <div className="spacer10"></div>
+
+        {/* Members */}
         <div>
-          Members:{" "}
+          <Typography variant="h5">Members:</Typography>
           <div className="memberContainer">
             {this.props.ongoingTrips[
               this.props.currentOngoingTripIndex
@@ -165,6 +201,7 @@ class OngoingTripInfo extends React.Component<
                       modal.style.display = "block";
                     }}
                   >
+                    <PersonIcon className="iconSpacer" />
                     {nickname}
                   </p>
                   <div className="modal" id={i.toString()}>
@@ -197,61 +234,74 @@ class OngoingTripInfo extends React.Component<
             })}
           </div>
         </div>
-        <Button
-          onClick={() =>
-            this.deleteTrip(
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .tripId,
-              this.props.userId,
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .memberIds,
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .ownerId
-            )
-          }
-          variant="contained"
-          color="secondary"
-          size="large"
-        >
-          UPDATE!
-        </Button>
 
-        <Button
-          onClick={() =>
-            this.deleteTrip(
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .tripId,
-              this.props.userId,
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .memberIds,
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .ownerId
-            )
-          }
-          variant="contained"
-          color="secondary"
-          size="large"
-        >
-          DELETE!
-        </Button>
-        <div className="navButtons">
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            onClick={this.props.onPreviousTrip}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            onClick={this.props.onNextTrip}
-          >
-            Next
-          </Button>
-        </div>
+        {/* Update & Delete button */}
+        <Grid container>
+          <Grid item xs={6}>
+            <Button
+              fullWidth
+              onClick={this.props.onShowEdit}
+              variant="contained"
+              color="primary"
+              size="large"
+            >
+              <UpdateIcon />
+              UPDATE
+            </Button>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Button
+              fullWidth
+              onClick={() =>
+                this.deleteTrip(
+                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                    .tripId,
+                  this.props.userId,
+                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                    .memberIds,
+                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                    .ownerId
+                )
+              }
+              variant="contained"
+              color="secondary"
+              size="large"
+            >
+              <DeleteForeverIcon />
+              DELETE
+            </Button>
+          </Grid>
+        </Grid>
+
+        {/* Previous & Next Button */}
+        <Grid container>
+          <Grid item xs={6}>
+            <Button
+              variant="contained"
+              color="default"
+              size="small"
+              fullWidth
+              onClick={this.props.onPreviousTrip}
+            >
+              <ArrowBackIosIcon />
+              Previous
+            </Button>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Button
+              variant="contained"
+              color="default"
+              size="small"
+              fullWidth
+              onClick={this.props.onNextTrip}
+            >
+              Next
+              <ArrowForwardIosIcon />
+            </Button>
+          </Grid>
+        </Grid>
       </div>
     );
   }
@@ -276,14 +326,22 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "SHOW_PROFILE",
         index
       }),
-    onPreviousTrip: () =>
+    onPreviousTrip: () => {
+      dispatch({
+        type: "RESET_TOGGLE_MESSAGES"
+      });
       dispatch({
         type: "PREVIOUS_ONGOING_TRIP"
-      }),
-    onNextTrip: () =>
+      });
+    },
+    onNextTrip: () => {
+      dispatch({
+        type: "RESET_TOGGLE_MESSAGES"
+      });
       dispatch({
         type: "NEXT_ONGOING_TRIP"
-      }),
+      });
+    },
     onJoinTrip: (trip: string, user: string) => {
       myFirestore
         .collection("trips")
@@ -298,7 +356,8 @@ const mapDispatchToProps = (dispatch: any) => {
     toggleMessages: () =>
       dispatch({
         type: "TOGGLE_MESSAGES"
-      })
+      }),
+    onShowEdit: () => dispatch({ type: "SHOW_EDIT" })
   };
 };
 

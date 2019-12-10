@@ -2,3 +2,24 @@
   padding-top: 0px !important;
   padding-bottom: 0px !important;
 }
+.typoH3 {
+  margin-top: 15px !important;
+  margin-bottom: 15px !important;
+}
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.spacer50 {
+  margin-top: 50px;
+}
+.spacer5 {
+  margin-bottom: 5px !important;
+}
+.iconSpacer {
+  margin-right: 5px;
+}
+.card-bg-blue {
+  background-color: #e8eaf6 !important;
+}
