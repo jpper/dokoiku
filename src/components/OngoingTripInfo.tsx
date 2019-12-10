@@ -7,6 +7,7 @@ import { myFirebase, myFirestore } from "../config/firebase";
 import Map from "./Map";
 
 // Material UI
+import "../styles/Modal.css";
 import {
   Grid,
   Card,
@@ -171,35 +172,52 @@ class OngoingTripInfo extends React.Component<
           Messages
         </Button>
 
+        <div className="spacer10"></div>
+
         {/* Members */}
         <div>
-          <List>
-            <Typography variant="h5">Members:</Typography>
-
+          <Typography variant="h5">Members:</Typography>
+          <div className="memberContainer">
             {this.props.ongoingTrips[
               this.props.currentOngoingTripIndex
             ].memberIds.map((m: any, i: number) => {
+              const nickname = this.props.users.find(
+                (u: { id: any }) => u.id === m
+              ).nickname;
+              const photo = this.props.users.find(
+                (u: { id: any }) => u.id === m
+              ).photoUrl;
               return (
-                <ListItem
-                  key={i}
-                  button
-                  alignItems="center"
-                  onClick={() => this.props.onShowProfile(i)}
-                  className="tripLocation"
-                >
-                  <ListItemIcon>
-                    <PersonIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      this.props.users.find((u: { id: any }) => u.id === m)
-                        .nickname
-                    }
-                  />
-                </ListItem>
+                <div>
+                  <p
+                    key={i}
+                    onClick={() => {
+                      const modal = document.getElementById(i.toString());
+                      modal.style.display = "block";
+                    }}
+                  >
+                    <PersonIcon className="iconSpacer" />
+                    {nickname}
+                  </p>
+                  <div className="modal" id={i.toString()}>
+                    <div className="modal-content">
+                      <img src={photo} alt={nickname} />
+                      <p>{nickname}</p>
+                      <button
+                        className="close"
+                        onClick={() => {
+                          const modal = document.getElementById(i.toString());
+                          modal.style.display = "none";
+                        }}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
               );
             })}
-          </List>
+          </div>
         </div>
 
         {/* Update & Delete button */}
