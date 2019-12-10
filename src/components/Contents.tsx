@@ -359,14 +359,6 @@ class Contents extends React.Component<myProps, any> {
             <p>Social</p>
             <ChatBoard />
           </TabPanel> */}
-
-          {/* Click Login */}
-          {this.state.value === -1 && (
-            <div style={{ marginTop: "35px" }}>
-              <Login />
-            </div>
-          )}
-
           {/* About */}
           {this.state.value === 0 && (
             <div>
@@ -375,6 +367,13 @@ class Contents extends React.Component<myProps, any> {
             </div>
           )}
         </AppBar>
+
+        {/* Click Login */}
+        {this.state.value === -1 && (
+          <div style={{ marginTop: "35px" }}>
+            <Login />
+          </div>
+        )}
       </div>
     );
   }

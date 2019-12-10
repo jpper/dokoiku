@@ -75,8 +75,10 @@ class OngoingTripInfo extends React.Component<
   render() {
     return (
       <div className="TripInfo">
-        <h1>Trip Details</h1>
-        <p>
+        <Typography variant="h3" className="typoH3">
+          <b>Trip Details</b>
+        </Typography>
+        <Typography>
           <DateRangeIcon />
           Start Date:{" "}
           {moment(
@@ -84,7 +86,7 @@ class OngoingTripInfo extends React.Component<
               this.props.currentOngoingTripIndex
             ].startDate.toDate()
           ).format("MMMM Do YYYY")}
-        </p>
+        </Typography>
         <p>
           <DateRangeIcon />
           End Date:{" "}
@@ -236,14 +238,22 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "SHOW_PROFILE",
         index
       }),
-    onPreviousTrip: () =>
+    onPreviousTrip: () => {
+      dispatch({
+        type: "RESET_TOGGLE_MESSAGES"
+      });
       dispatch({
         type: "PREVIOUS_ONGOING_TRIP"
-      }),
-    onNextTrip: () =>
+      });
+    },
+    onNextTrip: () => {
+      dispatch({
+        type: "RESET_TOGGLE_MESSAGES"
+      });
       dispatch({
         type: "NEXT_ONGOING_TRIP"
-      }),
+      });
+    },
     onJoinTrip: (trip: string, user: string) => {
       myFirestore
         .collection("trips")

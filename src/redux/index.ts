@@ -173,55 +173,61 @@ const reducer = (state: any = initialState, action: Action): any => {
     //0 = map, 1 = notes, 2 = msg
     case "TOGGLE_NOTES": {
       if (state.mapTripMessage === 0) {
-        console.log("Toggle notes 0")
-        console.log("STATE: ", state.mapTripMessage)
-      return {
-        ...state,
-        mapTripMessage: 1
-      };
-    }
+        console.log("Toggle notes 0");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 1
+        };
+      }
       if (state.mapTripMessage === 1) {
-        console.log("Toggle notes 1")
-        console.log("STATE: ", state.mapTripMessage)
+        console.log("Toggle notes 1");
+        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 0
         };
-    }
-    if (state.mapTripMessage === 2) {
-      console.log("Toggle notes 2")
-      console.log("STATE: ", state.mapTripMessage)
-      return {
-        ...state,
-        mapTripMessage: 1
-      };
-  }
+      }
+      if (state.mapTripMessage === 2) {
+        console.log("Toggle notes 2");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 1
+        };
+      }
     }
     case "TOGGLE_MESSAGES": {
       if (state.mapTripMessage === 0) {
-        console.log("Toggle messeges: 1")
-        console.log("STATE: ", state.mapTripMessage)
+        console.log("Toggle messeges: 1");
+        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 2
         };
       }
       if (state.mapTripMessage === 1) {
-        console.log("Toggle messeges: 1")
-        console.log("STATE: ", state.mapTripMessage)
+        console.log("Toggle messeges: 1");
+        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 2
         };
       }
       if (state.mapTripMessage === 2) {
-        console.log("Toggle messeges: 1")
-        console.log("STATE: ", state.mapTripMessage)
+        console.log("Toggle messeges: 1");
+        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 0
         };
       }
+    }
+    case "RESET_TOGGLE_MESSAGES": {
+      return {
+        ...state,
+        mapTripMessage: 0
+      };
     }
     case "GET_USERS": {
       return {
