@@ -25,8 +25,8 @@
     "dotenv": "^8.2.0",
     "env-cmd": "^10.0.1",
     "firebase": "^7.5.0",
-    "material-ui-icons": "^1.0.0-beta.36",
     "lodash": "^4.17.15",
+    "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.24.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -35,6 +35,7 @@
     "react-scripts": "3.2.0",
     "redux": "^4.0.4",
     "serialize-javascript": "^2.1.1",
+    "typeface-roboto": "^0.0.75",
     "typescript": "3.6.3",
     "typescript-fsa-reducers": "^1.2.1",
     "uuid": "^3.3.3"

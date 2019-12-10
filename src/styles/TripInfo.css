@@ -1,12 +1,4 @@
-/* .TripInfo {
-  border-style: solid;
-  border-width: 4px;
-  border-radius: 10px;
-  width: 200px;
+.tripLocation {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
-
-.TripInfo p {
-  border-style: solid;
-  border-radius: 10px;
-  border-width: 1px;
-} */
