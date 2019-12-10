@@ -1,44 +1,69 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Dokoiku
 
-## Available Scripts
+### A senior project for Code Chrysalis
 
-In the project directory, you can run:
+## Table of Contents
 
-### `yarn start`
+1. [Introduction](#introduction)
+2. [For Developers](#for-developers)
+   <!-- 3. [Navigating the App](#navigating-the-app) -->
+3. [Technology Used](#technology-used)
+4. [Future Features](#future-features)
+5. [Contributors](#contributors)
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Introduction
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+This is a full-stack, single page application that allows users to connect with each other to plan trips.
+It is also [available on Google App Engine](https://gopherdor-frontend-101.appspot.com/).
 
-### `yarn test`
+## For Developers
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To get started, clone this repository, navigate to the directory, and run the following commands in your terminal:
 
-### `yarn build`
+Install dependencies:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+yarn
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Start the server:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+yarn start
+```
 
-### `yarn eject`
+Then go to **localhost:3000** to see the app.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<!-- ## Navigating the App -->
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Technology Used
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Frontend:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- TypeScript
+- React
+- Redux
+- Material-UI
+- Google Maps
 
-## Learn More
+Backend and Deployment:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Google Cloud Platform
+- Firebase
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Future Features
+
+- Direct messaging
+- Location sharing
+- Multiple modes of transit
+- Expanded user profile
+
+...and more!
+
+## Contributors
+
+- [@baruishi](https://github.com/baruishi)
+- [@followdiallo](https://github.com/followdiallo) (Tech Lead)
+- [@Imamachi-n](https://github.com/Imamachi-n)
+- [@nlandon2](https://github.com/nlandon2)
+- [@Ziyu-Chen](https://github.com/Ziyu-Chen)
