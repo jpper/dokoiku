@@ -14,6 +14,7 @@ const initialState: any = {
   showProfile: false,
   showChat: false,
   showBuild: false,
+  showEdit: false,
   currentProfile: 0,
   mapTripMessage: 0
 };
@@ -101,7 +102,8 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         showBuild: false,
-        showProfile: false
+        showProfile: false,
+        showEdit: false
       };
     }
     case "SHOW_BUILD": {
@@ -109,6 +111,13 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         showBuild: true
+      };
+    }
+    case "SHOW_EDIT": {
+      //Add some logic to add trip to Firebase
+      return {
+        ...state,
+        showEdit: true
       };
     }
     case "SET_USER_INFO": {

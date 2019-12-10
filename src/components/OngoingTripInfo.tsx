@@ -36,6 +36,7 @@ type myProps = {
   onShowChat: any;
   onShowProfile: any;
   onPreviousTrip: any;
+  onShowEdit: any;
   onNextTrip: any;
   onJoinTrip?: any;
   userId: string;
@@ -59,14 +60,14 @@ class OngoingTripInfo extends React.Component<
     };
   }
 
-  deleteTrip(
+  async deleteTrip(
     tripId: string,
     userId: string,
     memberIds: string[],
     ownerId: string
   ) {
     if (userId === ownerId) {
-      myFirestore
+      await myFirestore
         .collection("trips")
         .doc(tripId)
         .delete();
@@ -74,11 +75,12 @@ class OngoingTripInfo extends React.Component<
       const newMemberIds = memberIds.filter(
         (memberId: string) => memberId !== userId
       );
-      myFirestore
+      await myFirestore
         .collection("trips")
         .doc(tripId)
         .update({ memberIds: newMemberIds });
     }
+    window.location.reload();
   }
 
   render() {
@@ -225,17 +227,7 @@ class OngoingTripInfo extends React.Component<
           <Grid item xs={6}>
             <Button
               fullWidth
-              onClick={() =>
-                this.deleteTrip(
-                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .tripId,
-                  this.props.userId,
-                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .memberIds,
-                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .ownerId
-                )
-              }
+              onClick={this.props.onShowEdit}
               variant="contained"
               color="primary"
               size="large"
@@ -351,7 +343,8 @@ const mapDispatchToProps = (dispatch: any) => {
     toggleMessages: () =>
       dispatch({
         type: "TOGGLE_MESSAGES"
-      })
+      }),
+    onShowEdit: () => dispatch({ type: "SHOW_EDIT" })
   };
 };
 
