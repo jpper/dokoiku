@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "../styles/Notes.css";
-import { config } from "../config/firebase";
+import { config, myFirebase } from "../config/firebase";
 
 class Editor extends Component {
   componentDidMount() {
     //// Initialize Firebase.
-    window.firebase.initializeApp(config);
+    // window.firebase.initializeApp(config);
     //// Get Firebase Database reference.
     const firepadRef = this.getExampleRef();
     //// Create CodeMirror (with lineWrapping on).
@@ -30,7 +30,7 @@ class Editor extends Component {
 
   // Helper to get hash from end of URL or generate a random one.
   getExampleRef() {
-    let ref = window.firebase.database().ref();
+    let ref = myFirebase.database().ref();
     ref = ref.child(this.props.tripId);
 
     // set an asynchronous listener to retrieve realtime data

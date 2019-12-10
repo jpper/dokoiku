@@ -12,6 +12,7 @@
 /build
 
 # misc
+/src/redux/dummyData.js
 .DS_Store
 .env
 .env.local

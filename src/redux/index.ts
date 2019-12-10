@@ -16,7 +16,7 @@ const initialState: any = {
   showBuild: false,
   showEdit: false,
   currentProfile: 0,
-  mapTripMessage: 1
+  mapTripMessage: 0
 };
 
 interface Action {
@@ -102,7 +102,8 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         showBuild: false,
-        showProfile: false
+        showProfile: false,
+        showEdit: false
       };
     }
     case "SHOW_BUILD": {
@@ -182,6 +183,7 @@ const reducer = (state: any = initialState, action: Action): any => {
     case "TOGGLE_NOTES": {
       if (state.mapTripMessage === 0) {
         console.log("Toggle notes 0");
+        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 1
@@ -189,27 +191,46 @@ const reducer = (state: any = initialState, action: Action): any => {
       }
       if (state.mapTripMessage === 1) {
         console.log("Toggle notes 1");
+        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 0
         };
       }
+      if (state.mapTripMessage === 2) {
+        console.log("Toggle notes 2");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 1
+        };
+      }
     }
     case "TOGGLE_MESSAGES": {
       if (state.mapTripMessage === 0) {
-        console.log("Toggle messeges: 2");
+        console.log("Toggle messeges: 1");
+        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 2
         };
       }
-      console.log("Toggle messeges: 0");
-      console.log("VALUE: ", action.value);
-      console.log("STATE: ", state.mapTripMessage);
-      return {
-        ...state,
-        mapTripMessage: 0
-      };
+      if (state.mapTripMessage === 1) {
+        console.log("Toggle messeges: 1");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 2
+        };
+      }
+      if (state.mapTripMessage === 2) {
+        console.log("Toggle messeges: 1");
+        console.log("STATE: ", state.mapTripMessage);
+        return {
+          ...state,
+          mapTripMessage: 0
+        };
+      }
     }
     case "GET_USERS": {
       return {

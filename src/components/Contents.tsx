@@ -275,9 +275,9 @@ class Contents extends React.Component<myProps, any> {
           </Tabs>
 
           {/* About */}
-          <TabPanel value={this.state.value} index={0}>
+          {/* <TabPanel value={this.state.value} index={0}>
             <About />
-          </TabPanel>
+          </TabPanel> */}
 
           {/* Ongoing Trips */}
           <TabPanel value={this.state.value} index={1}>
@@ -286,9 +286,13 @@ class Contents extends React.Component<myProps, any> {
             ) : (
               <>
                 <p>Ongoing Trips</p>
-                <Grid container>
+                {this.props.ongoingTrips.length? <Grid container>
                   <Grid item xs={5}>
-                    <OngoingTripInfo />
+                    <Container>
+                      <Card className="tripInfo">
+                        <OngoingTripInfo />
+                      </Card>
+                    </Container>
                   </Grid>
                   {/* {if statement and changing props value here} */}
                   <Grid item xs={7}>
@@ -314,12 +318,12 @@ class Contents extends React.Component<myProps, any> {
                         startDate={moment(
                           this.props.ongoingTrips[
                             this.props.currentOngoingTripIndex
-                          ].startDate
+                          ].startDate.toDate()
                         ).format("YYYY-MM-DD")}
                         endDate={moment(
                           this.props.ongoingTrips[
                             this.props.currentOngoingTripIndex
-                          ].endDate
+                          ].endDate.toDate()
                         ).format("YYYY-MM-DD")}
                         startLocation={
                           this.props.ongoingTrips[
@@ -347,7 +351,7 @@ class Contents extends React.Component<myProps, any> {
                       // <ChatBoard />
                     } */}
                   </Grid>
-                </Grid>
+                </Grid>:<div>Please join a trip or create your own</div>}
               </>
             )}
           </TabPanel>
@@ -361,7 +365,11 @@ class Contents extends React.Component<myProps, any> {
                 <p>Search Trip</p>
                 <Grid container>
                   <Grid item xs={5}>
-                    <SearchTripInfo />
+                    <Container>
+                      <Card className="tripInfo">
+                        <SearchTripInfo />
+                      </Card>
+                    </Container>
                   </Grid>
                   <Grid item xs={7}>
                     <Map
@@ -391,6 +399,21 @@ class Contents extends React.Component<myProps, any> {
             <p>Social</p>
             <ChatBoard />
           </TabPanel> */}
+
+          {/* Click Login */}
+          {this.state.value === -1 && (
+            <div style={{ marginTop: "35px" }}>
+              <Login />
+            </div>
+          )}
+
+          {/* About */}
+          {this.state.value === 0 && (
+            <div>
+              <img className="bgImg" src={backgroundImg} alt="backImg" />
+              <About />
+            </div>
+          )}
         </AppBar>
       </div>
     );

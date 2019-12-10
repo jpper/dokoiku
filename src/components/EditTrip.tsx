@@ -2,7 +2,8 @@ import React from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 import uuidv4 from "uuid/v4";
-import { Button } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { firestore } from "firebase";
 import "../styles/BuildTrip.css";
@@ -26,7 +27,7 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "CLOSE_POPUP"
       }),
-    onEditTrip: (
+    onEditTrip: async (
       name: string,
       startDate: string,
       endDate: string,
@@ -35,7 +36,7 @@ const mapDispatchToProps = (dispatch: any) => {
       budget: string,
       tripId: string
     ) => {
-      myFirestore
+      await myFirestore
         .collection("trips")
         .doc(tripId)
         .update({
@@ -47,6 +48,7 @@ const mapDispatchToProps = (dispatch: any) => {
           waypoints,
           budget
         });
+      window.location.reload();
     }
   };
 };
@@ -97,7 +99,6 @@ class EditTrip extends React.Component<EditProps, EditState> {
       return startDate >= today;
     });
     ValidatorForm.addValidationRule("startDateValidator2", (value: string) => {
-      if (this.state.endDate === null) return true;
       const startDate = new Date(value);
       const endDate = new Date(this.state.endDate);
       return endDate >= startDate;
@@ -128,6 +129,7 @@ class EditTrip extends React.Component<EditProps, EditState> {
             <h1>Edit Trip</h1>
             <ValidatorForm
               onSubmit={() => {
+                console.log(this.state.waypoints);
                 this.props.onEditTrip(
                   this.state.name,
                   this.state.startDate,
@@ -215,8 +217,22 @@ class EditTrip extends React.Component<EditProps, EditState> {
               <br />
               <label>Places:</label>
               {this.state.waypoints.length
-                ? this.state.waypoints.map((waypoint: any) => (
-                    <div>{waypoint.location}</div>
+                ? this.state.waypoints.map((waypoint: any, index: number) => (
+                    <div>
+                      <div>{waypoint.location}</div>
+                      <IconButton
+                        onClick={() =>
+                          this.setState({
+                            waypoints: [
+                              ...this.state.waypoints.slice(0, index),
+                              ...this.state.waypoints.slice(index + 1)
+                            ]
+                          })
+                        }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
                   ))
                 : null}
               <br />
@@ -277,12 +293,7 @@ class EditTrip extends React.Component<EditProps, EditState> {
               this.state.startLocation &&
               this.state.waypoints.length &&
               this.state.budget > 0 ? (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  onClick={this.props.onClosePopup}
-                >
+                <Button variant="contained" color="primary" type="submit">
                   Edit My Trip
                 </Button>
               ) : (
