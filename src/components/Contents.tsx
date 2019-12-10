@@ -294,14 +294,14 @@ class Contents extends React.Component<myProps, any> {
                         currentTripIndex={this.props.currentOngoingTripIndex}
                       />
                     ) : null}
-                    {/* {this.props.mapTripMessage === 1 &&
-                      // <Editor />
-                      // <ChatBoard />
-                    } */}
+                    {this.props.mapTripMessage === 1 &&
+                      <Editor />
+                      //<ChatBoard />
+                    }
 
-                    {/* {this.props.mapTripMessage === 2 &&
-                      // <ChatBoard />
-                    } */}
+                    {this.props.mapTripMessage === 2 &&
+                      <ChatBoard />
+                    }
                   </Grid>
                 </Grid>
               </>
