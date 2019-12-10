@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import TripInfo from "./TripInfo";
+import AllTripInfo from "./AllTripInfo";
 import Map from "./Map";
 import ChatBoard from "./ChatBoard";
 import About from "./About";
@@ -105,7 +105,7 @@ type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 class Contents extends React.Component<myProps, any> {
-  constructor(props: Props) {
+  constructor(props: myProps) {
     super(props);
     this.state = {
       value: 0
@@ -182,7 +182,7 @@ class Contents extends React.Component<myProps, any> {
           >
             <Tab label="About" icon={<InfoIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
-            <Tab label="Search Trip" icon={<SearchIcon />} />
+            <Tab label="Browse Trips" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
             {/* <Tab label="Social" icon={<ChatIcon />} /> */}
 
@@ -245,9 +245,10 @@ class Contents extends React.Component<myProps, any> {
                 <p>Ongoing Trips</p>
                 <Grid container>
                   <Grid item xs={5}>
+                    {/* <TripInfo /> */}
                     <Container>
                       <Card className="tripInfo">
-                        <TripInfo />
+                        <AllTripInfo />
                       </Card>
                     </Container>
                   </Grid>
@@ -268,10 +269,10 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Search Trip</p>
+                <p>Browse Trip</p>
                 <Grid container>
                   <Grid item xs={5}>
-                    <TripInfo />
+                    <AllTripInfo />
                   </Grid>
                   <Grid item xs={7}>
                     <Map

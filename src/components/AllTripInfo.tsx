@@ -23,6 +23,7 @@ import "../styles/TripInfo.css";
 
 type myProps = {
   trips: any;
+  users: any;
   currentTripIndex: number;
   onShowChat: any;
   onShowProfile: any;
@@ -34,18 +35,10 @@ type myProps = {
 
 // I will style this more later -- just wanted it functional for now
 
-class TripInfo extends React.Component<
+class AllTripInfo extends React.Component<
   myProps,
   { members: any; previousLength: number }
 > {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      members: [],
-      previousLength: 0
-    };
-  }
-
   componentWillMount() {
     const populatedMembers: any = [];
     this.props.trips[this.props.currentTripIndex].memberIds.forEach(
@@ -61,28 +54,7 @@ class TripInfo extends React.Component<
     this.setState({ members: populatedMembers });
   }
 
-  async componentDidUpdate() {
-    if (this.state.members.length !== this.state.previousLength) {
-      const populatedMembers: any = [];
-      this.props.trips[this.props.currentTripIndex].memberIds.forEach(
-        async (m: any) => {
-          const username = await myFirestore
-            .collection("users")
-            .doc(m)
-            .get()
-            .then(doc => doc.data().nickname);
-          populatedMembers.push(username);
-        }
-      );
-      this.setState({
-        members: populatedMembers,
-        previousLength: populatedMembers.length
-      });
-    }
-  }
-
   render() {
-    console.log(this.props.currentTripIndex);
     return (
       <div className="TripInfo">
         <h1>Trip Details</h1>
@@ -123,23 +95,17 @@ class TripInfo extends React.Component<
           </List>
         </div>
         <p>Budget: {this.props.trips[this.props.currentTripIndex].budget}</p>
-        <Button variant="outlined" color="secondary" size="small">
-          Notes
-        </Button>
-        <br></br>
-        <Button variant="outlined" color="secondary" size="small">
-          Messages
-        </Button>
         <div>
           Members:{" "}
           <ul className="memberContainer">
             {this.props.trips[this.props.currentTripIndex].memberIds.map(
               (m: any, i: number) => {
                 return (
-                  <li>
-                    <p key={i} onClick={() => this.props.onShowProfile(i)}>
-                      {this.state.members[i]}
-                    </p>
+                  <li key={i} onClick={() => this.props.onShowProfile(i)}>
+                    {
+                      this.props.users.find((u: { id: any }) => u.id === m)
+                        .nickname
+                    }
                   </li>
                 );
               }
@@ -186,6 +152,7 @@ const mapStateToProps = (state: any) => {
   return {
     userId: state.userId,
     trips: state.trips,
+    users: state.users,
     currentTripIndex: state.currentTripIndex
   };
 };
@@ -219,4 +186,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TripInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(AllTripInfo);
