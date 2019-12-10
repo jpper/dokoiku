@@ -75,8 +75,10 @@ class OngoingTripInfo extends React.Component<
   render() {
     return (
       <div className="TripInfo">
-        <h1>Trip Details</h1>
-        <p>
+        <Typography variant="h3" className="typoH3">
+          <b>Trip Details</b>
+        </Typography>
+        <Typography>
           <DateRangeIcon />
           Start Date:{" "}
           {moment(
@@ -84,7 +86,7 @@ class OngoingTripInfo extends React.Component<
               this.props.currentOngoingTripIndex
             ].startDate.toDate()
           ).format("MMMM Do YYYY")}
-        </p>
+        </Typography>
         <p>
           <DateRangeIcon />
           End Date:{" "}
