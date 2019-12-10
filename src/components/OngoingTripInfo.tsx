@@ -6,7 +6,20 @@ import firebase from "firebase";
 import { myFirebase, myFirestore } from "../config/firebase";
 import Map from "./Map";
 
-import { Grid } from "@material-ui/core";
+// Material UI
+import {
+  Grid,
+  Card,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography
+} from "@material-ui/core";
+import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
+import DateRangeIcon from "@material-ui/icons/DateRange";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import "../styles/TripInfo.css";
 
 type myProps = {
   ongoingTrips: any;
@@ -61,135 +74,143 @@ class OngoingTripInfo extends React.Component<
 
   render() {
     return (
-      <div>
-        <div className="TripInfo">
-          <h1>Trip Details</h1>
-          <p>
-            Start Date:{" "}
-            {moment(
-              this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].startDate.toDate()
-            ).format("MMMM Do YYYY")}
-          </p>
-          <p>
-            End Date:{" "}
-            {moment(
-              this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].endDate.toDate()
-            ).format("MMMM Do YYYY")}
-          </p>
-          <p>
-            Starting Location:
-            {` ${
+      <div className="TripInfo">
+        <h1>Trip Details</h1>
+        <p>
+          <DateRangeIcon />
+          Start Date:{" "}
+          {moment(
+            this.props.ongoingTrips[
+              this.props.currentOngoingTripIndex
+            ].startDate.toDate()
+          ).format("MMMM Do YYYY")}
+        </p>
+        <p>
+          <DateRangeIcon />
+          End Date:{" "}
+          {moment(
+            this.props.ongoingTrips[
+              this.props.currentOngoingTripIndex
+            ].endDate.toDate()
+          ).format("MMMM Do YYYY")}
+        </p>
+        <p>
+          <DoubleArrowIcon />
+          Starting Location:
+          {` ${
+            this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+              .startLocation
+          }`}
+        </p>
+        <div>
+          <List>
+            <Typography variant="h5">Waypoints:</Typography>
+            {this.props.ongoingTrips[
+              this.props.currentOngoingTripIndex
+            ].waypoints.map((l: any, i: number) => {
+              return (
+                <ListItem key={i} className="tripLocation">
+                  <ListItemIcon>
+                    <LocationOnIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={l.location} />
+                </ListItem>
+              );
+            })}
+          </List>
+        </div>
+        <p>
+          Budget:{" "}
+          {this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget}
+        </p>
+        <Button
+          variant="outlined"
+          color="secondary"
+          size="small"
+          onClick={() => this.props.toggleNotes()}
+        >
+          Notes
+        </Button>
+        <br></br>
+        <Button
+          variant="outlined"
+          color="secondary"
+          size="small"
+          onClick={() => this.props.toggleMessages()}
+        >
+          Messages
+        </Button>
+        <div>
+          Members:{" "}
+          <ul className="memberContainer">
+            {this.props.ongoingTrips[
+              this.props.currentOngoingTripIndex
+            ].memberIds.map((m: any, i: number) => {
+              return (
+                <li key={i} onClick={() => this.props.onShowProfile(i)}>
+                  {
+                    this.props.users.find((u: { id: any }) => u.id === m)
+                      .nickname
+                  }
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <Button
+          onClick={() =>
+            this.deleteTrip(
               this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .startLocation
-            }`}
-          </p>
-          <div>
-            Waypoints:{" "}
-            <ul className="waypointsContainer">
-              {this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].waypoints.map((l: any, i: number) => {
-                return <li key={i}>{l.location}</li>;
-              })}
-            </ul>
-          </div>
-          <p>
-            Budget:{" "}
-            {this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget}
-          </p>
-          <Button
-            variant="outlined"
-            color="secondary"
-            size="small"
-            onClick={() => this.props.toggleNotes()}
-          >
-            Notes
-          </Button>
-          <br></br>
-          <Button
-            variant="outlined"
-            color="secondary"
-            size="small"
-            onClick={() => this.props.toggleMessages()}
-          >
-            Messages
-          </Button>
-          <div>
-            Members:{" "}
-            <ul className="memberContainer">
-              {this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].memberIds.map((m: any, i: number) => {
-                return (
-                  <li key={i} onClick={() => this.props.onShowProfile(i)}>
-                    {
-                      this.props.users.find((u: { id: any }) => u.id === m)
-                        .nickname
-                    }
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <Button
-            onClick={() =>
-              this.deleteTrip(
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .tripId,
-                this.props.userId,
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .memberIds,
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .ownerId
-              )
-            }
-            variant="contained"
-            color="secondary"
-            size="large"
-          >
-            UPDATE!
-          </Button>
+                .tripId,
+              this.props.userId,
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .memberIds,
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .ownerId
+            )
+          }
+          variant="contained"
+          color="secondary"
+          size="large"
+        >
+          UPDATE!
+        </Button>
 
+        <Button
+          onClick={() =>
+            this.deleteTrip(
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .tripId,
+              this.props.userId,
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .memberIds,
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .ownerId
+            )
+          }
+          variant="contained"
+          color="secondary"
+          size="large"
+        >
+          DELETE!
+        </Button>
+        <div className="navButtons">
           <Button
-            onClick={() =>
-              this.deleteTrip(
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .tripId,
-                this.props.userId,
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .memberIds,
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .ownerId
-              )
-            }
             variant="contained"
             color="secondary"
-            size="large"
+            size="small"
+            onClick={this.props.onPreviousTrip}
           >
-            DELETE!
+            Previous
           </Button>
-          <div className="navButtons">
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              onClick={this.props.onPreviousTrip}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              onClick={this.props.onNextTrip}
-            >
-              Next
-            </Button>
-          </div>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            onClick={this.props.onNextTrip}
+          >
+            Next
+          </Button>
         </div>
       </div>
     );
