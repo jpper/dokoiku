@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import TripInfo from "./TripInfo";
+import OngoingTripInfo from "./OngoingTripInfo";
+import SearchTripInfo from "./SearchTripInfo";
 import Map from "./Map";
 import ChatBoard from "./ChatBoard";
 import About from "./About";
@@ -24,7 +25,9 @@ import {
   Grid,
   Avatar,
   Menu,
-  MenuItem
+  MenuItem,
+  Card,
+  Container
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import CardTravelIcon from "@material-ui/icons/CardTravel";
@@ -34,6 +37,8 @@ import ChatIcon from "@material-ui/icons/Chat";
 import InfoIcon from "@material-ui/icons/Info";
 import PersonIcon from "@material-ui/icons/Person";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+
+import backgroundImg from "../img/trip.jpg";
 
 type myProps = {
   userId: string;
@@ -51,19 +56,8 @@ type myProps = {
   onShowBuild?: any;
   currentProfile: number;
   setUserInfo: any;
-  login: any;
   getTrips: any;
 };
-
-// class Header extends React.Component<myProps, {}> {
-//   render() {
-//     return (
-//       <div className="Header">
-//         Baru header
-//       </div>
-//     );
-//   }
-// }
 
 const mapStateToProps = (state: any) => {
   return {
@@ -82,62 +76,9 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  login: () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    // this.setState({ isLoading: true });
-    myFirebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(async result => {
-        let userResult = result.user;
-        if (userResult) {
-          const result = await myFirestore
-            .collection("users")
-            .where("id", "==", userResult.uid)
-            .get();
-
-          if (result.docs.length === 0) {
-            // Set new data since this is a new user
-            myFirestore
-              .collection("users")
-              .doc(userResult.uid)
-              .set({
-                id: userResult.uid,
-                nickname: userResult.displayName,
-                aboutMe: "",
-                photoUrl: userResult.photoURL
-              })
-              .then(data => {
-                // Write user info to local
-                dispatch(
-                  setUserInfo(
-                    userResult.displayName,
-                    userResult.uid,
-                    userResult.photoURL
-                  )
-                );
-              });
-          } else {
-            // Write user info to local
-            dispatch(
-              setUserInfo(
-                userResult.displayName,
-                userResult.uid,
-                userResult.photoURL
-              )
-            );
-          }
-        } else {
-          console.log("User info not available");
-        }
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
-  },
   setUserInfo: (userName: string, userId: string, userPhoto: string) =>
     dispatch(setUserInfo(userName, userId, userPhoto)),
-  getTrips: (userId: string) => {
+  getTrips: async (userId: string) => {
     //console.log("called");
     myFirestore.collection("trips").onSnapshot(snapShot => {
       snapShot.docChanges().forEach(change => {
@@ -158,6 +99,11 @@ const mapDispatchToProps = (dispatch: any) => ({
         }
       });
     });
+    const users = await myFirestore
+      .collection("users")
+      .get()
+      .then(query => query.docs.map(user => user.data()));
+    dispatch({ type: "GET_USERS", users });
   }
 });
 
@@ -192,7 +138,7 @@ type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 class Contents extends React.Component<myProps, any> {
-  constructor(props: Props) {
+  constructor(props: myProps) {
     super(props);
     this.state = {
       value: 0
@@ -201,6 +147,14 @@ class Contents extends React.Component<myProps, any> {
 
   componentDidMount() {
     this.checkLogin();
+  }
+
+  componentWillUpdate() {
+    if (this.state.value === -1) {
+      this.setState({
+        value: 0
+      });
+    }
   }
 
   checkLogin = () => {
@@ -232,16 +186,18 @@ class Contents extends React.Component<myProps, any> {
     });
   };
 
+  onLogin = () => {
+    this.handleClose();
+    this.setState({
+      value: -1
+    });
+  };
+
   onLogout = () => {
     this.handleClose();
     this.props.setUserInfo("", "", "");
     firebase.auth().signOut();
     console.log("LOGOUT!!!");
-  };
-
-  onLogin = () => {
-    this.handleClose();
-    this.props.login();
   };
 
   render() {
@@ -260,7 +216,7 @@ class Contents extends React.Component<myProps, any> {
           >
             <Tab label="About" icon={<InfoIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
-            <Tab label="Search Trip" icon={<SearchIcon />} />
+            <Tab label="Browse Trips" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
             {/* <Tab label="Social" icon={<ChatIcon />} /> */}
 
@@ -310,9 +266,9 @@ class Contents extends React.Component<myProps, any> {
           </Tabs>
 
           {/* About */}
-          <TabPanel value={this.state.value} index={0}>
-            <About />
-          </TabPanel>
+          {/* <TabPanel value={this.state.value} index={0}> */}
+          {/* <About /> */}
+          {/* </TabPanel> */}
 
           {/* Ongoing Trips */}
           <TabPanel value={this.state.value} index={1}>
@@ -324,7 +280,7 @@ class Contents extends React.Component<myProps, any> {
                 {this.props.ongoingTrips.length ? (
                   <Grid container>
                     <Grid item xs={5}>
-                      <TripInfo
+                      <OngoingTripInfo
                         trips={this.props.ongoingTrips}
                         currentTripIndex={this.props.currentOngoingTripIndex}
                       />
@@ -351,13 +307,10 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Search Trip</p>
+                <p>Browse Trip</p>
                 <Grid container>
                   <Grid item xs={5}>
-                    <TripInfo
-                      trips={this.props.searchTrips}
-                      currentTripIndex={this.props.currentSearchTripIndex}
-                    />
+                    <SearchTripInfo />
                   </Grid>
                   <Grid item xs={7}>
                     {this.props.searchTrips.length ? (
@@ -390,6 +343,21 @@ class Contents extends React.Component<myProps, any> {
             <ChatBoard />
           </TabPanel> */}
         </AppBar>
+
+        {/* Click Login */}
+        {this.state.value === -1 && (
+          <div style={{ marginTop: "35px" }}>
+            <Login />
+          </div>
+        )}
+
+        {/* About */}
+        {this.state.value === 0 && (
+          <div>
+            <img className="bgImg" src={backgroundImg} alt="backImg" />
+            <About />
+          </div>
+        )}
       </div>
     );
   }

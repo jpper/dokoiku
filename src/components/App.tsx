@@ -1,7 +1,5 @@
 import React from "react";
-
 import Profile from "./Profile";
-
 import { myFirestore } from "../config/firebase";
 import "../styles/App.css";
 

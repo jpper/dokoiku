@@ -17,11 +17,12 @@ type myProps = {
   onNextTrip: any;
   onJoinTrip?: any;
   userId: string;
+  users: any;
 };
 
 // I will style this more later -- just wanted it functional for now
 
-class TripInfo extends React.Component<
+class OngoingTripInfo extends React.Component<
   myProps,
   { members: any; previousLength: number }
 > {
@@ -114,17 +115,18 @@ class TripInfo extends React.Component<
               {this.props.trips[this.props.currentTripIndex].memberIds.map(
                 (m: any, i: number) => {
                   return (
-                    <li>
-                      <p key={i} onClick={() => this.props.onShowProfile(i)}>
-                        {this.state.members[i]}
-                      </p>
+                    <li key={i} onClick={() => this.props.onShowProfile(i)}>
+                      {
+                        this.props.users.find((u: { id: any }) => u.id === m)
+                          .nickname
+                      }
                     </li>
                   );
                 }
               )}
             </ul>
           </div>
-          <Button
+          {/* <Button
             onClick={() =>
               this.props.onJoinTrip(
                 this.props.trips[this.props.currentTripIndex].tripId,
@@ -136,7 +138,7 @@ class TripInfo extends React.Component<
             size="large"
           >
             JOIN!
-          </Button>
+          </Button> */}
           <div className="navButtons">
             <Button
               variant="contained"
@@ -162,7 +164,8 @@ class TripInfo extends React.Component<
 }
 const mapStateToProps = (state: any) => {
   return {
-    userId: state.userId
+    userId: state.userId,
+    users: state.users
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
@@ -178,11 +181,11 @@ const mapDispatchToProps = (dispatch: any) => {
       }),
     onPreviousTrip: () =>
       dispatch({
-        type: "PREVIOUS_SEARCH_TRIP"
+        type: "PREVIOUS_ONGOING_TRIP"
       }),
     onNextTrip: () =>
       dispatch({
-        type: "NEXT_SEARCH_TRIP"
+        type: "NEXT_ONGOING_TRIP"
       }),
     onJoinTrip: (trip: string, user: string) => {
       myFirestore
@@ -194,4 +197,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TripInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(OngoingTripInfo);

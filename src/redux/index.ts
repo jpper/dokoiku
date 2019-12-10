@@ -10,6 +10,7 @@ const initialState: any = {
   searchTrips: [],
   currentOngoingTripIndex: 0,
   currentSearchTripIndex: 0,
+  users: [],
   showProfile: false,
   showChat: false,
   showBuild: false,
@@ -159,6 +160,12 @@ const reducer = (state: any = initialState, action: Action): any => {
     case "JOIN_TRIP": {
       return {
         ...state
+      };
+    }
+    case "GET_USERS": {
+      return {
+        ...state,
+        users: action.users
       };
     }
     default: {
