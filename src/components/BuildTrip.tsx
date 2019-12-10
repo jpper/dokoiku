@@ -98,9 +98,9 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
   }
   componentWillMount() {
     ValidatorForm.addValidationRule("startDateValidator", (value: string) => {
-      const startDate = new Date(value);
-      const today = new Date();
-      return startDate.getDate() >= today.getDate();
+      const startDate = new Date(value).setHours(0, 0, 0, 0);
+      const today = new Date().setHours(0, 0, 0, 0);
+      return startDate >= today;
     });
     ValidatorForm.addValidationRule("startDateValidator2", (value: string) => {
       if (this.state.endDate === null) return true;

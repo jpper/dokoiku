@@ -14,6 +14,7 @@ const initialState: any = {
   showProfile: false,
   showChat: false,
   showBuild: false,
+  showEdit: false,
   currentProfile: 0,
   mapTripMessage: 1
 };
@@ -111,6 +112,13 @@ const reducer = (state: any = initialState, action: Action): any => {
         showBuild: true
       };
     }
+    case "SHOW_EDIT": {
+      //Add some logic to add trip to Firebase
+      return {
+        ...state,
+        showEdit: true
+      };
+    }
     case "SET_USER_INFO": {
       return {
         ...state,
@@ -173,35 +181,35 @@ const reducer = (state: any = initialState, action: Action): any => {
     //0 = map, 1 = notes, 2 = msg
     case "TOGGLE_NOTES": {
       if (state.mapTripMessage === 0) {
-        console.log("Toggle notes 0")
-      return {
-        ...state,
-        mapTripMessage: 1
-      };
-    }
+        console.log("Toggle notes 0");
+        return {
+          ...state,
+          mapTripMessage: 1
+        };
+      }
       if (state.mapTripMessage === 1) {
-        console.log("Toggle notes 1")
+        console.log("Toggle notes 1");
         return {
           ...state,
           mapTripMessage: 0
         };
-    }
+      }
     }
     case "TOGGLE_MESSAGES": {
       if (state.mapTripMessage === 0) {
-        console.log("Toggle messeges: 2")
+        console.log("Toggle messeges: 2");
         return {
           ...state,
           mapTripMessage: 2
         };
       }
-      console.log("Toggle messeges: 0")
-      console.log("VALUE: ", action.value)
-      console.log("STATE: ", state.mapTripMessage)
+      console.log("Toggle messeges: 0");
+      console.log("VALUE: ", action.value);
+      console.log("STATE: ", state.mapTripMessage);
       return {
-          ...state,
-          mapTripMessage: 0
-        };
+        ...state,
+        mapTripMessage: 0
+      };
     }
     case "GET_USERS": {
       return {

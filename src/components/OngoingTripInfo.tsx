@@ -14,6 +14,7 @@ type myProps = {
   onShowChat: any;
   onShowProfile: any;
   onPreviousTrip: any;
+  onShowEdit: any;
   onNextTrip: any;
   onJoinTrip?: any;
   userId: string;
@@ -136,17 +137,7 @@ class OngoingTripInfo extends React.Component<
             </ul>
           </div>
           <Button
-            onClick={() =>
-              this.deleteTrip(
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .tripId,
-                this.props.userId,
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .memberIds,
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .ownerId
-              )
-            }
+            onClick={this.props.onShowEdit}
             variant="contained"
             color="secondary"
             size="large"
@@ -237,7 +228,8 @@ const mapDispatchToProps = (dispatch: any) => {
     toggleMessages: () =>
       dispatch({
         type: "TOGGLE_MESSAGES"
-      })
+      }),
+    onShowEdit: () => dispatch({ type: "SHOW_EDIT" })
   };
 };
 
