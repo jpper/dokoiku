@@ -43,9 +43,9 @@ class App extends React.Component<myProps, {}> {
         {this.props.userId.length && this.props.trips.length ? (
           <ChatBoard />
         ) : null}
-        {/* <TripInfo /> */}
-        {/* {this.props.showProfile ? <Profile /> : null}
-        {this.props.trips.length ? <Map /> : null} */}
+        <TripInfo />
+        {this.props.showProfile ? <Profile /> : null}
+        {this.props.trips.length ? <Map /> : null}
       </div>
     );
   }
