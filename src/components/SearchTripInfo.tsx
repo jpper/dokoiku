@@ -6,7 +6,8 @@ import firebase from "firebase";
 import { myFirebase, myFirestore } from "../config/firebase";
 import Map from "./Map";
 
-// Material UI
+// Material UI and styling
+import "../styles/Modal.css";
 import {
   Grid,
   Card,
@@ -107,20 +108,46 @@ class SearchTripInfo extends React.Component<
         </p>
         <div>
           Members:{" "}
-          <ul className="memberContainer">
+          <div className="memberContainer">
             {this.props.searchTrips[
               this.props.currentSearchTripIndex
             ].memberIds.map((m: any, i: number) => {
+              const nickname = this.props.users.find(
+                (u: { id: any }) => u.id === m
+              ).nickname;
+              const photo = this.props.users.find(
+                (u: { id: any }) => u.id === m
+              ).photoUrl;
               return (
-                <li key={i} onClick={() => this.props.onShowProfile(i)}>
-                  {
-                    this.props.users.find((u: { id: any }) => u.id === m)
-                      .nickname
-                  }
-                </li>
+                <div>
+                  <p
+                    key={i}
+                    onClick={() => {
+                      const modal = document.getElementById(i.toString());
+                      modal.style.display = "block";
+                    }}
+                  >
+                    {nickname}
+                  </p>
+                  <div className="modal" id={i.toString()}>
+                    <div className="modal-content">
+                      <img src={photo} alt={nickname} />
+                      <p>{nickname}</p>
+                      <button
+                        className="close"
+                        onClick={() => {
+                          const modal = document.getElementById(i.toString());
+                          modal.style.display = "none";
+                        }}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
               );
             })}
-          </ul>
+          </div>
         </div>
         <Button
           onClick={() =>
