@@ -300,7 +300,13 @@ class Contents extends React.Component<myProps, any> {
                         />
                       )}
                     {this.props.mapTripMessage === 1 && (
-                      <Editor tripId="testNotes" />
+                      <Editor
+                        tripId={
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex
+                          ].tripId
+                        }
+                      />
                     )}
 
                     {this.props.mapTripMessage === 2 && <ChatBoard />}
