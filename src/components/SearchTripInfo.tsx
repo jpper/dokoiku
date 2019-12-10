@@ -140,6 +140,9 @@ class SearchTripInfo extends React.Component<
               const photo = this.props.users.find(
                 (u: { id: any }) => u.id === m
               ).photoUrl;
+              const facebook = this.props.users.find(
+                (u: { id: any }) => u.id === m
+              ).facebook;
               return (
                 <div>
                   <p
@@ -156,6 +159,16 @@ class SearchTripInfo extends React.Component<
                     <div className="modal-content">
                       <img src={photo} alt={nickname} />
                       <p>{nickname}</p>
+                      {facebook ? (
+                        <a href={facebook}>
+                          <img
+                            src="https://www.facebook.com/images/fb_icon_325x325.png"
+                            alt="Facebook"
+                            id="fb-icon"
+                          />
+                        </a>
+                      ) : null}
+                      <br></br>
                       <button
                         className="close"
                         onClick={() => {
