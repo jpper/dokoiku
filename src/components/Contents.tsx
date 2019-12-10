@@ -281,7 +281,7 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Ongoing Trips</p>
+                {/* <p>Ongoing Trips</p> */}
                 <Grid container>
                   <Grid item xs={5}>
                     <Container>
@@ -322,7 +322,7 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Search Trip</p>
+                {/* <p>Search Trip</p> */}
                 <Grid container>
                   <Grid item xs={5}>
                     <Container>
@@ -348,7 +348,7 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Build Trip</p>
+                {/* <p>Build Trip</p> */}
                 <BuildTrip />
               </>
             )}
