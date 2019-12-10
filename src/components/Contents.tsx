@@ -280,10 +280,16 @@ class Contents extends React.Component<myProps, any> {
                 {this.props.ongoingTrips.length ? (
                   <Grid container>
                     <Grid item xs={5}>
-                      <OngoingTripInfo
-                        trips={this.props.ongoingTrips}
-                        currentTripIndex={this.props.currentOngoingTripIndex}
-                      />
+                      <Container>
+                        <Card className="tripInfo">
+                          <OngoingTripInfo
+                            trips={this.props.ongoingTrips}
+                            currentTripIndex={
+                              this.props.currentOngoingTripIndex
+                            }
+                          />
+                        </Card>
+                      </Container>
                     </Grid>
                     <Grid item xs={7}>
                       {this.props.ongoingTrips.length ? (
@@ -310,7 +316,11 @@ class Contents extends React.Component<myProps, any> {
                 <p>Browse Trip</p>
                 <Grid container>
                   <Grid item xs={5}>
-                    <SearchTripInfo />
+                    <Container>
+                      <Card className="tripInfo">
+                        <SearchTripInfo />
+                      </Card>
+                    </Container>
                   </Grid>
                   <Grid item xs={7}>
                     {this.props.searchTrips.length ? (
