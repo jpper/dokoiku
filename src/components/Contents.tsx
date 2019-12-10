@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import OngoingTripInfo from "./OngoingTripInfo";
 import SearchTripInfo from "./SearchTripInfo";
 import Map from "./Map";
-import Editor from './Notes';
+import Editor from "./Notes";
 import ChatBoard from "./ChatBoard";
 import About from "./About";
 import BuildTrip from "./BuildTrip";
@@ -288,19 +288,20 @@ class Contents extends React.Component<myProps, any> {
                   </Grid>
                   {/* {if statement and changing props value here} */}
                   <Grid item xs={7}>
-                    {this.props.mapTripMessage === 0 &&
+                    {this.props.ongoingTrips.length ? (
                       <Map
-                      trips={this.props.ongoingTrips}
-                      currentTripIndex={this.props.currentOngoingTripIndex}
-                    />}
-                    {this.props.mapTripMessage === 1 &&
+                        trips={this.props.ongoingTrips}
+                        currentTripIndex={this.props.currentOngoingTripIndex}
+                      />
+                    ) : null}
+                    {/* {this.props.mapTripMessage === 1 &&
                       // <Editor />
-                      <ChatBoard />
-                    }
-                    
-                    {this.props.mapTripMessage === 2 &&
-                      <ChatBoard />
-                    }
+                      // <ChatBoard />
+                    } */}
+
+                    {/* {this.props.mapTripMessage === 2 &&
+                      // <ChatBoard />
+                    } */}
                   </Grid>
                 </Grid>
               </>

@@ -37,17 +37,26 @@ class OngoingTripInfo extends React.Component<
     };
   }
 
-
-
-
-  deleteTrip(tripId: string, userId: string, memberIds: string[]) {
-    const newMemberIds = memberIds.filter(
-      (memberId: string) => memberId !== userId
-    );
-    myFirestore
-      .collection("trips")
-      .doc(tripId)
-      .update({ memberIds: newMemberIds });
+  deleteTrip(
+    tripId: string,
+    userId: string,
+    memberIds: string[],
+    ownerId: string
+  ) {
+    if (userId === ownerId) {
+      myFirestore
+        .collection("trips")
+        .doc(tripId)
+        .delete();
+    } else {
+      const newMemberIds = memberIds.filter(
+        (memberId: string) => memberId !== userId
+      );
+      myFirestore
+        .collection("trips")
+        .doc(tripId)
+        .update({ memberIds: newMemberIds });
+    }
   }
 
   render() {
@@ -58,64 +67,103 @@ class OngoingTripInfo extends React.Component<
           <p>
             Start Date:{" "}
             {moment(
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex].startDate.toDate()
+              this.props.ongoingTrips[
+                this.props.currentOngoingTripIndex
+              ].startDate.toDate()
             ).format("MMMM Do YYYY")}
           </p>
           <p>
             End Date:{" "}
             {moment(
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex].endDate.toDate()
+              this.props.ongoingTrips[
+                this.props.currentOngoingTripIndex
+              ].endDate.toDate()
             ).format("MMMM Do YYYY")}
           </p>
           <p>
             Starting Location:
-            {` ${this.props.ongoingTrips[this.props.currentOngoingTripIndex].startLocation}`}
+            {` ${
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .startLocation
+            }`}
           </p>
           <div>
             Waypoints:{" "}
             <ul className="waypointsContainer">
-              {this.props.ongoingTrips[this.props.currentOngoingTripIndex].waypoints.map(
-                (l: any, i: number) => {
-                  return <li key={i}>{l.location}</li>;
-                }
-              )}
+              {this.props.ongoingTrips[
+                this.props.currentOngoingTripIndex
+              ].waypoints.map((l: any, i: number) => {
+                return <li key={i}>{l.location}</li>;
+              })}
             </ul>
           </div>
-          <p>Budget: {this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget}</p>
-          <Button variant="outlined" color="secondary" size="small"
-          onClick={() => this.props.toggleNotes()}
+          <p>
+            Budget:{" "}
+            {this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget}
+          </p>
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="small"
+            onClick={() => this.props.toggleNotes()}
           >
             Notes
           </Button>
           <br></br>
-          <Button variant="outlined" color="secondary" size="small"
-          onClick={() => this.props.toggleMessages()}
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="small"
+            onClick={() => this.props.toggleMessages()}
           >
             Messages
           </Button>
           <div>
             Members:{" "}
             <ul className="memberContainer">
-              {this.props.ongoingTrips[this.props.currentOngoingTripIndex].memberIds.map(
-                (m: any, i: number) => {
-                  return (
-                    <li key={i} onClick={() => this.props.onShowProfile(i)}>
-                      {
-                        this.props.users.find((u: { id: any }) => u.id === m)
-                          .nickname
-                      }
-                    </li>
-                  );
-                }
-              )}
+              {this.props.ongoingTrips[
+                this.props.currentOngoingTripIndex
+              ].memberIds.map((m: any, i: number) => {
+                return (
+                  <li key={i} onClick={() => this.props.onShowProfile(i)}>
+                    {
+                      this.props.users.find((u: { id: any }) => u.id === m)
+                        .nickname
+                    }
+                  </li>
+                );
+              })}
             </ul>
           </div>
           <Button
             onClick={() =>
               this.deleteTrip(
-                this.props.trips[this.props.currentTripIndex].tripId,
+                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .tripId,
                 this.props.userId,
-                this.props.trips[this.props.currentTripIndex].memberIds
+                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .memberIds,
+                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .ownerId
+              )
+            }
+            variant="contained"
+            color="secondary"
+            size="large"
+          >
+            UPDATE!
+          </Button>
+
+          <Button
+            onClick={() =>
+              this.deleteTrip(
+                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .tripId,
+                this.props.userId,
+                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .memberIds,
+                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .ownerId
               )
             }
             variant="contained"
@@ -189,7 +237,7 @@ const mapDispatchToProps = (dispatch: any) => {
     toggleMessages: () =>
       dispatch({
         type: "TOGGLE_MESSAGES"
-      }),
+      })
   };
 };
 
