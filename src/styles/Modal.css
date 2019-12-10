@@ -43,3 +43,7 @@
   text-decoration: none;
   cursor: pointer;
 }
+
+#fb-icon {
+  width: 10%;
+}
