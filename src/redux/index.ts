@@ -232,6 +232,12 @@ const reducer = (state: any = initialState, action: Action): any => {
         };
       }
     }
+    case "RESET_TOGGLE_MESSAGES": {
+      return {
+        ...state,
+        mapTripMessage: 0
+      };
+    }
     case "GET_USERS": {
       return {
         ...state,

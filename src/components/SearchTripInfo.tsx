@@ -6,7 +6,8 @@ import firebase from "firebase";
 import { myFirebase, myFirestore } from "../config/firebase";
 import Map from "./Map";
 
-// Material UI
+// Material UI and styling
+import "../styles/Modal.css";
 import {
   Grid,
   Card,
@@ -19,6 +20,11 @@ import {
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import PersonIcon from "@material-ui/icons/Person";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import "../styles/TripInfo.css";
 
 type myProps = {
@@ -57,8 +63,13 @@ class SearchTripInfo extends React.Component<
   render() {
     return (
       <div className="TripInfo">
-        <h1>Trip Details</h1>
-        <p>
+        {/* Title */}
+        <Typography variant="h3" className="typoH3">
+          <b>Trip Details</b>
+        </Typography>
+
+        {/* Start Date */}
+        <Typography className="iconWrapper">
           <DateRangeIcon />
           Start Date:{" "}
           {moment(
@@ -66,8 +77,10 @@ class SearchTripInfo extends React.Component<
               this.props.currentSearchTripIndex
             ].startDate.toDate()
           ).format("MMMM Do YYYY")}
-        </p>
-        <p>
+        </Typography>
+
+        {/* End Date */}
+        <Typography className="iconWrapper">
           <DateRangeIcon />
           End Date:{" "}
           {moment(
@@ -75,15 +88,19 @@ class SearchTripInfo extends React.Component<
               this.props.currentSearchTripIndex
             ].endDate.toDate()
           ).format("MMMM Do YYYY")}
-        </p>
-        <p>
+        </Typography>
+
+        {/* Starting Location */}
+        <Typography className="iconWrapper">
           <DoubleArrowIcon />
           Starting Location:
           {` ${
             this.props.searchTrips[this.props.currentSearchTripIndex]
               .startLocation
           }`}
-        </p>
+        </Typography>
+
+        {/* WayPoints */}
         <div>
           <List>
             <Typography variant="h5">Waypoints:</Typography>
@@ -101,26 +118,59 @@ class SearchTripInfo extends React.Component<
             })}
           </List>
         </div>
-        <p>
+
+        {/* Budget */}
+        <Typography className="iconWrapper">
+          <MonetizationOnIcon />
           Budget:{" "}
           {this.props.searchTrips[this.props.currentSearchTripIndex].budget}
-        </p>
+        </Typography>
+
+        <div className="spacer10"></div>
+
         <div>
-          Members:{" "}
-          <ul className="memberContainer">
+          <Typography variant="h5">Members:</Typography>
+          <div className="memberContainer">
             {this.props.searchTrips[
               this.props.currentSearchTripIndex
             ].memberIds.map((m: any, i: number) => {
+              const nickname = this.props.users.find(
+                (u: { id: any }) => u.id === m
+              ).nickname;
+              const photo = this.props.users.find(
+                (u: { id: any }) => u.id === m
+              ).photoUrl;
               return (
-                <li key={i} onClick={() => this.props.onShowProfile(i)}>
-                  {
-                    this.props.users.find((u: { id: any }) => u.id === m)
-                      .nickname
-                  }
-                </li>
+                <div>
+                  <p
+                    key={i}
+                    onClick={() => {
+                      const modal = document.getElementById(i.toString());
+                      modal.style.display = "block";
+                    }}
+                  >
+                    <PersonIcon className="iconSpacer" />
+                    {nickname}
+                  </p>
+                  <div className="modal" id={i.toString()}>
+                    <div className="modal-content">
+                      <img src={photo} alt={nickname} />
+                      <p>{nickname}</p>
+                      <button
+                        className="close"
+                        onClick={() => {
+                          const modal = document.getElementById(i.toString());
+                          modal.style.display = "none";
+                        }}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
               );
             })}
-          </ul>
+          </div>
         </div>
         <Button
           onClick={() =>
@@ -132,27 +182,39 @@ class SearchTripInfo extends React.Component<
           variant="contained"
           color="primary"
           size="large"
+          fullWidth
         >
-          JOIN!
+          <GroupAddIcon />
+          JOIN
         </Button>
-        <div className="navButtons">
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            onClick={this.props.onPreviousTrip}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            onClick={this.props.onNextTrip}
-          >
-            Next
-          </Button>
-        </div>
+
+        {/* Previous & Next Button */}
+        <Grid container>
+          <Grid item xs={6}>
+            <Button
+              variant="contained"
+              color="default"
+              size="small"
+              fullWidth
+              onClick={this.props.onPreviousTrip}
+            >
+              <ArrowBackIosIcon />
+              Previous
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button
+              variant="contained"
+              color="default"
+              size="small"
+              fullWidth
+              onClick={this.props.onNextTrip}
+            >
+              Next
+              <ArrowForwardIosIcon />
+            </Button>
+          </Grid>
+        </Grid>
       </div>
     );
   }

@@ -1,5 +1,4 @@
 import React from "react";
-import Profile from "./Profile";
 import { myFirestore } from "../config/firebase";
 import "../styles/App.css";
 
@@ -39,8 +38,6 @@ class App extends React.Component<myProps, {}> {
         this.props.currentTripIndex !== undefined ? (
           <TripInfo />
         ) : null} */}
-
-        {this.props.showProfile ? <Profile /> : null}
       </div>
     );
   }
