@@ -298,17 +298,28 @@ class Contents extends React.Component<myProps, any> {
                     {/* {if statement and changing props value here} */}
                     <Grid item xs={7}>
                       {!this.props.showChat &&
-                      !this.props.showEdit &&
-                      this.props.ongoingTrips.length ? (
-                        <Map
-                          trips={this.props.ongoingTrips}
-                          currentTripIndex={this.props.currentOngoingTripIndex}
+                        !this.props.showEdit &&
+                        this.props.ongoingTrips.length &&
+                        this.props.mapTripMessage === 0 && (
+                          <Map
+                            trips={this.props.ongoingTrips}
+                            currentTripIndex={
+                              this.props.currentOngoingTripIndex
+                            }
+                          />
+                        )}
+                      {this.props.mapTripMessage === 1 && (
+                        <Editor
+                          tripId={
+                            this.props.ongoingTrips[
+                              this.props.currentOngoingTripIndex
+                            ].tripId
+                          }
                         />
-                      ) : null}
-                      {/* {this.props.mapTripMessage === 1 &&
-                      // <Editor />
-                      // <ChatBoard />
-                    } */}
+                      )}
+
+                      {this.props.mapTripMessage === 2 && <ChatBoard />}
+
                       {this.props.showEdit ? (
                         <EditTrip
                           name={
@@ -348,9 +359,6 @@ class Contents extends React.Component<myProps, any> {
                           }
                         />
                       ) : null}
-                      {/* {this.props.mapTripMessage === 2 &&
-                      // <ChatBoard />
-                    } */}
                     </Grid>
                   </Grid>
                 ) : (
