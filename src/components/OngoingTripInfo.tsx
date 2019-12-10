@@ -70,6 +70,16 @@ class OngoingTripInfo extends React.Component<
     }
   }
 
+  deleteTrip(tripId: string, userId: string, memberIds: string[]) {
+    const newMemberIds = memberIds.filter(
+      (memberId: string) => memberId !== userId
+    );
+    myFirestore
+      .collection("trips")
+      .doc(tripId)
+      .update({ memberIds: newMemberIds });
+  }
+
   render() {
     return (
       <div>
@@ -126,19 +136,20 @@ class OngoingTripInfo extends React.Component<
               )}
             </ul>
           </div>
-          {/* <Button
+          <Button
             onClick={() =>
-              this.props.onJoinTrip(
+              this.deleteTrip(
                 this.props.trips[this.props.currentTripIndex].tripId,
-                this.props.userId
+                this.props.userId,
+                this.props.trips[this.props.currentTripIndex].memberIds
               )
             }
             variant="contained"
-            color="primary"
+            color="secondary"
             size="large"
           >
-            JOIN!
-          </Button> */}
+            DELETE!
+          </Button>
           <div className="navButtons">
             <Button
               variant="contained"
@@ -192,7 +203,7 @@ const mapDispatchToProps = (dispatch: any) => {
         .collection("trips")
         .doc(trip)
         .update({ memberIds: firebase.firestore.FieldValue.arrayUnion(user) });
-      dispatch({ type: "JOIN_TRIP" });
+      // dispatch({ type: "JOIN_TRIP" });
     }
   };
 };
