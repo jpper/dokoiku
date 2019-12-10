@@ -11,6 +11,7 @@ import { Grid } from "@material-ui/core";
 type myProps = {
   trips: any;
   currentTripIndex: number;
+  onShowBuild: any;
   onShowChat: any;
   onShowProfile: any;
   onPreviousTrip: any;
@@ -139,6 +140,15 @@ class OngoingTripInfo extends React.Component<
           >
             JOIN!
           </Button> */}
+          <Button
+            onClick={this.props.showBuild}
+            variant="contained"
+            color="primary"
+            size="large"
+          >
+            Update Trip
+          </Button>
+          <br />
           <div className="navButtons">
             <Button
               variant="contained"
@@ -177,6 +187,11 @@ const mapDispatchToProps = (dispatch: any) => {
     onShowProfile: (index: number) =>
       dispatch({
         type: "SHOW_PROFILE",
+        index
+      }),
+    onShowBuild: (index: number) =>
+      dispatch({
+        type: "SHOW_BUILD",
         index
       }),
     onPreviousTrip: () =>
