@@ -15,6 +15,7 @@ import { setUserInfo } from "../redux/action";
 
 // Material UI & Styles
 import "../styles/Contents.css";
+import "../styles/AddFacebook.css";
 import {
   AppBar,
   Toolbar,
@@ -225,7 +226,7 @@ class Contents extends React.Component<myProps, any> {
           >
             <Tab label="About" icon={<InfoIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
-            <Tab label="Search Trip" icon={<SearchIcon />} />
+            <Tab label="Search Trips" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
             {/* <Tab label="Social" icon={<ChatIcon />} /> */}
 
@@ -265,8 +266,16 @@ class Contents extends React.Component<myProps, any> {
                     <p className="textUsername">
                       Hello, <b>{this.props.userName}</b>
                     </p>
-                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        const modal = document.getElementById("add-facebook");
+                        modal.style.display = "block";
+                        this.handleClose();
+                      }}
+                    >
+                      Profile
+                    </MenuItem>
+                    {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
                     <MenuItem onClick={this.onLogout}>Logout</MenuItem>
                   </>
                 )}
@@ -285,7 +294,7 @@ class Contents extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <p>Ongoing Trips</p>
+                {/* <p>Ongoing Trips</p> */}
                 {this.props.ongoingTrips.length ? (
                   <Grid container>
                     <Grid item xs={5}>
@@ -426,6 +435,38 @@ class Contents extends React.Component<myProps, any> {
             <Login />
           </div>
         )}
+        <div className="modal" id="add-facebook">
+          <div className="modal-content">
+            <p>Add a link to your Facebook:</p>
+            <input id="fb-url" placeholder="Paste URL here" />
+            <button
+              onClick={() => {
+                const url = (document.getElementById(
+                  "fb-url"
+                ) as HTMLInputElement).value;
+                myFirestore
+                  .collection("users")
+                  .doc(this.props.userId)
+                  .update({ facebook: url });
+                const modal = document.getElementById("add-facebook");
+                modal.style.display = "none";
+              }}
+            >
+              Submit
+            </button>
+            <br></br>
+            <br></br>
+            <button
+              className="close"
+              onClick={() => {
+                const modal = document.getElementById("add-facebook");
+                modal.style.display = "none";
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
