@@ -1,11 +1,9 @@
 import moment from "moment";
 import uuidv4 from "uuid/v4";
-import firebase, { firestore } from "firebase";
+import { firestore } from "firebase";
 import React, { Component } from "react";
-// import ReactLoading from "react-loading";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
-import { Dispatch } from "redux";
 import {
   setMessages,
   clearMessages,
@@ -21,11 +19,8 @@ import {
   ListItemText,
   Avatar,
   Card,
-  BottomNavigation,
   TextField,
-  IconButton,
   Button,
-  FormControl,
   Grid,
   GridList
 } from "@material-ui/core";
@@ -67,7 +62,6 @@ const mapDispatchToProps = (dispatch: any) => ({
                   const msg = change.doc.data();
                   msg.nickname = doc.data().nickname;
                   msg.photoUrl = doc.data().photoUrl;
-                  // console.log(msg);
                   dispatch(setMessages(msg));
                 });
             }
@@ -80,7 +74,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(setMessageListener(messageListener));
   },
   sendMessage: (tripId: string, userId: string, messageToBeSent: string) => {
-    // const moment = firestore.FieldValue.serverTimestamp();
     const moment = firestore.Timestamp.fromDate(new Date());
     const message = {
       content: messageToBeSent,
@@ -135,7 +128,6 @@ class ChatBoard extends Component<Props, ChatBoardState> {
     await this.props.clearListener(this.props.messageListener);
 
     await this.props.getMessages(this.props.tripId);
-    console.log(this.props.tripId);
 
     this.scrollToBottom();
   }
@@ -191,7 +183,6 @@ class ChatBoard extends Component<Props, ChatBoardState> {
               }}
             ></div>
 
-            {/* <BottomNavigation showLabels className="footer"> */}
             <Grid container>
               <Grid item xs={10}>
                 <TextField
@@ -240,7 +231,6 @@ class ChatBoard extends Component<Props, ChatBoardState> {
                 )}
               </Grid>
             </Grid>
-            {/* </BottomNavigation> */}
           </Container>
         </GridList>
       </div>

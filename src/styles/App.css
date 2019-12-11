@@ -66,3 +66,33 @@
   margin-left: 7%;
   padding-left: 2%;
 }
+
+.tabPanel {
+  background-color: white;
+  color: black;
+}
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.textUsername {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tripInfo {
+  padding-bottom: 10px;
+}
+.bgImg {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: auto;
+}

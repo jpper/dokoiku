@@ -7,7 +7,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { firestore } from "firebase";
 import "../styles/BuildTrip.css";
-import moment from "moment";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -18,15 +17,6 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onShowBuild: (index: number) =>
-      dispatch({
-        type: "SHOW_BUILD",
-        index
-      }),
-    onClosePopup: () =>
-      dispatch({
-        type: "CLOSE_POPUP"
-      }),
     onAddTrip: (
       name: string,
       userId: string,
@@ -58,9 +48,6 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 type BuildProps = {
-  showBuild: boolean;
-  onClosePopup: any;
-  onShowBuild: any;
   onAddTrip: any;
   userId: string;
 };
@@ -134,207 +121,184 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
   render() {
     return (
       <div>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={this.props.onShowBuild}
-        >
-          BUILD TRIP
-        </Button>
-        {this.props.showBuild ? (
-          <div>
-            <div className="BuildTrip">
-              <h1>Build Trip</h1>
-              <ValidatorForm
-                onSubmit={() => {
-                  this.props.onAddTrip(
-                    this.state.name,
-                    this.props.userId,
-                    this.state.startDate,
-                    this.state.endDate,
-                    this.state.startLocation,
-                    this.state.waypoints,
-                    this.state.budget
-                  );
-                  this.clearState();
-                  this.props.onClosePopup();
+        <div>
+          <div className="BuildTrip">
+            <h1>Build Trip</h1>
+            <ValidatorForm
+              onSubmit={() => {
+                this.props.onAddTrip(
+                  this.state.name,
+                  this.props.userId,
+                  this.state.startDate,
+                  this.state.endDate,
+                  this.state.startLocation,
+                  this.state.waypoints,
+                  this.state.budget
+                );
+                this.clearState();
+              }}
+              onError={errors => console.log(errors)}
+            >
+              <TextValidator
+                name="name"
+                label="Name"
+                variant="outlined"
+                validators={["required"]}
+                errorMessages={["this field is required"]}
+                value={this.state.name}
+                onChange={(e: any) => {
+                  this.setState({ name: e.currentTarget.value });
                 }}
-                onError={errors => console.log(errors)}
-              >
-                <TextValidator
-                  name="name"
-                  label="Name"
-                  variant="outlined"
-                  validators={["required"]}
-                  errorMessages={["this field is required"]}
-                  value={this.state.name}
-                  onChange={(e: any) => {
-                    this.setState({ name: e.currentTarget.value });
-                  }}
-                />
-                <br />
-                <br />
-                <br />
-                <TextValidator
-                  name="start-date"
-                  label="Start Date"
-                  variant="outlined"
-                  type="date"
-                  validators={[
-                    "required",
-                    "startDateValidator",
-                    "startDateValidator2"
-                  ]}
-                  errorMessages={[
-                    "this field is required",
-                    "start date must be from today",
-                    "start date must not be after end date"
-                  ]}
-                  InputLabelProps={{ shrink: true }}
-                  value={this.state.startDate}
-                  onChange={(e: any) => {
-                    this.setState({ startDate: e.currentTarget.value });
-                  }}
-                />
-                <br />
-                <br />
-                <br />
-                <TextValidator
-                  name="end-date"
-                  label="End Date"
-                  variant="outlined"
-                  type="date"
-                  validators={["required", "endDateValidator"]}
-                  errorMessages={[
-                    "this field is required",
-                    "end date must not be before start date"
-                  ]}
-                  InputLabelProps={{ shrink: true }}
-                  value={this.state.endDate}
-                  onChange={(e: any) => {
-                    this.setState({ endDate: e.currentTarget.value });
-                  }}
-                />
-                <br />
-                <br />
-                <br />
-                <TextValidator
-                  name="start-location"
-                  label="Start Location"
-                  variant="outlined"
-                  validators={["required"]}
-                  errorMessages={["this field is required"]}
-                  value={this.state.startLocation}
-                  onChange={(e: any) => {
-                    this.setState({ startLocation: e.currentTarget.value });
-                  }}
-                />
-                <br />
-                <br />
-                <br />
-                <label>Places:</label>
-                {this.state.waypoints.length
-                  ? this.state.waypoints.map((waypoint: any, index: number) => (
-                      <div>
-                        <div>{waypoint.location}</div>
-                        <IconButton
-                          onClick={() =>
-                            this.setState({
-                              waypoints: [
-                                ...this.state.waypoints.slice(0, index),
-                                ...this.state.waypoints.slice(index + 1)
-                              ]
-                            })
-                          }
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </div>
-                    ))
-                  : null}
-                <br />
-                <br />
-                <br />
-                <TextValidator
-                  name="places"
-                  label="Places"
-                  variant="outlined"
-                  value={this.state.addedWaypoint}
-                  onChange={(e: any) => {
-                    this.setState({ addedWaypoint: e.currentTarget.value });
-                  }}
-                />
-                <br />
-                <br />
-                <br />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    this.setState({
-                      waypoints: this.state.waypoints.concat([
-                        {
-                          location: this.state.addedWaypoint,
-                          stopover: true
+              />
+              <br />
+              <br />
+              <br />
+              <TextValidator
+                name="start-date"
+                label="Start Date"
+                variant="outlined"
+                type="date"
+                validators={[
+                  "required",
+                  "startDateValidator",
+                  "startDateValidator2"
+                ]}
+                errorMessages={[
+                  "this field is required",
+                  "start date must be from today",
+                  "start date must not be after end date"
+                ]}
+                InputLabelProps={{ shrink: true }}
+                value={this.state.startDate}
+                onChange={(e: any) => {
+                  this.setState({ startDate: e.currentTarget.value });
+                }}
+              />
+              <br />
+              <br />
+              <br />
+              <TextValidator
+                name="end-date"
+                label="End Date"
+                variant="outlined"
+                type="date"
+                validators={["required", "endDateValidator"]}
+                errorMessages={[
+                  "this field is required",
+                  "end date must not be before start date"
+                ]}
+                InputLabelProps={{ shrink: true }}
+                value={this.state.endDate}
+                onChange={(e: any) => {
+                  this.setState({ endDate: e.currentTarget.value });
+                }}
+              />
+              <br />
+              <br />
+              <br />
+              <TextValidator
+                name="start-location"
+                label="Start Location"
+                variant="outlined"
+                validators={["required"]}
+                errorMessages={["this field is required"]}
+                value={this.state.startLocation}
+                onChange={(e: any) => {
+                  this.setState({ startLocation: e.currentTarget.value });
+                }}
+              />
+              <br />
+              <br />
+              <br />
+              <label>Places:</label>
+              {this.state.waypoints.length
+                ? this.state.waypoints.map((waypoint: any, index: number) => (
+                    <div>
+                      <div>{waypoint.location}</div>
+                      <IconButton
+                        onClick={() =>
+                          this.setState({
+                            waypoints: [
+                              ...this.state.waypoints.slice(0, index),
+                              ...this.state.waypoints.slice(index + 1)
+                            ]
+                          })
                         }
-                      ]),
-                      addedWaypoint: ""
-                    });
-                  }}
-                >
-                  Add Place
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
+                  ))
+                : null}
+              <br />
+              <br />
+              <br />
+              <TextValidator
+                name="places"
+                label="Places"
+                variant="outlined"
+                value={this.state.addedWaypoint}
+                onChange={(e: any) => {
+                  this.setState({ addedWaypoint: e.currentTarget.value });
+                }}
+              />
+              <br />
+              <br />
+              <br />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  this.setState({
+                    waypoints: this.state.waypoints.concat([
+                      {
+                        location: this.state.addedWaypoint,
+                        stopover: true
+                      }
+                    ]),
+                    addedWaypoint: ""
+                  });
+                }}
+              >
+                Add Place
+              </Button>
+              <br />
+              <br />
+              <br />
+              <TextValidator
+                name="budget"
+                label="My Budget"
+                type="number"
+                variant="outlined"
+                validators={["minNumber:0", "required"]}
+                errorMessages={["cannot be negative", "this field is required"]}
+                InputProps={{ inputProps: { min: 0 } }}
+                value={this.state.budget}
+                onChange={(e: any) => {
+                  this.setState({ budget: e.currentTarget.value });
+                }}
+              />
+              <br />
+              <br />
+              <br />
+              {this.state.name &&
+              this.state.travelMode &&
+              this.state.startDate &&
+              this.state.endDate &&
+              this.state.startLocation &&
+              this.state.waypoints.length &&
+              this.state.budget > 0 ? (
+                <Button variant="contained" color="primary" type="submit">
+                  Submit My Trip
                 </Button>
-                <br />
-                <br />
-                <br />
-                <TextValidator
-                  name="budget"
-                  label="My Budget"
-                  type="number"
-                  variant="outlined"
-                  validators={["minNumber:0", "required"]}
-                  errorMessages={[
-                    "cannot be negative",
-                    "this field is required"
-                  ]}
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={this.state.budget}
-                  onChange={(e: any) => {
-                    this.setState({ budget: e.currentTarget.value });
-                  }}
-                />
-                <br />
-                <br />
-                <br />
-                {this.state.name &&
-                this.state.travelMode &&
-                this.state.startDate &&
-                this.state.endDate &&
-                this.state.startLocation &&
-                this.state.waypoints.length &&
-                this.state.budget > 0 ? (
-                  <Button variant="contained" color="primary" type="submit">
-                    Submit My Trip
-                  </Button>
-                ) : (
-                  <Button variant="contained" disabled>
-                    Please Fill Out the Form
-                  </Button>
-                )}
-                <br />
-                <br />
-                <br />
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={this.props.onClosePopup}
-                >
-                  Close
+              ) : (
+                <Button variant="contained" disabled>
+                  Please Fill Out the Form
                 </Button>
-              </ValidatorForm>
-            </div>
+              )}
+            </ValidatorForm>
           </div>
-        ) : null}
+        </div>
       </div>
     );
   }

@@ -1,13 +1,11 @@
 import React from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
-import uuidv4 from "uuid/v4";
 import { Button, IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { firestore } from "firebase";
 import "../styles/BuildTrip.css";
-import moment from "moment";
 
 const mapStateToProps = (state: any) => {
   return {

@@ -11,9 +11,7 @@ const initialState: any = {
   currentOngoingTripIndex: 0,
   currentSearchTripIndex: 0,
   users: [],
-  showProfile: false,
   showChat: false,
-  showBuild: false,
   showEdit: false,
   currentProfile: 0,
   mapTripMessage: 0
@@ -26,10 +24,6 @@ interface Action {
 
 const reducer = (state: any = initialState, action: Action): any => {
   switch (action.type) {
-    case "GET_TRIPS": {
-      //Call the DB, get the trips, and change the state
-      return; //this is a placeholder, don't actually do this
-    }
     case "NEXT_SEARCH_TRIP": {
       let nextIndex: number;
       if (state.currentSearchTripIndex + 1 >= state.searchTrips.length) {
@@ -39,7 +33,7 @@ const reducer = (state: any = initialState, action: Action): any => {
       }
       return {
         ...state,
-        showProfile: false,
+
         currentSearchTripIndex: nextIndex
       };
     }
@@ -52,7 +46,7 @@ const reducer = (state: any = initialState, action: Action): any => {
       }
       return {
         ...state,
-        showProfile: false,
+
         currentSearchTripIndex: nextIndex
       };
     }
@@ -65,7 +59,7 @@ const reducer = (state: any = initialState, action: Action): any => {
       }
       return {
         ...state,
-        showProfile: false,
+
         currentOngoingTripIndex: nextIndex
       };
     }
@@ -78,43 +72,23 @@ const reducer = (state: any = initialState, action: Action): any => {
       }
       return {
         ...state,
-        showProfile: false,
         currentOngoingTripIndex: nextIndex
       };
     }
-    case "SHOW_PROFILE": {
-      return {
-        ...state,
-        showProfile: true,
-        showChat: false,
-        showBuild: false,
-        currentProfile: action.index
-      };
-    }
+
     case "SHOW_CHAT": {
       return {
         ...state,
-        showProfile: false,
         showChat: true
       };
     }
     case "CLOSE_POPUP": {
       return {
         ...state,
-        showBuild: false,
-        showProfile: false,
         showEdit: false
       };
     }
-    case "SHOW_BUILD": {
-      //Add some logic to add trip to Firebase
-      return {
-        ...state,
-        showBuild: true
-      };
-    }
     case "SHOW_EDIT": {
-      //Add some logic to add trip to Firebase
       return {
         ...state,
         showEdit: true
@@ -126,9 +100,8 @@ const reducer = (state: any = initialState, action: Action): any => {
         userId: action.userId,
         userName: action.userName,
         userPhoto: action.userPhoto,
-        showProfile: false,
-        showChat: false,
-        showBuild: false
+
+        showChat: false
       };
     }
     case "ADD_SEARCH_TRIP": {
@@ -144,12 +117,9 @@ const reducer = (state: any = initialState, action: Action): any => {
       };
     }
     case "SET_MESSAGES": {
-      // console.log(action.messages);
       const tmpMessages = [...state.currentTripMessages, action.messages].sort(
         (a: any, b: any) => a.moment.seconds - b.moment.seconds
       );
-      // console.log("TESTTSTSYSYUSI");
-      // console.log(tmpMessages);
       return {
         ...state,
         currentTripMessages: tmpMessages
@@ -167,11 +137,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         messageListener: action.listener
       };
     }
-    case "JOIN_TRIP": {
-      return {
-        ...state
-      };
-    }
+
     case "GET_USERS": {
       return {
         ...state,
@@ -205,6 +171,7 @@ const reducer = (state: any = initialState, action: Action): any => {
           mapTripMessage: 1
         };
       }
+      break;
     }
     case "TOGGLE_MESSAGES": {
       if (state.mapTripMessage === 0) {
@@ -231,6 +198,7 @@ const reducer = (state: any = initialState, action: Action): any => {
           mapTripMessage: 0
         };
       }
+      break;
     }
     case "RESET_TOGGLE_MESSAGES": {
       return {
@@ -238,12 +206,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         mapTripMessage: 0
       };
     }
-    case "GET_USERS": {
-      return {
-        ...state,
-        users: action.users
-      };
-    }
+
     default: {
       return state;
     }
