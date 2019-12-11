@@ -1,16 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Paper } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import moment from "moment";
-import firebase from "firebase";
-import { myFirebase, myFirestore } from "../config/firebase";
-import Map from "./Map";
+import { myFirestore } from "../config/firebase";
 
 // Material UI
 import "../styles/Modal.css";
 import {
   Grid,
-  Card,
   List,
   ListItem,
   ListItemIcon,
@@ -34,7 +31,6 @@ type myProps = {
   ongoingTrips: any;
   currentOngoingTripIndex: number;
   onShowChat: any;
-  onShowProfile: any;
   onPreviousTrip: any;
   onShowEdit: any;
   onNextTrip: any;
@@ -46,20 +42,7 @@ type myProps = {
   mapTripMessage: any;
 };
 
-// I will style this more later -- just wanted it functional for now
-
-class OngoingTripInfo extends React.Component<
-  myProps,
-  { members: any; previousLength: number }
-> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      members: [],
-      previousLength: 0
-    };
-  }
-
+class OngoingTripInfo extends React.Component<myProps, {}> {
   async deleteTrip(
     tripId: string,
     userId: string,
@@ -321,11 +304,6 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "SHOW_CHAT"
       }),
-    onShowProfile: (index: number) =>
-      dispatch({
-        type: "SHOW_PROFILE",
-        index
-      }),
     onPreviousTrip: () => {
       dispatch({
         type: "RESET_TOGGLE_MESSAGES"
@@ -341,13 +319,6 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "NEXT_ONGOING_TRIP"
       });
-    },
-    onJoinTrip: (trip: string, user: string) => {
-      myFirestore
-        .collection("trips")
-        .doc(trip)
-        .update({ memberIds: firebase.firestore.FieldValue.arrayUnion(user) });
-      dispatch({ type: "JOIN_TRIP" });
     },
     toggleNotes: () =>
       dispatch({

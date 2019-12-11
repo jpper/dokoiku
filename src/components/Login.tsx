@@ -1,7 +1,5 @@
 import firebase from "firebase";
 import React, { Component } from "react";
-// import ReactLoading from "react-loading";
-// import { withRouter } from "react-router-dom";
 import { myFirebase, myFirestore } from "../config/firebase";
 import { setUserInfo } from "../redux/action";
 import { connect } from "react-redux";
@@ -28,8 +26,6 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
   login: (provider: any) => {
-    // const provider = new firebase.auth.GoogleAuthProvider();
-    // this.setState({ isLoading: true });
     myFirebase
       .auth()
       .signInWithPopup(provider)
@@ -83,7 +79,6 @@ const mapDispatchToProps = (dispatch: any) => ({
   setUserInfo: (userName: string, userId: string, userPhoto: string) =>
     dispatch(setUserInfo(userName, userId, userPhoto)),
   getTrips: async (userId: string) => {
-    //console.log("called");
     myFirestore.collection("trips").onSnapshot(snapShot => {
       snapShot.docChanges().forEach(change => {
         if (change.type === "added") {
@@ -188,7 +183,6 @@ class Login extends Component<Props, Status> {
                       >
                         SIGN OUT
                       </Button>
-                      {/* <div>{this.props.userName}</div> */}
                     </div>
                   ) : (
                     <div>

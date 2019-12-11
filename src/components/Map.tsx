@@ -6,7 +6,6 @@ import {
   DirectionsRenderer,
   Marker
 } from "@react-google-maps/api";
-import { connect } from "react-redux";
 import axios from "axios";
 require("dotenv").config();
 
@@ -43,7 +42,6 @@ class Map extends React.Component<MapProps, MapState> {
   directionsCallback(response: any | null) {
     if (response !== null) {
       if (response.status === "OK") {
-        //console.log(response);
         this.setState(() => ({
           response
         }));
@@ -67,7 +65,7 @@ class Map extends React.Component<MapProps, MapState> {
           });
         });
       } else {
-        //console.log("response: ", response);
+        console.log("response: ", response);
       }
     }
   }

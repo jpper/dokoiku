@@ -1,16 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Paper } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import moment from "moment";
 import firebase from "firebase";
-import { myFirebase, myFirestore } from "../config/firebase";
-import Map from "./Map";
+import { myFirestore } from "../config/firebase";
 
 // Material UI and styling
 import "../styles/Modal.css";
 import {
   Grid,
-  Card,
   List,
   ListItem,
   ListItemIcon,
@@ -32,40 +30,21 @@ type myProps = {
   users: any;
   currentSearchTripIndex: number;
   onShowChat: any;
-  onShowProfile: any;
   onPreviousTrip: any;
   onNextTrip: any;
   onJoinTrip?: any;
   userId: string;
 };
 
-// I will style this more later -- just wanted it functional for now
-
-class SearchTripInfo extends React.Component<
-  myProps,
-  { members: any; previousLength: number }
-> {
-  componentWillMount() {
-    const populatedMembers: any = [];
-    this.props.searchTrips[this.props.currentSearchTripIndex].memberIds.forEach(
-      async (m: any) => {
-        const username = await myFirestore
-          .collection("users")
-          .doc(m)
-          .get()
-          .then(doc => doc.data().nickname);
-        populatedMembers.push(username);
-      }
-    );
-    this.setState({ members: populatedMembers });
-  }
-
+class SearchTripInfo extends React.Component<myProps, {}> {
   render() {
     return (
       <div className="TripInfo">
         {/* Title */}
         <Typography variant="h3" className="typoH3">
-          <b>Trip Details</b>
+          <b>
+            {this.props.searchTrips[this.props.currentSearchTripIndex].name}
+          </b>
         </Typography>
 
         {/* Start Date */}
@@ -248,11 +227,6 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "SHOW_CHAT"
       }),
-    onShowProfile: (index: number) =>
-      dispatch({
-        type: "SHOW_PROFILE",
-        index
-      }),
     onPreviousTrip: () =>
       dispatch({
         type: "PREVIOUS_SEARCH_TRIP"
@@ -266,7 +240,7 @@ const mapDispatchToProps = (dispatch: any) => {
         .collection("trips")
         .doc(trip)
         .update({ memberIds: firebase.firestore.FieldValue.arrayUnion(user) });
-      dispatch({ type: "JOIN_TRIP" });
+      //Refactor this so that it changes the state and is redux compliant (dispatch add trip??)
     }
   };
 };
