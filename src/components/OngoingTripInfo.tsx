@@ -169,12 +169,14 @@ class OngoingTripInfo extends React.Component<myProps, {}> {
               //*************************************************** */
               let nickname = "";
               while (nickname === "") {
-                console.log("dfghjklkjhgfghjkl");
-                console.log("NICKNAME: ", nickname);
+                console.log("NICKNAME INSIDE LOOP: ", nickname);
+                console.log("PROPS INSIDE LOOP: ", this.props.users.length);
+              if (this.props.users.length > 0 ) {
                 nickname = this.props.users.find(
                   (u: { id: any }) => u.id === m
                 ).nickname;
-                
+              }
+
                 setTimeout( () => console.log("WAITING"), 500)
                 
               } 
