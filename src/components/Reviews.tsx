@@ -100,9 +100,9 @@ class Reviews extends Component<Props, any> {
                           <b>Rating</b>
                         </p>
                         <Rating
-                          name="disabled"
+                          name="readOnly"
                           value={review.rating}
-                          disabled
+                          readOnly
                         />
 
                         <p>

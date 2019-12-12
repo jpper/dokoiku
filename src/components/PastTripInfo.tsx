@@ -35,7 +35,8 @@ class PastTripInfo extends React.Component<any, any> {
       modalStatus: [],
       targetUser: -1,
       rating: 0,
-      message: ""
+      message: "",
+      isError: false
     };
   }
 
@@ -69,7 +70,8 @@ class PastTripInfo extends React.Component<any, any> {
     this.setState({
       targetUser: -1,
       rating: 0,
-      message: ""
+      message: "",
+      isError: false
     });
   };
 
@@ -92,6 +94,24 @@ class PastTripInfo extends React.Component<any, any> {
         rating: this.state.rating,
         message: this.state.message
       });
+  };
+
+  checkInput = () => {
+    if (this.state.rating === 0 || this.state.message === "") return false;
+    return true;
+  };
+
+  onSubmit = (event: any, reviewee: any) => {
+    // If textarea or rating is empty, error
+    if (!this.checkInput()) {
+      this.setState({
+        isError: true
+      });
+      return;
+    }
+
+    this.saveReviews(event, reviewee);
+    this.handleClose();
   };
 
   render() {
@@ -160,8 +180,10 @@ class PastTripInfo extends React.Component<any, any> {
               const nickname = this.props.users.find(
                 (u: { id: any }) => u.id === member
               ).nickname;
+              //   FIXME: skips own data here
+              //   if (member === this.props.userId) return;
+
               return (
-                //   TODO: skips own data here
                 <div key={i}>
                   <ListItem button onClick={() => this.onClickUser(i)}>
                     <ListItemIcon>
@@ -190,6 +212,20 @@ class PastTripInfo extends React.Component<any, any> {
                             Review for {nickname}
                           </h2>
                         </Box>
+
+                        {/* Error */}
+                        {this.state.isError && (
+                          <Box
+                            component="fieldset"
+                            mb={0}
+                            borderColor="transparent"
+                          >
+                            <Typography className="error-text">
+                              Textarea or Rating is empty...
+                            </Typography>
+                          </Box>
+                        )}
+
                         <Box
                           component="fieldset"
                           mb={1}
@@ -238,8 +274,7 @@ class PastTripInfo extends React.Component<any, any> {
                             variant="contained"
                             color="primary"
                             onClick={event => {
-                              this.saveReviews(event, member);
-                              this.handleClose();
+                              this.onSubmit(event, member);
                             }}
                           >
                             Submit
