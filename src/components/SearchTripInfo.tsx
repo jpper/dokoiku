@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useImperativeHandle } from "react";
 import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
 import moment from "moment";
@@ -169,8 +169,9 @@ class SearchTripInfo extends React.Component<myProps, {}> {
             onClick={() =>
               this.props.onJoinTrip(
                 this.props.searchTrips[this.props.currentSearchTripIndex]
-                  .tripId,
-                this.props.userId
+                  .ownerId,
+                this.props.userId,
+                this.props.searchTrips[this.props.currentSearchTripIndex].tripId
               )
             }
             variant="contained"
@@ -240,11 +241,22 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "NEXT_SEARCH_TRIP"
       }),
-    onJoinTrip: (trip: string, user: string) => {
+    onJoinTrip: (ownerId: string, userId: string, tripId: string) => {
       myFirestore
-        .collection("trips")
-        .doc(trip)
-        .update({ memberIds: firebase.firestore.FieldValue.arrayUnion(user) });
+        .collection("users")
+        .doc(ownerId)
+        .collection("requests")
+        .doc(userId + tripId)
+        .set({
+          fromId: userId,
+          tripId: tripId
+        });
+      myFirestore
+        .collection("users")
+        .doc(userId)
+        .collection("pendingTrips")
+        .doc(tripId)
+        .set({ tripId });
       //Refactor this so that it changes the state and is redux compliant (dispatch add trip??)
     }
   };
