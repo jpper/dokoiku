@@ -165,16 +165,29 @@ class OngoingTripInfo extends React.Component<myProps, {}> {
           <div className="memberContainer">
             {this.props.ongoingTrips[
               this.props.currentOngoingTripIndex
-            ].memberIds.map((m: any, i: number) => {
-              const nickname = this.props.users.find(
-                (u: { id: any }) => u.id === m
-              ).nickname;
+            ].memberIds.map((m: any, i: number) => { 
+              //*************************************************** */
+              let nickname = "";
+              while (nickname === "") {
+                console.log("dfghjklkjhgfghjkl");
+                console.log("NICKNAME: ", nickname);
+                nickname = this.props.users.find(
+                  (u: { id: any }) => u.id === m
+                ).nickname;
+                
+                setTimeout( () => console.log("WAITING"), 500)
+                
+              } 
+              console.log("OUT OF LOOP NICKNAME: ", nickname);
               const photo = this.props.users.find(
                 (u: { id: any }) => u.id === m
               ).photoUrl;
               const facebook = this.props.users.find(
                 (u: { id: any }) => u.id === m
               ).facebook;
+
+
+              
               return (
                 <div>
                   <p
