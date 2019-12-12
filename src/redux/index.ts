@@ -8,6 +8,7 @@ const initialState: any = {
   messageListener: undefined,
   ongoingTrips: [],
   searchTrips: [],
+  pendingTrips: [],
   currentOngoingTripIndex: 0,
   currentSearchTripIndex: 0,
   users: [],
@@ -106,6 +107,8 @@ const reducer = (state: any = initialState, action: Action): any => {
       };
     }
     case "ADD_SEARCH_TRIP": {
+      console.log(state.searchTrip);
+      console.log(action.searchTrip);
       return {
         ...state,
         searchTrips: [...state.searchTrips, action.searchTrip]
@@ -115,6 +118,12 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         ongoingTrips: [...state.ongoingTrips, action.ongoingTrip]
+      };
+    }
+    case "ADD_PENDING_TRIP": {
+      return {
+        ...state,
+        pendingTrips: [...state.pendingTrips, action.pendingTrip]
       };
     }
     case "SET_MESSAGES": {
@@ -212,6 +221,9 @@ const reducer = (state: any = initialState, action: Action): any => {
         ...state,
         requests: [...state.requests, action.request]
       };
+    }
+    case "LOGOUT": {
+      return { ...initialState };
     }
     default: {
       return state;

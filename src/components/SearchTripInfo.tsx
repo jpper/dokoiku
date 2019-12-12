@@ -246,6 +246,12 @@ const mapDispatchToProps = (dispatch: any) => {
           fromId: userId,
           tripId: tripId
         });
+      myFirestore
+        .collection("users")
+        .doc(userId)
+        .collection("pendingTrips")
+        .doc(tripId)
+        .set({ tripId });
       //Refactor this so that it changes the state and is redux compliant (dispatch add trip??)
     }
   };

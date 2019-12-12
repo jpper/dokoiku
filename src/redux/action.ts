@@ -37,3 +37,8 @@ export const addRequest = (request: any) => ({
   type: "ADD_REQUEST",
   request
 });
+
+export const addPendingTrip = (pendingTrip: any) => ({
+  type: "ADD_PENDING_TRIP",
+  pendingTrip
+});
