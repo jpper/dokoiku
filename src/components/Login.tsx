@@ -59,7 +59,6 @@ const mapDispatchToProps = (dispatch: any) => ({
                 );
               });
           } else {
-            // Write user info to local
             dispatch(
               setUserInfo(
                 userResult.displayName,

@@ -14,7 +14,8 @@ const initialState: any = {
   showChat: false,
   showEdit: false,
   currentProfile: 0,
-  mapTripMessage: 0
+  mapTripMessage: 0,
+  requests: []
 };
 
 interface Action {
@@ -206,7 +207,12 @@ const reducer = (state: any = initialState, action: Action): any => {
         mapTripMessage: 0
       };
     }
-
+    case "ADD_REQUEST": {
+      return {
+        ...state,
+        requests: [...state.requests, action.request]
+      };
+    }
     default: {
       return state;
     }

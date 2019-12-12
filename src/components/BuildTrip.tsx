@@ -32,7 +32,6 @@ const mapDispatchToProps = (dispatch: any) => {
         .doc(tripId)
         .set({
           name,
-          notes: "",
           ownerId: userId,
           tripId,
           travelMode: "DRIVING",
@@ -53,7 +52,6 @@ type BuildProps = {
 };
 type BuildState = {
   name: string;
-  notes: string;
   ownerId: string;
   tripId: string;
   travelMode: string;
@@ -71,7 +69,6 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
     super(props);
     this.state = {
       name: "",
-      notes: "",
       ownerId: "",
       tripId: "",
       travelMode: "DRIVING",
@@ -105,7 +102,6 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
   clearState() {
     this.setState({
       name: "",
-      notes: "",
       ownerId: "",
       tripId: "",
       travelMode: "DRIVING",

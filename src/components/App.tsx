@@ -9,9 +9,10 @@ import About from "./About";
 import BuildTrip from "./BuildTrip";
 import EditTrip from "./EditTrip";
 import Login from "./Login";
+import Notification from "./Notification";
 import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
-import { setUserInfo } from "../redux/action";
+import { setUserInfo, addRequest } from "../redux/action";
 
 // Material UI & Styles
 import "../styles/App.css";
@@ -28,7 +29,8 @@ import {
   Menu,
   MenuItem,
   Card,
-  Container
+  Container,
+  Badge
 } from "@material-ui/core";
 import CardTravelIcon from "@material-ui/icons/CardTravel";
 import SearchIcon from "@material-ui/icons/Search";
@@ -54,6 +56,8 @@ type myProps = {
   login: any;
   mapTripMessage: any;
   getTrips: any;
+  getRequests: any;
+  requests: any;
 };
 
 const mapStateToProps = (state: any) => {
@@ -69,7 +73,8 @@ const mapStateToProps = (state: any) => {
     showEdit: state.showEdit,
     currentProfile: state.currentProfile,
     mapTripMessage: state.mapTripMessage,
-    login: state.login
+    login: state.login,
+    requests: state.requests
   };
 };
 
@@ -102,6 +107,20 @@ const mapDispatchToProps = (dispatch: any) => ({
       .get()
       .then(query => query.docs.map(user => user.data()));
     dispatch({ type: "GET_USERS", users });
+  },
+  getRequests: async (userId: string) => {
+    myFirestore
+      .collection("users")
+      .doc(userId)
+      .collection("requests")
+      .onSnapshot(snapShot => {
+        snapShot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            console.log(change.doc.data());
+            dispatch(addRequest(change.doc.data()));
+          }
+        });
+      });
   }
 });
 
@@ -160,6 +179,7 @@ class App extends React.Component<myProps, any> {
       if (user !== null) {
         this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
         this.props.getTrips(user.uid);
+        this.props.getRequests(user.uid);
       }
     });
   };
@@ -222,14 +242,30 @@ class App extends React.Component<myProps, any> {
                 aria-haspopup="true"
                 onClick={this.handleClick}
               >
-                {this.props.userPhoto === "" ? (
-                  <>
-                    <AccountCircleIcon fontSize="large" />
-                  </>
+                {this.props.requests.length ? (
+                  <Badge variant="dot" color="secondary">
+                    {this.props.userPhoto === "" ? (
+                      <>
+                        <AccountCircleIcon fontSize="large" />
+                      </>
+                    ) : (
+                      <>
+                        <Avatar alt="User Photo" src={this.props.userPhoto} />
+                      </>
+                    )}
+                  </Badge>
                 ) : (
-                  <>
-                    <Avatar alt="User Photo" src={this.props.userPhoto} />
-                  </>
+                  <div>
+                    {this.props.userPhoto === "" ? (
+                      <>
+                        <AccountCircleIcon fontSize="large" />
+                      </>
+                    ) : (
+                      <>
+                        <Avatar alt="User Photo" src={this.props.userPhoto} />
+                      </>
+                    )}
+                  </div>
                 )}
               </IconButton>
               <Menu
@@ -259,6 +295,7 @@ class App extends React.Component<myProps, any> {
                     >
                       Profile
                     </MenuItem>
+                    <Notification />
                     {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
                     <MenuItem onClick={this.onLogout}>Logout</MenuItem>
                   </>
