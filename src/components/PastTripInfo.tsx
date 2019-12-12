@@ -229,6 +229,13 @@ class PastTripInfo extends React.Component<any, any> {
                         >
                           <Button
                             variant="contained"
+                            color="default"
+                            onClick={this.handleClose}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            variant="contained"
                             color="primary"
                             onClick={event => {
                               this.saveReviews(event, member);
