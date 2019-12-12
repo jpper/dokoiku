@@ -48,10 +48,35 @@ class PastTripInfo extends React.Component<any, any> {
     });
   }
 
-  onClickUser = (index: number) => {
+  onClickUser = (index: number, member: any) => {
     this.setState({
       targetUser: index
     });
+
+    // TODO: get a previous review if possible
+    this.checkPrevReview(member);
+  };
+
+  checkPrevReview = async (reviewee: any) => {
+    const tripId = this.props.ongoingTrips[
+      this.props.currentOngoingTripIndex
+    ].tripId.trim();
+    const reviewer = this.props.userId;
+    const reviewId = reviewer + "_" + reviewee;
+
+    const result = await myFirestore
+      .collection("trips")
+      .doc(tripId)
+      .collection("reviews")
+      .doc(reviewId)
+      .get();
+
+    if (result.exists) {
+      this.setState({
+        rating: result.data().rating,
+        message: result.data().message
+      });
+    }
   };
 
   handleOpen = (index: number) => {
@@ -185,7 +210,7 @@ class PastTripInfo extends React.Component<any, any> {
 
               return (
                 <div key={i}>
-                  <ListItem button onClick={() => this.onClickUser(i)}>
+                  <ListItem button onClick={() => this.onClickUser(i, member)}>
                     <ListItemIcon>
                       <PersonIcon className="iconSpacer" />
                     </ListItemIcon>
@@ -256,6 +281,7 @@ class PastTripInfo extends React.Component<any, any> {
                             placeholder="Write your review"
                             rows={10}
                             onChange={e => this.SetMessage(e)}
+                            value={this.state.message}
                           />
                         </Box>
                         <Box
