@@ -166,15 +166,15 @@ class OngoingTripInfo extends React.Component<myProps, {}> {
             {this.props.ongoingTrips[
               this.props.currentOngoingTripIndex
             ].memberIds.map((m: any, i: number) => {
-              const nickname = this.props.users.find(
-                (u: { id: any }) => u.id === m
-              ).nickname;
-              const photo = this.props.users.find(
-                (u: { id: any }) => u.id === m
-              ).photoUrl;
-              const facebook = this.props.users.find(
-                (u: { id: any }) => u.id === m
-              ).facebook;
+              const nickname =
+                this.props.users.find((u: { id: any }) => u.id === m)
+                  .nickname || "";
+              const photo =
+                this.props.users.find((u: { id: any }) => u.id === m)
+                  .photoUrl || "";
+              const facebook =
+                this.props.users.find((u: { id: any }) => u.id === m)
+                  .facebook || "";
               return (
                 <div>
                   <p

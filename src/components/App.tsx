@@ -11,7 +11,7 @@ import EditTrip from "./EditTrip";
 import Login from "./Login";
 import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
-import { setUserInfo } from "../redux/action";
+import { setUserInfo, setShowPastTrips, setShowReviews } from "../redux/action";
 
 // Material UI & Styles
 import "../styles/App.css";
@@ -35,8 +35,13 @@ import SearchIcon from "@material-ui/icons/Search";
 import BuildIcon from "@material-ui/icons/Build";
 import InfoIcon from "@material-ui/icons/Info";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+
+// FIXME: This is just for testing Reviews!! */
+import ChatIcon from "@material-ui/icons/Chat";
+
 import backgroundImg from "../img/trip.jpg";
 import moment from "moment";
+import PastTripInfo from "./PastTripInfo";
 
 type myProps = {
   userId: string;
@@ -54,6 +59,9 @@ type myProps = {
   login: any;
   mapTripMessage: any;
   getTrips: any;
+  setShowPastTrips: any;
+  showPastTrips: any;
+  setShowReviews: any;
 };
 
 const mapStateToProps = (state: any) => {
@@ -69,7 +77,9 @@ const mapStateToProps = (state: any) => {
     showEdit: state.showEdit,
     currentProfile: state.currentProfile,
     mapTripMessage: state.mapTripMessage,
-    login: state.login
+    login: state.login,
+    showPastTrips: state.showPastTrips,
+    setShowReviews: state.showReviews
   };
 };
 
@@ -102,6 +112,13 @@ const mapDispatchToProps = (dispatch: any) => ({
       .get()
       .then(query => query.docs.map(user => user.data()));
     dispatch({ type: "GET_USERS", users });
+  },
+  // FIXME: This is just for testing Reviews!!
+  setShowPastTrips: (status: boolean) => {
+    dispatch(setShowPastTrips(status));
+  },
+  setShowReviews: (status: boolean) => {
+    dispatch(setShowReviews(status));
   }
 });
 
@@ -212,7 +229,9 @@ class App extends React.Component<myProps, any> {
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
             <Tab label="Search Trips" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
-            {/* <Tab label="Social" icon={<ChatIcon />} /> */}
+
+            {/* FIXME: This is just for testing Reviews!! */}
+            <Tab label="Social" icon={<ChatIcon />} />
 
             {/* User Icon */}
             <div className="iconWrapper">
@@ -396,10 +415,44 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Social */}
-          {/* <TabPanel value={this.state.value} index={4}>
+          {/* FIXME: This is just for testing Reviews!! */}
+          <TabPanel value={this.state.value} index={4}>
             <p>Social</p>
-            <ChatBoard />
-          </TabPanel> */}
+            <button
+              onClick={() => {
+                this.props.setShowPastTrips(true);
+              }}
+            >
+              Test Reviews
+            </button>
+
+            <button
+              onClick={() => {
+                this.props.setShowReviews(true);
+              }}
+            >
+              Test Reviews
+            </button>
+
+            {this.props.showPastTrips && this.props.ongoingTrips.length && (
+              <Grid container>
+                <Grid item xs={5}>
+                  <Container>
+                    <Card className="tripInfo">
+                      <PastTripInfo />
+                    </Card>
+                  </Container>
+                </Grid>
+                <Grid item xs={7}>
+                  <Map
+                    trips={this.props.ongoingTrips}
+                    currentTripIndex={this.props.currentOngoingTripIndex}
+                  />
+                </Grid>
+              </Grid>
+            )}
+          </TabPanel>
+
           {/* About */}
           {this.state.value === 0 && (
             <div>

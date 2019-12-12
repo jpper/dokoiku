@@ -14,7 +14,9 @@ const initialState: any = {
   showChat: false,
   showEdit: false,
   currentProfile: 0,
-  mapTripMessage: 0
+  mapTripMessage: 0,
+  showPastTrips: false,
+  showReviews: false
 };
 
 interface Action {
@@ -204,6 +206,22 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         mapTripMessage: 0
+      };
+    }
+
+    case "SET_SHOW_PAST_TRIPS": {
+      return {
+        ...state,
+        showPastTrips: action.status,
+        showReviews: false
+      };
+    }
+
+    case "SET_SHOW_REVIEWS": {
+      return {
+        ...state,
+        showPastTrips: false,
+        showReviews: action.status
       };
     }
 

@@ -38,6 +38,16 @@ export const setTrips = (trips: any) => ({
   trips
 });
 
+export const setShowPastTrips = (status: boolean) => ({
+  type: "SET_SHOW_PAST_TRIPS",
+  status
+});
+
+export const setShowReviews = (status: boolean) => ({
+  type: "SET_SHOW_REVIEWS",
+  status
+});
+
 export const postTrip = (
   startDate: Date,
   endDate: Date,
