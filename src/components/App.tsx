@@ -500,7 +500,7 @@ class App extends React.Component<myProps, any> {
 
           {/* Social */}
           {/* FIXME: This is just for testing Reviews!! */}
-          <TabPanel value={this.state.value} index={4}>
+          <TabPanel value={this.state.value} index={5}>
             <p>Social</p>
             <button
               onClick={() => {
