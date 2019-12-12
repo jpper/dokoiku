@@ -14,19 +14,37 @@ type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 class Reviews extends Component<Props, any> {
-  private messagesEnd: any;
-
   constructor(props: Props) {
     super(props);
     this.state = {
-      test: ""
+      reviewInfo: []
     };
+  }
+
+  async componentDidMount() {
+    const result = await myFirestore
+      .collection("trips")
+      .where("memberIds", "array-contains", this.props.userId)
+      .get();
+
+    const tripIds = result.docs.map(res => res.id);
+    tripIds.forEach(async tripId => {
+      const result = await myFirestore
+        .collection("trips")
+        .doc(tripId)
+        .collection("reviews")
+        .get();
+
+      result.forEach(res => {
+        console.log(res.data());
+      });
+    });
   }
 
   render() {
     return (
-      <div className="ChatBoard">
-        <p>ReviewEditor</p>
+      <div className="reviews">
+        <p>Reviews</p>
       </div>
     );
   }

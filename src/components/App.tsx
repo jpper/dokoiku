@@ -38,10 +38,11 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 // FIXME: This is just for testing Reviews!! */
 import ChatIcon from "@material-ui/icons/Chat";
+import PastTripInfo from "./PastTripInfo";
+import Reviews from "./Reviews";
 
 import backgroundImg from "../img/trip.jpg";
 import moment from "moment";
-import PastTripInfo from "./PastTripInfo";
 
 type myProps = {
   userId: string;
@@ -62,6 +63,7 @@ type myProps = {
   setShowPastTrips: any;
   showPastTrips: any;
   setShowReviews: any;
+  showReviews: any;
 };
 
 const mapStateToProps = (state: any) => {
@@ -79,7 +81,7 @@ const mapStateToProps = (state: any) => {
     mapTripMessage: state.mapTripMessage,
     login: state.login,
     showPastTrips: state.showPastTrips,
-    setShowReviews: state.showReviews
+    showReviews: state.showReviews
   };
 };
 
@@ -423,7 +425,7 @@ class App extends React.Component<myProps, any> {
                 this.props.setShowPastTrips(true);
               }}
             >
-              Test Reviews
+              Past Trips
             </button>
 
             <button
@@ -431,7 +433,7 @@ class App extends React.Component<myProps, any> {
                 this.props.setShowReviews(true);
               }}
             >
-              Test Reviews
+              Check Reviews
             </button>
 
             {this.props.showPastTrips && this.props.ongoingTrips.length && (
@@ -449,6 +451,19 @@ class App extends React.Component<myProps, any> {
                     currentTripIndex={this.props.currentOngoingTripIndex}
                   />
                 </Grid>
+              </Grid>
+            )}
+
+            {this.props.showReviews && (
+              <Grid container>
+                <Grid item xs={5}>
+                  <Container>
+                    <Card className="reviews">
+                      <Reviews />
+                    </Card>
+                  </Container>
+                </Grid>
+                <Grid item xs={7}></Grid>
               </Grid>
             )}
           </TabPanel>

@@ -87,8 +87,8 @@ class PastTripInfo extends React.Component<any, any> {
       .collection("reviews")
       .doc(reviewId)
       .set({
-        reviewer,
-        reviewee,
+        reviewer: myFirestore.doc("users/" + reviewer),
+        reviewee: myFirestore.doc("users/" + reviewee),
         rating: this.state.rating,
         message: this.state.message
       });
@@ -161,6 +161,7 @@ class PastTripInfo extends React.Component<any, any> {
                 (u: { id: any }) => u.id === member
               ).nickname;
               return (
+                //   TODO: skips own data here
                 <div key={i}>
                   <ListItem button onClick={() => this.onClickUser(i)}>
                     <ListItemIcon>
