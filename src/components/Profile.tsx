@@ -5,8 +5,9 @@ import { myFirestore } from "../config/firebase";
 import { Button } from "@material-ui/core";
 
 type myProps = {
-  displayProfile: any;
+  displayProfile: string;
   users: any;
+  onChangeDisplayProfile: any;
 };
 
 class Profile extends React.Component<myProps, { user: any }> {
@@ -92,9 +93,14 @@ class Profile extends React.Component<myProps, { user: any }> {
             Reviews
           </Button>
           <br />
-          <Button variant="contained" color="secondary" size="large">
-            Past Trips
-          </Button>
+          <br />
+          <button
+            onClick={() => {
+              this.props.onChangeDisplayProfile(undefined);
+            }}
+          >
+            Close
+          </button>
         </div>
       );
     } else {
@@ -110,4 +116,14 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-export default connect(mapStateToProps)(Profile);
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    onChangeDisplayProfile: (profile: string) =>
+      dispatch({
+        type: "CHANGE_DISPLAY_PROFILE",
+        displayProfile: profile
+      })
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

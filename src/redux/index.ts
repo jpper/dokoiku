@@ -18,7 +18,8 @@ const initialState: any = {
   mapTripMessage: 0,
   showPastTrips: false,
   showReviews: false,
-  requests: []
+  requests: [],
+  displayProfile: undefined
 };
 
 interface Action {
@@ -243,6 +244,12 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
     case "LOGOUT": {
       return { ...initialState };
+    }
+    case "CHANGE_DISPLAY_PROFILE": {
+      return {
+        ...state,
+        displayProfile: action.displayProfile
+      };
     }
     default: {
       return state;

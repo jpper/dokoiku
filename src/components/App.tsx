@@ -12,6 +12,7 @@ import Login from "./Login";
 import Notification from "./Notification";
 import PendingTripInfo from "./PendingTripInfo";
 import MyProfile from "./MyProfile";
+import Profile from "./Profile";
 import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
 import {
@@ -77,6 +78,7 @@ type myProps = {
   getRequests: any;
   requests: any;
   logout: any;
+  displayProfile: string;
 };
 
 const mapStateToProps = (state: any) => {
@@ -95,7 +97,8 @@ const mapStateToProps = (state: any) => {
     login: state.login,
     showPastTrips: state.showPastTrips,
     showReviews: state.showReviews,
-    requests: state.requests
+    requests: state.requests,
+    displayProfile: state.displayProfile
   };
 };
 
@@ -377,7 +380,10 @@ class App extends React.Component<myProps, any> {
                     </Grid>
                     {/* {if statement and changing props value here} */}
                     <Grid item xs={7}>
-                      {!this.props.showChat &&
+                      {this.props.displayProfile ? (
+                        <Profile />
+                      ) : (
+                        !this.props.showChat &&
                         !this.props.showEdit &&
                         this.props.ongoingTrips.length &&
                         this.props.mapTripMessage === 0 && (
@@ -387,7 +393,8 @@ class App extends React.Component<myProps, any> {
                               this.props.currentOngoingTripIndex
                             }
                           />
-                        )}
+                        )
+                      )}
                       {this.props.mapTripMessage === 1 && (
                         <Notes
                           tripId={
