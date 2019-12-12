@@ -27,13 +27,26 @@ import Rating from "@material-ui/lab/Rating";
 import PersonIcon from "@material-ui/icons/Person";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import ChatIcon from "@material-ui/icons/Chat";
 import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/TripInfo.css";
 import "../styles/PastTripInfo.css";
 import Reviews from "./Reviews";
 
-class PastTripInfo extends React.Component<any, any> {
+enum PageStatus {
+  Map,
+  Reviews
+}
+
+interface myStates {
+  modalStatus: any;
+  targetUser: number;
+  rating: number;
+  message: string;
+  isError: boolean;
+  pageStatus: PageStatus;
+}
+
+class PastTripInfo extends React.Component<any, myStates> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -41,7 +54,8 @@ class PastTripInfo extends React.Component<any, any> {
       targetUser: -1,
       rating: 0,
       message: "",
-      isError: false
+      isError: false,
+      pageStatus: PageStatus.Map
     };
   }
 
@@ -146,6 +160,24 @@ class PastTripInfo extends React.Component<any, any> {
     this.handleClose();
   };
 
+  onReviewButton = () => {
+    if (this.state.pageStatus === PageStatus.Map) {
+      this.setState({
+        pageStatus: PageStatus.Reviews
+      });
+    } else if (this.state.pageStatus === PageStatus.Reviews) {
+      this.setState({
+        pageStatus: PageStatus.Map
+      });
+    }
+  };
+
+  clearButtonStatus = () => {
+    this.setState({
+      pageStatus: PageStatus.Map
+    });
+  };
+
   render() {
     return (
       <div className="pastTripInfo">
@@ -190,10 +222,11 @@ class PastTripInfo extends React.Component<any, any> {
                   color="primary"
                   size="medium"
                   fullWidth
-                  onClick={() => this.props.toggleNotes()}
+                  onClick={this.onReviewButton}
                 >
                   <DescriptionIcon className="iconSpacer" />
-                  Reviews for me
+                  {this.state.pageStatus === PageStatus.Map && `Reviews for me`}
+                  {this.state.pageStatus === PageStatus.Reviews && `Map`}
                 </Button>
                 {/* <Button
           variant="outlined"
@@ -352,7 +385,10 @@ class PastTripInfo extends React.Component<any, any> {
                       color="default"
                       size="small"
                       fullWidth
-                      onClick={this.props.onPreviousTrip}
+                      onClick={() => {
+                        this.clearButtonStatus();
+                        this.props.onPreviousTrip();
+                      }}
                     >
                       <ArrowBackIosIcon />
                       Previous
@@ -365,7 +401,10 @@ class PastTripInfo extends React.Component<any, any> {
                       color="default"
                       size="small"
                       fullWidth
-                      onClick={this.props.onNextTrip}
+                      onClick={() => {
+                        this.clearButtonStatus();
+                        this.props.onNextTrip();
+                      }}
                     >
                       Next
                       <ArrowForwardIosIcon />
@@ -378,11 +417,20 @@ class PastTripInfo extends React.Component<any, any> {
 
           {/* Map, Review Result */}
           <Grid item xs={7}>
-            {/* <Map
-              trips={this.props.ongoingTrips}
-              currentTripIndex={this.props.currentOngoingTripIndex}
-            /> */}
-            <Reviews />
+            {this.state.pageStatus === PageStatus.Map && (
+              <Map
+                trips={this.props.ongoingTrips}
+                currentTripIndex={this.props.currentOngoingTripIndex}
+              />
+            )}
+            {this.state.pageStatus === PageStatus.Reviews && (
+              <Reviews
+                tripId={
+                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                    .tripId
+                }
+              />
+            )}
           </Grid>
         </Grid>
       </div>

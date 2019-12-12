@@ -12,11 +12,8 @@ import {
 import { List, ListItem, ListItemText, Divider } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 
-type Props = ReturnType<typeof mapStateToProps> &
-  ReturnType<typeof mapDispatchToProps>;
-
-class Reviews extends Component<Props, any> {
-  constructor(props: Props) {
+class Reviews extends Component<any, any> {
+  constructor(props: any) {
     super(props);
     this.state = {
       reviewInfo: []
@@ -31,25 +28,27 @@ class Reviews extends Component<Props, any> {
       .get();
 
     result.docs.forEach(async res => {
-      const reviewerResult = await res.data().reviewer.get();
-      const reviewerName = reviewerResult.data().nickname;
+      if (this.props.tripId === res.data().tripId.id) {
+        const reviewerResult = await res.data().reviewer.get();
+        const reviewerName = reviewerResult.data().nickname;
 
-      const tripResult = await res.data().tripId.get();
-      const tripName = tripResult.data().name;
+        const tripResult = await res.data().tripId.get();
+        const tripName = tripResult.data().name;
 
-      const reviews = await res.data().message;
-      const rating = await res.data().rating;
-      this.setState({
-        reviewInfo: [
-          ...this.state.reviewInfo,
-          {
-            tripName,
-            reviewer: reviewerName,
-            reviews,
-            rating
-          }
-        ]
-      });
+        const reviews = await res.data().message;
+        const rating = await res.data().rating;
+        this.setState({
+          reviewInfo: [
+            ...this.state.reviewInfo,
+            {
+              tripName,
+              reviewer: reviewerName,
+              reviews,
+              rating
+            }
+          ]
+        });
+      }
     });
     console.log("OK!!");
   }
@@ -57,13 +56,13 @@ class Reviews extends Component<Props, any> {
   render() {
     return (
       <div className="reviews">
-        <p>Reviews</p>
+        {/* <p>Reviews</p> */}
         <List>
           {this.state.reviewInfo.map((review: any, index: any) => {
             return (
               <div key={index}>
-                {/* {index > 0 && <Divider />} */}
-                <Divider />
+                {index > 0 && <Divider />}
+                {/* <Divider /> */}
                 <ListItem>
                   <ListItemText
                     primary={
