@@ -11,9 +11,16 @@ import EditTrip from "./EditTrip";
 import Login from "./Login";
 import Notification from "./Notification";
 import PendingTripInfo from "./PendingTripInfo";
+import MyProfile from "./MyProfile";
 import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
-import { setUserInfo, addRequest, addPendingTrip } from "../redux/action";
+import {
+  setUserInfo,
+  addRequest,
+  addPendingTrip,
+  setShowPastTrips,
+  setShowReviews
+} from "../redux/action";
 
 // Material UI & Styles
 import "../styles/App.css";
@@ -38,6 +45,13 @@ import SearchIcon from "@material-ui/icons/Search";
 import BuildIcon from "@material-ui/icons/Build";
 import InfoIcon from "@material-ui/icons/Info";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+
+// FIXME: This is just for testing Reviews!! */
+import ChatIcon from "@material-ui/icons/Chat";
+import PastTripInfo from "./PastTripInfo";
+import Reviews from "./Reviews";
+
+import PersonIcon from "@material-ui/icons/Person";
 import backgroundImg from "../img/trip.jpg";
 import moment from "moment";
 
@@ -57,6 +71,10 @@ type myProps = {
   login: any;
   mapTripMessage: any;
   getTrips: any;
+  setShowPastTrips: any;
+  showPastTrips: any;
+  setShowReviews: any;
+  showReviews: any;
   getRequests: any;
   requests: any;
   logout: any;
@@ -76,6 +94,8 @@ const mapStateToProps = (state: any) => {
     currentProfile: state.currentProfile,
     mapTripMessage: state.mapTripMessage,
     login: state.login,
+    showPastTrips: state.showPastTrips,
+    showReviews: state.showReviews,
     requests: state.requests
   };
 };
@@ -130,6 +150,13 @@ const mapDispatchToProps = (dispatch: any) => ({
       .then(query => query.docs.map(user => user.data()));
     dispatch({ type: "GET_USERS", users });
   },
+  // FIXME: This is just for testing Reviews!!
+  setShowPastTrips: (status: boolean) => {
+    dispatch(setShowPastTrips(status));
+  },
+  setShowReviews: (status: boolean) => {
+    dispatch(setShowReviews(status));
+  },
   getRequests: async (userId: string) => {
     myFirestore
       .collection("users")
@@ -181,7 +208,7 @@ class App extends React.Component<myProps, any> {
   constructor(props: myProps) {
     super(props);
     this.state = {
-      value: 0
+      value: 1
     };
   }
 
@@ -253,10 +280,13 @@ class App extends React.Component<myProps, any> {
             aria-label="scrollable force tabs example"
           >
             <Tab label="About" icon={<InfoIcon />} />
+            <Tab label="Profile" icon={<PersonIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
             <Tab label="Search Trips" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
-            {/* <Tab label="Social" icon={<ChatIcon />} /> */}
+
+            {/* FIXME: This is just for testing Reviews!! */}
+            <Tab label="Social" icon={<ChatIcon />} />
 
             {/* User Icon */}
             <div className="iconWrapper">
@@ -329,8 +359,19 @@ class App extends React.Component<myProps, any> {
             </div>
           </Tabs>
 
-          {/* Ongoing Trips */}
+          {/* My Profile */}
           <TabPanel value={this.state.value} index={1}>
+            {this.props.userId === "" ? (
+              <Login />
+            ) : (
+              <>
+                <MyProfile />
+              </>
+            )}
+          </TabPanel>
+
+          {/* Ongoing Trips */}
+          <TabPanel value={this.state.value} index={2}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -418,7 +459,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Search Trip */}
-          <TabPanel value={this.state.value} index={2}>
+          <TabPanel value={this.state.value} index={3}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -447,7 +488,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Build Trip */}
-          <TabPanel value={this.state.value} index={3}>
+          <TabPanel value={this.state.value} index={4}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -458,10 +499,57 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Social */}
-          {/* <TabPanel value={this.state.value} index={4}>
+          {/* FIXME: This is just for testing Reviews!! */}
+          <TabPanel value={this.state.value} index={5}>
             <p>Social</p>
-            <ChatBoard />
-          </TabPanel> */}
+            <button
+              onClick={() => {
+                this.props.setShowPastTrips(true);
+              }}
+            >
+              Past Trips
+            </button>
+
+            <button
+              onClick={() => {
+                this.props.setShowReviews(true);
+              }}
+            >
+              Check Reviews
+            </button>
+
+            {this.props.showPastTrips && this.props.ongoingTrips.length && (
+              <Grid container>
+                <Grid item xs={5}>
+                  <Container>
+                    <Card className="tripInfo">
+                      <PastTripInfo />
+                    </Card>
+                  </Container>
+                </Grid>
+                <Grid item xs={7}>
+                  <Map
+                    trips={this.props.ongoingTrips}
+                    currentTripIndex={this.props.currentOngoingTripIndex}
+                  />
+                </Grid>
+              </Grid>
+            )}
+
+            {this.props.showReviews && (
+              <Grid container>
+                <Grid item xs={5}>
+                  <Container>
+                    <Card className="reviews">
+                      <Reviews />
+                    </Card>
+                  </Container>
+                </Grid>
+                <Grid item xs={7}></Grid>
+              </Grid>
+            )}
+          </TabPanel>
+
           {/* About */}
           {this.state.value === 0 && (
             <div>

@@ -38,6 +38,16 @@ export const addRequest = (request: any) => ({
   request
 });
 
+export const setShowPastTrips = (status: boolean) => ({
+  type: "SET_SHOW_PAST_TRIPS",
+  status
+});
+
+export const setShowReviews = (status: boolean) => ({
+  type: "SET_SHOW_REVIEWS",
+  status
+});
+
 export const addPendingTrip = (pendingTrip: any) => ({
   type: "ADD_PENDING_TRIP",
   pendingTrip

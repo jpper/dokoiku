@@ -16,6 +16,8 @@ const initialState: any = {
   showEdit: false,
   currentProfile: 0,
   mapTripMessage: 0,
+  showPastTrips: false,
+  showReviews: false,
   requests: []
 };
 
@@ -216,6 +218,23 @@ const reducer = (state: any = initialState, action: Action): any => {
         mapTripMessage: 0
       };
     }
+
+    case "SET_SHOW_PAST_TRIPS": {
+      return {
+        ...state,
+        showPastTrips: action.status,
+        showReviews: false
+      };
+    }
+
+    case "SET_SHOW_REVIEWS": {
+      return {
+        ...state,
+        showPastTrips: false,
+        showReviews: action.status
+      };
+    }
+
     case "ADD_REQUEST": {
       return {
         ...state,

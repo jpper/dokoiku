@@ -1,6 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button } from "@material-ui/core";
+import {
+  Button,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Dialog
+} from "@material-ui/core";
 import moment from "moment";
 import { myFirestore } from "../config/firebase";
 
@@ -42,7 +49,17 @@ type myProps = {
   mapTripMessage: any;
 };
 
-class OngoingTripInfo extends React.Component<myProps, {}> {
+type myState = {
+  toggleDialog: boolean;
+};
+
+class OngoingTripInfo extends React.Component<myProps, myState> {
+  constructor(props: myProps) {
+    super(props);
+    this.state = {
+      toggleDialog: false
+    };
+  }
   async deleteTrip(
     tripId: string,
     userId: string,
@@ -65,248 +82,291 @@ class OngoingTripInfo extends React.Component<myProps, {}> {
     }
     window.location.reload();
   }
-
+  handleToggle = () => {
+    this.setState({
+      toggleDialog: !this.state.toggleDialog
+    });
+  };
   render() {
-    return (
-      <div className="TripInfo">
-        {/* Title */}
-        <Typography variant="h3" className="typoH3">
-          <b>
-            {this.props.ongoingTrips[this.props.currentOngoingTripIndex].name}
-          </b>
-        </Typography>
+    if (this.props.users.length) {
+      return (
+        <div className="TripInfo">
+          {/* Title */}
+          <Typography variant="h3" className="typoH3">
+            <b>
+              {this.props.ongoingTrips[this.props.currentOngoingTripIndex].name}
+            </b>
+          </Typography>
+          {/* Start Date */}
+          <Typography className="iconWrapper">
+            <DateRangeIcon />
+            Start Date:{" "}
+            {moment(
+              this.props.ongoingTrips[
+                this.props.currentOngoingTripIndex
+              ].startDate.toDate()
+            ).format("MMMM Do YYYY")}
+          </Typography>
 
-        {/* Start Date */}
-        <Typography className="iconWrapper">
-          <DateRangeIcon />
-          Start Date:{" "}
-          {moment(
-            this.props.ongoingTrips[
-              this.props.currentOngoingTripIndex
-            ].startDate.toDate()
-          ).format("MMMM Do YYYY")}
-        </Typography>
+          {/* End Date */}
+          <Typography className="iconWrapper">
+            <DateRangeIcon />
+            End Date:{" "}
+            {moment(
+              this.props.ongoingTrips[
+                this.props.currentOngoingTripIndex
+              ].endDate.toDate()
+            ).format("MMMM Do YYYY")}
+          </Typography>
 
-        {/* End Date */}
-        <Typography className="iconWrapper">
-          <DateRangeIcon />
-          End Date:{" "}
-          {moment(
-            this.props.ongoingTrips[
-              this.props.currentOngoingTripIndex
-            ].endDate.toDate()
-          ).format("MMMM Do YYYY")}
-        </Typography>
+          {/* Starting Location */}
+          <Typography className="iconWrapper">
+            <DoubleArrowIcon />
+            Starting Location:
+            {` ${
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .startLocation
+            }`}
+          </Typography>
 
-        {/* Starting Location */}
-        <Typography className="iconWrapper">
-          <DoubleArrowIcon />
-          Starting Location:
-          {` ${
-            this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-              .startLocation
-          }`}
-        </Typography>
-
-        {/* WayPoints */}
-        <div>
-          <List>
-            <Typography variant="h5">Waypoints:</Typography>
-            {this.props.ongoingTrips[
-              this.props.currentOngoingTripIndex
-            ].waypoints.map((l: any, i: number) => {
-              return (
-                <ListItem key={i} className="tripLocation">
-                  <ListItemIcon>
-                    <LocationOnIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={l.location} />
-                </ListItem>
-              );
-            })}
-          </List>
-        </div>
-
-        {/* Budget */}
-        <Typography className="iconWrapper">
-          <MonetizationOnIcon />
-          Budget:{" "}
-          {this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget}
-        </Typography>
-
-        <div className="spacer10"></div>
-
-        {/* Notes & Messages */}
-        <Button
-          variant="outlined"
-          color="primary"
-          size="medium"
-          fullWidth
-          onClick={() => this.props.toggleNotes()}
-        >
-          <DescriptionIcon className="iconSpacer" />
-          Notes
-        </Button>
-        <br></br>
-        <Button
-          variant="outlined"
-          color="primary"
-          size="medium"
-          fullWidth
-          onClick={() => this.props.toggleMessages()}
-        >
-          <ChatIcon className="iconSpacer" />
-          Messages
-        </Button>
-
-        <div className="spacer10"></div>
-
-        <div>
-          <Typography variant="h5">Owned by:</Typography>
+          {/* WayPoints */}
           <div>
-            {
-              this.props.users.find(
-                (user: any) =>
-                  user.id ===
-                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .ownerId
-              ).nickname
-            }
+            <List>
+              <Typography variant="h5">Waypoints:</Typography>
+              {this.props.ongoingTrips[
+                this.props.currentOngoingTripIndex
+              ].waypoints.map((l: any, i: number) => {
+                return (
+                  <ListItem key={i} className="tripLocation">
+                    <ListItemIcon>
+                      <LocationOnIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={l.location} />
+                  </ListItem>
+                );
+              })}
+            </List>
           </div>
-        </div>
 
-        {/* Members */}
-        <div>
-          <Typography variant="h5">Members:</Typography>
+          {/* Budget */}
+          <Typography className="iconWrapper">
+            <MonetizationOnIcon />
+            Budget:{" "}
+            {this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget}
+          </Typography>
 
-          <div className="memberContainer">
-            {this.props.ongoingTrips[
-              this.props.currentOngoingTripIndex
-            ].memberIds.map((m: any, i: number) => {
-              const nickname = this.props.users.find(
-                (u: { id: any }) => u.id === m
-              ).nickname;
-              const photo = this.props.users.find(
-                (u: { id: any }) => u.id === m
-              ).photoUrl;
-              const facebook = this.props.users.find(
-                (u: { id: any }) => u.id === m
-              ).facebook;
-              return (
-                <div>
-                  <p
-                    key={i}
-                    onClick={() => {
-                      const modal = document.getElementById(i.toString());
-                      modal.style.display = "block";
-                    }}
-                  >
-                    <PersonIcon className="iconSpacer" />
-                    {nickname}
-                  </p>
-                  <div className="modal" id={i.toString()}>
-                    <div className="modal-content">
-                      <img src={photo} alt={nickname} />
-                      <p>{nickname}</p>
-                      {facebook ? (
-                        <a href={facebook}>
-                          <img
-                            src="https://www.facebook.com/images/fb_icon_325x325.png"
-                            alt="Facebook"
-                            id="fb-icon"
-                          />
-                        </a>
-                      ) : null}
-                      <br></br>
-                      <button
-                        className="close"
-                        onClick={() => {
-                          const modal = document.getElementById(i.toString());
-                          modal.style.display = "none";
-                        }}
-                      >
-                        Close
-                      </button>
+          <div className="spacer10"></div>
+
+          {/* Notes & Messages */}
+          <Button
+            variant="outlined"
+            color="primary"
+            size="medium"
+            fullWidth
+            onClick={() => this.props.toggleNotes()}
+          >
+            <DescriptionIcon className="iconSpacer" />
+            Notes
+          </Button>
+          <br></br>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="medium"
+            fullWidth
+            onClick={() => this.props.toggleMessages()}
+          >
+            <ChatIcon className="iconSpacer" />
+            Messages
+          </Button>
+
+          <div className="spacer10"></div>
+
+          <div>
+            <Typography variant="h5">Owned by:</Typography>
+            <div>
+              {
+                this.props.users.find(
+                  (user: any) =>
+                    user.id ===
+                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .ownerId
+                ).nickname
+              }
+            </div>
+          </div>
+
+          {/* Members */}
+          <div>
+            <Typography variant="h5">Members:</Typography>
+
+            <div className="memberContainer">
+              {this.props.ongoingTrips[
+                this.props.currentOngoingTripIndex
+              ].memberIds.map((m: any, i: number) => {
+                const nickname = this.props.users.find(
+                  (u: { id: any }) => u.id === m
+                ).nickname;
+                const photo = this.props.users.find(
+                  (u: { id: any }) => u.id === m
+                ).photoUrl;
+                const facebook = this.props.users.find(
+                  (u: { id: any }) => u.id === m
+                ).facebook;
+                return (
+                  <div>
+                    <p
+                      key={i}
+                      onClick={() => {
+                        const modal = document.getElementById(i.toString());
+                        modal.style.display = "block";
+                      }}
+                    >
+                      <PersonIcon className="iconSpacer" />
+                      {nickname}
+                    </p>
+                    <div className="modal" id={i.toString()}>
+                      <div className="modal-content">
+                        <img src={photo} alt={nickname} />
+                        <p>{nickname}</p>
+                        {facebook ? (
+                          <a href={facebook}>
+                            <img
+                              src="https://www.facebook.com/images/fb_icon_325x325.png"
+                              alt="Facebook"
+                              id="fb-icon"
+                            />
+                          </a>
+                        ) : null}
+                        <br></br>
+                        <button
+                          className="close"
+                          onClick={() => {
+                            const modal = document.getElementById(i.toString());
+                            modal.style.display = "none";
+                          }}
+                        >
+                          Close
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
+
+          {/* Update & Delete button */}
+          <Grid container>
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                onClick={this.props.onShowEdit}
+                variant="contained"
+                color="primary"
+                size="large"
+              >
+                <UpdateIcon />
+                UPDATE
+              </Button>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                onClick={this.handleToggle}
+                variant="contained"
+                color="secondary"
+                size="large"
+              >
+                <DeleteForeverIcon />
+                {this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .ownerId === this.props.userId
+                  ? "DELETE"
+                  : "LEAVE"}
+              </Button>
+              <Dialog
+                open={this.state.toggleDialog}
+                onClose={this.handleToggle}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">Confirm</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to{" "}
+                    {this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .ownerId === this.props.userId
+                      ? "delete"
+                      : "leave"}{" "}
+                    this trip?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleToggle} color="primary">
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      this.deleteTrip(
+                        this.props.ongoingTrips[
+                          this.props.currentOngoingTripIndex
+                        ].tripId,
+                        this.props.userId,
+                        this.props.ongoingTrips[
+                          this.props.currentOngoingTripIndex
+                        ].memberIds,
+                        this.props.ongoingTrips[
+                          this.props.currentOngoingTripIndex
+                        ].ownerId
+                      )
+                    }
+                    color="primary"
+                    autoFocus
+                  >
+                    {this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .ownerId === this.props.userId
+                      ? "Delete"
+                      : "Leave"}
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </Grid>
+
+            {/* Previous & Next Button */}
+            <Grid container>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  size="small"
+                  fullWidth
+                  onClick={this.props.onPreviousTrip}
+                >
+                  <ArrowBackIosIcon />
+                  Previous
+                </Button>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  size="small"
+                  fullWidth
+                  onClick={this.props.onNextTrip}
+                >
+                  Next
+                  <ArrowForwardIosIcon />
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
         </div>
-
-        {/* Update & Delete button */}
-        <Grid container>
-          <Grid item xs={6}>
-            <Button
-              fullWidth
-              onClick={this.props.onShowEdit}
-              variant="contained"
-              color="primary"
-              size="large"
-            >
-              <UpdateIcon />
-              UPDATE
-            </Button>
-          </Grid>
-
-          <Grid item xs={6}>
-            <Button
-              fullWidth
-              onClick={() =>
-                this.deleteTrip(
-                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .tripId,
-                  this.props.userId,
-                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .memberIds,
-                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .ownerId
-                )
-              }
-              variant="contained"
-              color="secondary"
-              size="large"
-            >
-              <DeleteForeverIcon />
-              {this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .ownerId === this.props.userId
-                ? "DELETE"
-                : "LEAVE"}
-            </Button>
-          </Grid>
-        </Grid>
-
-        {/* Previous & Next Button */}
-        <Grid container>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="default"
-              size="small"
-              fullWidth
-              onClick={this.props.onPreviousTrip}
-            >
-              <ArrowBackIosIcon />
-              Previous
-            </Button>
-          </Grid>
-
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="default"
-              size="small"
-              fullWidth
-              onClick={this.props.onNextTrip}
-            >
-              Next
-              <ArrowForwardIosIcon />
-            </Button>
-          </Grid>
-        </Grid>
-      </div>
-    );
+      );
+    } else {
+      return "Loading...";
+    }
   }
 }
 const mapStateToProps = (state: any) => {
