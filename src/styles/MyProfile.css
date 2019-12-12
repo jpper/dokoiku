@@ -1,0 +1,21 @@
+.MyProfile {
+  width: 40%;
+  text-align: center;
+}
+
+#no-social-icon {
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  filter: grayscale(100%);
+  width: 30%;
+}
+
+#social-icon {
+  width: 30%;
+}
+
+#profile-picture {
+  width: 90%;
+}

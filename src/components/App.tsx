@@ -11,6 +11,7 @@ import EditTrip from "./EditTrip";
 import Login from "./Login";
 import Notification from "./Notification";
 import PendingTripInfo from "./PendingTripInfo";
+import MyProfile from "./MyProfile";
 import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
 import {
@@ -50,6 +51,7 @@ import ChatIcon from "@material-ui/icons/Chat";
 import PastTripInfo from "./PastTripInfo";
 import Reviews from "./Reviews";
 
+import PersonIcon from "@material-ui/icons/Person";
 import backgroundImg from "../img/trip.jpg";
 import moment from "moment";
 
@@ -206,7 +208,7 @@ class App extends React.Component<myProps, any> {
   constructor(props: myProps) {
     super(props);
     this.state = {
-      value: 0
+      value: 1
     };
   }
 
@@ -278,6 +280,7 @@ class App extends React.Component<myProps, any> {
             aria-label="scrollable force tabs example"
           >
             <Tab label="About" icon={<InfoIcon />} />
+            <Tab label="Profile" icon={<PersonIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
             <Tab label="Search Trips" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
@@ -356,8 +359,19 @@ class App extends React.Component<myProps, any> {
             </div>
           </Tabs>
 
-          {/* Ongoing Trips */}
+          {/* My Profile */}
           <TabPanel value={this.state.value} index={1}>
+            {this.props.userId === "" ? (
+              <Login />
+            ) : (
+              <>
+                <MyProfile />
+              </>
+            )}
+          </TabPanel>
+
+          {/* Ongoing Trips */}
+          <TabPanel value={this.state.value} index={2}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -445,7 +459,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Search Trip */}
-          <TabPanel value={this.state.value} index={2}>
+          <TabPanel value={this.state.value} index={3}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -474,7 +488,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Build Trip */}
-          <TabPanel value={this.state.value} index={3}>
+          <TabPanel value={this.state.value} index={4}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
