@@ -12,6 +12,7 @@ import Login from "./Login";
 import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
 import { setUserInfo } from "../redux/action";
+import MyProfile from "./MyProfile";
 
 // Material UI & Styles
 import "../styles/App.css";
