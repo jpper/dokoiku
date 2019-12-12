@@ -9,9 +9,11 @@ import About from "./About";
 import BuildTrip from "./BuildTrip";
 import EditTrip from "./EditTrip";
 import Login from "./Login";
+import Notification from "./Notification";
+import PendingTripInfo from "./PendingTripInfo";
 import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
-import { setUserInfo } from "../redux/action";
+import { setUserInfo, addRequest, addPendingTrip } from "../redux/action";
 
 // Material UI & Styles
 import "../styles/App.css";
@@ -28,7 +30,8 @@ import {
   Menu,
   MenuItem,
   Card,
-  Container
+  Container,
+  Badge
 } from "@material-ui/core";
 import CardTravelIcon from "@material-ui/icons/CardTravel";
 import SearchIcon from "@material-ui/icons/Search";
@@ -54,6 +57,9 @@ type myProps = {
   login: any;
   mapTripMessage: any;
   getTrips: any;
+  getRequests: any;
+  requests: any;
+  logout: any;
 };
 
 const mapStateToProps = (state: any) => {
@@ -69,7 +75,8 @@ const mapStateToProps = (state: any) => {
     showEdit: state.showEdit,
     currentProfile: state.currentProfile,
     mapTripMessage: state.mapTripMessage,
-    login: state.login
+    login: state.login,
+    requests: state.requests
   };
 };
 
@@ -78,15 +85,35 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(setUserInfo(userName, userId, userPhoto)),
   getTrips: async (userId: string) => {
     //console.log("called");
+    const tripIds: any[] = [];
+    myFirestore
+      .collection("users")
+      .doc(userId)
+      .collection("pendingTrips")
+      .onSnapshot(snapShot => {
+        snapShot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            tripIds.push(change.doc.data().tripId);
+            console.log(tripIds);
+          }
+        });
+      });
+
     myFirestore.collection("trips").onSnapshot(snapShot => {
       snapShot.docChanges().forEach(change => {
         if (change.type === "added") {
+          console.log(change.doc.data().tripId);
           if (change.doc.data().memberIds.indexOf(userId) === -1) {
-            console.log("dispatching ADD_SEARCH_TRIP");
-            dispatch({
-              type: "ADD_SEARCH_TRIP",
-              searchTrip: change.doc.data()
-            });
+            if (tripIds.includes(change.doc.data().tripId)) {
+              console.log("dispatching ADD_PENDING_TRIP");
+              dispatch(addPendingTrip(change.doc.data()));
+            } else {
+              console.log("dispatching ADD_SEARCH_TRIP");
+              dispatch({
+                type: "ADD_SEARCH_TRIP",
+                searchTrip: change.doc.data()
+              });
+            }
           } else {
             console.log("dispatching ADD_ONGOING_TRIP");
             dispatch({
@@ -102,7 +129,22 @@ const mapDispatchToProps = (dispatch: any) => ({
       .get()
       .then(query => query.docs.map(user => user.data()));
     dispatch({ type: "GET_USERS", users });
-  }
+  },
+  getRequests: async (userId: string) => {
+    myFirestore
+      .collection("users")
+      .doc(userId)
+      .collection("requests")
+      .onSnapshot(snapShot => {
+        snapShot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            console.log(change.doc.data());
+            dispatch(addRequest(change.doc.data()));
+          }
+        });
+      });
+  },
+  logout: () => dispatch({ type: "LOGOUT" })
 });
 
 interface TabPanelProps {
@@ -160,6 +202,7 @@ class App extends React.Component<myProps, any> {
       if (user !== null) {
         this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
         this.props.getTrips(user.uid);
+        this.props.getRequests(user.uid);
       }
     });
   };
@@ -195,6 +238,7 @@ class App extends React.Component<myProps, any> {
     this.handleClose();
     this.props.setUserInfo("", "", "");
     firebase.auth().signOut();
+    this.props.logout();
     console.log("LOGOUT!!!");
   };
 
@@ -222,14 +266,30 @@ class App extends React.Component<myProps, any> {
                 aria-haspopup="true"
                 onClick={this.handleClick}
               >
-                {this.props.userPhoto === "" ? (
-                  <>
-                    <AccountCircleIcon fontSize="large" />
-                  </>
+                {this.props.requests.length ? (
+                  <Badge variant="dot" color="secondary">
+                    {this.props.userPhoto === "" ? (
+                      <>
+                        <AccountCircleIcon fontSize="large" />
+                      </>
+                    ) : (
+                      <>
+                        <Avatar alt="User Photo" src={this.props.userPhoto} />
+                      </>
+                    )}
+                  </Badge>
                 ) : (
-                  <>
-                    <Avatar alt="User Photo" src={this.props.userPhoto} />
-                  </>
+                  <div>
+                    {this.props.userPhoto === "" ? (
+                      <>
+                        <AccountCircleIcon fontSize="large" />
+                      </>
+                    ) : (
+                      <>
+                        <Avatar alt="User Photo" src={this.props.userPhoto} />
+                      </>
+                    )}
+                  </div>
                 )}
               </IconButton>
               <Menu
@@ -259,6 +319,8 @@ class App extends React.Component<myProps, any> {
                     >
                       Profile
                     </MenuItem>
+                    <Notification />
+                    <PendingTripInfo />
                     {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
                     <MenuItem onClick={this.onLogout}>Logout</MenuItem>
                   </>

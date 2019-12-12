@@ -59,7 +59,6 @@ const mapDispatchToProps = (dispatch: any) => ({
                 );
               });
           } else {
-            // Write user info to local
             dispatch(
               setUserInfo(
                 userResult.displayName,
@@ -103,7 +102,8 @@ const mapDispatchToProps = (dispatch: any) => ({
       .get()
       .then(query => query.docs.map(user => user.data()));
     dispatch({ type: "GET_USERS", users });
-  }
+  },
+  logout: () => dispatch({ type: "LOGOUT" })
 });
 
 interface Status {
@@ -152,6 +152,7 @@ class Login extends Component<Props, Status> {
 
   onlogoutPress = () => {
     this.props.setUserInfo("", "", "");
+    this.props.logout();
     firebase.auth().signOut();
   };
 

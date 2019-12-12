@@ -33,24 +33,12 @@ export const setMessageListener = (listener: any) => ({
   listener
 });
 
-export const setTrips = (trips: any) => ({
-  type: "SET_TRIPS",
-  trips
+export const addRequest = (request: any) => ({
+  type: "ADD_REQUEST",
+  request
 });
 
-export const postTrip = (
-  startDate: Date,
-  endDate: Date,
-  startLocation: string,
-  waypoints: any,
-  budget: number,
-  memberIds: any
-) => ({
-  type: "POST_TRIP",
-  startDate,
-  endDate,
-  startLocation,
-  waypoints,
-  budget,
-  memberIds
+export const addPendingTrip = (pendingTrip: any) => ({
+  type: "ADD_PENDING_TRIP",
+  pendingTrip
 });
