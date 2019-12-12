@@ -42,3 +42,9 @@ export const addPendingTrip = (pendingTrip: any) => ({
   type: "ADD_PENDING_TRIP",
   pendingTrip
 });
+
+export const removeRequest = (tripId: string, fromId: string) => ({
+  type: "REMOVE_REQUEST",
+  tripId,
+  fromId
+});

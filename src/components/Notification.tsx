@@ -8,6 +8,7 @@ import {
   Typography
 } from "@material-ui/core";
 import { myFirestore } from "../config/firebase";
+import { removeRequest } from "../redux/action";
 import firebase from "firebase";
 
 type myProps = {
@@ -15,6 +16,7 @@ type myProps = {
   users: any;
   ongoingTrips: any;
   userId: string;
+  removeRequest: any;
 };
 
 const mapStateToProps = (state: any) => {
@@ -25,14 +27,27 @@ const mapStateToProps = (state: any) => {
     userId: state.userId
   };
 };
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    removeRequest: (tripId: string, fromId: string) =>
+      dispatch(removeRequest(tripId, fromId))
+  };
+};
 
 class Notification extends React.Component<myProps, any> {
   acceptRequest = (ownerId: string, tripId: string, fromId: string) => {
+    this.props.removeRequest(tripId, fromId);
     myFirestore
       .collection("users")
       .doc(ownerId)
       .collection("requests")
       .doc(fromId + tripId)
+      .delete();
+    myFirestore
+      .collection("users")
+      .doc(fromId)
+      .collection("pendingTrips")
+      .doc(tripId)
       .delete();
     myFirestore
       .collection("trips")
@@ -42,15 +57,23 @@ class Notification extends React.Component<myProps, any> {
       });
   };
   rejectRequest = (ownerId: string, tripId: string, fromId: string) => {
+    this.props.removeRequest(tripId, fromId);
     myFirestore
       .collection("users")
       .doc(ownerId)
       .collection("requests")
       .doc(fromId + tripId)
       .delete();
+    myFirestore
+      .collection("users")
+      .doc(fromId)
+      .collection("pendingTrips")
+      .doc(tripId)
+      .delete();
   };
+
   render() {
-    console.log(this.props.ongoingTrips);
+    console.log(this.props.requests);
     return (
       <div>
         <Card>
@@ -78,13 +101,13 @@ class Notification extends React.Component<myProps, any> {
                     variant="contained"
                     color="primary"
                     size="small"
-                    onClick={() =>
+                    onClick={e => {
                       this.acceptRequest(
                         this.props.userId,
                         request.tripId,
                         request.fromId
-                      )
-                    }
+                      );
+                    }}
                   >
                     Accept
                   </Button>
@@ -93,13 +116,13 @@ class Notification extends React.Component<myProps, any> {
                     variant="contained"
                     color="secondary"
                     size="small"
-                    onClick={() =>
+                    onClick={e => {
                       this.rejectRequest(
                         this.props.userId,
                         request.tripId,
                         request.fromId
-                      )
-                    }
+                      );
+                    }}
                   >
                     Reject
                   </Button>
@@ -115,4 +138,4 @@ class Notification extends React.Component<myProps, any> {
   }
 }
 
-export default connect(mapStateToProps)(Notification);
+export default connect(mapStateToProps, mapDispatchToProps)(Notification);

@@ -71,7 +71,9 @@ class OngoingTripInfo extends React.Component<myProps, {}> {
       <div className="TripInfo">
         {/* Title */}
         <Typography variant="h3" className="typoH3">
-          <b>Trip Details</b>
+          <b>
+            {this.props.ongoingTrips[this.props.currentOngoingTripIndex].name}
+          </b>
         </Typography>
 
         {/* Start Date */}
@@ -159,9 +161,24 @@ class OngoingTripInfo extends React.Component<myProps, {}> {
 
         <div className="spacer10"></div>
 
+        <div>
+          <Typography variant="h5">Owned by:</Typography>
+          <div>
+            {
+              this.props.users.find(
+                (user: any) =>
+                  user.id ===
+                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                    .ownerId
+              ).nickname
+            }
+          </div>
+        </div>
+
         {/* Members */}
         <div>
           <Typography variant="h5">Members:</Typography>
+
           <div className="memberContainer">
             {this.props.ongoingTrips[
               this.props.currentOngoingTripIndex
@@ -252,7 +269,10 @@ class OngoingTripInfo extends React.Component<myProps, {}> {
               size="large"
             >
               <DeleteForeverIcon />
-              DELETE
+              {this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .ownerId === this.props.userId
+                ? "DELETE"
+                : "LEAVE"}
             </Button>
           </Grid>
         </Grid>
