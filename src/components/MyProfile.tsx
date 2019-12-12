@@ -17,6 +17,16 @@ class MyProfile extends React.Component<myProps, { user: any }> {
     };
   }
 
+  componentDidMount() {
+    if (this.state.user === undefined && this.props.users.length) {
+      this.setState({
+        user: this.props.users.find(
+          (u: { id: any }) => u.id === this.props.userId
+        )
+      });
+    }
+  }
+
   componentDidUpdate() {
     if (this.state.user === undefined && this.props.users.length) {
       this.setState({
