@@ -1,8 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import moment from "moment";
+import { firestore } from "firebase";
 import { myFirestore } from "../config/firebase";
 import BasicTripInfo from "./BasicTripInfo";
+import Map from "./Map";
 
 // Material UI
 import {
@@ -17,7 +19,9 @@ import {
   Backdrop,
   Button,
   TextareaAutosize,
-  Box
+  Box,
+  Container,
+  Card
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import PersonIcon from "@material-ui/icons/Person";
@@ -27,6 +31,7 @@ import ChatIcon from "@material-ui/icons/Chat";
 import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/TripInfo.css";
 import "../styles/PastTripInfo.css";
+import Reviews from "./Reviews";
 
 class PastTripInfo extends React.Component<any, any> {
   constructor(props: any) {
@@ -53,7 +58,7 @@ class PastTripInfo extends React.Component<any, any> {
       targetUser: index
     });
 
-    // TODO: get a previous review if possible
+    // get a previous review if possible
     this.checkPrevReview(member);
   };
 
@@ -62,11 +67,11 @@ class PastTripInfo extends React.Component<any, any> {
       this.props.currentOngoingTripIndex
     ].tripId.trim();
     const reviewer = this.props.userId;
-    const reviewId = reviewer + "_" + reviewee;
+    const reviewId = tripId + "_" + reviewer + "_" + reviewee;
 
     const result = await myFirestore
-      .collection("trips")
-      .doc(tripId)
+      .collection("users")
+      .doc(reviewee)
       .collection("reviews")
       .doc(reviewId)
       .get();
@@ -105,19 +110,21 @@ class PastTripInfo extends React.Component<any, any> {
       this.props.currentOngoingTripIndex
     ].tripId.trim();
     const reviewer = this.props.userId;
-    const reviewId = reviewer + "_" + reviewee;
+    const reviewId = tripId + "_" + reviewer + "_" + reviewee;
+    const postDate = firestore.Timestamp.fromDate(new Date());
     console.log(reviewee);
 
     myFirestore
-      .collection("trips")
-      .doc(tripId)
+      .collection("users")
+      .doc(reviewee)
       .collection("reviews")
       .doc(reviewId)
       .set({
+        tripId: myFirestore.doc("trips/" + tripId),
         reviewer: myFirestore.doc("users/" + reviewer),
-        reviewee: myFirestore.doc("users/" + reviewee),
         rating: this.state.rating,
-        message: this.state.message
+        message: this.state.message,
+        date: postDate
       });
   };
 
@@ -142,36 +149,53 @@ class PastTripInfo extends React.Component<any, any> {
   render() {
     return (
       <div className="pastTripInfo">
-        <BasicTripInfo
-          tripTitle={
-            this.props.ongoingTrips[this.props.currentOngoingTripIndex].name
-          }
-          startDate={moment(
-            this.props.ongoingTrips[
-              this.props.currentOngoingTripIndex
-            ].startDate.toDate()
-          ).format("MMMM Do YYYY")}
-          endDate={moment(
-            this.props.ongoingTrips[
-              this.props.currentOngoingTripIndex
-            ].endDate.toDate()
-          ).format("MMMM Do YYYY")}
-          location={
-            this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-              .startLocation
-          }
-          wayPoints={
-            this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-          }
-          budget={
-            this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget
-          }
-        />
+        <Grid container>
+          {/* Trip details */}
+          <Grid item xs={5}>
+            <Container>
+              <Card>
+                <BasicTripInfo
+                  tripTitle={
+                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .name
+                  }
+                  startDate={moment(
+                    this.props.ongoingTrips[
+                      this.props.currentOngoingTripIndex
+                    ].startDate.toDate()
+                  ).format("MMMM Do YYYY")}
+                  endDate={moment(
+                    this.props.ongoingTrips[
+                      this.props.currentOngoingTripIndex
+                    ].endDate.toDate()
+                  ).format("MMMM Do YYYY")}
+                  location={
+                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .startLocation
+                  }
+                  wayPoints={
+                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  }
+                  budget={
+                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .budget
+                  }
+                />
 
-        <div className="spacer10"></div>
+                <div className="spacer10"></div>
 
-        {/* Notes & Messages */}
-        <Button
+                {/* Notes & Messages */}
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="medium"
+                  fullWidth
+                  onClick={() => this.props.toggleNotes()}
+                >
+                  <DescriptionIcon className="iconSpacer" />
+                  Reviews for me
+                </Button>
+                {/* <Button
           variant="outlined"
           color="primary"
           size="medium"
@@ -191,156 +215,174 @@ class PastTripInfo extends React.Component<any, any> {
         >
           <ChatIcon className="iconSpacer" />
           Messages
-        </Button>
+        </Button> */}
 
-        <div className="spacer10"></div>
+                <div className="spacer10"></div>
 
-        {/* Members */}
-        <div>
-          <Typography variant="h5">Members:</Typography>
-          <List component="nav">
-            {this.props.ongoingTrips[
-              this.props.currentOngoingTripIndex
-            ].memberIds.map((member: any, i: number) => {
-              const nickname = this.props.users.find(
-                (u: { id: any }) => u.id === member
-              ).nickname;
-              //   FIXME: skips own data here
-              //   if (member === this.props.userId) return;
+                {/* Members */}
+                <div>
+                  <Typography variant="h5">Members:</Typography>
+                  <List component="nav">
+                    {this.props.ongoingTrips[
+                      this.props.currentOngoingTripIndex
+                    ].memberIds.map((member: any, i: number) => {
+                      const nickname = this.props.users.find(
+                        (u: { id: any }) => u.id === member
+                      ).nickname;
+                      //   FIXME: skips own data here
+                      //   if (member === this.props.userId) return;
 
-              return (
-                <div key={i}>
-                  <ListItem button onClick={() => this.onClickUser(i, member)}>
-                    <ListItemIcon>
-                      <PersonIcon className="iconSpacer" />
-                    </ListItemIcon>
-                    <ListItemText>{nickname}</ListItemText>
-                  </ListItem>
-                  <Modal
-                    className="modalWindow"
-                    open={this.handleOpen(i)}
-                    onClose={this.handleClose}
-                    closeAfterTransition
-                    BackdropComponent={Backdrop}
-                    BackdropProps={{
-                      timeout: 500
-                    }}
-                  >
-                    <Fade in={this.handleOpen(i)}>
-                      <div className="modalFade">
-                        <Box
-                          component="fieldset"
-                          mb={0}
-                          borderColor="transparent"
-                        >
-                          <h2 id="transition-modal-title">
-                            Review for {nickname}
-                          </h2>
-                        </Box>
-
-                        {/* Error */}
-                        {this.state.isError && (
-                          <Box
-                            component="fieldset"
-                            mb={0}
-                            borderColor="transparent"
+                      return (
+                        <div key={i}>
+                          <ListItem
+                            button
+                            onClick={() => this.onClickUser(i, member)}
                           >
-                            <Typography className="error-text">
-                              Textarea or Rating is empty...
-                            </Typography>
-                          </Box>
-                        )}
-
-                        <Box
-                          component="fieldset"
-                          mb={1}
-                          borderColor="transparent"
-                        >
-                          <Typography component="legend">Rating</Typography>
-                          <Rating
-                            name="simple-controlled"
-                            value={this.state.rating}
-                            onChange={(event, newValue) => {
-                              this.setState({
-                                rating: newValue
-                              });
-                            }}
-                          />
-                        </Box>
-                        <Box
-                          component="fieldset"
-                          mb={0}
-                          borderColor="transparent"
-                        >
-                          <Typography component="legend">
-                            Review Message
-                          </Typography>
-
-                          <TextareaAutosize
-                            className="textarea"
-                            placeholder="Write your review"
-                            rows={10}
-                            onChange={e => this.SetMessage(e)}
-                            value={this.state.message}
-                          />
-                        </Box>
-                        <Box
-                          component="fieldset"
-                          mb={0}
-                          borderColor="transparent"
-                        >
-                          <Button
-                            variant="contained"
-                            color="default"
-                            onClick={this.handleClose}
-                          >
-                            Cancel
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={event => {
-                              this.onSubmit(event, member);
+                            <ListItemIcon>
+                              <PersonIcon className="iconSpacer" />
+                            </ListItemIcon>
+                            <ListItemText>{nickname}</ListItemText>
+                          </ListItem>
+                          <Modal
+                            className="modalWindow"
+                            open={this.handleOpen(i)}
+                            onClose={this.handleClose}
+                            closeAfterTransition
+                            BackdropComponent={Backdrop}
+                            BackdropProps={{
+                              timeout: 500
                             }}
                           >
-                            Submit
-                          </Button>
-                        </Box>
-                      </div>
-                    </Fade>
-                  </Modal>
+                            <Fade in={this.handleOpen(i)}>
+                              <div className="modalFade">
+                                <Box
+                                  component="fieldset"
+                                  mb={0}
+                                  borderColor="transparent"
+                                >
+                                  <h2 id="transition-modal-title">
+                                    Review for {nickname}
+                                  </h2>
+                                </Box>
+
+                                {/* Error */}
+                                {this.state.isError && (
+                                  <Box
+                                    component="fieldset"
+                                    mb={0}
+                                    borderColor="transparent"
+                                  >
+                                    <Typography className="error-text">
+                                      Textarea or Rating is empty...
+                                    </Typography>
+                                  </Box>
+                                )}
+
+                                <Box
+                                  component="fieldset"
+                                  mb={1}
+                                  borderColor="transparent"
+                                >
+                                  <Typography component="legend">
+                                    Rating
+                                  </Typography>
+                                  <Rating
+                                    name="simple-controlled"
+                                    value={this.state.rating}
+                                    onChange={(event, newValue) => {
+                                      this.setState({
+                                        rating: newValue
+                                      });
+                                    }}
+                                  />
+                                </Box>
+                                <Box
+                                  component="fieldset"
+                                  mb={0}
+                                  borderColor="transparent"
+                                >
+                                  <Typography component="legend">
+                                    Review Message
+                                  </Typography>
+
+                                  <TextareaAutosize
+                                    className="textarea"
+                                    placeholder="Write your review"
+                                    rows={10}
+                                    onChange={e => this.SetMessage(e)}
+                                    value={this.state.message}
+                                  />
+                                </Box>
+                                <Box
+                                  component="fieldset"
+                                  mb={0}
+                                  borderColor="transparent"
+                                >
+                                  <Button
+                                    variant="contained"
+                                    color="default"
+                                    onClick={this.handleClose}
+                                  >
+                                    Cancel
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={event => {
+                                      this.onSubmit(event, member);
+                                    }}
+                                  >
+                                    Submit
+                                  </Button>
+                                </Box>
+                              </div>
+                            </Fade>
+                          </Modal>
+                        </div>
+                      );
+                    })}
+                  </List>
                 </div>
-              );
-            })}
-          </List>
-        </div>
 
-        {/* Previous & Next Button */}
-        <Grid container>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="default"
-              size="small"
-              fullWidth
-              onClick={this.props.onPreviousTrip}
-            >
-              <ArrowBackIosIcon />
-              Previous
-            </Button>
+                {/* Previous & Next Button */}
+                <Grid container>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="default"
+                      size="small"
+                      fullWidth
+                      onClick={this.props.onPreviousTrip}
+                    >
+                      <ArrowBackIosIcon />
+                      Previous
+                    </Button>
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="default"
+                      size="small"
+                      fullWidth
+                      onClick={this.props.onNextTrip}
+                    >
+                      Next
+                      <ArrowForwardIosIcon />
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Card>
+            </Container>
           </Grid>
 
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="default"
-              size="small"
-              fullWidth
-              onClick={this.props.onNextTrip}
-            >
-              Next
-              <ArrowForwardIosIcon />
-            </Button>
+          {/* Map, Review Result */}
+          <Grid item xs={7}>
+            {/* <Map
+              trips={this.props.ongoingTrips}
+              currentTripIndex={this.props.currentOngoingTripIndex}
+            /> */}
+            <Reviews />
           </Grid>
         </Grid>
       </div>

@@ -47,7 +47,8 @@ import InfoIcon from "@material-ui/icons/Info";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 // FIXME: This is just for testing Reviews!! */
-import ChatIcon from "@material-ui/icons/Chat";
+// import ChatIcon from "@material-ui/icons/Chat";
+import RateReviewIcon from "@material-ui/icons/RateReview";
 import PastTripInfo from "./PastTripInfo";
 import Reviews from "./Reviews";
 
@@ -286,7 +287,7 @@ class App extends React.Component<myProps, any> {
             <Tab label="Build Trip" icon={<BuildIcon />} />
 
             {/* FIXME: This is just for testing Reviews!! */}
-            <Tab label="Social" icon={<ChatIcon />} />
+            <Tab label="Trip Reviews" icon={<RateReviewIcon />} />
 
             {/* User Icon */}
             <div className="iconWrapper">
@@ -498,44 +499,10 @@ class App extends React.Component<myProps, any> {
             )}
           </TabPanel>
 
-          {/* Social */}
+          {/* Reviews */}
           {/* FIXME: This is just for testing Reviews!! */}
           <TabPanel value={this.state.value} index={5}>
-            <p>Social</p>
-            <button
-              onClick={() => {
-                this.props.setShowPastTrips(true);
-              }}
-            >
-              Past Trips
-            </button>
-
-            <button
-              onClick={() => {
-                this.props.setShowReviews(true);
-              }}
-            >
-              Check Reviews
-            </button>
-
-            {this.props.showPastTrips && this.props.ongoingTrips.length && (
-              <Grid container>
-                <Grid item xs={5}>
-                  <Container>
-                    <Card className="tripInfo">
-                      <PastTripInfo />
-                    </Card>
-                  </Container>
-                </Grid>
-                <Grid item xs={7}>
-                  <Map
-                    trips={this.props.ongoingTrips}
-                    currentTripIndex={this.props.currentOngoingTripIndex}
-                  />
-                </Grid>
-              </Grid>
-            )}
-
+            <PastTripInfo />
             {this.props.showReviews && (
               <Grid container>
                 <Grid item xs={5}>

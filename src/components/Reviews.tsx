@@ -25,55 +25,33 @@ class Reviews extends Component<Props, any> {
 
   async componentDidMount() {
     const result = await myFirestore
-      .collection("trips")
-      .where("memberIds", "array-contains", this.props.userId)
+      .collection("users")
+      .doc(this.props.userId)
+      .collection("reviews")
       .get();
 
-    const tripIds: any[] = [];
-    const tripNames: any[] = [];
-    result.docs.forEach(res => {
-      tripIds.push(res.id);
-      tripNames.push(res.data().name);
+    result.docs.forEach(async res => {
+      const reviewerResult = await res.data().reviewer.get();
+      const reviewerName = reviewerResult.data().nickname;
+
+      const tripResult = await res.data().tripId.get();
+      const tripName = tripResult.data().name;
+
+      const reviews = await res.data().message;
+      const rating = await res.data().rating;
+      this.setState({
+        reviewInfo: [
+          ...this.state.reviewInfo,
+          {
+            tripName,
+            reviewer: reviewerName,
+            reviews,
+            rating
+          }
+        ]
+      });
     });
-
-    const tmpReviewInfo: any[] = [];
-    tripIds.forEach(async (tripId, index) => {
-      const result = await myFirestore
-        .collection("trips")
-        .doc(tripId)
-        .collection("reviews")
-        .get();
-
-      if (result.size > 0) {
-        await result.forEach(async res => {
-          // Get reviewee name
-          const revieweeResult = await res.data().reviewee.get();
-          const revieweeName = revieweeResult.data().nickname;
-
-          // Get reviewer name
-          const reviewerResult = await res.data().reviewer.get();
-          const reviewerName = reviewerResult.data().nickname;
-
-          const reviews = await res.data().message;
-          const rating = await res.data().rating;
-
-          console.log(tripNames[index], revieweeName, reviewerName, reviews);
-          this.setState({
-            reviewInfo: [
-              ...this.state.reviewInfo,
-              {
-                tripName: tripNames[index],
-                reviewee: revieweeName,
-                reviewer: reviewerName,
-                reviews,
-                rating
-              }
-            ]
-          });
-          console.log("OK!!");
-        });
-      }
-    });
+    console.log("OK!!");
   }
 
   render() {
