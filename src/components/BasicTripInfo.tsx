@@ -21,6 +21,11 @@ export default class BasicTripInfo extends React.Component<any, any> {
           <b>{this.props.tripTitle}</b>
         </Typography>
 
+        {/* Country */}
+        <Typography className="iconWrapper">
+          Country: {this.props.country}
+        </Typography>
+
         {/* Start Date */}
         <Typography className="iconWrapper">
           <DateRangeIcon />

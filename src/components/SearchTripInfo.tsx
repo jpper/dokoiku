@@ -24,6 +24,7 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import "../styles/TripInfo.css";
+import countriesToCurrencies from "../data/countries_to_currencies.json";
 
 type myProps = {
   searchTrips: any;
@@ -46,6 +47,23 @@ class SearchTripInfo extends React.Component<myProps, {}> {
             <b>
               {this.props.searchTrips[this.props.currentSearchTripIndex].name}
             </b>
+          </Typography>
+
+          {/* Country */}
+          <Typography className="iconWrapper">
+            Country:
+            <img
+              src={`https://www.countryflags.io/${this.props.searchTrips[
+                this.props.currentSearchTripIndex
+              ].countryCode.toLowerCase()}/shiny/24.png`}
+            ></img>
+            {
+              countriesToCurrencies.find(
+                (item: any) =>
+                  this.props.searchTrips[this.props.currentSearchTripIndex]
+                    .countryCode === item.countryCode
+              ).country
+            }
           </Typography>
 
           {/* Start Date */}
@@ -74,10 +92,7 @@ class SearchTripInfo extends React.Component<myProps, {}> {
           <Typography className="iconWrapper">
             <DoubleArrowIcon />
             Starting Location:
-            {` ${
-              this.props.searchTrips[this.props.currentSearchTripIndex]
-                .startLocation
-            }`}
+            {` ${this.props.searchTrips[this.props.currentSearchTripIndex].startLocation}`}
           </Typography>
 
           {/* WayPoints */}
@@ -103,7 +118,16 @@ class SearchTripInfo extends React.Component<myProps, {}> {
           <Typography className="iconWrapper">
             <MonetizationOnIcon />
             Budget:{" "}
-            {this.props.searchTrips[this.props.currentSearchTripIndex].budget}
+            {
+              this.props.searchTrips[this.props.currentSearchTripIndex].budget
+            }{" "}
+            {
+              countriesToCurrencies.find(
+                (item: any) =>
+                  this.props.searchTrips[this.props.currentSearchTripIndex]
+                    .currencyCode === item.currencyCode
+              ).currency
+            }
           </Typography>
 
           <div className="spacer10"></div>
@@ -262,4 +286,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchTripInfo);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchTripInfo);

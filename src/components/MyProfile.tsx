@@ -3,24 +3,17 @@ import { connect } from "react-redux";
 import "../styles/MyProfile.css";
 import { myFirestore } from "../config/firebase";
 import { Button } from "@material-ui/core";
-import Reviews from "./Reviews";
-import { setPageTabIndex } from "../redux/action";
 
 type myProps = {
   userId: string;
   users: any;
-  setPageTabIndex: any;
 };
 
-class MyProfile extends React.Component<
-  myProps,
-  { user: any; showReview: any }
-> {
+class MyProfile extends React.Component<myProps, { user: any }> {
   constructor(props: myProps) {
     super(props);
     this.state = {
-      user: undefined,
-      showReview: false
+      user: undefined
     };
   }
 
@@ -44,220 +37,188 @@ class MyProfile extends React.Component<
     }
   }
 
-  onChangeShow = () => {
-    this.setState({
-      showReview: !this.state.showReview
-    });
-  };
-
   render() {
     if (this.state.user) {
       return (
         <div className="MyProfile">
-          {this.state.showReview ? (
-            <>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                onClick={this.onChangeShow}
+          <h1>{this.state.user.nickname}</h1>
+          <img src={this.state.user.photoUrl} id="profile-picture" />
+          <div className="social-icons">
+            {/* FACEBOOK */}
+            {this.state.user.facebook ? (
+              <img
+                src="https://www.facebook.com/images/fb_icon_325x325.png"
+                alt="Facebook"
+                id="social-icon"
+                onClick={() => {
+                  const modal = document.getElementById("add-facebook");
+                  modal.style.display = "block";
+                }}
+              />
+            ) : (
+              <img
+                src="https://www.facebook.com/images/fb_icon_325x325.png"
+                alt="Facebook"
+                id="no-social-icon"
+                onClick={() => {
+                  const modal = document.getElementById("add-facebook");
+                  modal.style.display = "block";
+                }}
+              />
+            )}
+            {/* INSTA */}
+            {this.state.user.instagram ? (
+              <img
+                src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
+                alt="Instagram"
+                id="social-icon"
+                onClick={() => {
+                  const modal = document.getElementById("add-instagram");
+                  modal.style.display = "block";
+                }}
+              />
+            ) : (
+              <img
+                src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
+                alt="Instagram"
+                id="no-social-icon"
+                onClick={() => {
+                  const modal = document.getElementById("add-instagram");
+                  modal.style.display = "block";
+                }}
+              />
+            )}
+            {/* TWITTER */}
+            {this.state.user.twitter ? (
+              <img
+                src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
+                alt="Twitter"
+                id="social-icon"
+                onClick={() => {
+                  const modal = document.getElementById("add-twitter");
+                  modal.style.display = "block";
+                }}
+              />
+            ) : (
+              <img
+                src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
+                alt="Twitter"
+                id="no-social-icon"
+                onClick={() => {
+                  const modal = document.getElementById("add-twitter");
+                  modal.style.display = "block";
+                }}
+              />
+            )}
+          </div>
+          {/* MODALS SECTION */}
+          {/* FACEBOOK */}
+          <div className="modal" id="add-facebook">
+            <div className="modal-content">
+              <p>Add a link to your Facebook:</p>
+              <input id="fb-url" placeholder="Paste URL here" />
+              <button
+                onClick={() => {
+                  const url = (document.getElementById(
+                    "fb-url"
+                  ) as HTMLInputElement).value;
+                  myFirestore
+                    .collection("users")
+                    .doc(this.props.userId)
+                    .update({ facebook: url });
+                  const modal = document.getElementById("add-facebook");
+                  modal.style.display = "none";
+                }}
               >
-                Profile
-              </Button>
-              <Reviews userId={this.state.user.id} />
-            </>
-          ) : (
-            <>
-              <h1>{this.state.user.nickname}</h1>
-              <img src={this.state.user.photoUrl} id="profile-picture" />
-              <div className="social-icons">
-                {/* FACEBOOK */}
-                {this.state.user.facebook ? (
-                  <img
-                    src="https://www.facebook.com/images/fb_icon_325x325.png"
-                    alt="Facebook"
-                    id="social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-facebook");
-                      modal.style.display = "block";
-                    }}
-                  />
-                ) : (
-                  <img
-                    src="https://www.facebook.com/images/fb_icon_325x325.png"
-                    alt="Facebook"
-                    id="no-social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-facebook");
-                      modal.style.display = "block";
-                    }}
-                  />
-                )}
-                {/* INSTA */}
-                {this.state.user.instagram ? (
-                  <img
-                    src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                    alt="Instagram"
-                    id="social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-instagram");
-                      modal.style.display = "block";
-                    }}
-                  />
-                ) : (
-                  <img
-                    src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                    alt="Instagram"
-                    id="no-social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-instagram");
-                      modal.style.display = "block";
-                    }}
-                  />
-                )}
-                {/* TWITTER */}
-                {this.state.user.twitter ? (
-                  <img
-                    src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                    alt="Twitter"
-                    id="social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-twitter");
-                      modal.style.display = "block";
-                    }}
-                  />
-                ) : (
-                  <img
-                    src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                    alt="Twitter"
-                    id="no-social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-twitter");
-                      modal.style.display = "block";
-                    }}
-                  />
-                )}
-              </div>
-              {/* MODALS SECTION */}
-              {/* FACEBOOK */}
-              <div className="modal" id="add-facebook">
-                <div className="modal-content">
-                  <p>Add a link to your Facebook:</p>
-                  <input id="fb-url" placeholder="Paste URL here" />
-                  <button
-                    onClick={() => {
-                      const url = (document.getElementById(
-                        "fb-url"
-                      ) as HTMLInputElement).value;
-                      myFirestore
-                        .collection("users")
-                        .doc(this.props.userId)
-                        .update({ facebook: url });
-                      const modal = document.getElementById("add-facebook");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Submit
-                  </button>
-                  <br></br>
-                  <br></br>
-                  <button
-                    className="close"
-                    onClick={() => {
-                      const modal = document.getElementById("add-facebook");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-              {/* INSTAGRAM */}
-              <div className="modal" id="add-instagram">
-                <div className="modal-content">
-                  <p>Add a link to your Instagram:</p>
-                  <input id="instagram-url" placeholder="Paste URL here" />
-                  <button
-                    onClick={() => {
-                      const url = (document.getElementById(
-                        "instagram-url"
-                      ) as HTMLInputElement).value;
-                      myFirestore
-                        .collection("users")
-                        .doc(this.props.userId)
-                        .update({ instagram: url });
-                      const modal = document.getElementById("add-instagram");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Submit
-                  </button>
-                  <br></br>
-                  <br></br>
-                  <button
-                    className="close"
-                    onClick={() => {
-                      const modal = document.getElementById("add-instagram");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-              {/* TWITTER */}
-              <div className="modal" id="add-twitter">
-                <div className="modal-content">
-                  <p>Add a link to your Twitter:</p>
-                  <input id="twitter-url" placeholder="Paste URL here" />
-                  <button
-                    onClick={() => {
-                      const url = (document.getElementById(
-                        "twitter-url"
-                      ) as HTMLInputElement).value;
-                      myFirestore
-                        .collection("users")
-                        .doc(this.props.userId)
-                        .update({ twitter: url });
-                      const modal = document.getElementById("add-twitter");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Submit
-                  </button>
-                  <br></br>
-                  <br></br>
-                  <button
-                    className="close"
-                    onClick={() => {
-                      const modal = document.getElementById("add-twitter");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-              <div id="star-container">⭐️⭐️⭐️⭐️⭐️</div>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                onClick={this.onChangeShow}
+                Submit
+              </button>
+              <br></br>
+              <br></br>
+              <button
+                className="close"
+                onClick={() => {
+                  const modal = document.getElementById("add-facebook");
+                  modal.style.display = "none";
+                }}
               >
-                Reviews
-              </Button>
-              <br />
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                onClick={() => this.props.setPageTabIndex(5)}
+                Close
+              </button>
+            </div>
+          </div>
+          {/* INSTAGRAM */}
+          <div className="modal" id="add-instagram">
+            <div className="modal-content">
+              <p>Add a link to your Instagram:</p>
+              <input id="instagram-url" placeholder="Paste URL here" />
+              <button
+                onClick={() => {
+                  const url = (document.getElementById(
+                    "instagram-url"
+                  ) as HTMLInputElement).value;
+                  myFirestore
+                    .collection("users")
+                    .doc(this.props.userId)
+                    .update({ instagram: url });
+                  const modal = document.getElementById("add-instagram");
+                  modal.style.display = "none";
+                }}
               >
-                Past Trips
-              </Button>
-            </>
-          )}
+                Submit
+              </button>
+              <br></br>
+              <br></br>
+              <button
+                className="close"
+                onClick={() => {
+                  const modal = document.getElementById("add-instagram");
+                  modal.style.display = "none";
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+          {/* TWITTER */}
+          <div className="modal" id="add-twitter">
+            <div className="modal-content">
+              <p>Add a link to your Twitter:</p>
+              <input id="twitter-url" placeholder="Paste URL here" />
+              <button
+                onClick={() => {
+                  const url = (document.getElementById(
+                    "twitter-url"
+                  ) as HTMLInputElement).value;
+                  myFirestore
+                    .collection("users")
+                    .doc(this.props.userId)
+                    .update({ twitter: url });
+                  const modal = document.getElementById("add-twitter");
+                  modal.style.display = "none";
+                }}
+              >
+                Submit
+              </button>
+              <br></br>
+              <br></br>
+              <button
+                className="close"
+                onClick={() => {
+                  const modal = document.getElementById("add-twitter");
+                  modal.style.display = "none";
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+          <div id="star-container">⭐️⭐️⭐️⭐️⭐️</div>
+          <Button variant="contained" color="secondary" size="large">
+            Reviews
+          </Button>
+          <br />
+          <Button variant="contained" color="secondary" size="large">
+            Past Trips
+          </Button>
         </div>
       );
     } else {
@@ -273,10 +234,4 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-  setPageTabIndex: (index: any) => {
-    dispatch(setPageTabIndex(index));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyProfile);
+export default connect(mapStateToProps)(MyProfile);

@@ -19,9 +19,8 @@ import {
   setUserInfo,
   addRequest,
   addPendingTrip,
-  setShowReviews,
-  addPastTrip,
-  setPageTabIndex
+  setShowPastTrips,
+  setShowReviews
 } from "../redux/action";
 
 // Material UI & Styles
@@ -48,8 +47,7 @@ import InfoIcon from "@material-ui/icons/Info";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 // FIXME: This is just for testing Reviews!! */
-// import ChatIcon from "@material-ui/icons/Chat";
-import RateReviewIcon from "@material-ui/icons/RateReview";
+import ChatIcon from "@material-ui/icons/Chat";
 import PastTripInfo from "./PastTripInfo";
 import Reviews from "./Reviews";
 
@@ -63,10 +61,8 @@ type myProps = {
   userPhoto: string;
   ongoingTrips: any;
   searchTrips: any;
-  pastTrips: any;
   currentOngoingTripIndex: number;
   currentSearchTripIndex: number;
-  currentPastTripIndex: number;
   showChat: boolean;
   showEdit: boolean;
   onShowChat?: any;
@@ -75,12 +71,14 @@ type myProps = {
   login: any;
   mapTripMessage: any;
   getTrips: any;
+  setShowPastTrips: any;
+  showPastTrips: any;
+  setShowReviews: any;
+  showReviews: any;
   getRequests: any;
   requests: any;
   logout: any;
   displayProfile: string;
-  pageTabIndex: any;
-  setPageTabIndex: any;
 };
 
 const mapStateToProps = (state: any) => {
@@ -90,18 +88,17 @@ const mapStateToProps = (state: any) => {
     userPhoto: state.userPhoto,
     ongoingTrips: state.ongoingTrips,
     searchTrips: state.searchTrips,
-    pastTrips: state.pastTrips,
     currentOngoingTripIndex: state.currentOngoingTripIndex,
     currentSearchTripIndex: state.currentSearchTripIndex,
-    currentPastTripIndex: state.currentPastTripIndex,
     showChat: state.showChat,
     showEdit: state.showEdit,
     currentProfile: state.currentProfile,
     mapTripMessage: state.mapTripMessage,
     login: state.login,
+    showPastTrips: state.showPastTrips,
+    showReviews: state.showReviews,
     requests: state.requests,
-    displayProfile: state.displayProfile,
-    pageTabIndex: state.pageTabIndex
+    displayProfile: state.displayProfile
   };
 };
 
@@ -145,18 +142,6 @@ const mapDispatchToProps = (dispatch: any) => ({
               type: "ADD_ONGOING_TRIP",
               ongoingTrip: change.doc.data()
             });
-
-            // Dispatch ADD_PAST_TRIP here!
-            const today = new Date();
-            if (
-              today.getTime() >
-              change.doc
-                .data()
-                .endDate.toDate()
-                .getTime()
-            ) {
-              dispatch(addPastTrip(change.doc.data()));
-            }
           }
         }
       });
@@ -166,6 +151,10 @@ const mapDispatchToProps = (dispatch: any) => ({
       .get()
       .then(query => query.docs.map(user => user.data()));
     dispatch({ type: "GET_USERS", users });
+  },
+  // FIXME: This is just for testing Reviews!!
+  setShowPastTrips: (status: boolean) => {
+    dispatch(setShowPastTrips(status));
   },
   setShowReviews: (status: boolean) => {
     dispatch(setShowReviews(status));
@@ -184,10 +173,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         });
       });
   },
-  logout: () => dispatch({ type: "LOGOUT" }),
-  setPageTabIndex: (index: any) => {
-    dispatch(setPageTabIndex(index));
-  }
+  logout: () => dispatch({ type: "LOGOUT" })
 });
 
 interface TabPanelProps {
@@ -233,8 +219,10 @@ class App extends React.Component<myProps, any> {
   }
 
   componentWillUpdate() {
-    if (this.props.pageTabIndex === -1) {
-      this.props.setPageTabIndex(0);
+    if (this.state.value === -1) {
+      this.setState({
+        value: 0
+      });
     }
   }
 
@@ -250,8 +238,8 @@ class App extends React.Component<myProps, any> {
 
   handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     // Change the target tab
-    this.props.setPageTabIndex(newValue);
     this.setState({
+      value: newValue,
       anchorEl: null
     });
   };
@@ -270,7 +258,9 @@ class App extends React.Component<myProps, any> {
 
   onLogin = () => {
     this.handleClose();
-    this.props.setPageTabIndex(-1);
+    this.setState({
+      value: -1
+    });
   };
 
   onLogout = () => {
@@ -286,7 +276,7 @@ class App extends React.Component<myProps, any> {
       <div className="contents">
         <AppBar position="static">
           <Tabs
-            value={this.props.pageTabIndex}
+            value={this.state.value}
             onChange={this.handleChange}
             centered
             aria-label="scrollable force tabs example"
@@ -298,7 +288,7 @@ class App extends React.Component<myProps, any> {
             <Tab label="Build Trip" icon={<BuildIcon />} />
 
             {/* FIXME: This is just for testing Reviews!! */}
-            <Tab label="Trip Reviews" icon={<RateReviewIcon />} />
+            <Tab label="Social" icon={<ChatIcon />} />
 
             {/* User Icon */}
             <div className="iconWrapper">
@@ -363,7 +353,7 @@ class App extends React.Component<myProps, any> {
           </Tabs>
 
           {/* My Profile */}
-          <TabPanel value={this.props.pageTabIndex} index={1}>
+          <TabPanel value={this.state.value} index={1}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -374,7 +364,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Ongoing Trips */}
-          <TabPanel value={this.props.pageTabIndex} index={2}>
+          <TabPanel value={this.state.value} index={2}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -466,7 +456,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Search Trip */}
-          <TabPanel value={this.props.pageTabIndex} index={3}>
+          <TabPanel value={this.state.value} index={3}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -495,24 +485,70 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Build Trip */}
-          <TabPanel value={this.props.pageTabIndex} index={4}>
-            {this.props.userId === "" ? <Login /> : <BuildTrip />}
-          </TabPanel>
-
-          {/* Reviews */}
-          {/* FIXME: This is just for testing Reviews!! */}
-          <TabPanel value={this.props.pageTabIndex} index={5}>
+          <TabPanel value={this.state.value} index={4}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
               <>
-                <PastTripInfo />
+                <BuildTrip />
               </>
             )}
           </TabPanel>
 
+          {/* Social */}
+          {/* FIXME: This is just for testing Reviews!! */}
+          <TabPanel value={this.state.value} index={5}>
+            <p>Social</p>
+            <button
+              onClick={() => {
+                this.props.setShowPastTrips(true);
+              }}
+            >
+              Past Trips
+            </button>
+
+            <button
+              onClick={() => {
+                this.props.setShowReviews(true);
+              }}
+            >
+              Check Reviews
+            </button>
+
+            {this.props.showPastTrips && this.props.ongoingTrips.length && (
+              <Grid container>
+                <Grid item xs={5}>
+                  <Container>
+                    <Card className="tripInfo">
+                      <PastTripInfo />
+                    </Card>
+                  </Container>
+                </Grid>
+                <Grid item xs={7}>
+                  <Map
+                    trips={this.props.ongoingTrips}
+                    currentTripIndex={this.props.currentOngoingTripIndex}
+                  />
+                </Grid>
+              </Grid>
+            )}
+
+            {this.props.showReviews && (
+              <Grid container>
+                <Grid item xs={5}>
+                  <Container>
+                    <Card className="reviews">
+                      <Reviews />
+                    </Card>
+                  </Container>
+                </Grid>
+                <Grid item xs={7}></Grid>
+              </Grid>
+            )}
+          </TabPanel>
+
           {/* About */}
-          {this.props.pageTabIndex === 0 && (
+          {this.state.value === 0 && (
             <div>
               <img className="bgImg" src={backgroundImg} alt="backImg" />
               <About />
@@ -521,7 +557,7 @@ class App extends React.Component<myProps, any> {
         </AppBar>
 
         {/* Click Login */}
-        {this.props.pageTabIndex === -1 && (
+        {this.state.value === -1 && (
           <div style={{ marginTop: "35px" }}>
             <Login />
           </div>

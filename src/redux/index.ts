@@ -9,10 +9,8 @@ const initialState: any = {
   ongoingTrips: [],
   searchTrips: [],
   pendingTrips: [],
-  pastTrips: [],
   currentOngoingTripIndex: 0,
   currentSearchTripIndex: 0,
-  currentPastTripIndex: 0,
   users: [],
   showChat: false,
   showEdit: false,
@@ -21,8 +19,7 @@ const initialState: any = {
   showPastTrips: false,
   showReviews: false,
   requests: [],
-  displayProfile: undefined,
-  pageTabIndex: 0
+  displayProfile: undefined
 };
 
 interface Action {
@@ -83,31 +80,6 @@ const reducer = (state: any = initialState, action: Action): any => {
         currentOngoingTripIndex: nextIndex
       };
     }
-    case "NEXT_PAST_TRIP": {
-      let nextIndex: number;
-      if (state.currentPastTripIndex + 1 >= state.pastTrips.length) {
-        nextIndex = 0;
-      } else {
-        nextIndex = state.currentPastTripIndex + 1;
-      }
-      return {
-        ...state,
-
-        currentPastTripIndex: nextIndex
-      };
-    }
-    case "PREVIOUS_PAST_TRIP": {
-      let nextIndex: number;
-      if (state.currentPastTripIndex === 0) {
-        nextIndex = state.pastTrips.length - 1;
-      } else {
-        nextIndex = state.currentPastTripIndex - 1;
-      }
-      return {
-        ...state,
-        currentPastTripIndex: nextIndex
-      };
-    }
 
     case "SHOW_CHAT": {
       return {
@@ -155,12 +127,6 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         pendingTrips: [...state.pendingTrips, action.pendingTrip]
-      };
-    }
-    case "ADD_PAST_TRIP": {
-      return {
-        ...state,
-        pastTrips: [...state.pastTrips, action.pastTrips]
       };
     }
     case "SET_MESSAGES": {
@@ -294,12 +260,6 @@ const reducer = (state: any = initialState, action: Action): any => {
           )
       );
       return { ...state, requests: newRequests };
-    }
-    case "SET_PAGE_TAB_INDEX": {
-      return {
-        ...state,
-        pageTabIndex: action.index
-      };
     }
     default: {
       return state;
