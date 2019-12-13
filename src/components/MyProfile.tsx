@@ -258,7 +258,7 @@ class MyProfile extends React.Component<
                 <Rating
                   value={this.state.rating}
                   readOnly
-                  precision={0.1}
+                  precision={0.25}
                   size="large"
                 />
               </div>

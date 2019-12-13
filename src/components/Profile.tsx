@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import "../styles/MyProfile.css";
 import { myFirestore } from "../config/firebase";
 import { Button } from "@material-ui/core";
+import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
 
 type myProps = {
@@ -11,12 +12,16 @@ type myProps = {
   onChangeDisplayProfile: any;
 };
 
-class Profile extends React.Component<myProps, { user: any; showReview: any }> {
+class Profile extends React.Component<
+  myProps,
+  { user: any; showReview: any; rating: number }
+> {
   constructor(props: myProps) {
     super(props);
     this.state = {
       user: undefined,
-      showReview: false
+      showReview: false,
+      rating: undefined
     };
   }
 
@@ -35,7 +40,7 @@ class Profile extends React.Component<myProps, { user: any; showReview: any }> {
     console.log(total);
     const averageRating = total / reviews.length;
     console.log(averageRating);
-    return Math.round(averageRating);
+    this.setState({ rating: averageRating });
   };
 
   componentDidMount() {
@@ -66,6 +71,7 @@ class Profile extends React.Component<myProps, { user: any; showReview: any }> {
 
   render() {
     if (this.state.user) {
+      this.calculateRating(this.state.user.id);
       return (
         <div className="MyProfile">
           {this.state.showReview ? (
@@ -138,7 +144,14 @@ class Profile extends React.Component<myProps, { user: any; showReview: any }> {
                   />
                 )}
               </div>
-              <div id="star-container">⭐️⭐️⭐️⭐️⭐️</div>
+              <div id="star-container">
+                <Rating
+                  value={this.state.rating ? this.state.rating : 0}
+                  readOnly
+                  precision={0.25}
+                  size="large"
+                />
+              </div>
               <Button
                 variant="contained"
                 color="secondary"
