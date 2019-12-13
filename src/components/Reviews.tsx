@@ -4,7 +4,13 @@ import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 
 // Material UI & Styles
-import { List, ListItem, ListItemText, Divider } from "@material-ui/core";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  CircularProgress
+} from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 
 export default class Reviews extends Component<any, any> {
@@ -109,6 +115,7 @@ export default class Reviews extends Component<any, any> {
     } else {
       return (
         <div>
+          <CircularProgress />
           <p>Loading...</p>
         </div>
       );
