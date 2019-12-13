@@ -2,11 +2,20 @@ import React from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 import uuidv4 from "uuid/v4";
-import { Button, IconButton } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  FormHelperText
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { firestore } from "firebase";
 import "../styles/BuildTrip.css";
+import countriesToCurrencies from "../data/countries_to_currencies.json";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -19,6 +28,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     onAddTrip: (
       name: string,
+      countryCode: string,
+      currencyCode: string,
       userId: string,
       startDate: string,
       endDate: string,
@@ -32,6 +43,8 @@ const mapDispatchToProps = (dispatch: any) => {
         .doc(tripId)
         .set({
           name,
+          countryCode,
+          currencyCode,
           ownerId: userId,
           tripId,
           travelMode: "DRIVING",
@@ -52,6 +65,8 @@ type BuildProps = {
 };
 type BuildState = {
   name: string;
+  countryCode: any;
+  currencyCode: string;
   ownerId: string;
   tripId: string;
   travelMode: string;
@@ -69,6 +84,8 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
     super(props);
     this.state = {
       name: "",
+      countryCode: "",
+      currencyCode: "",
       ownerId: "",
       tripId: "",
       travelMode: "DRIVING",
@@ -102,6 +119,8 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
   clearState() {
     this.setState({
       name: "",
+      countryCode: "",
+      currencyCode: "",
       ownerId: "",
       tripId: "",
       travelMode: "DRIVING",
@@ -124,6 +143,8 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               onSubmit={() => {
                 this.props.onAddTrip(
                   this.state.name,
+                  this.state.countryCode,
+                  this.state.currencyCode,
                   this.props.userId,
                   this.state.startDate,
                   this.state.endDate,
@@ -146,6 +167,36 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   this.setState({ name: e.currentTarget.value });
                 }}
               />
+              <br />
+              <br />
+              <br />
+              <FormControl>
+                <InputLabel>Country</InputLabel>
+                <Select
+                  onChange={e => {
+                    const [countryCode, currencyCode] = String(
+                      e.target.value
+                    ).split("||");
+                    this.setState({
+                      countryCode,
+                      currencyCode
+                    });
+                    console.log(this.state.countryCode);
+                    console.log(this.state.currencyCode);
+                  }}
+                >
+                  {countriesToCurrencies.map((item: any) => (
+                    <MenuItem
+                      value={[item.countryCode, item.currencyCode].join("||")}
+                    >
+                      {item.country}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <div id="helper-text">Cannot be changed once chosen</div>
+              </FormControl>
+              <br />
+              <br />
               <br />
               <br />
               <br />
@@ -263,7 +314,16 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               <br />
               <TextValidator
                 name="budget"
-                label="My Budget"
+                label={`My Budget ${
+                  this.state.currencyCode
+                    ? "(" +
+                      countriesToCurrencies.find(
+                        (item: any) =>
+                          this.state.currencyCode === item.currencyCode
+                      ).currency +
+                      ")"
+                    : ""
+                }`}
                 type="number"
                 variant="outlined"
                 validators={["minNumber:0", "required"]}
@@ -278,6 +338,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               <br />
               <br />
               {this.state.name &&
+              this.state.countryCode &&
               this.state.travelMode &&
               this.state.startDate &&
               this.state.endDate &&

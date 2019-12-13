@@ -33,6 +33,7 @@ import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ChatIcon from "@material-ui/icons/Chat";
 import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/TripInfo.css";
+import countriesToCurrencies from "../data/countries_to_currencies.json";
 
 type myProps = {
   ongoingTrips: any;
@@ -109,6 +110,22 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               {this.props.ongoingTrips[this.props.currentOngoingTripIndex].name}
             </b>
           </Typography>
+          {/* Country */}
+          <Typography className="iconWrapper">
+            Country:
+            <img
+              src={`https://www.countryflags.io/${this.props.ongoingTrips[
+                this.props.currentOngoingTripIndex
+              ].countryCode.toLowerCase()}/shiny/24.png`}
+            ></img>
+            {
+              countriesToCurrencies.find(
+                (item: any) =>
+                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                    .countryCode === item.countryCode
+              ).country
+            }
+          </Typography>
           {/* Start Date */}
           <Typography className="iconWrapper">
             <DateRangeIcon />
@@ -164,7 +181,16 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           <Typography className="iconWrapper">
             <MonetizationOnIcon />
             Budget:{" "}
-            {this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget}
+            {
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget
+            }{" "}
+            {
+              countriesToCurrencies.find(
+                (item: any) =>
+                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                    .currencyCode === item.currencyCode
+              ).currency
+            }
           </Typography>
 
           <div className="spacer10"></div>
