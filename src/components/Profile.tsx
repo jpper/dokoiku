@@ -18,6 +18,24 @@ class Profile extends React.Component<myProps, { user: any }> {
     };
   }
 
+  calculateRating = async (id: string) => {
+    const reviews = await myFirestore
+      .collection("users")
+      .doc(id)
+      .collection("reviews")
+      .get()
+      .then(query => query.docs.map(review => review.data()));
+    console.log(reviews);
+    let total = 0;
+    reviews.forEach(review => {
+      total += review.rating;
+    });
+    console.log(total);
+    const averageRating = total / reviews.length;
+    console.log(averageRating);
+    return Math.round(averageRating);
+  };
+
   componentDidMount() {
     if (this.state.user === undefined && this.props.users.length) {
       this.setState({
