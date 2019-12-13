@@ -1,3 +1,14 @@
 .MuiFormHelperText-root.MuiFormHelperText-contained.Mui-error.MuiFormHelperText-filled {
   border-width: 0;
 }
+
+.MuiFormControl-root {
+  width: 172.422px;
+  height: 19px;
+}
+
+#helper-text {
+  top: 5px;
+  font-size: 11.5px;
+  color: red;
+}
