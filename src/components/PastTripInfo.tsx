@@ -5,6 +5,7 @@ import { firestore } from "firebase";
 import { myFirestore } from "../config/firebase";
 import BasicTripInfo from "./BasicTripInfo";
 import Map from "./Map";
+import Notes from "./Notes";
 
 // Material UI
 import {
@@ -34,7 +35,9 @@ import Reviews from "./Reviews";
 
 enum PageStatus {
   Map,
-  Reviews
+  Reviews,
+  Notes,
+  Messages
 }
 
 interface myStates {
@@ -64,7 +67,9 @@ class PastTripInfo extends React.Component<any, myStates> {
   }
 
   componentDidMount() {
-    // TODO: get PastTrips
+    console.log("PAST_TRIP_INFO");
+
+    // get PastTrips
     const tmpPastTrips = this.props.ongoingTrips.filter((data: any) => {
       const today = new Date();
       return today.getTime() > data.endDate.toDate().getTime();
@@ -199,16 +204,22 @@ class PastTripInfo extends React.Component<any, myStates> {
     this.handleClose();
   };
 
+  onMapButton = () => {
+    this.setState({
+      pageStatus: PageStatus.Map
+    });
+  };
+
   onReviewButton = () => {
-    if (this.state.pageStatus === PageStatus.Map) {
-      this.setState({
-        pageStatus: PageStatus.Reviews
-      });
-    } else if (this.state.pageStatus === PageStatus.Reviews) {
-      this.setState({
-        pageStatus: PageStatus.Map
-      });
-    }
+    this.setState({
+      pageStatus: PageStatus.Reviews
+    });
+  };
+
+  onNotesButton = () => {
+    this.setState({
+      pageStatus: PageStatus.Notes
+    });
   };
 
   clearButtonStatus = () => {
@@ -258,39 +269,74 @@ class PastTripInfo extends React.Component<any, myStates> {
                   <div className="spacer10"></div>
 
                   {/* Notes & Messages */}
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    size="medium"
-                    fullWidth
-                    onClick={this.onReviewButton}
-                  >
-                    <DescriptionIcon className="iconSpacer" />
-                    {this.state.pageStatus === PageStatus.Map &&
-                      `Reviews for me`}
-                    {this.state.pageStatus === PageStatus.Reviews && `Map`}
-                  </Button>
-                  {/* <Button
-                variant="outlined"
-                color="primary"
-                size="medium"
-                fullWidth
-                onClick={() => this.props.toggleNotes()}
-              >
-                <DescriptionIcon className="iconSpacer" />
-                Notes
-              </Button>
-              <br></br>
-              <Button
-                variant="outlined"
-                color="primary"
-                size="medium"
-                fullWidth
-                onClick={() => this.props.toggleMessages()}
-              >
-                <ChatIcon className="iconSpacer" />
-                Messages
-              </Button> */}
+                  {this.state.pageStatus !== PageStatus.Map ? (
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="medium"
+                      fullWidth
+                      onClick={this.onMapButton}
+                    >
+                      <DescriptionIcon className="iconSpacer" />
+                      Map
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="medium"
+                      fullWidth
+                    >
+                      <DescriptionIcon className="iconSpacer" />
+                      Map
+                    </Button>
+                  )}
+
+                  {this.state.pageStatus !== PageStatus.Reviews ? (
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="medium"
+                      fullWidth
+                      onClick={this.onReviewButton}
+                    >
+                      <DescriptionIcon className="iconSpacer" />
+                      Reviews for me
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="medium"
+                      fullWidth
+                    >
+                      <DescriptionIcon className="iconSpacer" />
+                      Reviews for me
+                    </Button>
+                  )}
+
+                  {this.state.pageStatus !== PageStatus.Notes ? (
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="medium"
+                      fullWidth
+                      onClick={this.onNotesButton}
+                    >
+                      <DescriptionIcon className="iconSpacer" />
+                      Notes
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="medium"
+                      fullWidth
+                    >
+                      <DescriptionIcon className="iconSpacer" />
+                      Notes
+                    </Button>
+                  )}
 
                   <div className="spacer10"></div>
 
@@ -467,6 +513,14 @@ class PastTripInfo extends React.Component<any, myStates> {
               )}
               {this.state.pageStatus === PageStatus.Reviews && (
                 <Reviews
+                  tripId={
+                    this.state.pastTrips[this.state.currentPastTripIndex].tripId
+                  }
+                  userId={this.props.userId}
+                />
+              )}
+              {this.state.pageStatus === PageStatus.Notes && (
+                <Notes
                   tripId={
                     this.state.pastTrips[this.state.currentPastTripIndex].tripId
                   }
