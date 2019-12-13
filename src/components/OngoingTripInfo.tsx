@@ -100,6 +100,14 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               {this.props.ongoingTrips[this.props.currentOngoingTripIndex].name}
             </b>
           </Typography>
+          {/* Country */}
+          <Typography className="iconWrapper">
+            Country:{" "}
+            {
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .country
+            }
+          </Typography>
           {/* Start Date */}
           <Typography className="iconWrapper">
             <DateRangeIcon />
@@ -126,10 +134,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           <Typography className="iconWrapper">
             <DoubleArrowIcon />
             Starting Location:
-            {` ${
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .startLocation
-            }`}
+            {` ${this.props.ongoingTrips[this.props.currentOngoingTripIndex].startLocation}`}
           </Typography>
 
           {/* WayPoints */}
@@ -155,7 +160,13 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           <Typography className="iconWrapper">
             <MonetizationOnIcon />
             Budget:{" "}
-            {this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget}
+            {
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget
+            }{" "}
+            {
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .currency
+            }
           </Typography>
 
           <div className="spacer10"></div>
@@ -390,4 +401,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OngoingTripInfo);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(OngoingTripInfo);

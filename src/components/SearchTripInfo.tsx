@@ -48,6 +48,12 @@ class SearchTripInfo extends React.Component<myProps, {}> {
             </b>
           </Typography>
 
+          {/* Country */}
+          <Typography className="iconWrapper">
+            Country:{" "}
+            {this.props.searchTrips[this.props.currentSearchTripIndex].country}
+          </Typography>
+
           {/* Start Date */}
           <Typography className="iconWrapper">
             <DateRangeIcon />
@@ -74,10 +80,7 @@ class SearchTripInfo extends React.Component<myProps, {}> {
           <Typography className="iconWrapper">
             <DoubleArrowIcon />
             Starting Location:
-            {` ${
-              this.props.searchTrips[this.props.currentSearchTripIndex]
-                .startLocation
-            }`}
+            {` ${this.props.searchTrips[this.props.currentSearchTripIndex].startLocation}`}
           </Typography>
 
           {/* WayPoints */}
@@ -103,7 +106,10 @@ class SearchTripInfo extends React.Component<myProps, {}> {
           <Typography className="iconWrapper">
             <MonetizationOnIcon />
             Budget:{" "}
-            {this.props.searchTrips[this.props.currentSearchTripIndex].budget}
+            {
+              this.props.searchTrips[this.props.currentSearchTripIndex].budget
+            }{" "}
+            {this.props.searchTrips[this.props.currentSearchTripIndex].currency}
           </Typography>
 
           <div className="spacer10"></div>
@@ -262,4 +268,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchTripInfo);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchTripInfo);
