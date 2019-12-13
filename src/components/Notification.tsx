@@ -10,6 +10,7 @@ import {
 import { myFirestore } from "../config/firebase";
 import { removeRequest } from "../redux/action";
 import firebase from "firebase";
+import { string } from "prop-types";
 
 type myProps = {
   requests: any;
@@ -17,6 +18,8 @@ type myProps = {
   ongoingTrips: any;
   userId: string;
   removeRequest: any;
+  onChangeDisplayProfile: any;
+  displayProfile: string;
 };
 
 const mapStateToProps = (state: any) => {
@@ -24,13 +27,20 @@ const mapStateToProps = (state: any) => {
     requests: state.requests,
     users: state.users,
     ongoingTrips: state.ongoingTrips,
-    userId: state.userId
+    userId: state.userId,
+    displayProfile: state.displayProfile
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    removeRequest: (tripId: string, fromId: string) =>
-      dispatch(removeRequest(tripId, fromId))
+    removeRequest: (tripId: string, fromId: string) => {
+      dispatch(removeRequest(tripId, fromId));
+    },
+    onChangeDisplayProfile: (profile: string) =>
+      dispatch({
+        type: "CHANGE_DISPLAY_PROFILE",
+        displayProfile: profile
+      })
   };
 };
 
@@ -83,11 +93,17 @@ class Notification extends React.Component<myProps, any> {
                 <CardContent>
                   <Typography>
                     You have a request from{" "}
-                    {
-                      this.props.users.find(
-                        (user: any) => user.id === request.fromId
-                      ).nickname
-                    }{" "}
+                    <div
+                      onClick={() =>
+                        this.props.onChangeDisplayProfile(request.fromId)
+                      }
+                    >
+                      {
+                        this.props.users.find(
+                          (user: any) => user.id === request.fromId
+                        ).nickname
+                      }{" "}
+                    </div>
                     for{" "}
                     {
                       this.props.ongoingTrips.find(

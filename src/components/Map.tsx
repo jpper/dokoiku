@@ -72,7 +72,6 @@ class Map extends React.Component<MapProps, MapState> {
     }
   }
   render() {
-    console.log(this.state.positions[1]);
     if (this.state.isResponse) {
       return (
         <LoadScript
