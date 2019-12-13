@@ -6,6 +6,7 @@ import { myFirestore } from "../config/firebase";
 import BasicTripInfo from "./BasicTripInfo";
 import Map from "./Map";
 import Notes from "./Notes";
+import ChatBoard from "./ChatBoard";
 
 // Material UI
 import {
@@ -222,6 +223,12 @@ class PastTripInfo extends React.Component<any, myStates> {
     });
   };
 
+  onMessagesButton = () => {
+    this.setState({
+      pageStatus: PageStatus.Messages
+    });
+  };
+
   clearButtonStatus = () => {
     this.setState({
       pageStatus: PageStatus.Map
@@ -335,6 +342,29 @@ class PastTripInfo extends React.Component<any, myStates> {
                     >
                       <DescriptionIcon className="iconSpacer" />
                       Notes
+                    </Button>
+                  )}
+
+                  {this.state.pageStatus !== PageStatus.Messages ? (
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="medium"
+                      fullWidth
+                      onClick={this.onMessagesButton}
+                    >
+                      <DescriptionIcon className="iconSpacer" />
+                      Messages
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="medium"
+                      fullWidth
+                    >
+                      <DescriptionIcon className="iconSpacer" />
+                      Messages
                     </Button>
                   )}
 
@@ -521,6 +551,14 @@ class PastTripInfo extends React.Component<any, myStates> {
               )}
               {this.state.pageStatus === PageStatus.Notes && (
                 <Notes
+                  tripId={
+                    this.state.pastTrips[this.state.currentPastTripIndex].tripId
+                  }
+                />
+              )}
+
+              {this.state.pageStatus === PageStatus.Messages && (
+                <ChatBoard
                   tripId={
                     this.state.pastTrips[this.state.currentPastTripIndex].tripId
                   }
