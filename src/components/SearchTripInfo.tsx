@@ -38,7 +38,23 @@ type myProps = {
   displayProfile: string;
 };
 
-class SearchTripInfo extends React.Component<myProps, {}> {
+type myState = {
+  togglePending: boolean;
+};
+
+class SearchTripInfo extends React.Component<myProps, myState> {
+  constructor(props: myProps) {
+    super(props);
+    this.state = {
+      togglePending: false
+    };
+  }
+
+  handleToggle = () => {
+    this.setState({
+      togglePending: true
+    });
+  };
   render() {
     if (this.props.users.length) {
       return (
@@ -150,21 +166,22 @@ class SearchTripInfo extends React.Component<myProps, {}> {
             </div>
           </div>
           <Button
-            onClick={() =>
+            onClick={() => {
               this.props.onJoinTrip(
                 this.props.searchTrips[this.props.currentSearchTripIndex]
                   .ownerId,
                 this.props.userId,
                 this.props.searchTrips[this.props.currentSearchTripIndex].tripId
-              )
-            }
+              );
+              this.handleToggle();
+            }}
             variant="contained"
             color="primary"
             size="large"
             fullWidth
           >
             <GroupAddIcon />
-            JOIN
+            {this.state.togglePending ? "PENDING..." : "JOIN!"}
           </Button>
 
           {/* Previous & Next Button */}
