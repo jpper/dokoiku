@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import "../styles/MyProfile.css";
 // import { myFirestore } from "../config/firebase";
 import { Button } from "@material-ui/core";
+import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
 
 type myProps = {
@@ -11,14 +12,36 @@ type myProps = {
   onChangeDisplayProfile: any;
 };
 
-class Profile extends React.Component<myProps, { user: any; showReview: any }> {
+class Profile extends React.Component<
+  myProps,
+  { user: any; showReview: any; rating: number }
+> {
   constructor(props: myProps) {
     super(props);
     this.state = {
       user: undefined,
-      showReview: false
+      showReview: false,
+      rating: undefined
     };
   }
+
+  calculateRating = async (id: string) => {
+    const reviews = await myFirestore
+      .collection("users")
+      .doc(id)
+      .collection("reviews")
+      .get()
+      .then(query => query.docs.map(review => review.data()));
+    console.log(reviews);
+    let total = 0;
+    reviews.forEach(review => {
+      total += review.rating;
+    });
+    console.log(total);
+    const averageRating = total / reviews.length;
+    console.log(averageRating);
+    this.setState({ rating: averageRating });
+  };
 
   componentDidMount() {
     if (this.state.user === undefined && this.props.users.length) {
@@ -48,6 +71,7 @@ class Profile extends React.Component<myProps, { user: any; showReview: any }> {
 
   render() {
     if (this.state.user) {
+      this.calculateRating(this.state.user.id);
       return (
         <div className="MyProfile">
           {this.state.showReview ? (
@@ -120,7 +144,14 @@ class Profile extends React.Component<myProps, { user: any; showReview: any }> {
                   />
                 )}
               </div>
-              <div id="star-container">⭐️⭐️⭐️⭐️⭐️</div>
+              <div id="star-container">
+                <Rating
+                  value={this.state.rating ? this.state.rating : 0}
+                  readOnly
+                  precision={0.25}
+                  size="large"
+                />
+              </div>
               <Button
                 variant="contained"
                 color="secondary"

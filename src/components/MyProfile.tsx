@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import "../styles/MyProfile.css";
 import { myFirestore } from "../config/firebase";
 import { Button } from "@material-ui/core";
+import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
 import { setPageTabIndex } from "../redux/action";
 
@@ -14,15 +15,31 @@ type myProps = {
 
 class MyProfile extends React.Component<
   myProps,
-  { user: any; showReview: any }
+  { user: any; showReview: any; rating: number }
 > {
   constructor(props: myProps) {
     super(props);
     this.state = {
       user: undefined,
-      showReview: false
+      showReview: false,
+      rating: undefined
     };
   }
+
+  calculateRating = async (id: string) => {
+    const reviews = await myFirestore
+      .collection("users")
+      .doc(id)
+      .collection("reviews")
+      .get()
+      .then(query => query.docs.map(review => review.data()));
+    let total = 0;
+    reviews.forEach(review => {
+      total += review.rating;
+    });
+    const averageRating = total / reviews.length;
+    this.setState({ rating: averageRating });
+  };
 
   componentDidMount() {
     if (this.state.user === undefined && this.props.users.length) {
@@ -52,6 +69,7 @@ class MyProfile extends React.Component<
 
   render() {
     if (this.state.user) {
+      this.calculateRating(this.props.userId);
       return (
         <div className="MyProfile">
           {this.state.showReview ? (
@@ -238,7 +256,14 @@ class MyProfile extends React.Component<
                   </button>
                 </div>
               </div>
-              <div id="star-container">⭐️⭐️⭐️⭐️⭐️</div>
+              <div id="star-container">
+                <Rating
+                  value={this.state.rating}
+                  readOnly
+                  precision={0.25}
+                  size="large"
+                />
+              </div>
               <Button
                 variant="contained"
                 color="secondary"
