@@ -1,12 +1,12 @@
-import { firestore } from "firebase";
+// import { firestore } from "firebase";
 import React, { Component } from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
-import {
-  setMessages,
-  clearMessages,
-  setMessageListener
-} from "../redux/action";
+// import {
+//   setMessages,
+//   clearMessages,
+//   setMessageListener
+// } from "../redux/action";
 
 // Material UI & Styles
 import { List, ListItem, ListItemText, Divider } from "@material-ui/core";
@@ -36,7 +36,7 @@ class Reviews extends Component<Props, any> {
       tripNames.push(res.data().name);
     });
 
-    const tmpReviewInfo: any[] = [];
+    // const tmpReviewInfo: any[] = [];
     tripIds.forEach(async (tripId, index) => {
       const result = await myFirestore
         .collection("trips")

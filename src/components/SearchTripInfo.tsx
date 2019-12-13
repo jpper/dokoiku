@@ -1,8 +1,8 @@
-import React, { useImperativeHandle } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
 import moment from "moment";
-import firebase from "firebase";
+// import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
 
 // Material UI and styling
@@ -34,6 +34,8 @@ type myProps = {
   onNextTrip: any;
   onJoinTrip?: any;
   userId: string;
+  onChangeDisplayProfile: any;
+  displayProfile: string;
 };
 
 class SearchTripInfo extends React.Component<myProps, {}> {
@@ -109,60 +111,42 @@ class SearchTripInfo extends React.Component<myProps, {}> {
           <div className="spacer10"></div>
 
           <div>
-            <Typography variant="h5">Members:</Typography>
-            <div className="memberContainer">
-              {this.props.searchTrips[
-                this.props.currentSearchTripIndex
-              ].memberIds.map((m: any, i: number) => {
+            <Typography variant="h5">Owned by:</Typography>
+            <div>
+              {[
+                this.props.searchTrips[this.props.currentSearchTripIndex]
+                  .memberIds[0]
+              ].map((m: any, i: number) => {
                 const nickname = this.props.users.find(
                   (u: { id: any }) => u.id === m
                 ).nickname;
-                const photo = this.props.users.find(
-                  (u: { id: any }) => u.id === m
-                ).photoUrl;
-                const facebook = this.props.users.find(
-                  (u: { id: any }) => u.id === m
-                ).facebook;
                 return (
                   <div>
                     <p
                       key={i}
                       onClick={() => {
-                        const modal = document.getElementById(i.toString());
-                        modal.style.display = "block";
+                        this.props.onChangeDisplayProfile(m);
                       }}
                     >
                       <PersonIcon className="iconSpacer" />
                       {nickname}
                     </p>
-                    <div className="modal" id={i.toString()}>
-                      <div className="modal-content">
-                        <img src={photo} alt={nickname} />
-                        <p>{nickname}</p>
-                        {facebook ? (
-                          <a href={facebook}>
-                            <img
-                              src="https://www.facebook.com/images/fb_icon_325x325.png"
-                              alt="Facebook"
-                              id="fb-icon"
-                            />
-                          </a>
-                        ) : null}
-                        <br></br>
-                        <button
-                          className="close"
-                          onClick={() => {
-                            const modal = document.getElementById(i.toString());
-                            modal.style.display = "none";
-                          }}
-                        >
-                          Close
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 );
               })}
+            </div>
+          </div>
+
+          <div>
+            <Typography variant="h5">Members:</Typography>
+            <div className="memberContainer">
+              {this.props.searchTrips[this.props.currentSearchTripIndex]
+                .memberIds.length === 1
+                ? "There is currently 1 member!"
+                : "There are currently " +
+                  this.props.searchTrips[this.props.currentSearchTripIndex]
+                    .memberIds.length +
+                  " members!"}
             </div>
           </div>
           <Button
@@ -223,7 +207,8 @@ const mapStateToProps = (state: any) => {
     userId: state.userId,
     searchTrips: state.searchTrips,
     users: state.users,
-    currentSearchTripIndex: state.currentSearchTripIndex
+    currentSearchTripIndex: state.currentSearchTripIndex,
+    displayProfile: state.displayProfile
   };
 };
 
@@ -257,8 +242,12 @@ const mapDispatchToProps = (dispatch: any) => {
         .collection("pendingTrips")
         .doc(tripId)
         .set({ tripId });
-      //Refactor this so that it changes the state and is redux compliant (dispatch add trip??)
-    }
+    },
+    onChangeDisplayProfile: (profile: string) =>
+      dispatch({
+        type: "CHANGE_DISPLAY_PROFILE",
+        displayProfile: profile
+      })
   };
 };
 

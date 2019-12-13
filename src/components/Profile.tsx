@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import "../styles/MyProfile.css";
-import { myFirestore } from "../config/firebase";
+// import { myFirestore } from "../config/firebase";
 import { Button } from "@material-ui/core";
 
 type myProps = {
@@ -43,7 +43,11 @@ class Profile extends React.Component<myProps, { user: any }> {
       return (
         <div className="MyProfile">
           <h1>{this.state.user.nickname}</h1>
-          <img src={this.state.user.photoUrl} id="profile-picture" />
+          <img
+            src={this.state.user.photoUrl}
+            id="profile-picture"
+            alt="profile"
+          />
           <div className="social-icons">
             {/* FACEBOOK */}
             {this.state.user.facebook ? (
@@ -92,7 +96,6 @@ class Profile extends React.Component<myProps, { user: any }> {
           <Button variant="contained" color="secondary" size="large">
             Reviews
           </Button>
-          <br />
           <br />
           <button
             onClick={() => {

@@ -42,7 +42,11 @@ class MyProfile extends React.Component<myProps, { user: any }> {
       return (
         <div className="MyProfile">
           <h1>{this.state.user.nickname}</h1>
-          <img src={this.state.user.photoUrl} id="profile-picture" />
+          <img
+            src={this.state.user.photoUrl}
+            id="profile-picture"
+            alt="profile"
+          />
           <div className="social-icons">
             {/* FACEBOOK */}
             {this.state.user.facebook ? (

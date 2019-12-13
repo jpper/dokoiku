@@ -10,7 +10,6 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import { myFirestore } from "../config/firebase";
-import Profile from "./Profile";
 
 // Material UI
 import "../styles/Modal.css";
