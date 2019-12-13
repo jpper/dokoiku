@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import { myFirestore } from "../config/firebase";
+import Profile from "./Profile";
 
 // Material UI
 import "../styles/Modal.css";
@@ -47,6 +48,8 @@ type myProps = {
   toggleNotes: any;
   toggleMessages: any;
   mapTripMessage: any;
+  onChangeDisplayProfile: any;
+  displayProfile: string;
 };
 
 type myState = {
@@ -207,49 +210,18 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                 const nickname = this.props.users.find(
                   (u: { id: any }) => u.id === m
                 ).nickname;
-                const photo = this.props.users.find(
-                  (u: { id: any }) => u.id === m
-                ).photoUrl;
-                const facebook = this.props.users.find(
-                  (u: { id: any }) => u.id === m
-                ).facebook;
                 return (
                   <div>
                     <p
                       key={i}
                       onClick={() => {
-                        const modal = document.getElementById(i.toString());
-                        modal.style.display = "block";
+                        this.props.onChangeDisplayProfile(m);
+                        console.log(this.props.displayProfile);
                       }}
                     >
                       <PersonIcon className="iconSpacer" />
                       {nickname}
                     </p>
-                    <div className="modal" id={i.toString()}>
-                      <div className="modal-content">
-                        <img src={photo} alt={nickname} />
-                        <p>{nickname}</p>
-                        {facebook ? (
-                          <a href={facebook}>
-                            <img
-                              src="https://www.facebook.com/images/fb_icon_325x325.png"
-                              alt="Facebook"
-                              id="fb-icon"
-                            />
-                          </a>
-                        ) : null}
-                        <br></br>
-                        <button
-                          className="close"
-                          onClick={() => {
-                            const modal = document.getElementById(i.toString());
-                            modal.style.display = "none";
-                          }}
-                        >
-                          Close
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 );
               })}
@@ -375,7 +347,8 @@ const mapStateToProps = (state: any) => {
     currentOngoingTripIndex: state.currentOngoingTripIndex,
     userId: state.userId,
     users: state.users,
-    mapTripMessage: state.mapTripMessage
+    mapTripMessage: state.mapTripMessage,
+    displayProfile: state.displayProfile
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
@@ -408,7 +381,12 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "TOGGLE_MESSAGES"
       }),
-    onShowEdit: () => dispatch({ type: "SHOW_EDIT" })
+    onShowEdit: () => dispatch({ type: "SHOW_EDIT" }),
+    onChangeDisplayProfile: (profile: string) =>
+      dispatch({
+        type: "CHANGE_DISPLAY_PROFILE",
+        displayProfile: profile
+      })
   };
 };
 
