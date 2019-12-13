@@ -21,7 +21,8 @@ const initialState: any = {
   showPastTrips: false,
   showReviews: false,
   requests: [],
-  displayProfile: undefined
+  displayProfile: undefined,
+  pageTabIndex: 0
 };
 
 interface Action {
@@ -293,6 +294,12 @@ const reducer = (state: any = initialState, action: Action): any => {
           )
       );
       return { ...state, requests: newRequests };
+    }
+    case "SET_PAGE_TAB_INDEX": {
+      return {
+        ...state,
+        pageTabIndex: action.index
+      };
     }
     default: {
       return state;
