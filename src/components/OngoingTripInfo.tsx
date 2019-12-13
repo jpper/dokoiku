@@ -1,6 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button } from "@material-ui/core";
+import {
+  Button,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Dialog
+} from "@material-ui/core";
 import moment from "moment";
 import { myFirestore } from "../config/firebase";
 import Profile from "./Profile";
@@ -45,7 +52,17 @@ type myProps = {
   displayProfile: string;
 };
 
-class OngoingTripInfo extends React.Component<myProps, {}> {
+type myState = {
+  toggleDialog: boolean;
+};
+
+class OngoingTripInfo extends React.Component<myProps, myState> {
+  constructor(props: myProps) {
+    super(props);
+    this.state = {
+      toggleDialog: false
+    };
+  }
   async deleteTrip(
     tripId: string,
     userId: string,
@@ -68,16 +85,21 @@ class OngoingTripInfo extends React.Component<myProps, {}> {
     }
     window.location.reload();
   }
-
+  handleToggle = () => {
+    this.setState({
+      toggleDialog: !this.state.toggleDialog
+    });
+  };
   render() {
     if (this.props.users.length) {
       return (
         <div className="TripInfo">
           {/* Title */}
           <Typography variant="h3" className="typoH3">
-            <b>Trip Details</b>
+            <b>
+              {this.props.ongoingTrips[this.props.currentOngoingTripIndex].name}
+            </b>
           </Typography>
-
           {/* Start Date */}
           <Typography className="iconWrapper">
             <DateRangeIcon />
@@ -163,9 +185,24 @@ class OngoingTripInfo extends React.Component<myProps, {}> {
 
           <div className="spacer10"></div>
 
+          <div>
+            <Typography variant="h5">Owned by:</Typography>
+            <div>
+              {
+                this.props.users.find(
+                  (user: any) =>
+                    user.id ===
+                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .ownerId
+                ).nickname
+              }
+            </div>
+          </div>
+
           {/* Members */}
           <div>
             <Typography variant="h5">Members:</Typography>
+
             <div className="memberContainer">
               {this.props.ongoingTrips[
                 this.props.currentOngoingTripIndex
@@ -209,53 +246,92 @@ class OngoingTripInfo extends React.Component<myProps, {}> {
             <Grid item xs={6}>
               <Button
                 fullWidth
-                onClick={() =>
-                  this.deleteTrip(
-                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                      .tripId,
-                    this.props.userId,
-                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                      .memberIds,
-                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                      .ownerId
-                  )
-                }
+                onClick={this.handleToggle}
                 variant="contained"
                 color="secondary"
                 size="large"
               >
                 <DeleteForeverIcon />
-                DELETE
+                {this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .ownerId === this.props.userId
+                  ? "DELETE"
+                  : "LEAVE"}
               </Button>
-            </Grid>
-          </Grid>
-
-          {/* Previous & Next Button */}
-          <Grid container>
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="default"
-                size="small"
-                fullWidth
-                onClick={this.props.onPreviousTrip}
+              <Dialog
+                open={this.state.toggleDialog}
+                onClose={this.handleToggle}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
               >
-                <ArrowBackIosIcon />
-                Previous
-              </Button>
+                <DialogTitle id="alert-dialog-title">Confirm</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to{" "}
+                    {this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .ownerId === this.props.userId
+                      ? "delete"
+                      : "leave"}{" "}
+                    this trip?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleToggle} color="primary">
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      this.deleteTrip(
+                        this.props.ongoingTrips[
+                          this.props.currentOngoingTripIndex
+                        ].tripId,
+                        this.props.userId,
+                        this.props.ongoingTrips[
+                          this.props.currentOngoingTripIndex
+                        ].memberIds,
+                        this.props.ongoingTrips[
+                          this.props.currentOngoingTripIndex
+                        ].ownerId
+                      )
+                    }
+                    color="primary"
+                    autoFocus
+                  >
+                    {this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .ownerId === this.props.userId
+                      ? "Delete"
+                      : "Leave"}
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </Grid>
 
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="default"
-                size="small"
-                fullWidth
-                onClick={this.props.onNextTrip}
-              >
-                Next
-                <ArrowForwardIosIcon />
-              </Button>
+            {/* Previous & Next Button */}
+            <Grid container>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  size="small"
+                  fullWidth
+                  onClick={this.props.onPreviousTrip}
+                >
+                  <ArrowBackIosIcon />
+                  Previous
+                </Button>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  size="small"
+                  fullWidth
+                  onClick={this.props.onNextTrip}
+                >
+                  Next
+                  <ArrowForwardIosIcon />
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         </div>

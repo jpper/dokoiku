@@ -251,6 +251,16 @@ const reducer = (state: any = initialState, action: Action): any => {
         displayProfile: action.displayProfile
       };
     }
+    case "REMOVE_REQUEST": {
+      console.log(action.fromId);
+      const newRequests = state.requests.filter(
+        (request: any) =>
+          !(
+            request.fromId === action.fromId && request.tripId === action.tripId
+          )
+      );
+      return { ...state, requests: newRequests };
+    }
     default: {
       return state;
     }
