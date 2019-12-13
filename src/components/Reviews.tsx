@@ -2,17 +2,12 @@ import { firestore } from "firebase";
 import React, { Component } from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
-import {
-  setMessages,
-  clearMessages,
-  setMessageListener
-} from "../redux/action";
 
 // Material UI & Styles
 import { List, ListItem, ListItemText, Divider } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 
-class Reviews extends Component<any, any> {
+export default class Reviews extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -28,30 +23,39 @@ class Reviews extends Component<any, any> {
       .get();
 
     result.docs.forEach(async res => {
+      if (this.props.tripId === undefined) {
+        await this.setReviewInfo(res);
+        return;
+      }
+
       if (this.props.tripId === res.data().tripId.id) {
-        const reviewerResult = await res.data().reviewer.get();
-        const reviewerName = reviewerResult.data().nickname;
-
-        const tripResult = await res.data().tripId.get();
-        const tripName = tripResult.data().name;
-
-        const reviews = await res.data().message;
-        const rating = await res.data().rating;
-        this.setState({
-          reviewInfo: [
-            ...this.state.reviewInfo,
-            {
-              tripName,
-              reviewer: reviewerName,
-              reviews,
-              rating
-            }
-          ]
-        });
+        await this.setReviewInfo(res);
+        return;
       }
     });
-    console.log("OK!!");
   }
+
+  setReviewInfo = async (res: any) => {
+    const reviewerResult = await res.data().reviewer.get();
+    const reviewerName = reviewerResult.data().nickname;
+
+    const tripResult = await res.data().tripId.get();
+    const tripName = tripResult.data().name;
+
+    const reviews = await res.data().message;
+    const rating = await res.data().rating;
+    this.setState({
+      reviewInfo: [
+        ...this.state.reviewInfo,
+        {
+          tripName,
+          reviewer: reviewerName,
+          reviews,
+          rating
+        }
+      ]
+    });
+  };
 
   render() {
     return (
@@ -98,13 +102,3 @@ class Reviews extends Component<any, any> {
     );
   }
 }
-
-const mapStateToProps = (state: any) => ({
-  userId: state.userId
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-  clearMessage: () => {}
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Reviews);
