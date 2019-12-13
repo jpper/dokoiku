@@ -10,7 +10,6 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import { myFirestore } from "../config/firebase";
-import Profile from "./Profile";
 
 // Material UI
 import "../styles/Modal.css";
@@ -70,6 +69,16 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
     ownerId: string
   ) {
     if (userId === ownerId) {
+      const request_query = myFirestore
+        .collection("users")
+        .doc(ownerId)
+        .collection("requests")
+        .where("tripId", "==", tripId);
+      request_query.get().then((data: any) => {
+        data.forEach((doc: any) => {
+          doc.ref.delete();
+        });
+      });
       await myFirestore
         .collection("trips")
         .doc(tripId)
