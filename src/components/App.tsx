@@ -12,6 +12,7 @@ import Login from "./Login";
 import Notification from "./Notification";
 import PendingTripInfo from "./PendingTripInfo";
 import MyProfile from "./MyProfile";
+import Profile from "./Profile";
 import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
 import {
@@ -24,7 +25,6 @@ import {
 
 // Material UI & Styles
 import "../styles/App.css";
-import "../styles/AddFacebook.css";
 import {
   AppBar,
   Typography,
@@ -79,6 +79,7 @@ type myProps = {
   getRequests: any;
   requests: any;
   logout: any;
+  displayProfile: string;
 };
 
 const mapStateToProps = (state: any) => {
@@ -97,7 +98,8 @@ const mapStateToProps = (state: any) => {
     login: state.login,
     showPastTrips: state.showPastTrips,
     showReviews: state.showReviews,
-    requests: state.requests
+    requests: state.requests,
+    displayProfile: state.displayProfile
   };
 };
 
@@ -341,15 +343,6 @@ class App extends React.Component<myProps, any> {
                     <p className="textUsername">
                       Hello, <b>{this.props.userName}</b>
                     </p>
-                    <MenuItem
-                      onClick={() => {
-                        const modal = document.getElementById("add-facebook");
-                        modal.style.display = "block";
-                        this.handleClose();
-                      }}
-                    >
-                      Profile
-                    </MenuItem>
                     <Notification />
                     <PendingTripInfo />
                     {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
@@ -388,7 +381,10 @@ class App extends React.Component<myProps, any> {
                     </Grid>
                     {/* {if statement and changing props value here} */}
                     <Grid item xs={7}>
-                      {!this.props.showChat &&
+                      {this.props.displayProfile ? (
+                        <Profile />
+                      ) : (
+                        !this.props.showChat &&
                         !this.props.showEdit &&
                         this.props.ongoingTrips.length &&
                         this.props.mapTripMessage === 0 && (
@@ -398,7 +394,8 @@ class App extends React.Component<myProps, any> {
                               this.props.currentOngoingTripIndex
                             }
                           />
-                        )}
+                        )
+                      )}
                       {this.props.mapTripMessage === 1 && (
                         <Notes
                           tripId={
@@ -532,38 +529,6 @@ class App extends React.Component<myProps, any> {
             <Login />
           </div>
         )}
-        <div className="modal" id="add-facebook">
-          <div className="modal-content">
-            <p>Add a link to your Facebook:</p>
-            <input id="fb-url" placeholder="Paste URL here" />
-            <button
-              onClick={() => {
-                const url = (document.getElementById(
-                  "fb-url"
-                ) as HTMLInputElement).value;
-                myFirestore
-                  .collection("users")
-                  .doc(this.props.userId)
-                  .update({ facebook: url });
-                const modal = document.getElementById("add-facebook");
-                modal.style.display = "none";
-              }}
-            >
-              Submit
-            </button>
-            <br></br>
-            <br></br>
-            <button
-              className="close"
-              onClick={() => {
-                const modal = document.getElementById("add-facebook");
-                modal.style.display = "none";
-              }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
       </div>
     );
   }
