@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import "../styles/MyProfile.css";
 // import { myFirestore } from "../config/firebase";
 import { Button } from "@material-ui/core";
+import { myFirestore } from "../config/firebase";
 import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
 
