@@ -19,8 +19,8 @@ import {
   setUserInfo,
   addRequest,
   addPendingTrip,
-  setShowPastTrips,
-  setShowReviews
+  setShowReviews,
+  addPastTrip
 } from "../redux/action";
 
 // Material UI & Styles
@@ -62,8 +62,10 @@ type myProps = {
   userPhoto: string;
   ongoingTrips: any;
   searchTrips: any;
+  pastTrips: any;
   currentOngoingTripIndex: number;
   currentSearchTripIndex: number;
+  currentPastTripIndex: number;
   showChat: boolean;
   showEdit: boolean;
   onShowChat?: any;
@@ -72,10 +74,6 @@ type myProps = {
   login: any;
   mapTripMessage: any;
   getTrips: any;
-  setShowPastTrips: any;
-  showPastTrips: any;
-  setShowReviews: any;
-  showReviews: any;
   getRequests: any;
   requests: any;
   logout: any;
@@ -89,15 +87,15 @@ const mapStateToProps = (state: any) => {
     userPhoto: state.userPhoto,
     ongoingTrips: state.ongoingTrips,
     searchTrips: state.searchTrips,
+    pastTrips: state.pastTrips,
     currentOngoingTripIndex: state.currentOngoingTripIndex,
     currentSearchTripIndex: state.currentSearchTripIndex,
+    currentPastTripIndex: state.currentPastTripIndex,
     showChat: state.showChat,
     showEdit: state.showEdit,
     currentProfile: state.currentProfile,
     mapTripMessage: state.mapTripMessage,
     login: state.login,
-    showPastTrips: state.showPastTrips,
-    showReviews: state.showReviews,
     requests: state.requests,
     displayProfile: state.displayProfile
   };
@@ -143,6 +141,18 @@ const mapDispatchToProps = (dispatch: any) => ({
               type: "ADD_ONGOING_TRIP",
               ongoingTrip: change.doc.data()
             });
+
+            // Dispatch ADD_PAST_TRIP here!
+            const today = new Date();
+            if (
+              today.getTime() >
+              change.doc
+                .data()
+                .endDate.toDate()
+                .getTime()
+            ) {
+              dispatch(addPastTrip(change.doc.data()));
+            }
           }
         }
       });
@@ -152,10 +162,6 @@ const mapDispatchToProps = (dispatch: any) => ({
       .get()
       .then(query => query.docs.map(user => user.data()));
     dispatch({ type: "GET_USERS", users });
-  },
-  // FIXME: This is just for testing Reviews!!
-  setShowPastTrips: (status: boolean) => {
-    dispatch(setShowPastTrips(status));
   },
   setShowReviews: (status: boolean) => {
     dispatch(setShowReviews(status));
@@ -487,30 +493,18 @@ class App extends React.Component<myProps, any> {
 
           {/* Build Trip */}
           <TabPanel value={this.state.value} index={4}>
-            {this.props.userId === "" ? (
-              <Login />
-            ) : (
-              <>
-                <BuildTrip />
-              </>
-            )}
+            {this.props.userId === "" ? <Login /> : <BuildTrip />}
           </TabPanel>
 
           {/* Reviews */}
           {/* FIXME: This is just for testing Reviews!! */}
           <TabPanel value={this.state.value} index={5}>
-            <PastTripInfo />
-            {this.props.showReviews && (
-              <Grid container>
-                <Grid item xs={5}>
-                  <Container>
-                    <Card className="reviews">
-                      <Reviews />
-                    </Card>
-                  </Container>
-                </Grid>
-                <Grid item xs={7}></Grid>
-              </Grid>
+            {this.props.userId === "" ? (
+              <Login />
+            ) : (
+              <>
+                <PastTripInfo />
+              </>
             )}
           </TabPanel>
 

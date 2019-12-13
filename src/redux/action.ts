@@ -58,3 +58,8 @@ export const removeRequest = (tripId: string, fromId: string) => ({
   tripId,
   fromId
 });
+
+export const addPastTrip = (pastTrip: any) => ({
+  type: "ADD_PAST_TRIP",
+  pastTrip
+});
