@@ -19,8 +19,8 @@ import {
   setUserInfo,
   addRequest,
   addPendingTrip,
-  setShowPastTrips,
-  setShowReviews
+  setShowReviews,
+  addPastTrip
 } from "../redux/action";
 
 // Material UI & Styles
@@ -47,7 +47,8 @@ import InfoIcon from "@material-ui/icons/Info";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 // FIXME: This is just for testing Reviews!! */
-import ChatIcon from "@material-ui/icons/Chat";
+// import ChatIcon from "@material-ui/icons/Chat";
+import RateReviewIcon from "@material-ui/icons/RateReview";
 import PastTripInfo from "./PastTripInfo";
 import Reviews from "./Reviews";
 
@@ -61,8 +62,10 @@ type myProps = {
   userPhoto: string;
   ongoingTrips: any;
   searchTrips: any;
+  pastTrips: any;
   currentOngoingTripIndex: number;
   currentSearchTripIndex: number;
+  currentPastTripIndex: number;
   showChat: boolean;
   showEdit: boolean;
   onShowChat?: any;
@@ -71,10 +74,6 @@ type myProps = {
   login: any;
   mapTripMessage: any;
   getTrips: any;
-  setShowPastTrips: any;
-  showPastTrips: any;
-  setShowReviews: any;
-  showReviews: any;
   getRequests: any;
   requests: any;
   logout: any;
@@ -88,15 +87,15 @@ const mapStateToProps = (state: any) => {
     userPhoto: state.userPhoto,
     ongoingTrips: state.ongoingTrips,
     searchTrips: state.searchTrips,
+    pastTrips: state.pastTrips,
     currentOngoingTripIndex: state.currentOngoingTripIndex,
     currentSearchTripIndex: state.currentSearchTripIndex,
+    currentPastTripIndex: state.currentPastTripIndex,
     showChat: state.showChat,
     showEdit: state.showEdit,
     currentProfile: state.currentProfile,
     mapTripMessage: state.mapTripMessage,
     login: state.login,
-    showPastTrips: state.showPastTrips,
-    showReviews: state.showReviews,
     requests: state.requests,
     displayProfile: state.displayProfile
   };
@@ -142,6 +141,18 @@ const mapDispatchToProps = (dispatch: any) => ({
               type: "ADD_ONGOING_TRIP",
               ongoingTrip: change.doc.data()
             });
+
+            // Dispatch ADD_PAST_TRIP here!
+            const today = new Date();
+            if (
+              today.getTime() >
+              change.doc
+                .data()
+                .endDate.toDate()
+                .getTime()
+            ) {
+              dispatch(addPastTrip(change.doc.data()));
+            }
           }
         }
       });
@@ -151,10 +162,6 @@ const mapDispatchToProps = (dispatch: any) => ({
       .get()
       .then(query => query.docs.map(user => user.data()));
     dispatch({ type: "GET_USERS", users });
-  },
-  // FIXME: This is just for testing Reviews!!
-  setShowPastTrips: (status: boolean) => {
-    dispatch(setShowPastTrips(status));
   },
   setShowReviews: (status: boolean) => {
     dispatch(setShowReviews(status));
@@ -288,7 +295,7 @@ class App extends React.Component<myProps, any> {
             <Tab label="Build Trip" icon={<BuildIcon />} />
 
             {/* FIXME: This is just for testing Reviews!! */}
-            <Tab label="Social" icon={<ChatIcon />} />
+            <Tab label="Trip Reviews" icon={<RateReviewIcon />} />
 
             {/* User Icon */}
             <div className="iconWrapper">
@@ -486,64 +493,18 @@ class App extends React.Component<myProps, any> {
 
           {/* Build Trip */}
           <TabPanel value={this.state.value} index={4}>
+            {this.props.userId === "" ? <Login /> : <BuildTrip />}
+          </TabPanel>
+
+          {/* Reviews */}
+          {/* FIXME: This is just for testing Reviews!! */}
+          <TabPanel value={this.state.value} index={5}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
               <>
-                <BuildTrip />
+                <PastTripInfo />
               </>
-            )}
-          </TabPanel>
-
-          {/* Social */}
-          {/* FIXME: This is just for testing Reviews!! */}
-          <TabPanel value={this.state.value} index={5}>
-            <p>Social</p>
-            <button
-              onClick={() => {
-                this.props.setShowPastTrips(true);
-              }}
-            >
-              Past Trips
-            </button>
-
-            <button
-              onClick={() => {
-                this.props.setShowReviews(true);
-              }}
-            >
-              Check Reviews
-            </button>
-
-            {this.props.showPastTrips && this.props.ongoingTrips.length && (
-              <Grid container>
-                <Grid item xs={5}>
-                  <Container>
-                    <Card className="tripInfo">
-                      <PastTripInfo />
-                    </Card>
-                  </Container>
-                </Grid>
-                <Grid item xs={7}>
-                  <Map
-                    trips={this.props.ongoingTrips}
-                    currentTripIndex={this.props.currentOngoingTripIndex}
-                  />
-                </Grid>
-              </Grid>
-            )}
-
-            {this.props.showReviews && (
-              <Grid container>
-                <Grid item xs={5}>
-                  <Container>
-                    <Card className="reviews">
-                      <Reviews />
-                    </Card>
-                  </Container>
-                </Grid>
-                <Grid item xs={7}></Grid>
-              </Grid>
             )}
           </TabPanel>
 
