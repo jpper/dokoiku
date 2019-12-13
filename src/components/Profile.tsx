@@ -50,70 +50,6 @@ class Profile extends React.Component<myProps, { user: any; showReview: any }> {
     if (this.state.user) {
       return (
         <div className="MyProfile">
-<<<<<<< HEAD
-          <h1>{this.state.user.nickname}</h1>
-          <img
-            src={this.state.user.photoUrl}
-            id="profile-picture"
-            alt="profile"
-          />
-          <div className="social-icons">
-            {/* FACEBOOK */}
-            {this.state.user.facebook ? (
-              <img
-                src="https://www.facebook.com/images/fb_icon_325x325.png"
-                alt="Facebook"
-                id="social-icon"
-              />
-            ) : (
-              <img
-                src="https://www.facebook.com/images/fb_icon_325x325.png"
-                alt="Facebook"
-                id="no-social-icon"
-              />
-            )}
-            {/* INSTA */}
-            {this.state.user.instagram ? (
-              <img
-                src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                alt="Instagram"
-                id="social-icon"
-              />
-            ) : (
-              <img
-                src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                alt="Instagram"
-                id="no-social-icon"
-              />
-            )}
-            {/* TWITTER */}
-            {this.state.user.twitter ? (
-              <img
-                src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                alt="Twitter"
-                id="social-icon"
-              />
-            ) : (
-              <img
-                src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                alt="Twitter"
-                id="no-social-icon"
-              />
-            )}
-          </div>
-          <div id="star-container">⭐️⭐️⭐️⭐️⭐️</div>
-          <Button variant="contained" color="secondary" size="large">
-            Reviews
-          </Button>
-          <br />
-          <button
-            onClick={() => {
-              this.props.onChangeDisplayProfile(undefined);
-            }}
-          >
-            Close
-          </button>
-=======
           {this.state.showReview ? (
             <>
               <Button
@@ -204,7 +140,6 @@ class Profile extends React.Component<myProps, { user: any; showReview: any }> {
               </button>
             </>
           )}
->>>>>>> 35972f387213ab731560097ddcc87d6728d73fb0
         </div>
       );
     } else {
