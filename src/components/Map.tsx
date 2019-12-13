@@ -17,6 +17,7 @@ type MapProps = {
 interface MapState {
   response: any;
   positions: any;
+  isResponse: boolean;
 }
 
 class Map extends React.Component<MapProps, MapState> {
@@ -24,7 +25,8 @@ class Map extends React.Component<MapProps, MapState> {
     super(props);
     this.state = {
       response: null,
-      positions: []
+      positions: [],
+      isResponse: true
     };
     this.directionsCallback = this.directionsCallback.bind(this);
   }
@@ -65,57 +67,75 @@ class Map extends React.Component<MapProps, MapState> {
           });
         });
       } else {
-        console.log("response: ", response);
+        console.log(response);
       }
     }
   }
   render() {
-    return (
-      <LoadScript
-        id="script-loader"
-        googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAPS_API}`}
-      >
-        <GoogleMap
-          id="example-map"
-          mapContainerStyle={{
-            height: "600px",
-            width: "600px"
-          }}
-          zoom={6}
-          center={{
-            lat: 35.689722,
-            lng: 139.692222
-          }}
+    if (this.state.isResponse) {
+      return (
+        <LoadScript
+          id="script-loader"
+          googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAPS_API}`}
         >
-          {this.state.positions.length
-            ? this.state.positions
-                .slice(1)
-                .map((position: any, index: number) => (
-                  <Marker key={index} position={position} />
-                ))
-            : null}
-          <DirectionsService
-            options={{
-              origin: this.props.trips[this.props.currentTripIndex]
-                .startLocation,
-              destination: this.props.trips[this.props.currentTripIndex]
-                .startLocation,
-              waypoints: this.props.trips[this.props.currentTripIndex]
-                .waypoints,
-              travelMode: this.props.trips[this.props.currentTripIndex]
-                .travelMode
+          <GoogleMap
+            id="example-map"
+            mapContainerStyle={{
+              height: "600px",
+              width: "600px"
             }}
-            callback={this.directionsCallback}
-          />
-          <DirectionsRenderer
-            options={{
-              directions: this.state.response,
-              suppressMarkers: true
+            zoom={6}
+            center={{
+              lat: 35.689722,
+              lng: 139.692222
             }}
-          ></DirectionsRenderer>
-        </GoogleMap>
-      </LoadScript>
-    );
+          >
+            {this.state.positions.length
+              ? this.state.positions
+                  .slice(1)
+                  .map((position: any, index: number) => {
+                    if (position === this.state.positions[1]) {
+                      const icon = {
+                        url:
+                          "http://maps.google.com/mapfiles/kml/shapes/ranger_station.png",
+                        scaledSize: new google.maps.Size(40, 40)
+                      };
+                      return (
+                        <Marker key={index} position={position} icon={icon} />
+                      );
+                    } else if (
+                      position !==
+                      this.state.positions[this.state.positions.length - 1]
+                    ) {
+                      return <Marker key={index} position={position} />;
+                    }
+                  })
+              : null}
+            <DirectionsService
+              options={{
+                origin: this.props.trips[this.props.currentTripIndex]
+                  .startLocation,
+                destination: this.props.trips[this.props.currentTripIndex]
+                  .startLocation,
+                waypoints: this.props.trips[this.props.currentTripIndex]
+                  .waypoints,
+                travelMode: this.props.trips[this.props.currentTripIndex]
+                  .travelMode
+              }}
+              callback={this.directionsCallback}
+            />
+            <DirectionsRenderer
+              options={{
+                directions: this.state.response,
+                suppressMarkers: true
+              }}
+            ></DirectionsRenderer>
+          </GoogleMap>
+        </LoadScript>
+      );
+    } else {
+      return "There are no directions for your trip";
+    }
   }
 }
 

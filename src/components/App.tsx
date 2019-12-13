@@ -487,10 +487,19 @@ class App extends React.Component<myProps, any> {
                       </Container>
                     </Grid>
                     <Grid item xs={7}>
-                      <Map
-                        trips={this.props.searchTrips}
-                        currentTripIndex={this.props.currentSearchTripIndex}
-                      />
+                      {this.props.displayProfile ? (
+                        <Profile />
+                      ) : (
+                        !this.props.showChat &&
+                        !this.props.showEdit &&
+                        this.props.ongoingTrips.length &&
+                        this.props.mapTripMessage === 0 && (
+                          <Map
+                            trips={this.props.searchTrips}
+                            currentTripIndex={this.props.currentSearchTripIndex}
+                          />
+                        )
+                      )}
                     </Grid>
                   </Grid>
                 ) : (
