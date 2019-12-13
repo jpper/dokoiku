@@ -2,17 +2,19 @@ import React, { Component } from "react";
 import "../styles/Notes.css";
 import { myFirebase } from "../config/firebase";
 
-class Notes extends Component {
+class Notes extends Component<any, any> {
   componentDidMount() {
+    const windowMod: any = window;
+
     //// Get Firebase Database reference.
     const firepadRef = this.getExampleRef();
     //// Create CodeMirror (with lineWrapping on).
-    const codeMirror = window.CodeMirror(
+    const codeMirror = windowMod.CodeMirror(
       document.getElementById("firepad-container"),
       { lineWrapping: true }
     );
     //// Create Firepad (with rich text toolbar and shortcuts enabled).
-    const firepad = window.Firepad.fromCodeMirror(firepadRef, codeMirror, {
+    const firepad = windowMod.Firepad.fromCodeMirror(firepadRef, codeMirror, {
       richTextToolbar: true,
       richTextShortcuts: true
     });
@@ -35,7 +37,7 @@ class Notes extends Component {
     ref.on(
       "value",
       function(snapshot) {},
-      function(errorObject) {}
+      function(errorObject: any) {}
     );
     return ref;
   }

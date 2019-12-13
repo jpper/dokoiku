@@ -9,13 +9,22 @@ import About from "./About";
 import BuildTrip from "./BuildTrip";
 import EditTrip from "./EditTrip";
 import Login from "./Login";
+import Notification from "./Notification";
+import PendingTripInfo from "./PendingTripInfo";
+import MyProfile from "./MyProfile";
+import Profile from "./Profile";
 import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
-import { setUserInfo } from "../redux/action";
+import {
+  setUserInfo,
+  addRequest,
+  addPendingTrip,
+  setShowPastTrips,
+  setShowReviews
+} from "../redux/action";
 
 // Material UI & Styles
 import "../styles/App.css";
-import "../styles/AddFacebook.css";
 import {
   AppBar,
   Typography,
@@ -28,13 +37,21 @@ import {
   Menu,
   MenuItem,
   Card,
-  Container
+  Container,
+  Badge
 } from "@material-ui/core";
 import CardTravelIcon from "@material-ui/icons/CardTravel";
 import SearchIcon from "@material-ui/icons/Search";
 import BuildIcon from "@material-ui/icons/Build";
 import InfoIcon from "@material-ui/icons/Info";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+
+// FIXME: This is just for testing Reviews!! */
+import ChatIcon from "@material-ui/icons/Chat";
+import PastTripInfo from "./PastTripInfo";
+import Reviews from "./Reviews";
+
+import PersonIcon from "@material-ui/icons/Person";
 import backgroundImg from "../img/trip.jpg";
 import moment from "moment";
 
@@ -54,6 +71,14 @@ type myProps = {
   login: any;
   mapTripMessage: any;
   getTrips: any;
+  setShowPastTrips: any;
+  showPastTrips: any;
+  setShowReviews: any;
+  showReviews: any;
+  getRequests: any;
+  requests: any;
+  logout: any;
+  displayProfile: string;
 };
 
 const mapStateToProps = (state: any) => {
@@ -69,7 +94,11 @@ const mapStateToProps = (state: any) => {
     showEdit: state.showEdit,
     currentProfile: state.currentProfile,
     mapTripMessage: state.mapTripMessage,
-    login: state.login
+    login: state.login,
+    showPastTrips: state.showPastTrips,
+    showReviews: state.showReviews,
+    requests: state.requests,
+    displayProfile: state.displayProfile
   };
 };
 
@@ -78,15 +107,35 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(setUserInfo(userName, userId, userPhoto)),
   getTrips: async (userId: string) => {
     //console.log("called");
+    const tripIds: any[] = [];
+    myFirestore
+      .collection("users")
+      .doc(userId)
+      .collection("pendingTrips")
+      .onSnapshot(snapShot => {
+        snapShot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            tripIds.push(change.doc.data().tripId);
+            console.log(tripIds);
+          }
+        });
+      });
+
     myFirestore.collection("trips").onSnapshot(snapShot => {
       snapShot.docChanges().forEach(change => {
         if (change.type === "added") {
+          console.log(change.doc.data().tripId);
           if (change.doc.data().memberIds.indexOf(userId) === -1) {
-            console.log("dispatching ADD_SEARCH_TRIP");
-            dispatch({
-              type: "ADD_SEARCH_TRIP",
-              searchTrip: change.doc.data()
-            });
+            if (tripIds.includes(change.doc.data().tripId)) {
+              console.log("dispatching ADD_PENDING_TRIP");
+              dispatch(addPendingTrip(change.doc.data()));
+            } else {
+              console.log("dispatching ADD_SEARCH_TRIP");
+              dispatch({
+                type: "ADD_SEARCH_TRIP",
+                searchTrip: change.doc.data()
+              });
+            }
           } else {
             console.log("dispatching ADD_ONGOING_TRIP");
             dispatch({
@@ -102,7 +151,29 @@ const mapDispatchToProps = (dispatch: any) => ({
       .get()
       .then(query => query.docs.map(user => user.data()));
     dispatch({ type: "GET_USERS", users });
-  }
+  },
+  // FIXME: This is just for testing Reviews!!
+  setShowPastTrips: (status: boolean) => {
+    dispatch(setShowPastTrips(status));
+  },
+  setShowReviews: (status: boolean) => {
+    dispatch(setShowReviews(status));
+  },
+  getRequests: async (userId: string) => {
+    myFirestore
+      .collection("users")
+      .doc(userId)
+      .collection("requests")
+      .onSnapshot(snapShot => {
+        snapShot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            console.log(change.doc.data());
+            dispatch(addRequest(change.doc.data()));
+          }
+        });
+      });
+  },
+  logout: () => dispatch({ type: "LOGOUT" })
 });
 
 interface TabPanelProps {
@@ -139,7 +210,7 @@ class App extends React.Component<myProps, any> {
   constructor(props: myProps) {
     super(props);
     this.state = {
-      value: 0
+      value: 1
     };
   }
 
@@ -160,6 +231,7 @@ class App extends React.Component<myProps, any> {
       if (user !== null) {
         this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
         this.props.getTrips(user.uid);
+        this.props.getRequests(user.uid);
       }
     });
   };
@@ -195,6 +267,7 @@ class App extends React.Component<myProps, any> {
     this.handleClose();
     this.props.setUserInfo("", "", "");
     firebase.auth().signOut();
+    this.props.logout();
     console.log("LOGOUT!!!");
   };
 
@@ -209,10 +282,13 @@ class App extends React.Component<myProps, any> {
             aria-label="scrollable force tabs example"
           >
             <Tab label="About" icon={<InfoIcon />} />
+            <Tab label="Profile" icon={<PersonIcon />} />
             <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
             <Tab label="Search Trips" icon={<SearchIcon />} />
             <Tab label="Build Trip" icon={<BuildIcon />} />
-            {/* <Tab label="Social" icon={<ChatIcon />} /> */}
+
+            {/* FIXME: This is just for testing Reviews!! */}
+            <Tab label="Social" icon={<ChatIcon />} />
 
             {/* User Icon */}
             <div className="iconWrapper">
@@ -222,14 +298,30 @@ class App extends React.Component<myProps, any> {
                 aria-haspopup="true"
                 onClick={this.handleClick}
               >
-                {this.props.userPhoto === "" ? (
-                  <>
-                    <AccountCircleIcon fontSize="large" />
-                  </>
+                {this.props.requests.length ? (
+                  <Badge variant="dot" color="secondary">
+                    {this.props.userPhoto === "" ? (
+                      <>
+                        <AccountCircleIcon fontSize="large" />
+                      </>
+                    ) : (
+                      <>
+                        <Avatar alt="User Photo" src={this.props.userPhoto} />
+                      </>
+                    )}
+                  </Badge>
                 ) : (
-                  <>
-                    <Avatar alt="User Photo" src={this.props.userPhoto} />
-                  </>
+                  <div>
+                    {this.props.userPhoto === "" ? (
+                      <>
+                        <AccountCircleIcon fontSize="large" />
+                      </>
+                    ) : (
+                      <>
+                        <Avatar alt="User Photo" src={this.props.userPhoto} />
+                      </>
+                    )}
+                  </div>
                 )}
               </IconButton>
               <Menu
@@ -250,15 +342,8 @@ class App extends React.Component<myProps, any> {
                     <p className="textUsername">
                       Hello, <b>{this.props.userName}</b>
                     </p>
-                    <MenuItem
-                      onClick={() => {
-                        const modal = document.getElementById("add-facebook");
-                        modal.style.display = "block";
-                        this.handleClose();
-                      }}
-                    >
-                      Profile
-                    </MenuItem>
+                    <Notification />
+                    <PendingTripInfo />
                     {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
                     <MenuItem onClick={this.onLogout}>Logout</MenuItem>
                   </>
@@ -267,8 +352,19 @@ class App extends React.Component<myProps, any> {
             </div>
           </Tabs>
 
-          {/* Ongoing Trips */}
+          {/* My Profile */}
           <TabPanel value={this.state.value} index={1}>
+            {this.props.userId === "" ? (
+              <Login />
+            ) : (
+              <>
+                <MyProfile />
+              </>
+            )}
+          </TabPanel>
+
+          {/* Ongoing Trips */}
+          <TabPanel value={this.state.value} index={2}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -284,7 +380,10 @@ class App extends React.Component<myProps, any> {
                     </Grid>
                     {/* {if statement and changing props value here} */}
                     <Grid item xs={7}>
-                      {!this.props.showChat &&
+                      {this.props.displayProfile ? (
+                        <Profile />
+                      ) : (
+                        !this.props.showChat &&
                         !this.props.showEdit &&
                         this.props.ongoingTrips.length &&
                         this.props.mapTripMessage === 0 && (
@@ -294,7 +393,8 @@ class App extends React.Component<myProps, any> {
                               this.props.currentOngoingTripIndex
                             }
                           />
-                        )}
+                        )
+                      )}
                       {this.props.mapTripMessage === 1 && (
                         <Notes
                           tripId={
@@ -356,7 +456,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Search Trip */}
-          <TabPanel value={this.state.value} index={2}>
+          <TabPanel value={this.state.value} index={3}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -385,7 +485,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Build Trip */}
-          <TabPanel value={this.state.value} index={3}>
+          <TabPanel value={this.state.value} index={4}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -396,10 +496,57 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Social */}
-          {/* <TabPanel value={this.state.value} index={4}>
+          {/* FIXME: This is just for testing Reviews!! */}
+          <TabPanel value={this.state.value} index={5}>
             <p>Social</p>
-            <ChatBoard />
-          </TabPanel> */}
+            <button
+              onClick={() => {
+                this.props.setShowPastTrips(true);
+              }}
+            >
+              Past Trips
+            </button>
+
+            <button
+              onClick={() => {
+                this.props.setShowReviews(true);
+              }}
+            >
+              Check Reviews
+            </button>
+
+            {this.props.showPastTrips && this.props.ongoingTrips.length && (
+              <Grid container>
+                <Grid item xs={5}>
+                  <Container>
+                    <Card className="tripInfo">
+                      <PastTripInfo />
+                    </Card>
+                  </Container>
+                </Grid>
+                <Grid item xs={7}>
+                  <Map
+                    trips={this.props.ongoingTrips}
+                    currentTripIndex={this.props.currentOngoingTripIndex}
+                  />
+                </Grid>
+              </Grid>
+            )}
+
+            {this.props.showReviews && (
+              <Grid container>
+                <Grid item xs={5}>
+                  <Container>
+                    <Card className="reviews">
+                      <Reviews />
+                    </Card>
+                  </Container>
+                </Grid>
+                <Grid item xs={7}></Grid>
+              </Grid>
+            )}
+          </TabPanel>
+
           {/* About */}
           {this.state.value === 0 && (
             <div>
@@ -415,38 +562,6 @@ class App extends React.Component<myProps, any> {
             <Login />
           </div>
         )}
-        <div className="modal" id="add-facebook">
-          <div className="modal-content">
-            <p>Add a link to your Facebook:</p>
-            <input id="fb-url" placeholder="Paste URL here" />
-            <button
-              onClick={() => {
-                const url = (document.getElementById(
-                  "fb-url"
-                ) as HTMLInputElement).value;
-                myFirestore
-                  .collection("users")
-                  .doc(this.props.userId)
-                  .update({ facebook: url });
-                const modal = document.getElementById("add-facebook");
-                modal.style.display = "none";
-              }}
-            >
-              Submit
-            </button>
-            <br></br>
-            <br></br>
-            <button
-              className="close"
-              onClick={() => {
-                const modal = document.getElementById("add-facebook");
-                modal.style.display = "none";
-              }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
       </div>
     );
   }

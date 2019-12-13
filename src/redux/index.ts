@@ -8,13 +8,18 @@ const initialState: any = {
   messageListener: undefined,
   ongoingTrips: [],
   searchTrips: [],
+  pendingTrips: [],
   currentOngoingTripIndex: 0,
   currentSearchTripIndex: 0,
   users: [],
   showChat: false,
   showEdit: false,
   currentProfile: 0,
-  mapTripMessage: 0
+  mapTripMessage: 0,
+  showPastTrips: false,
+  showReviews: false,
+  requests: [],
+  displayProfile: undefined
 };
 
 interface Action {
@@ -105,6 +110,8 @@ const reducer = (state: any = initialState, action: Action): any => {
       };
     }
     case "ADD_SEARCH_TRIP": {
+      console.log(state.searchTrip);
+      console.log(action.searchTrip);
       return {
         ...state,
         searchTrips: [...state.searchTrips, action.searchTrip]
@@ -114,6 +121,12 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         ongoingTrips: [...state.ongoingTrips, action.ongoingTrip]
+      };
+    }
+    case "ADD_PENDING_TRIP": {
+      return {
+        ...state,
+        pendingTrips: [...state.pendingTrips, action.pendingTrip]
       };
     }
     case "SET_MESSAGES": {
@@ -207,6 +220,47 @@ const reducer = (state: any = initialState, action: Action): any => {
       };
     }
 
+    case "SET_SHOW_PAST_TRIPS": {
+      return {
+        ...state,
+        showPastTrips: action.status,
+        showReviews: false
+      };
+    }
+
+    case "SET_SHOW_REVIEWS": {
+      return {
+        ...state,
+        showPastTrips: false,
+        showReviews: action.status
+      };
+    }
+
+    case "ADD_REQUEST": {
+      return {
+        ...state,
+        requests: [...state.requests, action.request]
+      };
+    }
+    case "LOGOUT": {
+      return { ...initialState };
+    }
+    case "CHANGE_DISPLAY_PROFILE": {
+      return {
+        ...state,
+        displayProfile: action.displayProfile
+      };
+    }
+    case "REMOVE_REQUEST": {
+      console.log(action.fromId);
+      const newRequests = state.requests.filter(
+        (request: any) =>
+          !(
+            request.fromId === action.fromId && request.tripId === action.tripId
+          )
+      );
+      return { ...state, requests: newRequests };
+    }
     default: {
       return state;
     }
