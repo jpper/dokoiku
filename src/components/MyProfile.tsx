@@ -5,10 +5,12 @@ import { myFirestore } from "../config/firebase";
 import { Button } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
+import { setPageTabIndex } from "../redux/action";
 
 type myProps = {
   userId: string;
   users: any;
+  setPageTabIndex: any;
 };
 
 class MyProfile extends React.Component<
@@ -271,7 +273,12 @@ class MyProfile extends React.Component<
                 Reviews
               </Button>
               <br />
-              <Button variant="contained" color="secondary" size="large">
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                onClick={() => this.props.setPageTabIndex(5)}
+              >
                 Past Trips
               </Button>
             </>
@@ -291,4 +298,10 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-export default connect(mapStateToProps)(MyProfile);
+const mapDispatchToProps = (dispatch: any) => ({
+  setPageTabIndex: (index: any) => {
+    dispatch(setPageTabIndex(index));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyProfile);

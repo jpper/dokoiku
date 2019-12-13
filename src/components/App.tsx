@@ -20,7 +20,8 @@ import {
   addRequest,
   addPendingTrip,
   setShowReviews,
-  addPastTrip
+  addPastTrip,
+  setPageTabIndex
 } from "../redux/action";
 
 // Material UI & Styles
@@ -78,6 +79,8 @@ type myProps = {
   requests: any;
   logout: any;
   displayProfile: string;
+  pageTabIndex: any;
+  setPageTabIndex: any;
 };
 
 const mapStateToProps = (state: any) => {
@@ -97,7 +100,8 @@ const mapStateToProps = (state: any) => {
     mapTripMessage: state.mapTripMessage,
     login: state.login,
     requests: state.requests,
-    displayProfile: state.displayProfile
+    displayProfile: state.displayProfile,
+    pageTabIndex: state.pageTabIndex
   };
 };
 
@@ -180,7 +184,10 @@ const mapDispatchToProps = (dispatch: any) => ({
         });
       });
   },
-  logout: () => dispatch({ type: "LOGOUT" })
+  logout: () => dispatch({ type: "LOGOUT" }),
+  setPageTabIndex: (index: any) => {
+    dispatch(setPageTabIndex(index));
+  }
 });
 
 interface TabPanelProps {
@@ -226,10 +233,8 @@ class App extends React.Component<myProps, any> {
   }
 
   componentWillUpdate() {
-    if (this.state.value === -1) {
-      this.setState({
-        value: 0
-      });
+    if (this.props.pageTabIndex === -1) {
+      this.props.setPageTabIndex(0);
     }
   }
 
@@ -245,8 +250,8 @@ class App extends React.Component<myProps, any> {
 
   handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     // Change the target tab
+    this.props.setPageTabIndex(newValue);
     this.setState({
-      value: newValue,
       anchorEl: null
     });
   };
@@ -265,9 +270,7 @@ class App extends React.Component<myProps, any> {
 
   onLogin = () => {
     this.handleClose();
-    this.setState({
-      value: -1
-    });
+    this.props.setPageTabIndex(-1);
   };
 
   onLogout = () => {
@@ -283,7 +286,7 @@ class App extends React.Component<myProps, any> {
       <div className="contents">
         <AppBar position="static">
           <Tabs
-            value={this.state.value}
+            value={this.props.pageTabIndex}
             onChange={this.handleChange}
             centered
             aria-label="scrollable force tabs example"
@@ -360,7 +363,7 @@ class App extends React.Component<myProps, any> {
           </Tabs>
 
           {/* My Profile */}
-          <TabPanel value={this.state.value} index={1}>
+          <TabPanel value={this.props.pageTabIndex} index={1}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -371,7 +374,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Ongoing Trips */}
-          <TabPanel value={this.state.value} index={2}>
+          <TabPanel value={this.props.pageTabIndex} index={2}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -463,7 +466,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Search Trip */}
-          <TabPanel value={this.state.value} index={3}>
+          <TabPanel value={this.props.pageTabIndex} index={3}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -492,13 +495,13 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* Build Trip */}
-          <TabPanel value={this.state.value} index={4}>
+          <TabPanel value={this.props.pageTabIndex} index={4}>
             {this.props.userId === "" ? <Login /> : <BuildTrip />}
           </TabPanel>
 
           {/* Reviews */}
           {/* FIXME: This is just for testing Reviews!! */}
-          <TabPanel value={this.state.value} index={5}>
+          <TabPanel value={this.props.pageTabIndex} index={5}>
             {this.props.userId === "" ? (
               <Login />
             ) : (
@@ -509,7 +512,7 @@ class App extends React.Component<myProps, any> {
           </TabPanel>
 
           {/* About */}
-          {this.state.value === 0 && (
+          {this.props.pageTabIndex === 0 && (
             <div>
               <img className="bgImg" src={backgroundImg} alt="backImg" />
               <About />
@@ -518,7 +521,7 @@ class App extends React.Component<myProps, any> {
         </AppBar>
 
         {/* Click Login */}
-        {this.state.value === -1 && (
+        {this.props.pageTabIndex === -1 && (
           <div style={{ marginTop: "35px" }}>
             <Login />
           </div>
