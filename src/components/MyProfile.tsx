@@ -115,7 +115,10 @@ class MyProfile extends React.Component<myProps, { user: any }> {
           {/* FACEBOOK */}
           <div className="modal" id="add-facebook">
             <div className="modal-content">
-              <p>Add a link to your Facebook:</p>
+              <p>Add a link to your Facebook</p>
+              <h4>
+                This information will be visible to members of your trips.
+              </h4>
               <input id="fb-url" placeholder="Paste URL here" />
               <button
                 onClick={() => {
@@ -148,7 +151,10 @@ class MyProfile extends React.Component<myProps, { user: any }> {
           {/* INSTAGRAM */}
           <div className="modal" id="add-instagram">
             <div className="modal-content">
-              <p>Add a link to your Instagram:</p>
+              <p>Add a link to your Instagram</p>
+              <h4>
+                This information will be visible to members of your trips.
+              </h4>
               <input id="instagram-url" placeholder="Paste URL here" />
               <button
                 onClick={() => {
@@ -181,7 +187,10 @@ class MyProfile extends React.Component<myProps, { user: any }> {
           {/* TWITTER */}
           <div className="modal" id="add-twitter">
             <div className="modal-content">
-              <p>Add a link to your Twitter:</p>
+              <p>Add a link to your Twitter</p>
+              <h4>
+                This information will be visible to members of your trips.
+              </h4>
               <input id="twitter-url" placeholder="Paste URL here" />
               <button
                 onClick={() => {
