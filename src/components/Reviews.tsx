@@ -11,7 +11,8 @@ export default class Reviews extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      reviewInfo: []
+      reviewInfo: [],
+      isLoading: true
     };
   }
 
@@ -22,7 +23,7 @@ export default class Reviews extends Component<any, any> {
       .collection("reviews")
       .get();
 
-    result.docs.forEach(async res => {
+    await result.docs.forEach(async res => {
       if (this.props.tripId === undefined) {
         await this.setReviewInfo(res);
         return;
@@ -32,6 +33,10 @@ export default class Reviews extends Component<any, any> {
         await this.setReviewInfo(res);
         return;
       }
+    });
+
+    this.setState({
+      isLoading: false
     });
   }
 
@@ -58,47 +63,55 @@ export default class Reviews extends Component<any, any> {
   };
 
   render() {
-    return (
-      <div className="reviews">
-        {/* <p>Reviews</p> */}
-        <List>
-          {this.state.reviewInfo.map((review: any, index: any) => {
-            return (
-              <div key={index}>
-                {index > 0 && <Divider />}
-                {/* <Divider /> */}
-                <ListItem>
-                  <ListItemText
-                    primary={
-                      <React.Fragment>
-                        <p>
-                          <b>TripName:</b> {review.tripName}
-                        </p>
-                        <p>
-                          <b>Reviewer:</b> {review.reviewer}
-                        </p>
-                        <p>
-                          <b>Rating</b>
-                        </p>
-                        <Rating
-                          name="readOnly"
-                          value={review.rating}
-                          readOnly
-                        />
+    if (!this.state.isLoading) {
+      return (
+        <div className="reviews">
+          {/* <p>Reviews</p> */}
+          <List>
+            {this.state.reviewInfo.map((review: any, index: any) => {
+              return (
+                <div key={index}>
+                  {index > 0 && <Divider />}
+                  {/* <Divider /> */}
+                  <ListItem>
+                    <ListItemText
+                      primary={
+                        <React.Fragment>
+                          <p>
+                            <b>TripName:</b> {review.tripName}
+                          </p>
+                          <p>
+                            <b>Reviewer:</b> {review.reviewer}
+                          </p>
+                          <p>
+                            <b>Rating</b>
+                          </p>
+                          <Rating
+                            name="readOnly"
+                            value={review.rating}
+                            readOnly
+                          />
 
-                        <p>
-                          <b>Review for you</b>
-                        </p>
-                        <p>{review.reviews}</p>
-                      </React.Fragment>
-                    }
-                  />
-                </ListItem>
-              </div>
-            );
-          })}
-        </List>
-      </div>
-    );
+                          <p>
+                            <b>Review for you</b>
+                          </p>
+                          <p>{review.reviews}</p>
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItem>
+                </div>
+              );
+            })}
+          </List>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p>Loading...</p>
+        </div>
+      );
+    }
   }
 }
