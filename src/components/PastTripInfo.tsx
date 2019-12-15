@@ -78,6 +78,7 @@ class PastTripInfo extends React.Component<any, myStates> {
     this.setState({
       pastTrips: tmpPastTrips
     });
+    console.log(tmpPastTrips);
 
     // Setup modal window status (Open/ Close)
     let initialStatus = Array(this.state.pastTrips.length);
@@ -91,7 +92,7 @@ class PastTripInfo extends React.Component<any, myStates> {
     let prevIndex: number;
     console.log(this.state.pastTrips);
     if (this.state.currentPastTripIndex === 0) {
-      prevIndex = this.state.pastTrips.length;
+      prevIndex = this.state.pastTrips.length - 1;
     } else {
       prevIndex = this.state.currentPastTripIndex - 1;
     }
@@ -105,7 +106,7 @@ class PastTripInfo extends React.Component<any, myStates> {
     if (this.state.currentPastTripIndex + 1 >= this.state.pastTrips.length) {
       nextIndex = 0;
     } else {
-      nextIndex = this.state.currentPastTripIndex - 1;
+      nextIndex = this.state.currentPastTripIndex + 1;
     }
     this.setState({
       currentPastTripIndex: nextIndex
@@ -513,7 +514,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                         fullWidth
                         onClick={() => {
                           this.clearButtonStatus();
-                          this.props.onPreviousTrip();
+                          this.prevPastTrip();
                         }}
                       >
                         <ArrowBackIosIcon />
@@ -529,7 +530,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                         fullWidth
                         onClick={() => {
                           this.clearButtonStatus();
-                          this.props.onNextTrip();
+                          this.nextPastTrip();
                         }}
                       >
                         Next
