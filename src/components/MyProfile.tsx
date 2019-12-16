@@ -9,29 +9,50 @@ import {
   ListItem,
   ListItemText,
   Modal,
-  Grid
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
-import { setPageTabIndex } from "../redux/action";
+import { setPageTabIndex, setUserCurrencyCode } from "../redux/action";
+import countriesToCurrencies from "../data/countries_to_currencies.json";
+import _ from "lodash";
 import "typeface-roboto";
 
 type myProps = {
   userId: string;
   users: any;
+  userCurrencyCode: string;
   setPageTabIndex: any;
+  updateUserCurrencyCode: any;
 };
 
 class MyProfile extends React.Component<
   myProps,
-  { user: any; showReview: any; rating: number }
+  {
+    user: any;
+    showReview: any;
+    rating: number;
+    userCurrencyCode: string;
+    toggleDialog: boolean;
+  }
 > {
   constructor(props: myProps) {
     super(props);
     this.state = {
       user: undefined,
       showReview: false,
-      rating: undefined
+      rating: undefined,
+      userCurrencyCode: this.props.userCurrencyCode,
+      toggleDialog: false
     };
   }
 
@@ -73,6 +94,12 @@ class MyProfile extends React.Component<
   onChangeShow = () => {
     this.setState({
       showReview: !this.state.showReview
+    });
+  };
+
+  handleToggle = () => {
+    this.setState({
+      toggleDialog: !this.state.toggleDialog
     });
   };
 
@@ -327,6 +354,81 @@ class MyProfile extends React.Component<
 
               <div className="spacer10"></div>
 
+              <Typography variant="h6" align="center">
+                {"The currency I use: " +
+                  countriesToCurrencies.find(
+                    (item: any) =>
+                      item.currencyCode === this.state.userCurrencyCode
+                  ).currency}
+              </Typography>
+
+              <FormControl>
+                <Grid
+                  container
+                  alignContent="center"
+                  alignItems="baseline"
+                  justify="center"
+                >
+                  <Grid item></Grid>
+                  <Grid item>
+                    <InputLabel>Currency</InputLabel>
+                    <Select
+                      value={this.state.userCurrencyCode}
+                      onChange={e => {
+                        this.setState({
+                          userCurrencyCode: String(e.target.value)
+                        });
+                      }}
+                    >
+                      {_.uniqBy(countriesToCurrencies, "currencyCode")
+                        .sort((a: any, b: any) => {
+                          if (a.currency > b.currency) return 1;
+                          else return -1;
+                        })
+                        .map((item: any) => (
+                          <MenuItem value={item.currencyCode}>
+                            {item.currency}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </Grid>
+
+                  <Grid item>
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      onClick={() => {
+                        this.props.updateUserCurrencyCode(
+                          this.state.userCurrencyCode,
+                          this.props.userId
+                        );
+                        this.handleToggle();
+                      }}
+                    >
+                      Submit
+                    </Button>
+                  </Grid>
+                </Grid>
+              </FormControl>
+              <Dialog
+                open={this.state.toggleDialog}
+                onClose={this.handleToggle}
+              >
+                <DialogTitle>Notification</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    You have changed your currency to{" "}
+                    {this.state.userCurrencyCode}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleToggle}>Close</Button>
+                </DialogActions>
+              </Dialog>
+
+              <div className="spacer10"></div>
+              <div className="spacer10"></div>
+
               <Grid container>
                 <Grid item xs={6}>
                   <Button
@@ -365,13 +467,21 @@ class MyProfile extends React.Component<
 const mapStateToProps = (state: any) => {
   return {
     userId: state.userId,
-    users: state.users
+    users: state.users,
+    userCurrencyCode: state.userCurrencyCode
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
   setPageTabIndex: (index: any) => {
     dispatch(setPageTabIndex(index));
+  },
+  updateUserCurrencyCode: (currencyCode: string, userId: string) => {
+    myFirestore
+      .collection("users")
+      .doc(userId)
+      .update({ currencyCode });
+    dispatch(setUserCurrencyCode(currencyCode));
   }
 });
 
