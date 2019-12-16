@@ -3,12 +3,12 @@
 }
 
 body {
-  display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
   padding: 10px;
 }
 
+.MuiTabs-flexContainer {
+  justify-content: center;
+}
 .App-logo {
   height: 40vmin;
 }
@@ -97,9 +97,16 @@ body {
 }
 .bgImg {
   position: absolute;
-  top: 72px;
+  top: 84px;
   left: 0;
   z-index: -1;
   width: 100%;
   height: auto;
+}
+
+#privacy-policy {
+  width: 100%;
+  background-color: #3f50b5;
+  color: white;
+  border: none;
 }

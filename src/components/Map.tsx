@@ -81,8 +81,8 @@ class Map extends React.Component<MapProps, MapState> {
           <GoogleMap
             id="example-map"
             mapContainerStyle={{
-              height: "600px",
-              width: "600px"
+              height: "100%",
+              width: "100%"
             }}
             zoom={6}
             center={{
@@ -109,6 +109,7 @@ class Map extends React.Component<MapProps, MapState> {
                     ) {
                       return <Marker key={index} position={position} />;
                     }
+                    return undefined; //put in this line to solve a linter error; delete if it causes trouble
                   })
               : null}
             <DirectionsService

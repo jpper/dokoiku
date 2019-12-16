@@ -1,7 +1,6 @@
 // import { firestore } from "firebase";
 import React, { Component } from "react";
 import { myFirestore } from "../config/firebase";
-import { connect } from "react-redux";
 
 // Material UI & Styles
 import {
