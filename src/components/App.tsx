@@ -81,6 +81,7 @@ type myProps = {
   displayProfile: string;
   pageTabIndex: any;
   setPageTabIndex: any;
+  getUserCurrencyCode: any;
 };
 
 const mapStateToProps = (state: any) => {
@@ -187,6 +188,18 @@ const mapDispatchToProps = (dispatch: any) => ({
   logout: () => dispatch({ type: "LOGOUT" }),
   setPageTabIndex: (index: any) => {
     dispatch(setPageTabIndex(index));
+  },
+  getUserCurrencyCode: (userId: string) => {
+    myFirestore
+      .collection("users")
+      .doc(userId)
+      .get()
+      .then((response: any) => {
+        dispatch({
+          type: "SET_USER_CURRENCY_CODE",
+          userCurrencyCode: response.data().currencyCode
+        });
+      });
   }
 });
 
@@ -244,6 +257,7 @@ class App extends React.Component<myProps, any> {
         this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
         this.props.getTrips(user.uid);
         this.props.getRequests(user.uid);
+        this.props.getUserCurrencyCode(user.uid);
       }
     });
   };

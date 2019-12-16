@@ -2,27 +2,37 @@ import React from "react";
 import { connect } from "react-redux";
 import "../styles/MyProfile.css";
 import { myFirestore } from "../config/firebase";
-import { Button } from "@material-ui/core";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
+} from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
 import { setPageTabIndex } from "../redux/action";
+import countriesToCurrencies from "../data/countries_to_currencies.json";
+import _ from "lodash";
 
 type myProps = {
   userId: string;
   users: any;
+  userCurrencyCode: string;
   setPageTabIndex: any;
 };
 
 class MyProfile extends React.Component<
   myProps,
-  { user: any; showReview: any; rating: number }
+  { user: any; showReview: any; rating: number; userCurrencyCode: string }
 > {
   constructor(props: myProps) {
     super(props);
     this.state = {
       user: undefined,
       showReview: false,
-      rating: undefined
+      rating: undefined,
+      userCurrencyCode: this.props.userCurrencyCode
     };
   }
 
@@ -87,6 +97,35 @@ class MyProfile extends React.Component<
           ) : (
             <>
               <h1>{this.state.user.nickname}</h1>
+              <h1>
+                {"The currency I use: " +
+                  countriesToCurrencies.find(
+                    (item: any) =>
+                      item.currencyCode === this.state.userCurrencyCode
+                  ).currency}
+              </h1>
+              <FormControl>
+                <InputLabel>Currency</InputLabel>
+                <Select
+                  value={this.state.userCurrencyCode}
+                  onChange={e => {
+                    this.setState({ userCurrencyCode: String(e.target.value) });
+                  }}
+                >
+                  {_.uniqBy(countriesToCurrencies, "currencyCode")
+                    .sort((a: any, b: any) => {
+                      if (a.currency > b.currency) return 1;
+                      else return -1;
+                    })
+                    .map((item: any) => (
+                      <MenuItem value={item.currencyCode}>
+                        {item.currency}
+                      </MenuItem>
+                    ))}
+                </Select>
+                <div id="helper-text">Cannot be changed once chosen</div>
+              </FormControl>
+              <br />
               <img src={this.state.user.photoUrl} id="profile-picture" />
               <div className="social-icons">
                 {/* FACEBOOK */}
@@ -294,7 +333,8 @@ class MyProfile extends React.Component<
 const mapStateToProps = (state: any) => {
   return {
     userId: state.userId,
-    users: state.users
+    users: state.users,
+    userCurrencyCode: state.userCurrencyCode
   };
 };
 
