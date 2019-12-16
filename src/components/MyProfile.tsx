@@ -330,7 +330,6 @@ class MyProfile extends React.Component<
               <Grid container>
                 <Grid item xs={6}>
                   <Button
-                    className="spacer-right5"
                     variant="contained"
                     color="primary"
                     size="large"
