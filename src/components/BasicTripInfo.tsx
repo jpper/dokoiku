@@ -58,14 +58,13 @@ export default class BasicTripInfo extends React.Component<any, any> {
         {/* Starting Location */}
         <Typography className="iconWrapper">
           <DoubleArrowIcon />
-          Starting Location:
-          {this.props.location}
+          Starting Location: {` ${this.props.location}`}
         </Typography>
 
         {/* WayPoints */}
         <div>
           <List>
-            <Typography variant="h5">Waypoints:</Typography>
+            <Typography variant="h4">Waypoints:</Typography>
             {this.props.wayPoints.waypoints.map((l: any, i: number) => {
               return (
                 <ListItem key={i} className="tripLocation">

@@ -459,7 +459,7 @@ class PastTripInfo extends React.Component<any, myStates> {
 
                   {/* Members */}
                   <div>
-                    <Typography variant="h5">Members:</Typography>
+                    <Typography variant="h4">Review for Members:</Typography>
                     <List component="nav">
                       {this.state.pastTrips[
                         this.state.currentPastTripIndex
@@ -472,7 +472,7 @@ class PastTripInfo extends React.Component<any, myStates> {
 
                         return (
                           <div key={i}>
-                            <ListItem
+                            {/* <ListItem
                               button
                               onClick={() => this.onClickUser(i, member)}
                             >
@@ -480,7 +480,18 @@ class PastTripInfo extends React.Component<any, myStates> {
                                 <PersonIcon className="iconSpacer" />
                               </ListItemIcon>
                               <ListItemText>{nickname}</ListItemText>
-                            </ListItem>
+                            </ListItem> */}
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              size="medium"
+                              fullWidth
+                              key={i}
+                              onClick={() => this.onClickUser(i, member)}
+                            >
+                              <PersonIcon className="iconSpacer" />
+                              {nickname}
+                            </Button>
                             <Modal
                               className="modalWindow"
                               open={this.handleOpen(i)}

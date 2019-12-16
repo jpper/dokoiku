@@ -322,7 +322,7 @@ class App extends React.Component<myProps, any> {
                     <Tab label="Build Trip" icon={<BuildIcon />} />
 
                     {/* FIXME: This is just for testing Reviews!! */}
-                    <Tab label="Trip Reviews" icon={<RateReviewIcon />} />
+                    <Tab label="Past Trips" icon={<RateReviewIcon />} />
 
                     {/* User Icon */}
                     <div className="iconWrapper">
