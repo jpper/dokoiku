@@ -22,7 +22,7 @@
   color: red !important;
 }
 
-.pastTripInfo p {
+.tripBasicInfo p {
   border-style: solid;
   border-color: rgb(180, 178, 178);
   border-radius: 10px;

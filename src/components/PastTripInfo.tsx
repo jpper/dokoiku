@@ -25,7 +25,8 @@ import {
   Box,
   Container,
   Card,
-  Tooltip
+  Tooltip,
+  Divider
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import PersonIcon from "@material-ui/icons/Person";
@@ -283,74 +284,77 @@ class PastTripInfo extends React.Component<any, myStates> {
             <Grid item xs={5}>
               <Container>
                 <Card>
-                  <BasicTripInfo
-                    country={
-                      this.state.pastTrips[this.state.currentPastTripIndex]
-                        .countryCode
-                    }
-                    tripTitle={
-                      this.state.pastTrips[this.state.currentPastTripIndex].name
-                    }
-                    startDate={moment(
-                      this.state.pastTrips[
-                        this.state.currentPastTripIndex
-                      ].startDate.toDate()
-                    ).format("MMMM Do YYYY")}
-                    endDate={moment(
-                      this.state.pastTrips[
-                        this.state.currentPastTripIndex
-                      ].endDate.toDate()
-                    ).format("MMMM Do YYYY")}
-                    location={
-                      this.state.pastTrips[this.state.currentPastTripIndex]
-                        .startLocation
-                    }
-                    wayPoints={
-                      this.state.pastTrips[this.state.currentPastTripIndex]
-                    }
-                  />
-
-                  {/* Budget */}
-                  <Tooltip
-                    title={
-                      this.props.userCurrencyCode !== "None"
-                        ? Math.round(this.state.userCurrencyBudget * 100) /
-                            100 +
-                          " " +
-                          countriesToCurrencies
-                            .concat([
-                              {
-                                country: "None",
-                                countryCode: "None",
-                                currency: "None",
-                                currencyCode: "None"
-                              }
-                            ])
-                            .find(
-                              (item: any) =>
-                                this.props.userCurrencyCode ===
-                                item.currencyCode
-                            ).currency
-                        : ""
-                    }
-                    placement="top-end"
-                  >
-                    <Typography className="iconWrapper">
-                      Budget:{" "}
-                      {
+                  <div className="tripBasicInfo">
+                    <BasicTripInfo
+                      country={
                         this.state.pastTrips[this.state.currentPastTripIndex]
-                          .budget
-                      }{" "}
-                      {
-                        countriesToCurrencies.find(
-                          (item: any) =>
-                            this.state.pastTrips[
-                              this.state.currentPastTripIndex
-                            ].currencyCode === item.currencyCode
-                        ).currency
+                          .countryCode
                       }
-                    </Typography>
-                  </Tooltip>
+                      tripTitle={
+                        this.state.pastTrips[this.state.currentPastTripIndex]
+                          .name
+                      }
+                      startDate={moment(
+                        this.state.pastTrips[
+                          this.state.currentPastTripIndex
+                        ].startDate.toDate()
+                      ).format("MMMM Do YYYY")}
+                      endDate={moment(
+                        this.state.pastTrips[
+                          this.state.currentPastTripIndex
+                        ].endDate.toDate()
+                      ).format("MMMM Do YYYY")}
+                      location={
+                        this.state.pastTrips[this.state.currentPastTripIndex]
+                          .startLocation
+                      }
+                      wayPoints={
+                        this.state.pastTrips[this.state.currentPastTripIndex]
+                      }
+                    />
+
+                    {/* Budget */}
+                    <Tooltip
+                      title={
+                        this.props.userCurrencyCode !== "None"
+                          ? Math.round(this.state.userCurrencyBudget * 100) /
+                              100 +
+                            " " +
+                            countriesToCurrencies
+                              .concat([
+                                {
+                                  country: "None",
+                                  countryCode: "None",
+                                  currency: "None",
+                                  currencyCode: "None"
+                                }
+                              ])
+                              .find(
+                                (item: any) =>
+                                  this.props.userCurrencyCode ===
+                                  item.currencyCode
+                              ).currency
+                          : ""
+                      }
+                      placement="top-end"
+                    >
+                      <Typography className="iconWrapper">
+                        Budget:{" "}
+                        {
+                          this.state.pastTrips[this.state.currentPastTripIndex]
+                            .budget
+                        }{" "}
+                        {
+                          countriesToCurrencies.find(
+                            (item: any) =>
+                              this.state.pastTrips[
+                                this.state.currentPastTripIndex
+                              ].currencyCode === item.currencyCode
+                          ).currency
+                        }
+                      </Typography>
+                    </Tooltip>
+                  </div>
 
                   <div className="spacer10"></div>
 
@@ -640,12 +644,19 @@ class PastTripInfo extends React.Component<any, myStates> {
                 />
               )}
               {this.state.pageStatus === PageStatus.Reviews && (
-                <Reviews
-                  tripId={
-                    this.state.pastTrips[this.state.currentPastTripIndex].tripId
-                  }
-                  userId={this.props.userId}
-                />
+                <>
+                  <Typography variant="h5">
+                    Reviews for {this.props.userName}
+                  </Typography>
+                  <Divider />
+                  <Reviews
+                    tripId={
+                      this.state.pastTrips[this.state.currentPastTripIndex]
+                        .tripId
+                    }
+                    userId={this.props.userId}
+                  />
+                </>
               )}
               {this.state.pageStatus === PageStatus.Notes && (
                 <Notes
@@ -674,6 +685,7 @@ const mapStateToProps = (state: any) => {
     ongoingTrips: state.ongoingTrips,
     currentOngoingTripIndex: state.currentOngoingTripIndex,
     userId: state.userId,
+    userName: state.userName,
     users: state.users,
     mapTripMessage: state.mapTripMessage,
     userCurrencyCode: state.userCurrencyCode
