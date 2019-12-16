@@ -16,6 +16,7 @@ class PendingTripInfo extends React.Component<myProps, {}> {
   render() {
     return (
       <div>
+        Pending Trips:
         {this.props.pendingTrips.length ? (
           this.props.pendingTrips.map((trip: any) => (
             <Card>
