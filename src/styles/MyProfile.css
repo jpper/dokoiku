@@ -1,7 +1,7 @@
-.MyProfile {
+/* .MyProfile {
   width: 40%;
   text-align: center;
-}
+} */
 
 #no-social-icon {
   -webkit-filter: grayscale(100%);
@@ -17,5 +17,70 @@
 }
 
 #profile-picture {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   width: 90%;
+  max-width: 350px;
+  border-radius: 100%;
+  overflow: hidden;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  border: 5px solid #50597b;
+}
+
+#profile-picture-small {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  max-width: 200px;
+  border-radius: 100%;
+  overflow: hidden;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  border: 5px solid #50597b;
+}
+
+.spacer50 {
+  margin-top: 50px;
+}
+.spacer10 {
+  margin-top: 10px;
+}
+
+#horizontal-list {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+}
+
+.listItem {
+  border-right: 1px solid #3b5998 !important;
+}
+
+#listItem-facebook {
+  border-top: 5px solid #3b5998 !important;
+}
+
+#listItem-twitter {
+  border-top: 5px solid #1da1f2 !important;
+}
+
+#listItem-instagram {
+  border-top: 5px solid #85397b !important;
+}
+
+#typo-rating {
+  padding-bottom: 5px;
+}
+
+.MuiRating-sizeLarge {
+  font-size: 2.5rem !important;
+}
+
+.MuiListItemText-multiline {
+  text-align: center;
 }
