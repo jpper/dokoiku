@@ -171,7 +171,11 @@ class MyProfile extends React.Component<
                 </DialogActions>
               </Dialog>
               <br />
-              <img src={this.state.user.photoUrl} id="profile-picture" />
+              <img
+                src={this.state.user.photoUrl}
+                id="profile-picture"
+                alt={this.state.user.nickname}
+              />
               <div className="social-icons">
                 {/* FACEBOOK */}
                 {this.state.user.facebook ? (
@@ -245,6 +249,9 @@ class MyProfile extends React.Component<
               <div className="modal" id="add-facebook">
                 <div className="modal-content">
                   <p>Add a link to your Facebook:</p>
+                  <h4>
+                    This information will be visible to members of your trips.
+                  </h4>
                   <input id="fb-url" placeholder="Paste URL here" />
                   <button
                     onClick={() => {
@@ -278,6 +285,9 @@ class MyProfile extends React.Component<
               <div className="modal" id="add-instagram">
                 <div className="modal-content">
                   <p>Add a link to your Instagram:</p>
+                  <h4>
+                    This information will be visible to members of your trips.
+                  </h4>
                   <input id="instagram-url" placeholder="Paste URL here" />
                   <button
                     onClick={() => {
@@ -311,6 +321,9 @@ class MyProfile extends React.Component<
               <div className="modal" id="add-twitter">
                 <div className="modal-content">
                   <p>Add a link to your Twitter:</p>
+                  <h4>
+                    This information will be visible to members of your trips.
+                  </h4>
                   <input id="twitter-url" placeholder="Paste URL here" />
                   <button
                     onClick={() => {

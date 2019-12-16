@@ -10,7 +10,6 @@ import {
 import { myFirestore } from "../config/firebase";
 import { removeRequest } from "../redux/action";
 import firebase from "firebase";
-import { string } from "prop-types";
 
 type myProps = {
   requests: any;
