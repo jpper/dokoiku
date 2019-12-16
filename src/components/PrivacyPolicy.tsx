@@ -1,8 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function PrivacyPolicy() {
   return (
     <div>
+      <Link to="/">
+        <button>Back to Dokoiku</button>
+      </Link>
       <h1>Privacy Policy</h1>
 
       <p>Effective date: December 16, 2019</p>
@@ -281,6 +285,9 @@ export default function PrivacyPolicy() {
       <ul>
         <li>By email: dokoikuteam@gmail.com</li>
       </ul>
+      <Link to="/">
+        <button>Back to Dokoiku</button>
+      </Link>
     </div>
   );
 }
