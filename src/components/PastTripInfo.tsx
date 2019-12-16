@@ -6,6 +6,7 @@ import { myFirestore } from "../config/firebase";
 import BasicTripInfo from "./BasicTripInfo";
 import Map from "./Map";
 import Notes from "./Notes";
+import ChatBoard from "./ChatBoard";
 
 // Material UI
 import {
@@ -74,10 +75,10 @@ class PastTripInfo extends React.Component<any, myStates> {
       const today = new Date();
       return today.getTime() > data.endDate.toDate().getTime();
     });
-
     this.setState({
       pastTrips: tmpPastTrips
     });
+    console.log(tmpPastTrips);
 
     // Setup modal window status (Open/ Close)
     let initialStatus = Array(this.state.pastTrips.length);
@@ -89,6 +90,7 @@ class PastTripInfo extends React.Component<any, myStates> {
 
   prevPastTrip = () => {
     let prevIndex: number;
+    console.log(this.state.pastTrips);
     if (this.state.currentPastTripIndex === 0) {
       prevIndex = this.state.pastTrips.length - 1;
     } else {
@@ -104,7 +106,7 @@ class PastTripInfo extends React.Component<any, myStates> {
     if (this.state.currentPastTripIndex + 1 >= this.state.pastTrips.length) {
       nextIndex = 0;
     } else {
-      nextIndex = this.state.currentPastTripIndex - 1;
+      nextIndex = this.state.currentPastTripIndex + 1;
     }
     this.setState({
       currentPastTripIndex: nextIndex
@@ -222,6 +224,12 @@ class PastTripInfo extends React.Component<any, myStates> {
     });
   };
 
+  onMessagesButton = () => {
+    this.setState({
+      pageStatus: PageStatus.Messages
+    });
+  };
+
   clearButtonStatus = () => {
     this.setState({
       pageStatus: PageStatus.Map
@@ -269,74 +277,105 @@ class PastTripInfo extends React.Component<any, myStates> {
                   <div className="spacer10"></div>
 
                   {/* Notes & Messages */}
-                  {this.state.pageStatus !== PageStatus.Map ? (
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      size="medium"
-                      fullWidth
-                      onClick={this.onMapButton}
-                    >
-                      <DescriptionIcon className="iconSpacer" />
-                      Map
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="medium"
-                      fullWidth
-                    >
-                      <DescriptionIcon className="iconSpacer" />
-                      Map
-                    </Button>
-                  )}
+                  <Grid item>
+                    {this.state.pageStatus !== PageStatus.Map ? (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                        onClick={this.onMapButton}
+                      >
+                        <DescriptionIcon className="iconSpacer" />
+                        Map
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                      >
+                        <DescriptionIcon className="iconSpacer" />
+                        Map
+                      </Button>
+                    )}
+                  </Grid>
 
-                  {this.state.pageStatus !== PageStatus.Reviews ? (
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      size="medium"
-                      fullWidth
-                      onClick={this.onReviewButton}
-                    >
-                      <DescriptionIcon className="iconSpacer" />
-                      Reviews for me
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="medium"
-                      fullWidth
-                    >
-                      <DescriptionIcon className="iconSpacer" />
-                      Reviews for me
-                    </Button>
-                  )}
+                  <Grid item>
+                    {this.state.pageStatus !== PageStatus.Reviews ? (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                        onClick={this.onReviewButton}
+                      >
+                        <DescriptionIcon className="iconSpacer" />
+                        Reviews for me
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                      >
+                        <DescriptionIcon className="iconSpacer" />
+                        Reviews for me
+                      </Button>
+                    )}
+                  </Grid>
 
-                  {this.state.pageStatus !== PageStatus.Notes ? (
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      size="medium"
-                      fullWidth
-                      onClick={this.onNotesButton}
-                    >
-                      <DescriptionIcon className="iconSpacer" />
-                      Notes
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="medium"
-                      fullWidth
-                    >
-                      <DescriptionIcon className="iconSpacer" />
-                      Notes
-                    </Button>
-                  )}
+                  <Grid item>
+                    {this.state.pageStatus !== PageStatus.Notes ? (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                        onClick={this.onNotesButton}
+                      >
+                        <DescriptionIcon className="iconSpacer" />
+                        Notes
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                      >
+                        <DescriptionIcon className="iconSpacer" />
+                        Notes
+                      </Button>
+                    )}
+                  </Grid>
+
+                  <Grid item>
+                    {this.state.pageStatus !== PageStatus.Messages ? (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                        onClick={this.onMessagesButton}
+                      >
+                        <DescriptionIcon className="iconSpacer" />
+                        Messages
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                      >
+                        <DescriptionIcon className="iconSpacer" />
+                        Messages
+                      </Button>
+                    )}
+                  </Grid>
 
                   <div className="spacer10"></div>
 
@@ -475,7 +514,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                         fullWidth
                         onClick={() => {
                           this.clearButtonStatus();
-                          this.props.onPreviousTrip();
+                          this.prevPastTrip();
                         }}
                       >
                         <ArrowBackIosIcon />
@@ -491,7 +530,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                         fullWidth
                         onClick={() => {
                           this.clearButtonStatus();
-                          this.props.onNextTrip();
+                          this.nextPastTrip();
                         }}
                       >
                         Next
@@ -521,6 +560,14 @@ class PastTripInfo extends React.Component<any, myStates> {
               )}
               {this.state.pageStatus === PageStatus.Notes && (
                 <Notes
+                  tripId={
+                    this.state.pastTrips[this.state.currentPastTripIndex].tripId
+                  }
+                />
+              )}
+
+              {this.state.pageStatus === PageStatus.Messages && (
+                <ChatBoard
                   tripId={
                     this.state.pastTrips[this.state.currentPastTripIndex].tripId
                   }
