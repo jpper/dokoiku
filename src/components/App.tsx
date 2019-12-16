@@ -381,6 +381,7 @@ class App extends React.Component<myProps, any> {
                               Hello, <b>{this.props.userName}</b>
                             </p>
                             <Notification />
+                            <br />
                             <PendingTripInfo />
                             {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
                             <MenuItem onClick={this.onLogout}>Logout</MenuItem>
