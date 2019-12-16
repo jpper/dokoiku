@@ -9,6 +9,11 @@ import {
   MenuItem,
   FormControl,
   InputLabel
+  // DialogTitle,
+  // DialogContent,
+  // DialogContentText,
+  // DialogActions,
+  // Dialog,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
@@ -76,6 +81,7 @@ type BuildState = {
   addedWaypoint: string;
   budget: number;
   memberIds: any;
+  // toggleDialog: boolean;
 };
 
 class BuildTrip extends React.Component<BuildProps, BuildState> {
@@ -95,6 +101,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
       addedWaypoint: "",
       budget: 0,
       memberIds: []
+      // toggleDialog: false
     };
   }
   componentWillMount() {
@@ -134,9 +141,9 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
   }
   render() {
     return (
-      <div>
+      <div className="BuildTrip">
         <div>
-          <div className="BuildTrip">
+          <div>
             <h1>Build Trip</h1>
             <ValidatorForm
               onSubmit={() => {
@@ -180,8 +187,8 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                       countryCode,
                       currencyCode
                     });
-                    console.log(this.state.countryCode);
-                    console.log(this.state.currencyCode);
+                    // console.log(this.state.countryCode);
+                    // console.log(this.state.currencyCode);
                   }}
                 >
                   {countriesToCurrencies.map((item: any) => (
@@ -192,7 +199,9 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                     </MenuItem>
                   ))}
                 </Select>
-                <div id="helper-text">Cannot be changed once chosen</div>
+                <div id="helper-text">
+                  Cannot be changed once trip has been created
+                </div>
               </FormControl>
               <br />
               <br />

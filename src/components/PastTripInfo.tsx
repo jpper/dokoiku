@@ -14,9 +14,9 @@ import {
   Grid,
   Typography,
   List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
+  // ListItem,
+  // ListItemIcon,
+  // ListItemText,
   Modal,
   Fade,
   Backdrop,
@@ -277,7 +277,7 @@ class PastTripInfo extends React.Component<any, myStates> {
       <div className="pastTripInfo">
         {this.state.pastTrips.length === 0 ||
         this.props.userCurrencyCode === "" ? (
-          <p>Nothing past trips</p>
+          <p>No past trips</p>
         ) : (
           <Grid container>
             {/* Trip details */}
@@ -463,7 +463,7 @@ class PastTripInfo extends React.Component<any, myStates> {
 
                   {/* Members */}
                   <div>
-                    <Typography variant="h4">Review for Members:</Typography>
+                    <Typography variant="h5">Review for Members:</Typography>
                     <List component="nav">
                       {this.state.pastTrips[
                         this.state.currentPastTripIndex

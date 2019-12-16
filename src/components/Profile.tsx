@@ -85,7 +85,7 @@ class Profile extends React.Component<
           <div className="spacer10"></div>
           <img
             src={this.state.user.photoUrl}
-            alt="photoImg"
+            alt={this.state.user.nickname}
             id="profile-picture-small"
           />
           <div className="spacer10"></div>

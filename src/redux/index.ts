@@ -139,8 +139,8 @@ const reducer = (state: any = initialState, action: Action): any => {
       };
     }
     case "ADD_SEARCH_TRIP": {
-      console.log(state.searchTrip);
-      console.log(action.searchTrip);
+      // console.log(state.searchTrip);
+      // console.log(action.searchTrip);
       return {
         ...state,
         searchTrips: [...state.searchTrips, action.searchTrip]

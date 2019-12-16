@@ -1,3 +1,9 @@
 .MuiFormHelperText-root.MuiFormHelperText-contained.Mui-error.MuiFormHelperText-filled {
   border-width: 0;
 }
+
+.BuildTrip {
+  width: 90%;
+  text-align: center;
+  margin-left: 35%;
+}

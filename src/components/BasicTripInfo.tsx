@@ -31,7 +31,7 @@ export default class BasicTripInfo extends React.Component<any, any> {
 
         {/* Country */}
         <Typography className="iconWrapper">
-          Country:
+          Country:{" "}
           <img
             src={`https://www.countryflags.io/${this.props.country.toLowerCase()}/shiny/24.png`}
             alt="flag"
@@ -41,6 +41,12 @@ export default class BasicTripInfo extends React.Component<any, any> {
               (item: any) => this.props.country === item.countryCode
             ).country
           }
+        </Typography>
+
+        {/* Starting Location */}
+        <Typography className="iconWrapper">
+          <DoubleArrowIcon />
+          Starting Location: {` ${this.props.location}`}
         </Typography>
 
         {/* Start Date */}
@@ -55,16 +61,10 @@ export default class BasicTripInfo extends React.Component<any, any> {
           End Date: {this.props.endDate}
         </Typography>
 
-        {/* Starting Location */}
-        <Typography className="iconWrapper">
-          <DoubleArrowIcon />
-          Starting Location: {` ${this.props.location}`}
-        </Typography>
-
         {/* WayPoints */}
         <div>
           <List>
-            <Typography variant="h4">Waypoints:</Typography>
+            <Typography variant="h5">Waypoints:</Typography>
             {this.props.wayPoints.waypoints.map((l: any, i: number) => {
               return (
                 <ListItem key={i} className="tripLocation">
