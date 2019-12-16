@@ -97,7 +97,7 @@ body {
 }
 .bgImg {
   position: absolute;
-  top: 72px;
+  top: 84px;
   left: 0;
   z-index: -1;
   width: 100%;
