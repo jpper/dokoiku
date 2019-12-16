@@ -914,7 +914,7 @@
   {
     "country": "Namibia",
     "countryCode": "NA",
-    "currency": "Dollar",
+    "currency": "Namibia Dollar",
     "currencyCode": "NAD"
   },
   {
@@ -986,7 +986,7 @@
   {
     "country": "North Korea",
     "countryCode": "KP",
-    "currency": "Won",
+    "currency": "North Korean Won",
     "currencyCode": "KPW"
   },
   {
@@ -1202,7 +1202,7 @@
   {
     "country": "Singapore",
     "countryCode": "SG",
-    "currency": "Dollar",
+    "currency": "Singapore Dollar",
     "currencyCode": "SGD"
   },
   {
@@ -1244,7 +1244,7 @@
   {
     "country": "South Korea",
     "countryCode": "KR",
-    "currency": "Won",
+    "currency": "South Korean Won",
     "currencyCode": "KRW"
   },
   {
@@ -1304,7 +1304,7 @@
   {
     "country": "Taiwan",
     "countryCode": "TW",
-    "currency": "Dollar",
+    "currency": "Taiwan Dollar",
     "currencyCode": "TWD"
   },
   {

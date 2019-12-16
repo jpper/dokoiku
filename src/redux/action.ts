@@ -68,3 +68,8 @@ export const setPageTabIndex = (index: number) => ({
   type: "SET_PAGE_TAB_INDEX",
   index
 });
+
+export const setUserCurrencyCode = (userCurrencyCode: string) => ({
+  type: "SET_USER_CURRENCY_CODE",
+  userCurrencyCode
+});

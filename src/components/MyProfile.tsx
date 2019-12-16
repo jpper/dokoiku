@@ -7,11 +7,16 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
-import { setPageTabIndex } from "../redux/action";
+import { setPageTabIndex, setUserCurrencyCode } from "../redux/action";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 import _ from "lodash";
 
@@ -20,11 +25,18 @@ type myProps = {
   users: any;
   userCurrencyCode: string;
   setPageTabIndex: any;
+  updateUserCurrencyCode: any;
 };
 
 class MyProfile extends React.Component<
   myProps,
-  { user: any; showReview: any; rating: number; userCurrencyCode: string }
+  {
+    user: any;
+    showReview: any;
+    rating: number;
+    userCurrencyCode: string;
+    toggleDialog: boolean;
+  }
 > {
   constructor(props: myProps) {
     super(props);
@@ -32,7 +44,8 @@ class MyProfile extends React.Component<
       user: undefined,
       showReview: false,
       rating: undefined,
-      userCurrencyCode: this.props.userCurrencyCode
+      userCurrencyCode: this.props.userCurrencyCode,
+      toggleDialog: false
     };
   }
 
@@ -74,6 +87,12 @@ class MyProfile extends React.Component<
   onChangeShow = () => {
     this.setState({
       showReview: !this.state.showReview
+    });
+  };
+
+  handleToggle = () => {
+    this.setState({
+      toggleDialog: !this.state.toggleDialog
     });
   };
 
@@ -123,8 +142,34 @@ class MyProfile extends React.Component<
                       </MenuItem>
                     ))}
                 </Select>
-                <div id="helper-text">Cannot be changed once chosen</div>
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    this.props.updateUserCurrencyCode(
+                      this.state.userCurrencyCode,
+                      this.props.userId
+                    );
+                    this.handleToggle();
+                  }}
+                >
+                  Submit
+                </Button>
               </FormControl>
+              <Dialog
+                open={this.state.toggleDialog}
+                onClose={this.handleToggle}
+              >
+                <DialogTitle>Notification</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    You have changed your currency to{" "}
+                    {this.state.userCurrencyCode}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleToggle}>Close</Button>
+                </DialogActions>
+              </Dialog>
               <br />
               <img src={this.state.user.photoUrl} id="profile-picture" />
               <div className="social-icons">
@@ -341,6 +386,13 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => ({
   setPageTabIndex: (index: any) => {
     dispatch(setPageTabIndex(index));
+  },
+  updateUserCurrencyCode: (currencyCode: string, userId: string) => {
+    myFirestore
+      .collection("users")
+      .doc(userId)
+      .update({ currencyCode });
+    dispatch(setUserCurrencyCode(currencyCode));
   }
 });
 

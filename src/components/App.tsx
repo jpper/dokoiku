@@ -21,7 +21,8 @@ import {
   addPendingTrip,
   setShowReviews,
   addPastTrip,
-  setPageTabIndex
+  setPageTabIndex,
+  setUserCurrencyCode
 } from "../redux/action";
 
 // Material UI & Styles
@@ -195,10 +196,7 @@ const mapDispatchToProps = (dispatch: any) => ({
       .doc(userId)
       .get()
       .then((response: any) => {
-        dispatch({
-          type: "SET_USER_CURRENCY_CODE",
-          userCurrencyCode: response.data().currencyCode
-        });
+        dispatch(setUserCurrencyCode(response.data().currencyCode));
       });
   }
 });
