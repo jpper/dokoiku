@@ -297,7 +297,7 @@ class MyProfile extends React.Component<
               </div>
               <div id="star-container">
                 <Rating
-                  value={this.state.rating}
+                  value={this.state.rating ? this.state.rating : 0}
                   readOnly
                   precision={0.25}
                   size="large"
