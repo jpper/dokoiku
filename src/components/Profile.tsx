@@ -8,7 +8,8 @@ import {
   Grid,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  Link
 } from "@material-ui/core";
 import { myFirestore } from "../config/firebase";
 import Rating from "@material-ui/lab/Rating";
@@ -146,76 +147,105 @@ class Profile extends React.Component<
               <div className="spacer10"></div>
 
               <List id="horizontal-list">
-                <ListItem className="listItem" id="listItem-facebook">
-                  <ListItemText
-                    primary={
-                      <React.Fragment>
-                        {/* FACEBOOK */}
-                        {this.state.user.facebook ? (
+                <ListItem button className="listItem" id="listItem-facebook">
+                  {/* FACEBOOK */}
+                  {this.state.user.facebook ? (
+                    <Link href={this.state.user.facebook} target="_blank">
+                      <ListItemText
+                        primary={
+                          <React.Fragment>
+                            <img
+                              src="https://www.facebook.com/images/fb_icon_325x325.png"
+                              alt="Facebook"
+                              id="social-icon"
+                            />
+                          </React.Fragment>
+                        }
+                        secondary="Facebook"
+                      />
+                    </Link>
+                  ) : (
+                    <ListItemText
+                      primary={
+                        <React.Fragment>
                           <img
                             src="https://www.facebook.com/images/fb_icon_325x325.png"
                             alt="Facebook"
-                            id="social-icon"
-                          />
-                        ) : (
-                          <img
-                            src="https://www.facebook.com/images/fb_icon_325x325.png"
-                            alt="Facebook"
                             id="no-social-icon"
                           />
-                        )}
-                      </React.Fragment>
-                    }
-                    secondary="Facebook"
-                  />
+                        </React.Fragment>
+                      }
+                      secondary="Facebook"
+                    />
+                  )}
                 </ListItem>
 
-                <ListItem className="listItem" id="listItem-twitter">
-                  <ListItemText
-                    primary={
-                      <React.Fragment>
-                        {/* TWITTER */}
-                        {this.state.user.twitter ? (
+                <ListItem button className="listItem" id="listItem-twitter">
+                  {/* TWITTER */}
+                  {this.state.user.twitter ? (
+                    <Link href={this.state.user.twitter} target="_blank">
+                      <ListItemText
+                        primary={
+                          <React.Fragment>
+                            <img
+                              src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
+                              alt="Twitter"
+                              id="social-icon"
+                            />
+                          </React.Fragment>
+                        }
+                        secondary="Twitter"
+                      />
+                    </Link>
+                  ) : (
+                    <ListItemText
+                      primary={
+                        <React.Fragment>
                           <img
                             src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
                             alt="Twitter"
-                            id="social-icon"
-                          />
-                        ) : (
-                          <img
-                            src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                            alt="Twitter"
                             id="no-social-icon"
                           />
-                        )}
-                      </React.Fragment>
-                    }
-                    secondary="Twitter"
-                  />
+                        </React.Fragment>
+                      }
+                      secondary="Twitter"
+                    />
+                  )}
                 </ListItem>
 
-                <ListItem id="listItem-instagram">
-                  <ListItemText
-                    primary={
-                      <React.Fragment>
-                        {/* INSTA */}
-                        {this.state.user.instagram ? (
-                          <img
-                            src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                            alt="Instagram"
-                            id="social-icon"
-                          />
-                        ) : (
-                          <img
-                            src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                            alt="Instagram"
-                            id="no-social-icon"
-                          />
-                        )}
-                      </React.Fragment>
-                    }
-                    secondary="Instagram"
-                  />
+                {/* INSTA */}
+                <ListItem button id="listItem-instagram">
+                  {this.state.user.instagram ? (
+                    <Link href={this.state.user.instagram} target="_blank">
+                      <ListItemText
+                        primary={
+                          <React.Fragment>
+                            <img
+                              src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
+                              alt="Instagram"
+                              id="social-icon"
+                            />
+                          </React.Fragment>
+                        }
+                        secondary="Instagram"
+                      />
+                    </Link>
+                  ) : (
+                    <>
+                      <ListItemText
+                        primary={
+                          <React.Fragment>
+                            <img
+                              src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
+                              alt="Instagram"
+                              id="no-social-icon"
+                            />
+                          </React.Fragment>
+                        }
+                        secondary="Instagram"
+                      />
+                    </>
+                  )}
                 </ListItem>
               </List>
 
