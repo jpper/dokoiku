@@ -396,7 +396,15 @@ class App extends React.Component<myProps, any> {
                       <Login />
                     ) : (
                       <>
-                        <MyProfile />
+                        <Grid container>
+                          <Grid item sm={3}></Grid>
+                          <Grid item xs={12} sm={6}>
+                            <Card>
+                              <MyProfile />
+                            </Card>
+                          </Grid>
+                          <Grid item sm={3}></Grid>
+                        </Grid>
                       </>
                     )}
                   </TabPanel>
