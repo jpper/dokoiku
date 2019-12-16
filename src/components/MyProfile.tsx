@@ -369,7 +369,6 @@ class MyProfile extends React.Component<
                   alignItems="baseline"
                   justify="center"
                 >
-                  <Grid item></Grid>
                   <Grid item>
                     <InputLabel>Currency</InputLabel>
                     <Select
