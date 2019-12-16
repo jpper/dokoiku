@@ -30,7 +30,6 @@ import "../styles/ChatBoard.css";
 const mapStateToProps = (state: any) => ({
   userId: state.userId,
   userName: state.userName,
-  tripId: state.ongoingTrips[state.currentOngoingTripIndex].tripId.trim(),
   tripMessages: state.currentTripMessages,
   messageListener: state.messageListener
 });
@@ -102,7 +101,9 @@ interface ChatBoardState {
 }
 
 type Props = ReturnType<typeof mapStateToProps> &
-  ReturnType<typeof mapDispatchToProps>;
+  ReturnType<typeof mapDispatchToProps> & {
+    tripId: any;
+  };
 
 class ChatBoard extends Component<Props, ChatBoardState> {
   private messagesEnd: any;

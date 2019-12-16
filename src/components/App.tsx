@@ -415,7 +415,13 @@ class App extends React.Component<myProps, any> {
                         />
                       )}
 
-                      {this.props.mapTripMessage === 2 && <ChatBoard />}
+                      {this.props.mapTripMessage === 2 && (
+                        <ChatBoard
+                          tripId={this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex
+                          ].tripId.trim()}
+                        />
+                      )}
 
                       {this.props.showEdit ? (
                         <EditTrip
