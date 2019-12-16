@@ -54,7 +54,6 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 // import ChatIcon from "@material-ui/icons/Chat";
 import RateReviewIcon from "@material-ui/icons/RateReview";
 import PastTripInfo from "./PastTripInfo";
-import Reviews from "./Reviews";
 
 import PersonIcon from "@material-ui/icons/Person";
 import backgroundImg from "../img/trip.jpg";

@@ -100,7 +100,11 @@ class Profile extends React.Component<
           ) : (
             <>
               <h1>{this.state.user.nickname}</h1>
-              <img src={this.state.user.photoUrl} id="profile-picture" />
+              <img
+                src={this.state.user.photoUrl}
+                id="profile-picture"
+                alt={this.state.user.nickname}
+              />
               <div className="social-icons">
                 {/* FACEBOOK */}
                 {this.state.user.facebook ? (

@@ -8,8 +8,7 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel,
-  FormHelperText
+  InputLabel
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";

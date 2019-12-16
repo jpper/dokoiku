@@ -27,7 +27,6 @@ import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PersonIcon from "@material-ui/icons/Person";
-import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
@@ -146,6 +145,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               src={`https://www.countryflags.io/${this.props.ongoingTrips[
                 this.props.currentOngoingTripIndex
               ].countryCode.toLowerCase()}/shiny/24.png`}
+              alt="flag"
             ></img>
             {
               countriesToCurrencies.find(

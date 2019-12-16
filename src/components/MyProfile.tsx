@@ -171,7 +171,11 @@ class MyProfile extends React.Component<
                 </DialogActions>
               </Dialog>
               <br />
-              <img src={this.state.user.photoUrl} id="profile-picture" />
+              <img
+                src={this.state.user.photoUrl}
+                id="profile-picture"
+                alt={this.state.user.nickname}
+              />
               <div className="social-icons">
                 {/* FACEBOOK */}
                 {this.state.user.facebook ? (
