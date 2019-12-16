@@ -41,14 +41,11 @@ class Profile extends React.Component<
       .collection("reviews")
       .get()
       .then(query => query.docs.map(review => review.data()));
-    console.log(reviews);
     let total = 0;
     reviews.forEach(review => {
       total += review.rating;
     });
-    console.log(total);
     const averageRating = total / reviews.length;
-    console.log(averageRating);
     this.setState({ rating: averageRating });
   };
 
