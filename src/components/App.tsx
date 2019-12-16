@@ -286,10 +286,12 @@ class App extends React.Component<myProps, any> {
       <div className="contents">
         <AppBar position="static">
           <Tabs
+            variant="scrollable"
             value={this.props.pageTabIndex}
             onChange={this.handleChange}
-            centered
+            scrollButtons="on"
             aria-label="scrollable force tabs example"
+            className="tabs"
           >
             <Tab label="About" icon={<InfoIcon />} />
             <Tab label="Profile" icon={<PersonIcon />} />

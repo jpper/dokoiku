@@ -3,12 +3,12 @@
 }
 
 body {
-  display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
   padding: 10px;
 }
 
+.MuiTabs-flexContainer {
+  justify-content: center;
+}
 .App-logo {
   height: 40vmin;
 }

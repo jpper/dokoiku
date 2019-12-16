@@ -81,8 +81,8 @@ class Map extends React.Component<MapProps, MapState> {
           <GoogleMap
             id="example-map"
             mapContainerStyle={{
-              height: "600px",
-              width: "600px"
+              height: "100%",
+              width: "100%"
             }}
             zoom={6}
             center={{
