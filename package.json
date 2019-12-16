@@ -39,6 +39,7 @@
     "serialize-javascript": "^2.1.1",
     "typeface-roboto": "^0.0.75",
     "typescript": "3.6.3",
+    "typescript-fsa": "*",
     "typescript-fsa-reducers": "^1.2.1",
     "uuid": "^3.3.3"
   },

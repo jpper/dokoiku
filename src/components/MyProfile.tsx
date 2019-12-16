@@ -372,52 +372,42 @@ class MyProfile extends React.Component<
               </Typography>
 
               <FormControl>
-                <Grid
-                  container
-                  alignContent="center"
-                  alignItems="baseline"
-                  justify="center"
+                <InputLabel>Currency</InputLabel>
+                <Select
+                  value={this.state.userCurrencyCode}
+                  onChange={e => {
+                    this.setState({ userCurrencyCode: String(e.target.value) });
+                  }}
                 >
-                  <Grid item>
-                    <InputLabel>Currency</InputLabel>
-                    <Select
-                      value={this.state.userCurrencyCode}
-                      onChange={e => {
-                        this.setState({
-                          userCurrencyCode: String(e.target.value)
-                        });
-                      }}
-                    >
-                      {_.uniqBy(countriesToCurrencies, "currencyCode")
-                        .sort((a: any, b: any) => {
-                          if (a.currency > b.currency) return 1;
-                          else return -1;
-                        })
-                        .map((item: any) => (
-                          <MenuItem value={item.currencyCode}>
-                            {item.currency}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </Grid>
-
-                  <Grid item>
-                    <Button
-                      color="primary"
-                      variant="outlined"
-                      onClick={() => {
-                        this.props.updateUserCurrencyCode(
-                          this.state.userCurrencyCode,
-                          this.props.userId
-                        );
-                        this.handleToggle();
-                      }}
-                    >
-                      Submit
-                    </Button>
-                  </Grid>
-                </Grid>
+                  <MenuItem value={"None"}>{"None"}</MenuItem>                
+                  {_.uniqBy(countriesToCurrencies, "currencyCode")
+                    .sort((a: any, b: any) => {
+                      if (a.currency > b.currency) return 1;
+                      else return -1;
+                    })
+                    .map((item: any) => (
+                      <MenuItem value={item.currencyCode}>
+                        {item.currency}                    
+                      </MenuItem>
+                    ))}
+                                
+                </Select>
+                       
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    this.props.updateUserCurrencyCode(
+                      this.state.userCurrencyCode,
+                      this.props.userId
+                    );
+                    this.handleToggle();
+                  }}
+                >
+                  Submit
+                </Button>
+                             
               </FormControl>
+
               <Dialog
                 open={this.state.toggleDialog}
                 onClose={this.handleToggle}
