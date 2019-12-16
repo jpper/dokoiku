@@ -317,7 +317,7 @@ class App extends React.Component<myProps, any> {
                   >
                     <Tab label="About" icon={<InfoIcon />} />
                     <Tab label="Profile" icon={<PersonIcon />} />
-                    <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
+                    <Tab label="Upcoming Trips" icon={<CardTravelIcon />} />
                     <Tab label="Search Trips" icon={<SearchIcon />} />
                     <Tab label="Build Trip" icon={<BuildIcon />} />
 
