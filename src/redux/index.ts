@@ -4,6 +4,7 @@ const initialState: any = {
   userId: "",
   userName: "",
   userPhoto: "",
+  userCurrencyCode: "",
   currentTripMessages: [],
   messageListener: undefined,
   ongoingTrips: [],
@@ -299,6 +300,12 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         pageTabIndex: action.index
+      };
+    }
+    case "SET_USER_CURRENCY_CODE": {
+      return {
+        ...state,
+        userCurrencyCode: action.userCurrencyCode
       };
     }
     default: {
