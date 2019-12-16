@@ -9,7 +9,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  Link
+  Link,
+  Divider
 } from "@material-ui/core";
 import { myFirestore } from "../config/firebase";
 import Rating from "@material-ui/lab/Rating";
@@ -81,203 +82,183 @@ class Profile extends React.Component<
       this.calculateRating(this.state.user.id);
       return (
         <div className="MyProfile">
-          {this.state.showReview ? (
-            <>
-              <Grid container>
-                <Grid item xs={6}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    fullWidth
-                    onClick={this.onChangeShow}
-                  >
-                    Profile
-                  </Button>
-                </Grid>
+          <div className="spacer10"></div>
+          <img
+            src={this.state.user.photoUrl}
+            alt="photoImg"
+            id="profile-picture-small"
+          />
+          <div className="spacer10"></div>
 
-                <Grid item xs={6}>
-                  <Button
-                    variant="contained"
-                    color="default"
-                    size="large"
-                    fullWidth
-                    onClick={() => {
-                      this.props.onChangeDisplayProfile(undefined);
-                    }}
-                  >
-                    Close
-                  </Button>
-                </Grid>
-              </Grid>
+          <Typography variant="h4" align="center">
+            <b>{this.state.user.nickname}</b>
+          </Typography>
 
-              <Reviews userId={this.state.user.id} />
-            </>
-          ) : (
-            <>
-              <div className="spacer10"></div>
-              <img src={this.state.user.photoUrl} id="profile-picture-small" />
-              <div className="spacer10"></div>
-
-              <Typography variant="h4" align="center">
-                <b>{this.state.user.nickname}</b>
+          <Grid
+            container
+            alignContent="center"
+            alignItems="center"
+            justify="center"
+          >
+            <Grid item>
+              <Typography variant="h6" id="typo-rating">
+                Rating
               </Typography>
+            </Grid>
+            <Grid item>
+              <Rating
+                value={this.state.rating ? this.state.rating : 0}
+                readOnly
+                precision={0.25}
+                size="large"
+              />
+            </Grid>
+          </Grid>
 
-              <Grid
-                container
-                alignContent="center"
-                alignItems="center"
-                justify="center"
-              >
-                <Grid item>
-                  <Typography variant="h6" id="typo-rating">
-                    Rating
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Rating
-                    value={this.state.rating ? this.state.rating : 0}
-                    readOnly
-                    precision={0.25}
-                    size="large"
+          <div className="spacer10"></div>
+
+          <List id="horizontal-list">
+            <ListItem button className="listItem" id="listItem-facebook">
+              {/* FACEBOOK */}
+              {this.state.user.facebook ? (
+                <Link href={this.state.user.facebook} target="_blank">
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        <img
+                          src="https://www.facebook.com/images/fb_icon_325x325.png"
+                          alt="Facebook"
+                          id="social-icon"
+                        />
+                      </React.Fragment>
+                    }
+                    secondary="Facebook"
                   />
-                </Grid>
-              </Grid>
-
-              <div className="spacer10"></div>
-
-              <List id="horizontal-list">
-                <ListItem button className="listItem" id="listItem-facebook">
-                  {/* FACEBOOK */}
-                  {this.state.user.facebook ? (
-                    <Link href={this.state.user.facebook} target="_blank">
-                      <ListItemText
-                        primary={
-                          <React.Fragment>
-                            <img
-                              src="https://www.facebook.com/images/fb_icon_325x325.png"
-                              alt="Facebook"
-                              id="social-icon"
-                            />
-                          </React.Fragment>
-                        }
-                        secondary="Facebook"
+                </Link>
+              ) : (
+                <ListItemText
+                  primary={
+                    <React.Fragment>
+                      <img
+                        src="https://www.facebook.com/images/fb_icon_325x325.png"
+                        alt="Facebook"
+                        id="no-social-icon"
                       />
-                    </Link>
-                  ) : (
-                    <ListItemText
-                      primary={
-                        <React.Fragment>
-                          <img
-                            src="https://www.facebook.com/images/fb_icon_325x325.png"
-                            alt="Facebook"
-                            id="no-social-icon"
-                          />
-                        </React.Fragment>
-                      }
-                      secondary="Facebook"
-                    />
-                  )}
-                </ListItem>
+                    </React.Fragment>
+                  }
+                  secondary="Facebook"
+                />
+              )}
+            </ListItem>
 
-                <ListItem button className="listItem" id="listItem-twitter">
-                  {/* TWITTER */}
-                  {this.state.user.twitter ? (
-                    <Link href={this.state.user.twitter} target="_blank">
-                      <ListItemText
-                        primary={
-                          <React.Fragment>
-                            <img
-                              src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                              alt="Twitter"
-                              id="social-icon"
-                            />
-                          </React.Fragment>
-                        }
-                        secondary="Twitter"
+            <ListItem button className="listItem" id="listItem-twitter">
+              {/* TWITTER */}
+              {this.state.user.twitter ? (
+                <Link href={this.state.user.twitter} target="_blank">
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        <img
+                          src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
+                          alt="Twitter"
+                          id="social-icon"
+                        />
+                      </React.Fragment>
+                    }
+                    secondary="Twitter"
+                  />
+                </Link>
+              ) : (
+                <ListItemText
+                  primary={
+                    <React.Fragment>
+                      <img
+                        src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
+                        alt="Twitter"
+                        id="no-social-icon"
                       />
-                    </Link>
-                  ) : (
-                    <ListItemText
-                      primary={
-                        <React.Fragment>
-                          <img
-                            src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                            alt="Twitter"
-                            id="no-social-icon"
-                          />
-                        </React.Fragment>
-                      }
-                      secondary="Twitter"
-                    />
-                  )}
-                </ListItem>
+                    </React.Fragment>
+                  }
+                  secondary="Twitter"
+                />
+              )}
+            </ListItem>
 
-                {/* INSTA */}
-                <ListItem button id="listItem-instagram">
-                  {this.state.user.instagram ? (
-                    <Link href={this.state.user.instagram} target="_blank">
-                      <ListItemText
-                        primary={
-                          <React.Fragment>
-                            <img
-                              src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                              alt="Instagram"
-                              id="social-icon"
-                            />
-                          </React.Fragment>
-                        }
-                        secondary="Instagram"
-                      />
-                    </Link>
-                  ) : (
-                    <>
-                      <ListItemText
-                        primary={
-                          <React.Fragment>
-                            <img
-                              src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                              alt="Instagram"
-                              id="no-social-icon"
-                            />
-                          </React.Fragment>
-                        }
-                        secondary="Instagram"
-                      />
-                    </>
-                  )}
-                </ListItem>
-              </List>
+            {/* INSTA */}
+            <ListItem button id="listItem-instagram">
+              {this.state.user.instagram ? (
+                <Link href={this.state.user.instagram} target="_blank">
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        <img
+                          src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
+                          alt="Instagram"
+                          id="social-icon"
+                        />
+                      </React.Fragment>
+                    }
+                    secondary="Instagram"
+                  />
+                </Link>
+              ) : (
+                <>
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        <img
+                          src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
+                          alt="Instagram"
+                          id="no-social-icon"
+                        />
+                      </React.Fragment>
+                    }
+                    secondary="Instagram"
+                  />
+                </>
+              )}
+            </ListItem>
+          </List>
 
-              <div className="spacer10"></div>
+          <div className="spacer10"></div>
 
-              <Grid container>
-                <Grid item xs={6}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    fullWidth
-                    onClick={this.onChangeShow}
-                  >
-                    Reviews
-                  </Button>
-                </Grid>
+          <Grid container>
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                fullWidth
+                onClick={this.onChangeShow}
+              >
+                Reviews
+              </Button>
+            </Grid>
 
-                <Grid item xs={6}>
-                  <Button
-                    variant="contained"
-                    color="default"
-                    size="large"
-                    fullWidth
-                    onClick={() => {
-                      this.props.onChangeDisplayProfile(undefined);
-                    }}
-                  >
-                    Close
-                  </Button>
-                </Grid>
-              </Grid>
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                color="default"
+                size="large"
+                fullWidth
+                onClick={() => {
+                  this.props.onChangeDisplayProfile(undefined);
+                }}
+              >
+                Close
+              </Button>
+            </Grid>
+          </Grid>
+
+          <div className="spacer20"></div>
+
+          {this.state.showReview && (
+            <>
+              <Typography variant="h5">
+                Reviews for {this.state.user.nickname}
+              </Typography>
+              <Divider />
+              <Reviews userId={this.state.user.id} />
             </>
           )}
         </div>
