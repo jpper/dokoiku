@@ -118,10 +118,19 @@ class MyProfile extends React.Component<
               <h1>{this.state.user.nickname}</h1>
               <h1>
                 {"The currency I use: " +
-                  countriesToCurrencies.find(
-                    (item: any) =>
-                      item.currencyCode === this.state.userCurrencyCode
-                  ).currency}
+                  countriesToCurrencies
+                    .concat([
+                      {
+                        country: "None",
+                        countryCode: "None",
+                        currency: "None",
+                        currencyCode: "None"
+                      }
+                    ])
+                    .find(
+                      (item: any) =>
+                        item.currencyCode === this.state.userCurrencyCode
+                    ).currency}
               </h1>
               <FormControl>
                 <InputLabel>Currency</InputLabel>
@@ -131,6 +140,7 @@ class MyProfile extends React.Component<
                     this.setState({ userCurrencyCode: String(e.target.value) });
                   }}
                 >
+                  <MenuItem value={"None"}>{"None"}</MenuItem>
                   {_.uniqBy(countriesToCurrencies, "currencyCode")
                     .sort((a: any, b: any) => {
                       if (a.currency > b.currency) return 1;

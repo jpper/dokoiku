@@ -196,7 +196,9 @@ const mapDispatchToProps = (dispatch: any) => ({
       .doc(userId)
       .get()
       .then((response: any) => {
-        dispatch(setUserCurrencyCode(response.data().currencyCode));
+        if (response.data().currencyCode)
+          dispatch(setUserCurrencyCode(response.data().currencyCode));
+        else dispatch(setUserCurrencyCode("None"));
       });
   }
 });

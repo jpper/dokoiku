@@ -167,11 +167,23 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           {/* Budget */}
           <Tooltip
             title={
-              Math.round(this.state.userCurrencyBudget * 100) / 100 +
-              " " +
-              countriesToCurrencies.find(
-                (item: any) => this.props.userCurrencyCode === item.currencyCode
-              ).currency
+              this.props.userCurrencyCode !== "None"
+                ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
+                  " " +
+                  countriesToCurrencies
+                    .concat([
+                      {
+                        country: "None",
+                        countryCode: "None",
+                        currency: "None",
+                        currencyCode: "None"
+                      }
+                    ])
+                    .find(
+                      (item: any) =>
+                        this.props.userCurrencyCode === item.currencyCode
+                    ).currency
+                : ""
             }
             placement="top-end"
           >
