@@ -18,7 +18,6 @@ import {
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PersonIcon from "@material-ui/icons/Person";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
@@ -103,6 +102,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
               src={`https://www.countryflags.io/${this.props.searchTrips[
                 this.props.currentSearchTripIndex
               ].countryCode.toLowerCase()}/shiny/24.png`}
+              alt="flag"
             ></img>
             {
               countriesToCurrencies.find(
@@ -201,7 +201,11 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                 ).nickname;
                 return (
                   <div>
-                    <p
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="medium"
+                      fullWidth
                       key={i}
                       onClick={() => {
                         this.props.onChangeDisplayProfile(m);
@@ -209,7 +213,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                     >
                       <PersonIcon className="iconSpacer" />
                       {nickname}
-                    </p>
+                    </Button>
                   </div>
                 );
               })}
