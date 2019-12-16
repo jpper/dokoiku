@@ -248,6 +248,10 @@ class PastTripInfo extends React.Component<any, myStates> {
               <Container>
                 <Card>
                   <BasicTripInfo
+                    country={
+                      this.state.pastTrips[this.state.currentPastTripIndex]
+                        .countryCode
+                    }
                     tripTitle={
                       this.state.pastTrips[this.state.currentPastTripIndex].name
                     }
