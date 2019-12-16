@@ -24,6 +24,7 @@ import {
   setPageTabIndex,
   setUserCurrencyCode
 } from "../redux/action";
+import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 
 // Material UI & Styles
 import "../styles/App.css";
@@ -40,7 +41,8 @@ import {
   MenuItem,
   Card,
   Container,
-  Badge
+  Badge,
+  Button
 } from "@material-ui/core";
 import CardTravelIcon from "@material-ui/icons/CardTravel";
 import SearchIcon from "@material-ui/icons/Search";
@@ -52,11 +54,11 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 // import ChatIcon from "@material-ui/icons/Chat";
 import RateReviewIcon from "@material-ui/icons/RateReview";
 import PastTripInfo from "./PastTripInfo";
-import Reviews from "./Reviews";
 
 import PersonIcon from "@material-ui/icons/Person";
 import backgroundImg from "../img/trip.jpg";
 import moment from "moment";
+import PrivacyPolicy from "./PrivacyPolicy";
 
 type myProps = {
   userId: string;
@@ -295,267 +297,295 @@ class App extends React.Component<myProps, any> {
 
   render() {
     return (
-      <div className="contents">
-        <AppBar position="static">
-          <Tabs
-            variant="scrollable"
-            value={this.props.pageTabIndex}
-            onChange={this.handleChange}
-            scrollButtons="on"
-            aria-label="scrollable force tabs example"
-            className="tabs"
-          >
-            <Tab label="About" icon={<InfoIcon />} />
-            <Tab label="Profile" icon={<PersonIcon />} />
-            <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
-            <Tab label="Search Trips" icon={<SearchIcon />} />
-            <Tab label="Build Trip" icon={<BuildIcon />} />
+      <Router>
+        <Route
+          exact={true}
+          path="/"
+          render={() => {
+            return (
+              <div className="contents">
+                <AppBar position="static">
+                  <Tabs
+                    value={this.props.pageTabIndex}
+                    onChange={this.handleChange}
+                    centered
+                    className="tabs"
+                    scrollButtons="on"
+                    aria-label="scrollable force tabs example"
+                  >
+                    <Tab label="About" icon={<InfoIcon />} />
+                    <Tab label="Profile" icon={<PersonIcon />} />
+                    <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
+                    <Tab label="Search Trips" icon={<SearchIcon />} />
+                    <Tab label="Build Trip" icon={<BuildIcon />} />
 
-            {/* FIXME: This is just for testing Reviews!! */}
-            <Tab label="Trip Reviews" icon={<RateReviewIcon />} />
+                    {/* FIXME: This is just for testing Reviews!! */}
+                    <Tab label="Trip Reviews" icon={<RateReviewIcon />} />
 
-            {/* User Icon */}
-            <div className="iconWrapper">
-              <IconButton
-                color="inherit"
-                aria-controls="personalMenu"
-                aria-haspopup="true"
-                onClick={this.handleClick}
-              >
-                {this.props.requests.length ? (
-                  <Badge variant="dot" color="secondary">
-                    {this.props.userPhoto === "" ? (
-                      <>
-                        <AccountCircleIcon fontSize="large" />
-                      </>
+                    {/* User Icon */}
+                    <div className="iconWrapper">
+                      <IconButton
+                        color="inherit"
+                        aria-controls="personalMenu"
+                        aria-haspopup="true"
+                        onClick={this.handleClick}
+                      >
+                        {this.props.requests.length ? (
+                          <Badge variant="dot" color="secondary">
+                            {this.props.userPhoto === "" ? (
+                              <>
+                                <AccountCircleIcon fontSize="large" />
+                              </>
+                            ) : (
+                              <>
+                                <Avatar
+                                  alt="User Photo"
+                                  src={this.props.userPhoto}
+                                />
+                              </>
+                            )}
+                          </Badge>
+                        ) : (
+                          <div>
+                            {this.props.userPhoto === "" ? (
+                              <>
+                                <AccountCircleIcon fontSize="large" />
+                              </>
+                            ) : (
+                              <>
+                                <Avatar
+                                  alt="User Photo"
+                                  src={this.props.userPhoto}
+                                />
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </IconButton>
+                      <Menu
+                        id="personalMenu"
+                        anchorEl={this.state.anchorEl}
+                        open={Boolean(this.state.anchorEl)}
+                        onClose={this.handleClose}
+                      >
+                        {this.props.userId === "" ? (
+                          <>
+                            <p className="textUsername">
+                              Hello, <b>Anonymous</b>
+                            </p>
+                            <MenuItem onClick={this.onLogin}>Login</MenuItem>
+                          </>
+                        ) : (
+                          <>
+                            <p className="textUsername">
+                              Hello, <b>{this.props.userName}</b>
+                            </p>
+                            <Notification />
+                            <PendingTripInfo />
+                            {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
+                            <MenuItem onClick={this.onLogout}>Logout</MenuItem>
+                          </>
+                        )}
+                      </Menu>
+                    </div>
+                  </Tabs>
+
+                  {/* My Profile */}
+                  <TabPanel value={this.props.pageTabIndex} index={1}>
+                    {this.props.userId === "" ? (
+                      <Login />
                     ) : (
                       <>
-                        <Avatar alt="User Photo" src={this.props.userPhoto} />
+                        <MyProfile />
                       </>
                     )}
-                  </Badge>
-                ) : (
-                  <div>
-                    {this.props.userPhoto === "" ? (
-                      <>
-                        <AccountCircleIcon fontSize="large" />
-                      </>
+                  </TabPanel>
+
+                  {/* Ongoing Trips */}
+                  <TabPanel value={this.props.pageTabIndex} index={2}>
+                    {this.props.userId === "" ? (
+                      <Login />
                     ) : (
                       <>
-                        <Avatar alt="User Photo" src={this.props.userPhoto} />
+                        {this.props.ongoingTrips.length ? (
+                          <Grid container>
+                            <Grid item xs={5}>
+                              <Container>
+                                <Card className="tripInfo">
+                                  <OngoingTripInfo />
+                                </Card>
+                              </Container>
+                            </Grid>
+                            {/* {if statement and changing props value here} */}
+                            <Grid item xs={7}>
+                              {this.props.displayProfile ? (
+                                <Profile />
+                              ) : (
+                                !this.props.showChat &&
+                                !this.props.showEdit &&
+                                this.props.ongoingTrips.length &&
+                                this.props.mapTripMessage === 0 && (
+                                  <Map
+                                    trips={this.props.ongoingTrips}
+                                    currentTripIndex={
+                                      this.props.currentOngoingTripIndex
+                                    }
+                                  />
+                                )
+                              )}
+                              {this.props.mapTripMessage === 1 && (
+                                <Notes
+                                  tripId={
+                                    this.props.ongoingTrips[
+                                      this.props.currentOngoingTripIndex
+                                    ].tripId
+                                  }
+                                />
+                              )}
+
+                              {this.props.mapTripMessage === 2 && (
+                                <ChatBoard
+                                  tripId={this.props.ongoingTrips[
+                                    this.props.currentOngoingTripIndex
+                                  ].tripId.trim()}
+                                />
+                              )}
+
+                              {this.props.showEdit ? (
+                                <EditTrip
+                                  name={
+                                    this.props.ongoingTrips[
+                                      this.props.currentOngoingTripIndex
+                                    ].name
+                                  }
+                                  startDate={moment(
+                                    this.props.ongoingTrips[
+                                      this.props.currentOngoingTripIndex
+                                    ].startDate.toDate()
+                                  ).format("YYYY-MM-DD")}
+                                  endDate={moment(
+                                    this.props.ongoingTrips[
+                                      this.props.currentOngoingTripIndex
+                                    ].endDate.toDate()
+                                  ).format("YYYY-MM-DD")}
+                                  startLocation={
+                                    this.props.ongoingTrips[
+                                      this.props.currentOngoingTripIndex
+                                    ].startLocation
+                                  }
+                                  budget={
+                                    this.props.ongoingTrips[
+                                      this.props.currentOngoingTripIndex
+                                    ].budget
+                                  }
+                                  waypoints={
+                                    this.props.ongoingTrips[
+                                      this.props.currentOngoingTripIndex
+                                    ].waypoints
+                                  }
+                                  tripId={
+                                    this.props.ongoingTrips[
+                                      this.props.currentOngoingTripIndex
+                                    ].tripId
+                                  }
+                                />
+                              ) : null}
+                            </Grid>
+                          </Grid>
+                        ) : (
+                          <div>Please join a trip or create your own.</div>
+                        )}
                       </>
                     )}
+                  </TabPanel>
+
+                  {/* Search Trip */}
+                  <TabPanel value={this.props.pageTabIndex} index={3}>
+                    {this.props.userId === "" ? (
+                      <Login />
+                    ) : (
+                      <>
+                        {this.props.searchTrips.length ? (
+                          <Grid container>
+                            <Grid item xs={5}>
+                              <Container>
+                                <Card className="tripInfo">
+                                  <SearchTripInfo />
+                                </Card>
+                              </Container>
+                            </Grid>
+                            <Grid item xs={7}>
+                              {this.props.displayProfile ? (
+                                <Profile />
+                              ) : (
+                                !this.props.showChat &&
+                                !this.props.showEdit &&
+                                this.props.ongoingTrips.length &&
+                                this.props.mapTripMessage === 0 && (
+                                  <Map
+                                    trips={this.props.searchTrips}
+                                    currentTripIndex={
+                                      this.props.currentSearchTripIndex
+                                    }
+                                  />
+                                )
+                              )}
+                            </Grid>
+                          </Grid>
+                        ) : (
+                          <div>There are no new trips available.</div>
+                        )}
+                      </>
+                    )}
+                  </TabPanel>
+
+                  {/* Build Trip */}
+                  <TabPanel value={this.props.pageTabIndex} index={4}>
+                    {this.props.userId === "" ? <Login /> : <BuildTrip />}
+                  </TabPanel>
+
+                  {/* Reviews */}
+                  {/* FIXME: This is just for testing Reviews!! */}
+                  <TabPanel value={this.props.pageTabIndex} index={5}>
+                    {this.props.userId === "" ? (
+                      <Login />
+                    ) : (
+                      <>
+                        <PastTripInfo />
+                      </>
+                    )}
+                  </TabPanel>
+
+                  {/* About */}
+                  {this.props.pageTabIndex === 0 && (
+                    <div>
+                      <img
+                        className="bgImg"
+                        src={backgroundImg}
+                        alt="backImg"
+                      />
+                      <About />
+                    </div>
+                  )}
+                </AppBar>
+
+                {/* Click Login */}
+                {this.props.pageTabIndex === -1 && (
+                  <div style={{ marginTop: "35px" }}>
+                    <Login />
                   </div>
                 )}
-              </IconButton>
-              <Menu
-                id="personalMenu"
-                anchorEl={this.state.anchorEl}
-                open={Boolean(this.state.anchorEl)}
-                onClose={this.handleClose}
-              >
-                {this.props.userId === "" ? (
-                  <>
-                    <p className="textUsername">
-                      Hello, <b>Anonymous</b>
-                    </p>
-                    <MenuItem onClick={this.onLogin}>Login</MenuItem>
-                  </>
-                ) : (
-                  <>
-                    <p className="textUsername">
-                      Hello, <b>{this.props.userName}</b>
-                    </p>
-                    <Notification />
-                    <PendingTripInfo />
-                    {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
-                    <MenuItem onClick={this.onLogout}>Logout</MenuItem>
-                  </>
-                )}
-              </Menu>
-            </div>
-          </Tabs>
-
-          {/* My Profile */}
-          <TabPanel value={this.props.pageTabIndex} index={1}>
-            {this.props.userId === "" ? (
-              <Login />
-            ) : (
-              <>
-                <MyProfile />
-              </>
-            )}
-          </TabPanel>
-
-          {/* Ongoing Trips */}
-          <TabPanel value={this.props.pageTabIndex} index={2}>
-            {this.props.userId === "" ? (
-              <Login />
-            ) : (
-              <>
-                {this.props.ongoingTrips.length ? (
-                  <Grid container>
-                    <Grid item xs={5}>
-                      <Container>
-                        <Card className="tripInfo">
-                          <OngoingTripInfo />
-                        </Card>
-                      </Container>
-                    </Grid>
-                    {/* {if statement and changing props value here} */}
-                    <Grid item xs={7}>
-                      {this.props.displayProfile ? (
-                        <Profile />
-                      ) : (
-                        !this.props.showChat &&
-                        !this.props.showEdit &&
-                        this.props.ongoingTrips.length &&
-                        this.props.mapTripMessage === 0 && (
-                          <Map
-                            trips={this.props.ongoingTrips}
-                            currentTripIndex={
-                              this.props.currentOngoingTripIndex
-                            }
-                          />
-                        )
-                      )}
-                      {this.props.mapTripMessage === 1 && (
-                        <Notes
-                          tripId={
-                            this.props.ongoingTrips[
-                              this.props.currentOngoingTripIndex
-                            ].tripId
-                          }
-                        />
-                      )}
-
-                      {this.props.mapTripMessage === 2 && (
-                        <ChatBoard
-                          tripId={this.props.ongoingTrips[
-                            this.props.currentOngoingTripIndex
-                          ].tripId.trim()}
-                        />
-                      )}
-
-                      {this.props.showEdit ? (
-                        <EditTrip
-                          name={
-                            this.props.ongoingTrips[
-                              this.props.currentOngoingTripIndex
-                            ].name
-                          }
-                          startDate={moment(
-                            this.props.ongoingTrips[
-                              this.props.currentOngoingTripIndex
-                            ].startDate.toDate()
-                          ).format("YYYY-MM-DD")}
-                          endDate={moment(
-                            this.props.ongoingTrips[
-                              this.props.currentOngoingTripIndex
-                            ].endDate.toDate()
-                          ).format("YYYY-MM-DD")}
-                          startLocation={
-                            this.props.ongoingTrips[
-                              this.props.currentOngoingTripIndex
-                            ].startLocation
-                          }
-                          budget={
-                            this.props.ongoingTrips[
-                              this.props.currentOngoingTripIndex
-                            ].budget
-                          }
-                          waypoints={
-                            this.props.ongoingTrips[
-                              this.props.currentOngoingTripIndex
-                            ].waypoints
-                          }
-                          tripId={
-                            this.props.ongoingTrips[
-                              this.props.currentOngoingTripIndex
-                            ].tripId
-                          }
-                        />
-                      ) : null}
-                    </Grid>
-                  </Grid>
-                ) : (
-                  <div>Please join a trip or create your own.</div>
-                )}
-              </>
-            )}
-          </TabPanel>
-
-          {/* Search Trip */}
-          <TabPanel value={this.props.pageTabIndex} index={3}>
-            {this.props.userId === "" ? (
-              <Login />
-            ) : (
-              <>
-                {this.props.searchTrips.length ? (
-                  <Grid container>
-                    <Grid item xs={5}>
-                      <Container>
-                        <Card className="tripInfo">
-                          <SearchTripInfo />
-                        </Card>
-                      </Container>
-                    </Grid>
-                    <Grid item xs={7}>
-                      {this.props.displayProfile ? (
-                        <Profile />
-                      ) : (
-                        !this.props.showChat &&
-                        !this.props.showEdit &&
-                        this.props.ongoingTrips.length &&
-                        this.props.mapTripMessage === 0 && (
-                          <Map
-                            trips={this.props.searchTrips}
-                            currentTripIndex={this.props.currentSearchTripIndex}
-                          />
-                        )
-                      )}
-                    </Grid>
-                  </Grid>
-                ) : (
-                  <div>There are no new trips available.</div>
-                )}
-              </>
-            )}
-          </TabPanel>
-
-          {/* Build Trip */}
-          <TabPanel value={this.props.pageTabIndex} index={4}>
-            {this.props.userId === "" ? <Login /> : <BuildTrip />}
-          </TabPanel>
-
-          {/* Reviews */}
-          {/* FIXME: This is just for testing Reviews!! */}
-          <TabPanel value={this.props.pageTabIndex} index={5}>
-            {this.props.userId === "" ? (
-              <Login />
-            ) : (
-              <>
-                <PastTripInfo />
-              </>
-            )}
-          </TabPanel>
-
-          {/* About */}
-          {this.props.pageTabIndex === 0 && (
-            <div>
-              <img className="bgImg" src={backgroundImg} alt="backImg" />
-              <About />
-            </div>
-          )}
-        </AppBar>
-
-        {/* Click Login */}
-        {this.props.pageTabIndex === -1 && (
-          <div style={{ marginTop: "35px" }}>
-            <Login />
-          </div>
-        )}
-      </div>
+                <Link to="/privacy">
+                  <Button variant="outlined" size="small" id="privacy-policy">
+                    Privacy Policy
+                  </Button>
+                </Link>
+              </div>
+            );
+          }}
+        />
+        <Route path="/privacy" component={PrivacyPolicy} />
+      </Router>
     );
   }
 }

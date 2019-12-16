@@ -109,6 +109,7 @@ class Map extends React.Component<MapProps, MapState> {
                     ) {
                       return <Marker key={index} position={position} />;
                     }
+                    return undefined; //put in this line to solve a linter error; delete if it causes trouble
                   })
               : null}
             <DirectionsService
