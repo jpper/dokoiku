@@ -2,10 +2,18 @@ import React from "react";
 import { connect } from "react-redux";
 import "../styles/MyProfile.css";
 // import { myFirestore } from "../config/firebase";
-import { Button } from "@material-ui/core";
+import {
+  Button,
+  Typography,
+  Grid,
+  List,
+  ListItem,
+  ListItemText
+} from "@material-ui/core";
 import { myFirestore } from "../config/firebase";
 import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
+import "typeface-roboto";
 
 type myProps = {
   displayProfile: string;
@@ -77,99 +85,172 @@ class Profile extends React.Component<
         <div className="MyProfile">
           {this.state.showReview ? (
             <>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                onClick={this.onChangeShow}
-              >
-                Profile
-              </Button>
-              <Button
-                variant="contained"
-                color="default"
-                size="large"
-                onClick={() => {
-                  this.props.onChangeDisplayProfile(undefined);
-                }}
-              >
-                Close
-              </Button>
+              <Grid container>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                    onClick={this.onChangeShow}
+                  >
+                    Profile
+                  </Button>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    size="large"
+                    fullWidth
+                    onClick={() => {
+                      this.props.onChangeDisplayProfile(undefined);
+                    }}
+                  >
+                    Close
+                  </Button>
+                </Grid>
+              </Grid>
+
               <Reviews userId={this.state.user.id} />
             </>
           ) : (
             <>
-              <h1>{this.state.user.nickname}</h1>
-              <img src={this.state.user.photoUrl} id="profile-picture" />
-              <div className="social-icons">
-                {/* FACEBOOK */}
-                {this.state.user.facebook ? (
-                  <img
-                    src="https://www.facebook.com/images/fb_icon_325x325.png"
-                    alt="Facebook"
-                    id="social-icon"
-                  />
-                ) : (
-                  <img
-                    src="https://www.facebook.com/images/fb_icon_325x325.png"
-                    alt="Facebook"
-                    id="no-social-icon"
-                  />
-                )}
-                {/* INSTA */}
-                {this.state.user.instagram ? (
-                  <img
-                    src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                    alt="Instagram"
-                    id="social-icon"
-                  />
-                ) : (
-                  <img
-                    src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                    alt="Instagram"
-                    id="no-social-icon"
-                  />
-                )}
-                {/* TWITTER */}
-                {this.state.user.twitter ? (
-                  <img
-                    src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                    alt="Twitter"
-                    id="social-icon"
-                  />
-                ) : (
-                  <img
-                    src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                    alt="Twitter"
-                    id="no-social-icon"
-                  />
-                )}
-              </div>
-              <div id="star-container">
-                <Rating
-                  value={this.state.rating ? this.state.rating : 0}
-                  readOnly
-                  precision={0.25}
-                  size="large"
-                />
-              </div>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                onClick={this.onChangeShow}
+              <div className="spacer10"></div>
+              <img src={this.state.user.photoUrl} id="profile-picture-small" />
+              <div className="spacer10"></div>
+
+              <Typography variant="h4" align="center">
+                <b>{this.state.user.nickname}</b>
+              </Typography>
+
+              <Grid
+                container
+                alignContent="center"
+                alignItems="center"
+                justify="center"
               >
-                Reviews
-              </Button>
-              <br />
-              <br />
-              <button
-                onClick={() => {
-                  this.props.onChangeDisplayProfile(undefined);
-                }}
-              >
-                Close
-              </button>
+                <Grid item>
+                  <Typography variant="h6" id="typo-rating">
+                    Rating
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Rating
+                    value={this.state.rating ? this.state.rating : 0}
+                    readOnly
+                    precision={0.25}
+                    size="large"
+                  />
+                </Grid>
+              </Grid>
+
+              <div className="spacer10"></div>
+
+              <List id="horizontal-list">
+                <ListItem className="listItem" id="listItem-facebook">
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        {/* FACEBOOK */}
+                        {this.state.user.facebook ? (
+                          <img
+                            src="https://www.facebook.com/images/fb_icon_325x325.png"
+                            alt="Facebook"
+                            id="social-icon"
+                          />
+                        ) : (
+                          <img
+                            src="https://www.facebook.com/images/fb_icon_325x325.png"
+                            alt="Facebook"
+                            id="no-social-icon"
+                          />
+                        )}
+                      </React.Fragment>
+                    }
+                    secondary="Facebook"
+                  />
+                </ListItem>
+
+                <ListItem className="listItem" id="listItem-twitter">
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        {/* TWITTER */}
+                        {this.state.user.twitter ? (
+                          <img
+                            src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
+                            alt="Twitter"
+                            id="social-icon"
+                          />
+                        ) : (
+                          <img
+                            src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
+                            alt="Twitter"
+                            id="no-social-icon"
+                          />
+                        )}
+                      </React.Fragment>
+                    }
+                    secondary="Twitter"
+                  />
+                </ListItem>
+
+                <ListItem id="listItem-instagram">
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        {/* INSTA */}
+                        {this.state.user.instagram ? (
+                          <img
+                            src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
+                            alt="Instagram"
+                            id="social-icon"
+                          />
+                        ) : (
+                          <img
+                            src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
+                            alt="Instagram"
+                            id="no-social-icon"
+                          />
+                        )}
+                      </React.Fragment>
+                    }
+                    secondary="Instagram"
+                  />
+                </ListItem>
+              </List>
+
+              <div className="spacer10"></div>
+
+              <Grid container>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                    onClick={this.onChangeShow}
+                  >
+                    Reviews
+                  </Button>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    size="large"
+                    fullWidth
+                    onClick={() => {
+                      this.props.onChangeDisplayProfile(undefined);
+                    }}
+                  >
+                    Close
+                  </Button>
+                </Grid>
+              </Grid>
             </>
           )}
         </div>

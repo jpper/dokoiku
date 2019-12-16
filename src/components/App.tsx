@@ -288,6 +288,8 @@ class App extends React.Component<myProps, any> {
           <Tabs
             value={this.props.pageTabIndex}
             onChange={this.handleChange}
+            variant="scrollable"
+            scrollButtons="on"
             centered
             aria-label="scrollable force tabs example"
           >
@@ -368,7 +370,15 @@ class App extends React.Component<myProps, any> {
               <Login />
             ) : (
               <>
-                <MyProfile />
+                <Grid container>
+                  <Grid item sm={3}></Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Card>
+                      <MyProfile />
+                    </Card>
+                  </Grid>
+                  <Grid item sm={3}></Grid>
+                </Grid>
               </>
             )}
           </TabPanel>
@@ -381,7 +391,7 @@ class App extends React.Component<myProps, any> {
               <>
                 {this.props.ongoingTrips.length ? (
                   <Grid container>
-                    <Grid item xs={5}>
+                    <Grid item xs={12} sm={5}>
                       <Container>
                         <Card className="tripInfo">
                           <OngoingTripInfo />
@@ -389,7 +399,7 @@ class App extends React.Component<myProps, any> {
                       </Container>
                     </Grid>
                     {/* {if statement and changing props value here} */}
-                    <Grid item xs={7}>
+                    <Grid item xs={12} sm={7}>
                       {this.props.displayProfile ? (
                         <Profile />
                       ) : (

@@ -2,10 +2,19 @@ import React from "react";
 import { connect } from "react-redux";
 import "../styles/MyProfile.css";
 import { myFirestore } from "../config/firebase";
-import { Button } from "@material-ui/core";
+import {
+  Button,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Modal,
+  Grid
+} from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
 import { setPageTabIndex } from "../redux/action";
+import "typeface-roboto";
 
 type myProps = {
   userId: string;
@@ -76,86 +85,145 @@ class MyProfile extends React.Component<
             <>
               <Button
                 variant="contained"
-                color="secondary"
+                color="primary"
                 size="large"
+                fullWidth
                 onClick={this.onChangeShow}
               >
-                Profile
+                Go back to Profile
               </Button>
               <Reviews userId={this.state.user.id} />
             </>
           ) : (
             <>
-              <h1>{this.state.user.nickname}</h1>
+              <div className="spacer10"></div>
               <img src={this.state.user.photoUrl} id="profile-picture" />
-              <div className="social-icons">
-                {/* FACEBOOK */}
-                {this.state.user.facebook ? (
-                  <img
-                    src="https://www.facebook.com/images/fb_icon_325x325.png"
-                    alt="Facebook"
-                    id="social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-facebook");
-                      modal.style.display = "block";
-                    }}
+              <div className="spacer10"></div>
+
+              <Typography variant="h4" align="center">
+                <b>{this.state.user.nickname}</b>
+              </Typography>
+
+              <Grid
+                container
+                alignContent="center"
+                alignItems="center"
+                justify="center"
+              >
+                <Grid item>
+                  <Typography variant="h6" id="typo-rating">
+                    Rating
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Rating
+                    value={this.state.rating ? this.state.rating : 0}
+                    readOnly
+                    precision={0.25}
+                    size="large"
                   />
-                ) : (
-                  <img
-                    src="https://www.facebook.com/images/fb_icon_325x325.png"
-                    alt="Facebook"
-                    id="no-social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-facebook");
-                      modal.style.display = "block";
-                    }}
+                </Grid>
+              </Grid>
+
+              <div className="spacer10"></div>
+
+              <List id="horizontal-list">
+                <ListItem
+                  className="listItem"
+                  id="listItem-facebook"
+                  button
+                  onClick={() => {
+                    const modal = document.getElementById("add-facebook");
+                    modal.style.display = "block";
+                  }}
+                >
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        {/* FACEBOOK */}
+                        {this.state.user.facebook ? (
+                          <img
+                            src="https://www.facebook.com/images/fb_icon_325x325.png"
+                            alt="Facebook"
+                            id="social-icon"
+                          />
+                        ) : (
+                          <img
+                            src="https://www.facebook.com/images/fb_icon_325x325.png"
+                            alt="Facebook"
+                            id="no-social-icon"
+                          />
+                        )}
+                      </React.Fragment>
+                    }
+                    secondary="Facebook"
                   />
-                )}
-                {/* INSTA */}
-                {this.state.user.instagram ? (
-                  <img
-                    src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                    alt="Instagram"
-                    id="social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-instagram");
-                      modal.style.display = "block";
-                    }}
+                </ListItem>
+
+                <ListItem
+                  button
+                  className="listItem"
+                  id="listItem-twitter"
+                  onClick={() => {
+                    const modal = document.getElementById("add-twitter");
+                    modal.style.display = "block";
+                  }}
+                >
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        {/* TWITTER */}
+                        {this.state.user.twitter ? (
+                          <img
+                            src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
+                            alt="Twitter"
+                            id="social-icon"
+                          />
+                        ) : (
+                          <img
+                            src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
+                            alt="Twitter"
+                            id="no-social-icon"
+                          />
+                        )}
+                      </React.Fragment>
+                    }
+                    secondary="Twitter"
                   />
-                ) : (
-                  <img
-                    src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
-                    alt="Instagram"
-                    id="no-social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-instagram");
-                      modal.style.display = "block";
-                    }}
+                </ListItem>
+
+                <ListItem
+                  id="listItem-instagram"
+                  button
+                  onClick={() => {
+                    const modal = document.getElementById("add-instagram");
+                    modal.style.display = "block";
+                  }}
+                >
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        {/* INSTA */}
+                        {this.state.user.instagram ? (
+                          <img
+                            src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
+                            alt="Instagram"
+                            id="social-icon"
+                          />
+                        ) : (
+                          <img
+                            src="https://www.parkviewbaptist.com/wp-content/uploads/2019/09/Instagram-Icon.png"
+                            alt="Instagram"
+                            id="no-social-icon"
+                          />
+                        )}
+                      </React.Fragment>
+                    }
+                    secondary="Instagram"
                   />
-                )}
-                {/* TWITTER */}
-                {this.state.user.twitter ? (
-                  <img
-                    src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                    alt="Twitter"
-                    id="social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-twitter");
-                      modal.style.display = "block";
-                    }}
-                  />
-                ) : (
-                  <img
-                    src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-twitter-512.png"
-                    alt="Twitter"
-                    id="no-social-icon"
-                    onClick={() => {
-                      const modal = document.getElementById("add-twitter");
-                      modal.style.display = "block";
-                    }}
-                  />
-                )}
-              </div>
+                </ListItem>
+              </List>
+
               {/* MODALS SECTION */}
               {/* FACEBOOK */}
               <div className="modal" id="add-facebook">
@@ -256,31 +324,35 @@ class MyProfile extends React.Component<
                   </button>
                 </div>
               </div>
-              <div id="star-container">
-                <Rating
-                  value={this.state.rating}
-                  readOnly
-                  precision={0.25}
-                  size="large"
-                />
-              </div>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                onClick={this.onChangeShow}
-              >
-                Reviews
-              </Button>
-              <br />
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                onClick={() => this.props.setPageTabIndex(5)}
-              >
-                Past Trips
-              </Button>
+
+              <div className="spacer10"></div>
+
+              <Grid container>
+                <Grid item xs={6}>
+                  <Button
+                    className="spacer-right5"
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                    onClick={this.onChangeShow}
+                  >
+                    Reviews
+                  </Button>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                    onClick={() => this.props.setPageTabIndex(5)}
+                  >
+                    Past Trips
+                  </Button>
+                </Grid>
+              </Grid>
             </>
           )}
         </div>
