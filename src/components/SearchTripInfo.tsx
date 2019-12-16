@@ -201,7 +201,11 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                 ).nickname;
                 return (
                   <div>
-                    <p
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="medium"
+                      fullWidth
                       key={i}
                       onClick={() => {
                         this.props.onChangeDisplayProfile(m);
@@ -209,7 +213,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                     >
                       <PersonIcon className="iconSpacer" />
                       {nickname}
-                    </p>
+                    </Button>
                   </div>
                 );
               })}

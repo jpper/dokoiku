@@ -159,7 +159,7 @@ class Profile extends React.Component<
               </div>
               <Button
                 variant="contained"
-                color="secondary"
+                color="primary"
                 size="large"
                 onClick={this.onChangeShow}
               >
@@ -167,13 +167,16 @@ class Profile extends React.Component<
               </Button>
               <br />
               <br />
-              <button
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
                 onClick={() => {
                   this.props.onChangeDisplayProfile(undefined);
                 }}
               >
                 Close
-              </button>
+              </Button>
             </>
           )}
         </div>

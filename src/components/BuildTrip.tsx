@@ -162,11 +162,11 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 validators={["required"]}
                 errorMessages={["this field is required"]}
                 value={this.state.name}
+                size="small"
                 onChange={(e: any) => {
                   this.setState({ name: e.currentTarget.value });
                 }}
               />
-              <br />
               <br />
               <br />
               <FormControl>
@@ -196,14 +196,12 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               </FormControl>
               <br />
               <br />
-              <br />
-              <br />
-              <br />
               <TextValidator
                 name="start-date"
                 label="Start Date"
                 variant="outlined"
                 type="date"
+                size="small"
                 validators={[
                   "required",
                   "startDateValidator",
@@ -222,12 +220,12 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               />
               <br />
               <br />
-              <br />
               <TextValidator
                 name="end-date"
                 label="End Date"
                 variant="outlined"
                 type="date"
+                size="small"
                 validators={["required", "endDateValidator"]}
                 errorMessages={[
                   "this field is required",
@@ -241,11 +239,11 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               />
               <br />
               <br />
-              <br />
               <TextValidator
                 name="start-location"
                 label="Start Location"
                 variant="outlined"
+                size="small"
                 validators={["required"]}
                 errorMessages={["this field is required"]}
                 value={this.state.startLocation}
@@ -253,7 +251,6 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   this.setState({ startLocation: e.currentTarget.value });
                 }}
               />
-              <br />
               <br />
               <br />
               <label>Places:</label>
@@ -278,17 +275,16 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 : null}
               <br />
               <br />
-              <br />
               <TextValidator
                 name="places"
                 label="Places"
+                size="small"
                 variant="outlined"
                 value={this.state.addedWaypoint}
                 onChange={(e: any) => {
                   this.setState({ addedWaypoint: e.currentTarget.value });
                 }}
               />
-              <br />
               <br />
               <br />
               <Button
@@ -310,9 +306,10 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               </Button>
               <br />
               <br />
-              <br />
+
               <TextValidator
                 name="budget"
+                size="small"
                 label={`My Budget ${
                   this.state.currencyCode
                     ? "(" +
@@ -333,7 +330,6 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   this.setState({ budget: e.currentTarget.value });
                 }}
               />
-              <br />
               <br />
               <br />
               {this.state.name &&
