@@ -7,6 +7,7 @@ import BasicTripInfo from "./BasicTripInfo";
 import Map from "./Map";
 import Notes from "./Notes";
 import ChatBoard from "./ChatBoard";
+import axios from "axios";
 
 // Material UI
 import {
@@ -23,7 +24,8 @@ import {
   TextareaAutosize,
   Box,
   Container,
-  Card
+  Card,
+  Tooltip
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import PersonIcon from "@material-ui/icons/Person";
@@ -33,6 +35,7 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/TripInfo.css";
 import "../styles/PastTripInfo.css";
 import Reviews from "./Reviews";
+import countriesToCurrencies from "../data/countries_to_currencies.json";
 
 enum PageStatus {
   Map,
@@ -50,6 +53,7 @@ interface myStates {
   pageStatus: PageStatus;
   pastTrips: any[];
   currentPastTripIndex: number;
+  userCurrencyBudget: any;
 }
 
 class PastTripInfo extends React.Component<any, myStates> {
@@ -63,7 +67,8 @@ class PastTripInfo extends React.Component<any, myStates> {
       isError: false,
       pageStatus: PageStatus.Map,
       pastTrips: [],
-      currentPastTripIndex: 0
+      currentPastTripIndex: 0,
+      userCurrencyBudget: 0
     };
   }
 
@@ -236,10 +241,41 @@ class PastTripInfo extends React.Component<any, myStates> {
     });
   };
 
+  exchangeCurrency = async (
+    fromCurrency: string,
+    toCurrency: string,
+    budget: number
+  ) => {
+    const result = await axios.get(
+      `https://currency-exchange.p.rapidapi.com/exchange?q=1&from=${fromCurrency}&to=${toCurrency}`,
+      {
+        headers: {
+          "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
+          "x-rapidapi-key": "b6e4f9fc03msh80db2bc55980af4p181a67jsnb4b3c557714d"
+        }
+      }
+    );
+    console.log(result.data);
+    const userCurrencyBudget = result.data * budget;
+    this.setState({ userCurrencyBudget });
+  };
+
+  componentWillMount() {
+    if (this.props.ongoingTrips > 0) {
+      this.exchangeCurrency(
+        this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+          .currencyCode,
+        this.props.userCurrencyCode,
+        this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget
+      );
+    }
+  }
+
   render() {
     return (
       <div className="pastTripInfo">
-        {this.state.pastTrips.length === 0 ? (
+        {this.state.pastTrips.length === 0 ||
+        this.props.userCurrencyCode === "" ? (
           <p>Nothing past trips</p>
         ) : (
           <Grid container>
@@ -272,11 +308,49 @@ class PastTripInfo extends React.Component<any, myStates> {
                     wayPoints={
                       this.state.pastTrips[this.state.currentPastTripIndex]
                     }
-                    budget={
-                      this.state.pastTrips[this.state.currentPastTripIndex]
-                        .budget
-                    }
                   />
+
+                  {/* Budget */}
+                  <Tooltip
+                    title={
+                      this.props.userCurrencyCode !== "None"
+                        ? Math.round(this.state.userCurrencyBudget * 100) /
+                            100 +
+                          " " +
+                          countriesToCurrencies
+                            .concat([
+                              {
+                                country: "None",
+                                countryCode: "None",
+                                currency: "None",
+                                currencyCode: "None"
+                              }
+                            ])
+                            .find(
+                              (item: any) =>
+                                this.props.userCurrencyCode ===
+                                item.currencyCode
+                            ).currency
+                        : ""
+                    }
+                    placement="top-end"
+                  >
+                    <Typography className="iconWrapper">
+                      Budget:{" "}
+                      {
+                        this.state.pastTrips[this.state.currentPastTripIndex]
+                          .budget
+                      }{" "}
+                      {
+                        countriesToCurrencies.find(
+                          (item: any) =>
+                            this.state.pastTrips[
+                              this.state.currentPastTripIndex
+                            ].currencyCode === item.currencyCode
+                        ).currency
+                      }
+                    </Typography>
+                  </Tooltip>
 
                   <div className="spacer10"></div>
 
@@ -590,7 +664,8 @@ const mapStateToProps = (state: any) => {
     currentOngoingTripIndex: state.currentOngoingTripIndex,
     userId: state.userId,
     users: state.users,
-    mapTripMessage: state.mapTripMessage
+    mapTripMessage: state.mapTripMessage,
+    userCurrencyCode: state.userCurrencyCode
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
