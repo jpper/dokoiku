@@ -39,7 +39,7 @@ body {
 .Profile img {
   width: 100px;
 }
-
+/* 
 .TripInfo p {
   border-style: solid;
   border-color: rgb(180, 178, 178);
@@ -47,7 +47,7 @@ body {
   border-width: 1px;
   margin-left: 3px;
   margin-right: 3px;
-}
+} */
 
 .waypointsContainer {
   overflow-x: scroll;
