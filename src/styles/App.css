@@ -75,8 +75,13 @@ body {
 }
 
 .tabPanel {
-  background-color: white;
   color: black;
+  background: rgb(34, 193, 195);
+  background: linear-gradient(
+    180deg,
+    rgba(34, 193, 195, 1) 0%,
+    rgba(79, 116, 193, 1) 100%
+  );
 }
 .iconWrapper {
   display: flex;
@@ -92,9 +97,7 @@ body {
   justify-content: center;
   align-items: center;
 }
-.tripInfo {
-  padding-bottom: 10px;
-}
+
 .bgImg {
   position: absolute;
   top: 84px;
