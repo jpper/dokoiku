@@ -103,7 +103,7 @@ class MyProfile extends React.Component<
   };
 
   render() {
-    if (this.state.user) {
+    if (this.state.user && this.state.userCurrencyCode) {
       this.calculateRating(this.props.userId);
       return (
         <div className="MyProfile">
@@ -362,51 +362,53 @@ class MyProfile extends React.Component<
 
               <div className="spacer10"></div>
 
-              <Typography variant="h6" align="center">
+              {/* <Typography variant="h6" align="center">
                 {"The currency I use: " +
                   countriesToCurrencies.find(
                     (item: any) =>
                       item.currencyCode === this.state.userCurrencyCode
                   ).currency}
-              </Typography>
-
-              <FormControl>
-                <InputLabel>Currency</InputLabel>
-                <Select
-                  value={this.state.userCurrencyCode}
-                  onChange={e => {
-                    this.setState({ userCurrencyCode: String(e.target.value) });
-                  }}
-                >
-                  <MenuItem value={"None"}>{"None"}</MenuItem>                
-                  {_.uniqBy(countriesToCurrencies, "currencyCode")
-                    .sort((a: any, b: any) => {
-                      if (a.currency > b.currency) return 1;
-                      else return -1;
-                    })
-                    .map((item: any) => (
-                      <MenuItem value={item.currencyCode}>
-                        {item.currency}                    
-                      </MenuItem>
-                    ))}
-                                
-                </Select>
-                       
-                <Button
-                  color="primary"
-                  onClick={() => {
-                    this.props.updateUserCurrencyCode(
-                      this.state.userCurrencyCode,
-                      this.props.userId
-                    );
-                    this.handleToggle();
-                  }}
-                >
-                  Submit
-                </Button>
-                             
-              </FormControl>
-
+              </Typography> */}
+              <div id="currency-selector-container">
+                <FormControl id="currency-selector">
+                  <InputLabel>The currency I use: </InputLabel>
+                  <Select
+                    value={this.state.userCurrencyCode}
+                    onChange={e => {
+                      this.setState({
+                        userCurrencyCode: String(e.target.value)
+                      });
+                    }}
+                  >
+                    <MenuItem value={"None"}>{"None"}</MenuItem>                
+                    {_.uniqBy(countriesToCurrencies, "currencyCode")
+                      .sort((a: any, b: any) => {
+                        if (a.currency > b.currency) return 1;
+                        else return -1;
+                      })
+                      .map((item: any) => (
+                        <MenuItem value={item.currencyCode}>
+                          {item.currency}                    
+                        </MenuItem>
+                      ))}
+                           
+                  </Select>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      this.props.updateUserCurrencyCode(
+                        this.state.userCurrencyCode,
+                        this.props.userId
+                      );
+                      this.handleToggle();
+                    }}
+                  >
+                    Change
+                  </Button>
+                       
+                </FormControl>
+              </div>
               <Dialog
                 open={this.state.toggleDialog}
                 onClose={this.handleToggle}
@@ -415,7 +417,12 @@ class MyProfile extends React.Component<
                 <DialogContent>
                   <DialogContentText>
                     You have changed your currency to{" "}
-                    {this.state.userCurrencyCode}
+                    {
+                      countriesToCurrencies.find(
+                        (item: any) =>
+                          item.currencyCode === this.state.userCurrencyCode
+                      ).currency
+                    }
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
