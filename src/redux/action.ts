@@ -59,9 +59,9 @@ export const removeRequest = (tripId: string, fromId: string) => ({
   fromId
 });
 
-export const addPastTrip = (pastTrip: any) => ({
+export const addPastTrip = (pastTrips: any) => ({
   type: "ADD_PAST_TRIP",
-  pastTrip
+  pastTrips
 });
 
 export const setPageTabIndex = (index: number) => ({
