@@ -17,7 +17,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  DialogActions
+  DialogActions,
+  TextField
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
@@ -42,6 +43,7 @@ class MyProfile extends React.Component<
     rating: number;
     userCurrencyCode: string;
     toggleDialog: boolean;
+    aboutMeText: string;
   }
 > {
   constructor(props: myProps) {
@@ -51,7 +53,8 @@ class MyProfile extends React.Component<
       showReview: false,
       rating: undefined,
       userCurrencyCode: this.props.userCurrencyCode,
-      toggleDialog: false
+      toggleDialog: false,
+      aboutMeText: undefined
     };
   }
 
@@ -361,6 +364,35 @@ class MyProfile extends React.Component<
               </div>
 
               <div className="spacer10"></div>
+
+              <div id="about-me-container">
+                <TextField
+                  id="about-me"
+                  variant="outlined"
+                  multiline
+                  label="About Me"
+                  rows="3"
+                  defaultValue={this.state.user.aboutMe}
+                  onChange={(e: any) => {
+                    this.setState({ aboutMeText: e.currentTarget.value });
+                  }}
+                />
+                <br />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    myFirestore
+                      .collection("users")
+                      .doc(this.props.userId)
+                      .update({ aboutMe: this.state.aboutMeText });
+                  }}
+                >
+                  Update
+                </Button>
+              </div>
+
+              <br />
 
               {/* <Typography variant="h6" align="center">
                 {"The currency I use: " +

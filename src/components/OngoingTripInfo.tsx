@@ -25,7 +25,7 @@ import {
 } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
-//import LocationOnIcon from "@material-ui/icons/LocationOn";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PersonIcon from "@material-ui/icons/Person";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
@@ -51,6 +51,7 @@ type myProps = {
   onChangeDisplayProfile: any;
   displayProfile: string;
   userCurrencyCode: string;
+  clearToggle: any;
 };
 
 type myState = {
@@ -133,7 +134,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
       return (
         <div className="TripInfo">
           {/* Title */}
-          <Typography variant="h3" className="typoH3">
+          <Typography variant="h4" className="noWrapper">
             <b>
               {this.props.ongoingTrips[this.props.currentOngoingTripIndex].name}
             </b>
@@ -156,9 +157,9 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             }
           </Typography>
           {/* Starting Location */}
-          <Typography className="iconWrapper">
+          <Typography className="noWrapper">
             <DoubleArrowIcon />
-            <strong>Starting Location:</strong>
+            <strong>Starting Location: </strong>
 
             {` ${
               this.props.ongoingTrips[this.props.currentOngoingTripIndex]
@@ -166,7 +167,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             }`}
           </Typography>
           {/* Start Date */}
-          <Typography className="iconWrapper">
+          <Typography className="noWrapper">
             <DateRangeIcon />
             <strong>Start Date: </strong>
             {moment(
@@ -177,7 +178,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           </Typography>
 
           {/* End Date */}
-          <Typography className="iconWrapper">
+          <Typography className="noWrapper">
             <DateRangeIcon />
             <strong>End Date: </strong>
             {moment(
@@ -190,20 +191,26 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           {/* WayPoints */}
           <div>
             <Typography className="noWrapper">
-              <strong className="boldText">Destinations:</strong>
+              <LocationOnIcon />
+              <strong className="boldText topPadding">Destinations:</strong>
             </Typography>
-            {this.props.ongoingTrips[
-              this.props.currentOngoingTripIndex
-            ].waypoints.map((l: any, i: number) => {
-              return (
-                <div>
-                  <Typography className="noWrapper">{l.location}</Typography>
-                </div>
-                // <ListItem key={i} className="tripLocation">
-                //   <ListItemText primary={l.location} />
-                // </ListItem>
-              );
-            })}
+
+            <ul className="ul-test">
+              {this.props.ongoingTrips[
+                this.props.currentOngoingTripIndex
+              ].waypoints.map((l: any, i: number) => {
+                return (
+                  <>
+                    <Typography className="noWrapper">
+                      <li>{l.location}</li>
+                    </Typography>
+                  </>
+                  // <ListItem key={i} className="tripLocation">
+                  //   <ListItemText primary={l.location} />
+                  // </ListItem>
+                );
+              })}
+            </ul>
           </div>
 
           {/* Budget */}
@@ -229,7 +236,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             }
             placement="top-end"
           >
-            <Typography className="iconWrapper">
+            <Typography className="noWrapper topPadding">
               <strong>Budget: </strong>
               {
                 this.props.ongoingTrips[this.props.currentOngoingTripIndex]
@@ -278,7 +285,9 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           <div className="spacer10"></div>
 
           <div>
-            <Typography variant="h5">Owned by:</Typography>
+            <Typography className="noWrapper topPadding">
+              <strong>Owned by:</strong>
+            </Typography>
             <div className="owner">
               <Button
                 variant="outlined"
@@ -303,7 +312,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
 
           {/* Members */}
           <div>
-            <Typography variant="h5">
+            <Typography className="noWrapper topPadding">
               <strong>Members:</strong>
             </Typography>
 
@@ -323,6 +332,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                       fullWidth
                       key={i}
                       onClick={async () => {
+                        await this.props.clearToggle();
                         await this.props.onChangeDisplayProfile(undefined);
                         this.props.onChangeDisplayProfile(m);
                       }}
@@ -414,6 +424,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </Grid>
 
             {/* Previous & Next Button */}
+
             <Grid container>
               <Grid item xs={6}>
                 <Button
@@ -516,12 +527,20 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "RESET_TOGGLE_MESSAGES"
       });
       dispatch({
+        type: "CHANGE_DISPLAY_PROFILE",
+        displayProfile: undefined
+      });
+      dispatch({
         type: "PREVIOUS_ONGOING_TRIP"
       });
     },
     onNextTrip: () => {
       dispatch({
         type: "RESET_TOGGLE_MESSAGES"
+      });
+      dispatch({
+        type: "CHANGE_DISPLAY_PROFILE",
+        displayProfile: undefined
       });
       dispatch({
         type: "NEXT_ONGOING_TRIP"
@@ -535,6 +554,11 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "TOGGLE_MESSAGES"
       }),
+    clearToggle: () => {
+      dispatch({
+        type: "RESET_TOGGLE_MESSAGES"
+      });
+    },
     onShowEdit: () => dispatch({ type: "SHOW_EDIT" }),
     onChangeDisplayProfile: (profile: string) =>
       dispatch({
