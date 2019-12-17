@@ -403,7 +403,7 @@ class MyProfile extends React.Component<
                     this.handleToggle();
                   }}
                 >
-                  Submit
+                  Change my currency
                 </Button>
                              
               </FormControl>
