@@ -123,7 +123,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         snapShot.docChanges().forEach(change => {
           if (change.type === "added") {
             tripIds.push(change.doc.data().tripId);
-            console.log(tripIds);
+            //console.log(tripIds);
           }
         });
       });
@@ -131,7 +131,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     myFirestore.collection("trips").onSnapshot(snapShot => {
       snapShot.docChanges().forEach(change => {
         if (change.type === "added") {
-          console.log(change.doc.data().tripId);
+          //console.log(change.doc.data().tripId);
           if (change.doc.data().memberIds.indexOf(userId) === -1) {
             if (tripIds.includes(change.doc.data().tripId)) {
               console.log("dispatching ADD_PENDING_TRIP");
@@ -318,12 +318,12 @@ class App extends React.Component<myProps, any> {
                   >
                     <Tab label="About" icon={<InfoIcon />} />
                     <Tab label="Profile" icon={<PersonIcon />} />
-                    <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
+                    <Tab label="Upcoming Trips" icon={<CardTravelIcon />} />
                     <Tab label="Search Trips" icon={<SearchIcon />} />
                     <Tab label="Build Trip" icon={<BuildIcon />} />
 
                     {/* FIXME: This is just for testing Reviews!! */}
-                    <Tab label="Trip Reviews" icon={<RateReviewIcon />} />
+                    <Tab label="Past Trips" icon={<RateReviewIcon />} />
 
                     {/* User Icon */}
                     <div className="iconWrapper">
@@ -421,7 +421,7 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.ongoingTrips.length ? (
                           <Grid container>
-                            <Grid item xs={5}>
+                            <Grid item xs={3}>
                               <Container>
                                 <Card className="tripInfo">
                                   <OngoingTripInfo />
@@ -429,7 +429,7 @@ class App extends React.Component<myProps, any> {
                               </Container>
                             </Grid>
                             {/* {if statement and changing props value here} */}
-                            <Grid item xs={7}>
+                            <Grid item xs={9}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -519,20 +519,20 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.searchTrips.length ? (
                           <Grid container>
-                            <Grid item xs={5}>
+                            <Grid item xs={3}>
                               <Container>
                                 <Card className="tripInfo">
                                   <SearchTripInfo />
                                 </Card>
                               </Container>
                             </Grid>
-                            <Grid item xs={7}>
+                            <Grid item xs={9}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
                                 !this.props.showChat &&
                                 !this.props.showEdit &&
-                                this.props.ongoingTrips.length &&
+                                this.props.searchTrips.length &&
                                 this.props.mapTripMessage === 0 && (
                                   <Map
                                     trips={this.props.searchTrips}
@@ -552,13 +552,13 @@ class App extends React.Component<myProps, any> {
                   </TabPanel>
 
                   {/* Build Trip */}
-                  <TabPanel value={this.props.pageTabIndex} index={4}>
+                  <TabPanel value={this.props.pageTabIndex} index={3}>
                     {this.props.userId === "" ? <Login /> : <BuildTrip />}
                   </TabPanel>
 
                   {/* Reviews */}
                   {/* FIXME: This is just for testing Reviews!! */}
-                  <TabPanel value={this.props.pageTabIndex} index={5}>
+                  <TabPanel value={this.props.pageTabIndex} index={3}>
                     {this.props.userId === "" ? (
                       <Login />
                     ) : (

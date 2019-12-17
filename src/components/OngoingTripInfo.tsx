@@ -117,7 +117,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
         }
       }
     );
-    console.log(result.data);
+    //console.log(result.data);
     const userCurrencyBudget = result.data * budget;
     this.setState({ userCurrencyBudget });
   };
@@ -139,8 +139,8 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </b>
           </Typography>
           {/* Country */}
-          <Typography className="noWrapper">
-            Country:
+          <Typography className="iconWrapper">
+            <strong>Country: </strong>
             <img
               src={`https://www.countryflags.io/${this.props.ongoingTrips[
                 this.props.currentOngoingTripIndex
@@ -155,10 +155,20 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               ).country
             }
           </Typography>
+          {/* Starting Location */}
+          <Typography className="iconWrapper">
+            <DoubleArrowIcon />
+            <strong>Starting Location:</strong>
+
+            {` ${
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .startLocation
+            }`}
+          </Typography>
           {/* Start Date */}
           <Typography className="iconWrapper">
             <DateRangeIcon />
-            Start Date:{" "}
+            <strong>Start Date: </strong>
             {moment(
               this.props.ongoingTrips[
                 this.props.currentOngoingTripIndex
@@ -169,7 +179,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           {/* End Date */}
           <Typography className="iconWrapper">
             <DateRangeIcon />
-            End Date:{" "}
+            <strong>End Date: </strong>
             {moment(
               this.props.ongoingTrips[
                 this.props.currentOngoingTripIndex
@@ -177,33 +187,23 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             ).format("MMMM Do YYYY")}
           </Typography>
 
-          {/* Starting Location */}
-          <Typography className="iconWrapper">
-            <DoubleArrowIcon />
-            Starting Location:
-            {` ${
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .startLocation
-            }`}
-          </Typography>
-
           {/* WayPoints */}
           <div>
-            <List>
-              <Typography variant="h4">Waypoints:</Typography>
-              {this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].waypoints.map((l: any, i: number) => {
-                return (
-                  <ListItem key={i} className="tripLocation">
-                    <ListItemIcon>
-                      <LocationOnIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={l.location} />
-                  </ListItem>
-                );
-              })}
-            </List>
+            <Typography className="noWrapper">
+              <strong className="boldText">Destinations:</strong>
+            </Typography>
+            {this.props.ongoingTrips[
+              this.props.currentOngoingTripIndex
+            ].waypoints.map((l: any, i: number) => {
+              return (
+                <div>
+                  <Typography className="noWrapper">{l.location}</Typography>
+                </div>
+                // <ListItem key={i} className="tripLocation">
+                //   <ListItemText primary={l.location} />
+                // </ListItem>
+              );
+            })}
           </div>
 
           {/* Budget */}
@@ -230,7 +230,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             placement="top-end"
           >
             <Typography className="iconWrapper">
-              Budget:{" "}
+              <strong>Budget: </strong>
               {
                 this.props.ongoingTrips[this.props.currentOngoingTripIndex]
                   .budget
@@ -272,23 +272,34 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           <div className="spacer10"></div>
 
           <div>
-            <Typography variant="h4">Owned by:</Typography>
+            <Typography variant="h5">Owned by:</Typography>
             <div className="owner">
-              <PersonIcon />
-              {
-                this.props.users.find(
-                  (user: any) =>
-                    user.id ===
-                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                      .ownerId
-                ).nickname
-              }
+              <Button
+                variant="outlined"
+                color="primary"
+                size="medium"
+                fullWidth
+              >
+                <PersonIcon />
+                {
+                  this.props.users.find(
+                    (user: any) =>
+                      user.id ===
+                      this.props.ongoingTrips[
+                        this.props.currentOngoingTripIndex
+                      ].ownerId
+                  ).nickname
+                }
+              </Button>
             </div>
           </div>
+          <br />
 
           {/* Members */}
           <div>
-            <Typography variant="h4">Members:</Typography>
+            <Typography variant="h5">
+              <strong>Members:</strong>
+            </Typography>
 
             <div className="memberContainer">
               {this.props.ongoingTrips[
@@ -307,7 +318,6 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                       key={i}
                       onClick={() => {
                         this.props.onChangeDisplayProfile(m);
-                        console.log(this.props.displayProfile);
                       }}
                     >
                       <PersonIcon className="iconSpacer" />
@@ -318,7 +328,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               })}
             </div>
           </div>
-
+          <br />
           {/* Update & Delete button */}
           <Grid container>
             <Grid item xs={6}>

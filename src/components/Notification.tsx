@@ -82,7 +82,7 @@ class Notification extends React.Component<myProps, any> {
   };
 
   render() {
-    console.log(this.props.requests);
+    //console.log(this.props.requests);
     return (
       <div>
         <Card>

@@ -50,6 +50,9 @@
 .spacer10 {
   margin-top: 10px;
 }
+.spacer20 {
+  margin-top: 20px;
+}
 
 #horizontal-list {
   display: flex;

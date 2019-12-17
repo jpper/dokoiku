@@ -89,7 +89,7 @@ export default class Reviews extends Component<any, any> {
                             <b>Reviewer:</b> {review.reviewer}
                           </p>
                           <p>
-                            <b>Rating</b>
+                            <b>Rating:</b>
                           </p>
                           <Rating
                             name="readOnly"
@@ -98,7 +98,7 @@ export default class Reviews extends Component<any, any> {
                           />
 
                           <p>
-                            <b>Review for you</b>
+                            <b>Review:</b>
                           </p>
                           <p>{review.reviews}</p>
                         </React.Fragment>

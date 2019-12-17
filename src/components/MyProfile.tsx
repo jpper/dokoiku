@@ -8,7 +8,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Modal,
   Grid,
   FormControl,
   InputLabel,
@@ -124,7 +123,11 @@ class MyProfile extends React.Component<
           ) : (
             <>
               <div className="spacer10"></div>
-              <img src={this.state.user.photoUrl} id="profile-picture" />
+              <img
+                src={this.state.user.photoUrl}
+                id="profile-picture"
+                alt={this.state.user.nickname}
+              />
               <div className="spacer10"></div>
 
               <Typography variant="h4" align="center">
@@ -137,11 +140,6 @@ class MyProfile extends React.Component<
                 alignItems="center"
                 justify="center"
               >
-                <Grid item>
-                  <Typography variant="h6" id="typo-rating">
-                    Rating
-                  </Typography>
-                </Grid>
                 <Grid item>
                   <Rating
                     value={this.state.rating ? this.state.rating : 0}

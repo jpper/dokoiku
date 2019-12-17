@@ -17,9 +17,6 @@ class About extends React.Component<{}, {}> {
           Dokoiku is an app for people who want to connect and share a trip
           together.
         </Typography>
-        <Typography variant="h5">
-          Users can join already active trips or find an already existing trip.
-        </Typography>
 
         <div className="spacer50"></div>
 
