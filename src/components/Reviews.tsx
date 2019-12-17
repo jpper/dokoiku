@@ -50,6 +50,7 @@ export default class Reviews extends Component<any, any> {
     const reviewerName = reviewerResult.data().nickname;
 
     const tripResult = await res.data().tripId.get();
+    if (!tripResult.exists) return; // If past trips delete, skip the info
     const tripName = tripResult.data().name;
 
     const reviews = await res.data().message;
