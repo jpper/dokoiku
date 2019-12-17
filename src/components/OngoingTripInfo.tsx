@@ -17,15 +17,15 @@ import countriesToCurrencies from "../data/countries_to_currencies.json";
 import "../styles/Modal.css";
 import {
   Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
+  // List,
+  // ListItem,
+  // ListItemIcon,
+  // ListItemText,
   Typography
 } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
+//import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PersonIcon from "@material-ui/icons/Person";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
@@ -140,7 +140,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           </Typography>
           {/* Country */}
           <Typography className="iconWrapper">
-            Country:{" "}
+            <strong>Country: </strong>
             <img
               src={`https://www.countryflags.io/${this.props.ongoingTrips[
                 this.props.currentOngoingTripIndex
@@ -158,7 +158,8 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           {/* Starting Location */}
           <Typography className="iconWrapper">
             <DoubleArrowIcon />
-            Starting Location:
+            <strong>Starting Location:</strong>
+
             {` ${
               this.props.ongoingTrips[this.props.currentOngoingTripIndex]
                 .startLocation
@@ -167,7 +168,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           {/* Start Date */}
           <Typography className="iconWrapper">
             <DateRangeIcon />
-            Start Date:{" "}
+            <strong>Start Date: </strong>
             {moment(
               this.props.ongoingTrips[
                 this.props.currentOngoingTripIndex
@@ -178,7 +179,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           {/* End Date */}
           <Typography className="iconWrapper">
             <DateRangeIcon />
-            End Date:{" "}
+            <strong>End Date: </strong>
             {moment(
               this.props.ongoingTrips[
                 this.props.currentOngoingTripIndex
@@ -188,21 +189,21 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
 
           {/* WayPoints */}
           <div>
-            <List>
-              <Typography variant="h5">Waypoints:</Typography>
-              {this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].waypoints.map((l: any, i: number) => {
-                return (
-                  <ListItem key={i} className="tripLocation">
-                    <ListItemIcon>
-                      <LocationOnIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={l.location} />
-                  </ListItem>
-                );
-              })}
-            </List>
+            <Typography className="noWrapper">
+              <strong className="boldText">Destinations:</strong>
+            </Typography>
+            {this.props.ongoingTrips[
+              this.props.currentOngoingTripIndex
+            ].waypoints.map((l: any, i: number) => {
+              return (
+                <div>
+                  <Typography className="noWrapper">{l.location}</Typography>
+                </div>
+                // <ListItem key={i} className="tripLocation">
+                //   <ListItemText primary={l.location} />
+                // </ListItem>
+              );
+            })}
           </div>
 
           {/* Budget */}
@@ -229,7 +230,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             placement="top-end"
           >
             <Typography className="iconWrapper">
-              Budget:{" "}
+              <strong>Budget: </strong>
               {
                 this.props.ongoingTrips[this.props.currentOngoingTripIndex]
                   .budget
@@ -251,7 +252,10 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             color="primary"
             size="medium"
             fullWidth
-            onClick={() => this.props.toggleNotes()}
+            onClick={async () => {
+              await this.props.onChangeDisplayProfile(undefined);
+              this.props.toggleNotes();
+            }}
           >
             <DescriptionIcon className="iconSpacer" />
             Notes
@@ -262,7 +266,10 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             color="primary"
             size="medium"
             fullWidth
-            onClick={() => this.props.toggleMessages()}
+            onClick={async () => {
+              await this.props.onChangeDisplayProfile(undefined);
+              this.props.toggleMessages();
+            }}
           >
             <ChatIcon className="iconSpacer" />
             Messages
@@ -296,7 +303,9 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
 
           {/* Members */}
           <div>
-            <Typography variant="h5">Members:</Typography>
+            <Typography variant="h5">
+              <strong>Members:</strong>
+            </Typography>
 
             <div className="memberContainer">
               {this.props.ongoingTrips[
@@ -313,7 +322,8 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                       size="medium"
                       fullWidth
                       key={i}
-                      onClick={() => {
+                      onClick={async () => {
+                        await this.props.onChangeDisplayProfile(undefined);
                         this.props.onChangeDisplayProfile(m);
                       }}
                     >

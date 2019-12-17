@@ -223,7 +223,7 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
     case "TOGGLE_MESSAGES": {
       if (state.mapTripMessage === 0) {
-        console.log("Toggle messeges: 1");
+        console.log("Toggle messages: 1");
         console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
@@ -231,7 +231,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         };
       }
       if (state.mapTripMessage === 1) {
-        console.log("Toggle messeges: 1");
+        console.log("Toggle messages: 1");
         console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
@@ -239,7 +239,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         };
       }
       if (state.mapTripMessage === 2) {
-        console.log("Toggle messeges: 1");
+        console.log("Toggle messages: 1");
         console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
