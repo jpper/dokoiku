@@ -17,15 +17,15 @@ import countriesToCurrencies from "../data/countries_to_currencies.json";
 import "../styles/Modal.css";
 import {
   Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
+  // List,
+  // ListItem,
+  // ListItemIcon,
+  // ListItemText,
   Typography
 } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
+//import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PersonIcon from "@material-ui/icons/Person";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
