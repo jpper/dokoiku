@@ -144,14 +144,8 @@ const mapDispatchToProps = (dispatch: any) => ({
               });
             }
           } else {
-            console.log("dispatching ADD_ONGOING_TRIP");
-            dispatch({
-              type: "ADD_ONGOING_TRIP",
-              ongoingTrip: change.doc.data()
-            });
-
-            // Dispatch ADD_PAST_TRIP here!
             const today = new Date();
+            // Dispatch ADD_PAST_TRIP here!
             if (
               today.getTime() >
               change.doc
@@ -159,7 +153,14 @@ const mapDispatchToProps = (dispatch: any) => ({
                 .endDate.toDate()
                 .getTime()
             ) {
+              console.log("dispatching ADD_PAST_TRIP");
               dispatch(addPastTrip(change.doc.data()));
+            } else {
+              console.log("dispatching ADD_ONGOING_TRIP");
+              dispatch({
+                type: "ADD_ONGOING_TRIP",
+                ongoingTrip: change.doc.data()
+              });
             }
           }
         }

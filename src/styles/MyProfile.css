@@ -84,7 +84,7 @@
   font-size: 2.5rem !important;
 }
 
-.MuiListItemText-multiline {
+.itemTextCentering .MuiListItemText-multiline {
   text-align: center;
 }
 
