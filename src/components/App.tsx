@@ -123,7 +123,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         snapShot.docChanges().forEach(change => {
           if (change.type === "added") {
             tripIds.push(change.doc.data().tripId);
-            console.log(tripIds);
+            //console.log(tripIds);
           }
         });
       });
@@ -131,7 +131,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     myFirestore.collection("trips").onSnapshot(snapShot => {
       snapShot.docChanges().forEach(change => {
         if (change.type === "added") {
-          console.log(change.doc.data().tripId);
+          //console.log(change.doc.data().tripId);
           if (change.doc.data().memberIds.indexOf(userId) === -1) {
             if (tripIds.includes(change.doc.data().tripId)) {
               console.log("dispatching ADD_PENDING_TRIP");
@@ -317,12 +317,12 @@ class App extends React.Component<myProps, any> {
                   >
                     <Tab label="About" icon={<InfoIcon />} />
                     <Tab label="Profile" icon={<PersonIcon />} />
-                    <Tab label="Ongoing Trips" icon={<CardTravelIcon />} />
+                    <Tab label="Upcoming Trips" icon={<CardTravelIcon />} />
                     <Tab label="Search Trips" icon={<SearchIcon />} />
                     <Tab label="Build Trip" icon={<BuildIcon />} />
 
                     {/* FIXME: This is just for testing Reviews!! */}
-                    <Tab label="Trip Reviews" icon={<RateReviewIcon />} />
+                    <Tab label="Past Trips" icon={<RateReviewIcon />} />
 
                     {/* User Icon */}
                     <div className="iconWrapper">

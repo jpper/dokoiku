@@ -90,7 +90,7 @@ class EditTrip extends React.Component<EditProps, EditState> {
     };
   }
   componentWillMount() {
-    console.log(this.props.startDate);
+    //console.log(this.props.startDate);
     ValidatorForm.addValidationRule("startDateValidator", (value: string) => {
       const startDate = new Date(value).setHours(0, 0, 0, 0);
       const today = new Date().setHours(0, 0, 0, 0);
@@ -127,7 +127,7 @@ class EditTrip extends React.Component<EditProps, EditState> {
             <h1>Edit Trip</h1>
             <ValidatorForm
               onSubmit={() => {
-                console.log(this.state.waypoints);
+                //console.log(this.state.waypoints);
                 this.props.onEditTrip(
                   this.state.name,
                   this.state.startDate,
