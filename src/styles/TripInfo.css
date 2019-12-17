@@ -28,3 +28,9 @@
 .owner {
   font-size: 18px;
 }
+.noWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}

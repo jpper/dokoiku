@@ -311,6 +311,7 @@ class App extends React.Component<myProps, any> {
                     value={this.props.pageTabIndex}
                     onChange={this.handleChange}
                     centered
+                    variant="scrollable"
                     className="tabs"
                     scrollButtons="on"
                     aria-label="scrollable force tabs example"
@@ -420,7 +421,7 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.ongoingTrips.length ? (
                           <Grid container>
-                            <Grid item xs={5}>
+                            <Grid item xs={3}>
                               <Container>
                                 <Card className="tripInfo">
                                   <OngoingTripInfo />
@@ -428,7 +429,7 @@ class App extends React.Component<myProps, any> {
                               </Container>
                             </Grid>
                             {/* {if statement and changing props value here} */}
-                            <Grid item xs={7}>
+                            <Grid item xs={9}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -518,20 +519,20 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.searchTrips.length ? (
                           <Grid container>
-                            <Grid item xs={5}>
+                            <Grid item xs={3}>
                               <Container>
                                 <Card className="tripInfo">
                                   <SearchTripInfo />
                                 </Card>
                               </Container>
                             </Grid>
-                            <Grid item xs={7}>
+                            <Grid item xs={9}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
                                 !this.props.showChat &&
                                 !this.props.showEdit &&
-                                this.props.ongoingTrips.length &&
+                                this.props.searchTrips.length &&
                                 this.props.mapTripMessage === 0 && (
                                   <Map
                                     trips={this.props.searchTrips}
