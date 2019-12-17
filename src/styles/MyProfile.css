@@ -100,3 +100,7 @@
 .MuiSelect-root.MuiSelect-select.MuiSelect-selectMenu.MuiInputBase-input.MuiInput-input {
   text-align: center;
 }
+
+#about-me-container {
+  text-align: center;
+}

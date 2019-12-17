@@ -84,7 +84,7 @@ export default class Reviews extends Component<any, any> {
                       primary={
                         <React.Fragment>
                           <p>
-                            <b>TripName:</b> {review.tripName}
+                            <b>Trip Name:</b> {review.tripName}
                           </p>
                           <p>
                             <b>Reviewer:</b> {review.reviewer}
