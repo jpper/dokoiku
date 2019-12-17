@@ -1,7 +1,6 @@
 // import { firestore } from "firebase";
 import React, { Component } from "react";
 import { myFirestore } from "../config/firebase";
-import { connect } from "react-redux";
 
 // Material UI & Styles
 import {
@@ -51,6 +50,7 @@ export default class Reviews extends Component<any, any> {
     const reviewerName = reviewerResult.data().nickname;
 
     const tripResult = await res.data().tripId.get();
+    if (!tripResult.exists) return; // If past trips delete, skip the info
     const tripName = tripResult.data().name;
 
     const reviews = await res.data().message;
@@ -90,7 +90,7 @@ export default class Reviews extends Component<any, any> {
                             <b>Reviewer:</b> {review.reviewer}
                           </p>
                           <p>
-                            <b>Rating</b>
+                            <b>Rating:</b>
                           </p>
                           <Rating
                             name="readOnly"
@@ -99,7 +99,7 @@ export default class Reviews extends Component<any, any> {
                           />
 
                           <p>
-                            <b>Review for you</b>
+                            <b>Review:</b>
                           </p>
                           <p>{review.reviews}</p>
                         </React.Fragment>

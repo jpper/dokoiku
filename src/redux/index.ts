@@ -4,6 +4,7 @@ const initialState: any = {
   userId: "",
   userName: "",
   userPhoto: "",
+  userCurrencyCode: "",
   currentTripMessages: [],
   messageListener: undefined,
   ongoingTrips: [],
@@ -138,8 +139,8 @@ const reducer = (state: any = initialState, action: Action): any => {
       };
     }
     case "ADD_SEARCH_TRIP": {
-      console.log(state.searchTrip);
-      console.log(action.searchTrip);
+      // console.log(state.searchTrip);
+      // console.log(action.searchTrip);
       return {
         ...state,
         searchTrips: [...state.searchTrips, action.searchTrip]
@@ -222,7 +223,7 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
     case "TOGGLE_MESSAGES": {
       if (state.mapTripMessage === 0) {
-        console.log("Toggle messeges: 1");
+        console.log("Toggle messages: 1");
         console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
@@ -230,7 +231,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         };
       }
       if (state.mapTripMessage === 1) {
-        console.log("Toggle messeges: 1");
+        console.log("Toggle messages: 1");
         console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
@@ -238,7 +239,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         };
       }
       if (state.mapTripMessage === 2) {
-        console.log("Toggle messeges: 1");
+        console.log("Toggle messages: 1");
         console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
@@ -299,6 +300,12 @@ const reducer = (state: any = initialState, action: Action): any => {
       return {
         ...state,
         pageTabIndex: action.index
+      };
+    }
+    case "SET_USER_CURRENCY_CODE": {
+      return {
+        ...state,
+        userCurrencyCode: action.userCurrencyCode
       };
     }
     default: {

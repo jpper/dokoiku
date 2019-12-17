@@ -10,7 +10,6 @@ import {
 import { myFirestore } from "../config/firebase";
 import { removeRequest } from "../redux/action";
 import firebase from "firebase";
-import { string } from "prop-types";
 
 type myProps = {
   requests: any;
@@ -83,7 +82,7 @@ class Notification extends React.Component<myProps, any> {
   };
 
   render() {
-    console.log(this.props.requests);
+    //console.log(this.props.requests);
     return (
       <div>
         <Card>
@@ -93,7 +92,9 @@ class Notification extends React.Component<myProps, any> {
                 <CardContent>
                   <Typography>
                     You have a request from{" "}
-                    <div
+                    <Button
+                      variant="outlined"
+                      size="small"
                       onClick={() =>
                         this.props.onChangeDisplayProfile(request.fromId)
                       }
@@ -103,7 +104,7 @@ class Notification extends React.Component<myProps, any> {
                           (user: any) => user.id === request.fromId
                         ).nickname
                       }{" "}
-                    </div>
+                    </Button>
                     for{" "}
                     {
                       this.props.ongoingTrips.find(

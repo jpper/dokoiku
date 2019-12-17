@@ -5,11 +5,13 @@
 .typoH3 {
   margin-top: 15px !important;
   margin-bottom: 15px !important;
+  text-align: center;
 }
 .iconWrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
 }
 .spacer50 {
   margin-top: 50px;
@@ -22,4 +24,13 @@
 }
 .card-bg-blue {
   background-color: #e8eaf6 !important;
+}
+.owner {
+  font-size: 18px;
+}
+.noWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }

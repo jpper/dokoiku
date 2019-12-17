@@ -9,7 +9,16 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  FormHelperText
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogActions
+  // DialogTitle,
+  // DialogContent,
+  // DialogContentText,
+  // DialogActions,
+  // Dialog,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
@@ -77,6 +86,7 @@ type BuildState = {
   addedWaypoint: string;
   budget: number;
   memberIds: any;
+  toggleDialog: boolean;
 };
 
 class BuildTrip extends React.Component<BuildProps, BuildState> {
@@ -95,7 +105,8 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
       waypoints: [],
       addedWaypoint: "",
       budget: 0,
-      memberIds: []
+      memberIds: [],
+      toggleDialog: false
     };
   }
   componentWillMount() {
@@ -133,11 +144,16 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
       memberIds: []
     });
   }
+  handleDialogToggle = () => {
+    this.setState({
+      toggleDialog: !this.state.toggleDialog
+    });
+  };
   render() {
     return (
-      <div>
+      <div className="BuildTrip">
         <div>
-          <div className="BuildTrip">
+          <div>
             <h1>Build Trip</h1>
             <ValidatorForm
               onSubmit={() => {
@@ -153,6 +169,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   this.state.budget
                 );
                 this.clearState();
+                this.handleDialogToggle();
               }}
               onError={errors => console.log(errors)}
             >
@@ -163,11 +180,11 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 validators={["required"]}
                 errorMessages={["this field is required"]}
                 value={this.state.name}
+                size="small"
                 onChange={(e: any) => {
                   this.setState({ name: e.currentTarget.value });
                 }}
               />
-              <br />
               <br />
               <br />
               <FormControl>
@@ -181,8 +198,8 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                       countryCode,
                       currencyCode
                     });
-                    console.log(this.state.countryCode);
-                    console.log(this.state.currencyCode);
+                    // console.log(this.state.countryCode);
+                    // console.log(this.state.currencyCode);
                   }}
                 >
                   {countriesToCurrencies.map((item: any) => (
@@ -193,11 +210,10 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                     </MenuItem>
                   ))}
                 </Select>
-                <div id="helper-text">Cannot be changed once chosen</div>
+                <div id="helper-text">
+                  Cannot be changed once trip has been created
+                </div>
               </FormControl>
-              <br />
-              <br />
-              <br />
               <br />
               <br />
               <TextValidator
@@ -205,6 +221,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 label="Start Date"
                 variant="outlined"
                 type="date"
+                size="small"
                 validators={[
                   "required",
                   "startDateValidator",
@@ -223,12 +240,12 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               />
               <br />
               <br />
-              <br />
               <TextValidator
                 name="end-date"
                 label="End Date"
                 variant="outlined"
                 type="date"
+                size="small"
                 validators={["required", "endDateValidator"]}
                 errorMessages={[
                   "this field is required",
@@ -242,11 +259,11 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               />
               <br />
               <br />
-              <br />
               <TextValidator
                 name="start-location"
                 label="Start Location"
                 variant="outlined"
+                size="small"
                 validators={["required"]}
                 errorMessages={["this field is required"]}
                 value={this.state.startLocation}
@@ -254,7 +271,6 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   this.setState({ startLocation: e.currentTarget.value });
                 }}
               />
-              <br />
               <br />
               <br />
               <label>Places:</label>
@@ -279,17 +295,16 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 : null}
               <br />
               <br />
-              <br />
               <TextValidator
                 name="places"
                 label="Places"
+                size="small"
                 variant="outlined"
                 value={this.state.addedWaypoint}
                 onChange={(e: any) => {
                   this.setState({ addedWaypoint: e.currentTarget.value });
                 }}
               />
-              <br />
               <br />
               <br />
               <Button
@@ -311,9 +326,10 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               </Button>
               <br />
               <br />
-              <br />
+
               <TextValidator
                 name="budget"
+                size="small"
                 label={`My Budget ${
                   this.state.currencyCode
                     ? "(" +
@@ -336,7 +352,6 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               />
               <br />
               <br />
-              <br />
               {this.state.name &&
               this.state.countryCode &&
               this.state.travelMode &&
@@ -354,6 +369,25 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 </Button>
               )}
             </ValidatorForm>
+            <Dialog open={this.state.toggleDialog}>
+              <DialogTitle>Successfully Built!</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Congratulations! You just built a new trip! Go to your
+                  upcoming trips and add some notes!
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    this.handleDialogToggle();
+                    document.location.reload();
+                  }}
+                >
+                  Okay
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </div>
       </div>

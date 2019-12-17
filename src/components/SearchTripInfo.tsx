@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import moment from "moment";
 // import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
@@ -18,13 +18,13 @@ import {
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PersonIcon from "@material-ui/icons/Person";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import "../styles/TripInfo.css";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
+import axios from "axios";
 
 type myProps = {
   searchTrips: any;
@@ -37,17 +37,20 @@ type myProps = {
   userId: string;
   onChangeDisplayProfile: any;
   displayProfile: string;
+  userCurrencyCode: string;
 };
 
 type myState = {
   togglePending: boolean;
+  userCurrencyBudget: number;
 };
 
 class SearchTripInfo extends React.Component<myProps, myState> {
   constructor(props: myProps) {
     super(props);
     this.state = {
-      togglePending: false
+      togglePending: false,
+      userCurrencyBudget: 0
     };
   }
 
@@ -56,8 +59,33 @@ class SearchTripInfo extends React.Component<myProps, myState> {
       togglePending: true
     });
   };
+  exchangeCurrency = async (
+    fromCurrency: string,
+    toCurrency: string,
+    budget: number
+  ) => {
+    const result = await axios.get(
+      `https://currency-exchange.p.rapidapi.com/exchange?q=1&from=${fromCurrency}&to=${toCurrency}`,
+      {
+        headers: {
+          "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
+          "x-rapidapi-key": "b6e4f9fc03msh80db2bc55980af4p181a67jsnb4b3c557714d"
+        }
+      }
+    );
+    //console.log(result.data);
+    const userCurrencyBudget = result.data * budget;
+    this.setState({ userCurrencyBudget });
+  };
+  componentWillMount() {
+    this.exchangeCurrency(
+      this.props.searchTrips[this.props.currentSearchTripIndex].currencyCode,
+      this.props.userCurrencyCode,
+      this.props.searchTrips[this.props.currentSearchTripIndex].budget
+    );
+  }
   render() {
-    if (this.props.users.length) {
+    if (this.props.users.length && this.props.userCurrencyCode) {
       return (
         <div className="TripInfo">
           {/* Title */}
@@ -69,11 +97,12 @@ class SearchTripInfo extends React.Component<myProps, myState> {
 
           {/* Country */}
           <Typography className="iconWrapper">
-            Country:
+            Country:{" "}
             <img
               src={`https://www.countryflags.io/${this.props.searchTrips[
                 this.props.currentSearchTripIndex
               ].countryCode.toLowerCase()}/shiny/24.png`}
+              alt="flag"
             ></img>
             {
               countriesToCurrencies.find(
@@ -82,6 +111,16 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                     .countryCode === item.countryCode
               ).country
             }
+          </Typography>
+
+          {/* Starting Location */}
+          <Typography className="iconWrapper">
+            <DoubleArrowIcon />
+            Starting Location:
+            {` ${
+              this.props.searchTrips[this.props.currentSearchTripIndex]
+                .startLocation
+            }`}
           </Typography>
 
           {/* Start Date */}
@@ -106,16 +145,6 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             ).format("MMMM Do YYYY")}
           </Typography>
 
-          {/* Starting Location */}
-          <Typography className="iconWrapper">
-            <DoubleArrowIcon />
-            Starting Location:
-            {` ${
-              this.props.searchTrips[this.props.currentSearchTripIndex]
-                .startLocation
-            }`}
-          </Typography>
-
           {/* WayPoints */}
           <div>
             <List>
@@ -136,21 +165,40 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           </div>
 
           {/* Budget */}
-          <Typography className="iconWrapper">
-            <MonetizationOnIcon />
-            Budget:{" "}
-            {
-              this.props.searchTrips[this.props.currentSearchTripIndex].budget
-            }{" "}
-            {
-              countriesToCurrencies.find(
-                (item: any) =>
-                  this.props.searchTrips[this.props.currentSearchTripIndex]
-                    .currencyCode === item.currencyCode
-              ).currency
+          <Tooltip
+            title={
+              this.props.userCurrencyCode !== "None"
+                ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
+                  " " +
+                  countriesToCurrencies
+                    .concat([
+                      {
+                        country: "None",
+                        countryCode: "None",
+                        currency: "None",
+                        currencyCode: "None"
+                      }
+                    ])
+                    .find(
+                      (item: any) =>
+                        this.props.userCurrencyCode === item.currencyCode
+                    ).currency
+                : ""
             }
-          </Typography>
-
+            placement="top-end"
+          >
+            <Typography className="iconWrapper">
+              Budget:{" "}
+              {this.props.searchTrips[this.props.currentSearchTripIndex].budget}{" "}
+              {
+                countriesToCurrencies.find(
+                  (item: any) =>
+                    this.props.searchTrips[this.props.currentSearchTripIndex]
+                      .currencyCode === item.currencyCode
+                ).currency
+              }
+            </Typography>
+          </Tooltip>
           <div className="spacer10"></div>
 
           <div>
@@ -165,7 +213,11 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                 ).nickname;
                 return (
                   <div>
-                    <p
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="medium"
+                      fullWidth
                       key={i}
                       onClick={() => {
                         this.props.onChangeDisplayProfile(m);
@@ -173,13 +225,13 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                     >
                       <PersonIcon className="iconSpacer" />
                       {nickname}
-                    </p>
+                    </Button>
                   </div>
                 );
               })}
             </div>
           </div>
-
+          <br />
           <div>
             <Typography variant="h5">Members:</Typography>
             <div className="memberContainer">
@@ -191,6 +243,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                     .memberIds.length +
                   " members!"}
             </div>
+            <br />
           </div>
           <Button
             onClick={() => {
@@ -219,19 +272,63 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                 color="default"
                 size="small"
                 fullWidth
-                onClick={this.props.onPreviousTrip}
+                onClick={() => {
+                  this.props.onPreviousTrip();
+                  if (this.props.currentSearchTripIndex - 1 >= 0) {
+                    this.exchangeCurrency(
+                      this.props.searchTrips[
+                        this.props.currentSearchTripIndex - 1
+                      ].currencyCode,
+                      this.props.userCurrencyCode,
+                      this.props.searchTrips[
+                        this.props.currentSearchTripIndex - 1
+                      ].budget
+                    );
+                  } else {
+                    this.exchangeCurrency(
+                      this.props.searchTrips[this.props.searchTrips.length - 1]
+                        .currencyCode,
+                      this.props.userCurrencyCode,
+                      this.props.searchTrips[this.props.searchTrips.length - 1]
+                        .budget
+                    );
+                  }
+                }}
               >
                 <ArrowBackIosIcon />
                 Previous
               </Button>
             </Grid>
+
             <Grid item xs={6}>
               <Button
                 variant="contained"
                 color="default"
                 size="small"
                 fullWidth
-                onClick={this.props.onNextTrip}
+                onClick={() => {
+                  this.props.onNextTrip();
+                  if (
+                    this.props.currentSearchTripIndex + 1 <
+                    this.props.searchTrips.length
+                  ) {
+                    this.exchangeCurrency(
+                      this.props.searchTrips[
+                        this.props.currentSearchTripIndex + 1
+                      ].currencyCode,
+                      this.props.userCurrencyCode,
+                      this.props.searchTrips[
+                        this.props.currentSearchTripIndex + 1
+                      ].budget
+                    );
+                  } else {
+                    this.exchangeCurrency(
+                      this.props.searchTrips[0].currencyCode,
+                      this.props.userCurrencyCode,
+                      this.props.searchTrips[0].budget
+                    );
+                  }
+                }}
               >
                 Next
                 <ArrowForwardIosIcon />
@@ -252,7 +349,8 @@ const mapStateToProps = (state: any) => {
     searchTrips: state.searchTrips,
     users: state.users,
     currentSearchTripIndex: state.currentSearchTripIndex,
-    displayProfile: state.displayProfile
+    displayProfile: state.displayProfile,
+    userCurrencyCode: state.userCurrencyCode
   };
 };
 
