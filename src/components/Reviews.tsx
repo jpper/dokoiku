@@ -1,6 +1,7 @@
 // import { firestore } from "firebase";
 import React, { Component } from "react";
 import { myFirestore } from "../config/firebase";
+import moment from "moment";
 
 // Material UI & Styles
 import {
@@ -12,6 +13,7 @@ import {
   Typography
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
+import "../styles/Reviews.css";
 
 export default class Reviews extends Component<any, any> {
   constructor(props: any) {
@@ -56,6 +58,8 @@ export default class Reviews extends Component<any, any> {
 
     const reviews = await res.data().message;
     const rating = await res.data().rating;
+    let date = await res.data().date;
+    date = moment(date.toDate()).format("YYYY-MM-DD HH:mm");
     this.setState({
       reviewInfo: [
         ...this.state.reviewInfo,
@@ -63,7 +67,8 @@ export default class Reviews extends Component<any, any> {
           tripName,
           reviewer: reviewerName,
           reviews,
-          rating
+          rating,
+          date
         }
       ]
     });
@@ -85,19 +90,28 @@ export default class Reviews extends Component<any, any> {
                       primary={
                         <React.Fragment>
                           <Rating
+                            id="medium-star"
+                            size="small"
                             name="readOnly"
                             value={review.rating}
                             readOnly
                           />
-                          <Typography>
+                          <Typography variant="h6">
                             <b>TripName:</b> {review.tripName}
                           </Typography>
-                          <Typography>{review.reviews}</Typography>
+                          <Typography variant="body1">
+                            {review.reviews}
+                          </Typography>
                         </React.Fragment>
                       }
                       secondary={
                         <React.Fragment>
-                          <Typography>by {review.reviewer}</Typography>
+                          <Typography variant="body2">
+                            by {review.reviewer}
+                          </Typography>
+                          <Typography variant="body2">
+                            Date: {review.date}
+                          </Typography>
                         </React.Fragment>
                       }
                     />
