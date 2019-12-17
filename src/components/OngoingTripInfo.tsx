@@ -313,7 +313,8 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                       size="medium"
                       fullWidth
                       key={i}
-                      onClick={() => {
+                      onClick={async () => {
+                        await this.props.onChangeDisplayProfile(undefined);
                         this.props.onChangeDisplayProfile(m);
                       }}
                     >
