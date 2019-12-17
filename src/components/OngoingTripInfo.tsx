@@ -17,15 +17,15 @@ import countriesToCurrencies from "../data/countries_to_currencies.json";
 import "../styles/Modal.css";
 import {
   Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
+  // List,
+  // ListItem,
+  // ListItemIcon,
+  // ListItemText,
   Typography
 } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
+//import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PersonIcon from "@material-ui/icons/Person";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
@@ -252,7 +252,10 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             color="primary"
             size="medium"
             fullWidth
-            onClick={() => this.props.toggleNotes()}
+            onClick={async () => {
+              await this.props.onChangeDisplayProfile(undefined);
+              this.props.toggleNotes();
+            }}
           >
             <DescriptionIcon className="iconSpacer" />
             Notes
@@ -263,7 +266,10 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             color="primary"
             size="medium"
             fullWidth
-            onClick={() => this.props.toggleMessages()}
+            onClick={async () => {
+              await this.props.onChangeDisplayProfile(undefined);
+              this.props.toggleMessages();
+            }}
           >
             <ChatIcon className="iconSpacer" />
             Messages
@@ -316,7 +322,8 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                       size="medium"
                       fullWidth
                       key={i}
-                      onClick={() => {
+                      onClick={async () => {
+                        await this.props.onChangeDisplayProfile(undefined);
                         this.props.onChangeDisplayProfile(m);
                       }}
                     >
