@@ -82,7 +82,7 @@ class Notification extends React.Component<myProps, any> {
   };
 
   render() {
-    console.log(this.props.requests);
+    //console.log(this.props.requests);
     return (
       <div>
         <Card>
@@ -92,7 +92,9 @@ class Notification extends React.Component<myProps, any> {
                 <CardContent>
                   <Typography>
                     You have a request from{" "}
-                    <div
+                    <Button
+                      variant="outlined"
+                      size="small"
                       onClick={() =>
                         this.props.onChangeDisplayProfile(request.fromId)
                       }
@@ -102,7 +104,7 @@ class Notification extends React.Component<myProps, any> {
                           (user: any) => user.id === request.fromId
                         ).nickname
                       }{" "}
-                    </div>
+                    </Button>
                     for{" "}
                     {
                       this.props.ongoingTrips.find(

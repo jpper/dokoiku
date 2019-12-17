@@ -73,7 +73,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
         }
       }
     );
-    console.log(result.data);
+    //console.log(result.data);
     const userCurrencyBudget = result.data * budget;
     this.setState({ userCurrencyBudget });
   };
@@ -97,7 +97,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
 
           {/* Country */}
           <Typography className="iconWrapper">
-            Country:
+            Country:{" "}
             <img
               src={`https://www.countryflags.io/${this.props.searchTrips[
                 this.props.currentSearchTripIndex
@@ -111,6 +111,16 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                     .countryCode === item.countryCode
               ).country
             }
+          </Typography>
+
+          {/* Starting Location */}
+          <Typography className="iconWrapper">
+            <DoubleArrowIcon />
+            Starting Location:
+            {` ${
+              this.props.searchTrips[this.props.currentSearchTripIndex]
+                .startLocation
+            }`}
           </Typography>
 
           {/* Start Date */}
@@ -133,16 +143,6 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                 this.props.currentSearchTripIndex
               ].endDate.toDate()
             ).format("MMMM Do YYYY")}
-          </Typography>
-
-          {/* Starting Location */}
-          <Typography className="iconWrapper">
-            <DoubleArrowIcon />
-            Starting Location:
-            {` ${
-              this.props.searchTrips[this.props.currentSearchTripIndex]
-                .startLocation
-            }`}
           </Typography>
 
           {/* WayPoints */}
@@ -231,7 +231,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
               })}
             </div>
           </div>
-
+          <br />
           <div>
             <Typography variant="h5">Members:</Typography>
             <div className="memberContainer">
@@ -243,6 +243,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                     .memberIds.length +
                   " members!"}
             </div>
+            <br />
           </div>
           <Button
             onClick={() => {

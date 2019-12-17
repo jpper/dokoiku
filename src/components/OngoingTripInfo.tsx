@@ -117,7 +117,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
         }
       }
     );
-    console.log(result.data);
+    //console.log(result.data);
     const userCurrencyBudget = result.data * budget;
     this.setState({ userCurrencyBudget });
   };
@@ -140,7 +140,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           </Typography>
           {/* Country */}
           <Typography className="iconWrapper">
-            Country:
+            Country:{" "}
             <img
               src={`https://www.countryflags.io/${this.props.ongoingTrips[
                 this.props.currentOngoingTripIndex
@@ -154,6 +154,15 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                     .countryCode === item.countryCode
               ).country
             }
+          </Typography>
+          {/* Starting Location */}
+          <Typography className="iconWrapper">
+            <DoubleArrowIcon />
+            Starting Location:
+            {` ${
+              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                .startLocation
+            }`}
           </Typography>
           {/* Start Date */}
           <Typography className="iconWrapper">
@@ -177,20 +186,10 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             ).format("MMMM Do YYYY")}
           </Typography>
 
-          {/* Starting Location */}
-          <Typography className="iconWrapper">
-            <DoubleArrowIcon />
-            Starting Location:
-            {` ${
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .startLocation
-            }`}
-          </Typography>
-
           {/* WayPoints */}
           <div>
             <List>
-              <Typography variant="h4">Waypoints:</Typography>
+              <Typography variant="h5">Waypoints:</Typography>
               {this.props.ongoingTrips[
                 this.props.currentOngoingTripIndex
               ].waypoints.map((l: any, i: number) => {
@@ -272,23 +271,32 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
           <div className="spacer10"></div>
 
           <div>
-            <Typography variant="h4">Owned by:</Typography>
+            <Typography variant="h5">Owned by:</Typography>
             <div className="owner">
-              <PersonIcon />
-              {
-                this.props.users.find(
-                  (user: any) =>
-                    user.id ===
-                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                      .ownerId
-                ).nickname
-              }
+              <Button
+                variant="outlined"
+                color="primary"
+                size="medium"
+                fullWidth
+              >
+                <PersonIcon />
+                {
+                  this.props.users.find(
+                    (user: any) =>
+                      user.id ===
+                      this.props.ongoingTrips[
+                        this.props.currentOngoingTripIndex
+                      ].ownerId
+                  ).nickname
+                }
+              </Button>
             </div>
           </div>
+          <br />
 
           {/* Members */}
           <div>
-            <Typography variant="h4">Members:</Typography>
+            <Typography variant="h5">Members:</Typography>
 
             <div className="memberContainer">
               {this.props.ongoingTrips[
@@ -307,7 +315,6 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                       key={i}
                       onClick={() => {
                         this.props.onChangeDisplayProfile(m);
-                        console.log(this.props.displayProfile);
                       }}
                     >
                       <PersonIcon className="iconSpacer" />
@@ -318,7 +325,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               })}
             </div>
           </div>
-
+          <br />
           {/* Update & Delete button */}
           <Grid container>
             <Grid item xs={6}>
