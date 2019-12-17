@@ -97,7 +97,7 @@ export default class Reviews extends Component<any, any> {
                             readOnly
                           />
                           <Typography variant="h6">
-                            <b>TripName:</b> {review.tripName}
+                            <b>Trip Name:</b> {review.tripName}
                           </Typography>
                           <Typography variant="body1">
                             {review.reviews}
