@@ -89,7 +89,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
       return (
         <div className="TripInfo">
           {/* Title */}
-          <Typography variant="h3" className="typoH3">
+          <Typography variant="h4" className="noWrapper">
             <b>
               {this.props.searchTrips[this.props.currentSearchTripIndex].name}
             </b>
@@ -97,7 +97,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
 
           {/* Country */}
           <Typography className="iconWrapper">
-            Country:{" "}
+            <strong>Country: </strong>
             <img
               src={`https://www.countryflags.io/${this.props.searchTrips[
                 this.props.currentSearchTripIndex
@@ -114,9 +114,9 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           </Typography>
 
           {/* Starting Location */}
-          <Typography className="iconWrapper">
+          <Typography className="noWrapper">
             <DoubleArrowIcon />
-            Starting Location:
+            <strong>Starting Location: </strong>
             {` ${
               this.props.searchTrips[this.props.currentSearchTripIndex]
                 .startLocation
@@ -124,9 +124,9 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           </Typography>
 
           {/* Start Date */}
-          <Typography className="iconWrapper">
+          <Typography className="noWrapper">
             <DateRangeIcon />
-            Start Date:{" "}
+            <strong>Start Date: </strong>
             {moment(
               this.props.searchTrips[
                 this.props.currentSearchTripIndex
@@ -135,9 +135,9 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           </Typography>
 
           {/* End Date */}
-          <Typography className="iconWrapper">
+          <Typography className="noWrapper">
             <DateRangeIcon />
-            End Date:{" "}
+            <strong>End Date: </strong>
             {moment(
               this.props.searchTrips[
                 this.props.currentSearchTripIndex
@@ -148,7 +148,10 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           {/* WayPoints */}
           <div>
             <List>
-              <Typography variant="h5">Waypoints:</Typography>
+              <Typography className="noWrapper">
+                <LocationOnIcon />
+                <strong className="boldText topPadding">Destinations:</strong>
+              </Typography>
               {this.props.searchTrips[
                 this.props.currentSearchTripIndex
               ].waypoints.map((l: any, i: number) => {

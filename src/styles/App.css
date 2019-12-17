@@ -6,16 +6,16 @@ body {
   padding: 10px;
 }
 
-.MuiTabs-flexContainer {
+/* .MuiTabs-flexContainer {
   justify-content: center;
-}
+} */
 .App-logo {
   height: 40vmin;
 }
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 100;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -91,9 +91,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.tripInfo {
-  padding-bottom: 10px;
 }
 .bgImg {
   position: absolute;
