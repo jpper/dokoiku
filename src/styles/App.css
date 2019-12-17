@@ -75,8 +75,13 @@ body {
 }
 
 .tabPanel {
-  background-color: white;
   color: black;
+  background: rgb(214, 220, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(214, 220, 255, 1) 0%,
+    rgba(63, 80, 181, 1) 100%
+  );
 }
 .iconWrapper {
   display: flex;

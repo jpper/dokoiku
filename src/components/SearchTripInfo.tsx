@@ -147,24 +147,23 @@ class SearchTripInfo extends React.Component<myProps, myState> {
 
           {/* WayPoints */}
           <div>
-            <List>
-              <Typography className="noWrapper">
-                <LocationOnIcon />
-                <strong className="boldText topPadding">Destinations:</strong>
-              </Typography>
+            <Typography className="noWrapper">
+              <LocationOnIcon />
+              <strong className="boldText topPadding">Destinations:</strong>
+            </Typography>
+            <ul className="ul-test">
               {this.props.searchTrips[
                 this.props.currentSearchTripIndex
               ].waypoints.map((l: any, i: number) => {
                 return (
-                  <ListItem key={i} className="tripLocation">
-                    <ListItemIcon>
-                      <LocationOnIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={l.location} />
-                  </ListItem>
+                  <>
+                    <Typography className="noWrapper">
+                      <li>{l.location}</li>
+                    </Typography>
+                  </>
                 );
               })}
-            </List>
+            </ul>
           </div>
 
           {/* Budget */}
@@ -190,9 +189,11 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             }
             placement="top-end"
           >
-            <Typography className="iconWrapper">
-              Budget:{" "}
-              {this.props.searchTrips[this.props.currentSearchTripIndex].budget}{" "}
+            <Typography className="noWrapper topPadding">
+              <strong>Budget: </strong>
+              {
+                this.props.searchTrips[this.props.currentSearchTripIndex].budget
+              }{" "}
               {
                 countriesToCurrencies.find(
                   (item: any) =>
@@ -205,7 +206,9 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           <div className="spacer10"></div>
 
           <div>
-            <Typography variant="h5">Owned by:</Typography>
+            <Typography className="noWrapper topPadding">
+              <strong>Owned by:</strong>
+            </Typography>
             <div>
               {[
                 this.props.searchTrips[this.props.currentSearchTripIndex]
@@ -236,16 +239,18 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           </div>
           <br />
           <div>
-            <Typography variant="h5">Members:</Typography>
-            <div className="memberContainer">
+            <Typography className="noWrapper topPadding">
+              <strong>Members:</strong>
+            </Typography>
+            <Typography className="noWrapper">
               {this.props.searchTrips[this.props.currentSearchTripIndex]
                 .memberIds.length === 1
-                ? "There is currently 1 member!"
-                : "There are currently " +
+                ? "1 member"
+                : "" +
                   this.props.searchTrips[this.props.currentSearchTripIndex]
                     .memberIds.length +
-                  " members!"}
-            </div>
+                  " members"}
+            </Typography>
             <br />
           </div>
           <Button
