@@ -89,6 +89,18 @@ export default class Reviews extends Component<any, any> {
                     <ListItemText
                       primary={
                         <React.Fragment>
+<<<<<<< HEAD
+                          <p>
+                            <b>Trip Name:</b> {review.tripName}
+                          </p>
+                          <p>
+                            <b>Reviewer:</b> {review.reviewer}
+                          </p>
+                          <p>
+                            <b>Rating:</b>
+                          </p>
+=======
+>>>>>>> 4ba483520c648555d22ca056404e0453b934d239
                           <Rating
                             id="medium-star"
                             size="small"

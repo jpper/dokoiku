@@ -101,11 +101,6 @@ class Profile extends React.Component<
             justify="center"
           >
             <Grid item>
-              <Typography variant="h6" id="typo-rating">
-                Rating
-              </Typography>
-            </Grid>
-            <Grid item>
               <Rating
                 value={this.state.rating ? this.state.rating : 0}
                 readOnly
@@ -116,6 +111,10 @@ class Profile extends React.Component<
           </Grid>
 
           <div className="spacer10"></div>
+
+          <div id="about-others">
+            <h3>{this.state.user.aboutMe}</h3>
+          </div>
 
           <List id="horizontal-list">
             <ListItem button className="listItem" id="listItem-facebook">

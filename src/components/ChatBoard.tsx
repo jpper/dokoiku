@@ -194,6 +194,9 @@ class ChatBoard extends Component<Props, ChatBoardState> {
                   value={this.state.messageToBeSent}
                   onChange={e => this.handleChange(e)}
                   fullWidth
+                  style={{
+                    backgroundColor: "white"
+                  }}
                 />
               </Grid>
               <Grid item xs={2}>
