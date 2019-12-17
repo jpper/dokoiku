@@ -75,16 +75,10 @@ class PastTripInfo extends React.Component<any, myStates> {
 
   componentDidMount() {
     console.log("PAST_TRIP_INFO");
-
-    // get PastTrips
-    const tmpPastTrips = this.props.ongoingTrips.filter((data: any) => {
-      const today = new Date();
-      return today.getTime() > data.endDate.toDate().getTime();
-    });
     this.setState({
-      pastTrips: tmpPastTrips
+      pastTrips: this.props.pastTrips
     });
-    console.log(tmpPastTrips);
+    console.log(this.props.pastTrips);
 
     // Setup modal window status (Open/ Close)
     let initialStatus = Array(this.state.pastTrips.length);
@@ -682,7 +676,7 @@ class PastTripInfo extends React.Component<any, myStates> {
 }
 const mapStateToProps = (state: any) => {
   return {
-    ongoingTrips: state.ongoingTrips,
+    pastTrips: state.pastTrips,
     currentOngoingTripIndex: state.currentOngoingTripIndex,
     userId: state.userId,
     userName: state.userName,

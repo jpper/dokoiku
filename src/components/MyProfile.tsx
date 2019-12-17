@@ -157,7 +157,7 @@ class MyProfile extends React.Component<
 
               <List id="horizontal-list">
                 <ListItem
-                  className="listItem"
+                  className="listItem itemTextCentering"
                   id="listItem-facebook"
                   button
                   onClick={() => {
@@ -190,7 +190,7 @@ class MyProfile extends React.Component<
 
                 <ListItem
                   button
-                  className="listItem"
+                  className="listItem itemTextCentering"
                   id="listItem-twitter"
                   onClick={() => {
                     const modal = document.getElementById("add-twitter");
@@ -222,6 +222,7 @@ class MyProfile extends React.Component<
 
                 <ListItem
                   id="listItem-instagram"
+                  className="itemTextCentering"
                   button
                   onClick={() => {
                     const modal = document.getElementById("add-instagram");
