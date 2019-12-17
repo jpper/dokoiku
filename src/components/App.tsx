@@ -311,6 +311,7 @@ class App extends React.Component<myProps, any> {
                     value={this.props.pageTabIndex}
                     onChange={this.handleChange}
                     centered
+                    variant="scrollable"
                     className="tabs"
                     scrollButtons="on"
                     aria-label="scrollable force tabs example"

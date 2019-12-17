@@ -139,7 +139,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </b>
           </Typography>
           {/* Country */}
-          <Typography className="iconWrapper">
+          <Typography className="noWrapper">
             Country:
             <img
               src={`https://www.countryflags.io/${this.props.ongoingTrips[
