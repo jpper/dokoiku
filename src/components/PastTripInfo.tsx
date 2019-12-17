@@ -471,8 +471,8 @@ class PastTripInfo extends React.Component<any, myStates> {
                         const nickname = this.props.users.find(
                           (u: { id: any }) => u.id === member
                         ).nickname;
-                        //   FIXME: skips own data here
-                        //   if (member === this.props.userId) return;
+                        // skips own data here
+                        if (member === this.props.userId) return;
 
                         return (
                           <div key={i}>
