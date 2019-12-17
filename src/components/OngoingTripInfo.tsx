@@ -51,6 +51,7 @@ type myProps = {
   onChangeDisplayProfile: any;
   displayProfile: string;
   userCurrencyCode: string;
+  clearToggle: any;
 };
 
 type myState = {
@@ -323,6 +324,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                       fullWidth
                       key={i}
                       onClick={async () => {
+                        await this.props.clearToggle();
                         await this.props.onChangeDisplayProfile(undefined);
                         this.props.onChangeDisplayProfile(m);
                       }}
@@ -516,12 +518,20 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "RESET_TOGGLE_MESSAGES"
       });
       dispatch({
+        type: "CHANGE_DISPLAY_PROFILE",
+        displayProfile: undefined
+      });
+      dispatch({
         type: "PREVIOUS_ONGOING_TRIP"
       });
     },
     onNextTrip: () => {
       dispatch({
         type: "RESET_TOGGLE_MESSAGES"
+      });
+      dispatch({
+        type: "CHANGE_DISPLAY_PROFILE",
+        displayProfile: undefined
       });
       dispatch({
         type: "NEXT_ONGOING_TRIP"
@@ -535,6 +545,11 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "TOGGLE_MESSAGES"
       }),
+    clearToggle: () => {
+      dispatch({
+        type: "RESET_TOGGLE_MESSAGES"
+      });
+    },
     onShowEdit: () => dispatch({ type: "SHOW_EDIT" }),
     onChangeDisplayProfile: (profile: string) =>
       dispatch({
