@@ -286,6 +286,7 @@ class App extends React.Component<myProps, any> {
       <div className="contents">
         <AppBar position="static">
           <Tabs
+            variant="scrollable"
             value={this.props.pageTabIndex}
             onChange={this.handleChange}
             centered
