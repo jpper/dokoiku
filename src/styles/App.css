@@ -82,6 +82,7 @@ body {
     rgba(214, 220, 255, 1) 0%,
     rgba(63, 80, 181, 1) 100%
   );
+  padding-bottom: 2px !important;
 }
 .iconWrapper {
   display: flex;
@@ -111,4 +112,15 @@ body {
   background-color: #3f50b5;
   color: white;
   border: none;
+}
+
+.iconImg-container {
+  text-align: center !important;
+  z-index: 100 !important;
+}
+
+.iconImg {
+  margin-top: 25px;
+  width: 120px;
+  height: 120px;
 }
