@@ -8,7 +8,12 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel
+  InputLabel,
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogActions
   // DialogTitle,
   // DialogContent,
   // DialogContentText,
@@ -81,7 +86,7 @@ type BuildState = {
   addedWaypoint: string;
   budget: number;
   memberIds: any;
-  // toggleDialog: boolean;
+  toggleDialog: boolean;
 };
 
 class BuildTrip extends React.Component<BuildProps, BuildState> {
@@ -100,8 +105,8 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
       waypoints: [],
       addedWaypoint: "",
       budget: 0,
-      memberIds: []
-      // toggleDialog: false
+      memberIds: [],
+      toggleDialog: false
     };
   }
   componentWillMount() {
@@ -139,6 +144,11 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
       memberIds: []
     });
   }
+  handleDialogToggle = () => {
+    this.setState({
+      toggleDialog: !this.state.toggleDialog
+    });
+  };
   render() {
     return (
       <div className="BuildTrip">
@@ -159,6 +169,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   this.state.budget
                 );
                 this.clearState();
+                this.handleDialogToggle();
               }}
               onError={errors => console.log(errors)}
             >
@@ -358,6 +369,25 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                 </Button>
               )}
             </ValidatorForm>
+            <Dialog open={this.state.toggleDialog}>
+              <DialogTitle>Successfully Built!</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Congratulations! You just built a new trip! Go to your
+                  upcoming trips and add some notes!
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    this.handleDialogToggle();
+                    document.location.reload();
+                  }}
+                >
+                  Okay
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </div>
       </div>
