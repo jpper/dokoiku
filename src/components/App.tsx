@@ -552,13 +552,13 @@ class App extends React.Component<myProps, any> {
                   </TabPanel>
 
                   {/* Build Trip */}
-                  <TabPanel value={this.props.pageTabIndex} index={3}>
+                  <TabPanel value={this.props.pageTabIndex} index={4}>
                     {this.props.userId === "" ? <Login /> : <BuildTrip />}
                   </TabPanel>
 
                   {/* Reviews */}
                   {/* FIXME: This is just for testing Reviews!! */}
-                  <TabPanel value={this.props.pageTabIndex} index={3}>
+                  <TabPanel value={this.props.pageTabIndex} index={5}>
                     {this.props.userId === "" ? (
                       <Login />
                     ) : (
