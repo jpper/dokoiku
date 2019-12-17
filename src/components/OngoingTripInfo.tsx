@@ -251,7 +251,10 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             color="primary"
             size="medium"
             fullWidth
-            onClick={() => this.props.toggleNotes()}
+            onClick={async () => {
+              await this.props.onChangeDisplayProfile(undefined);
+              this.props.toggleNotes();
+            }}
           >
             <DescriptionIcon className="iconSpacer" />
             Notes
@@ -262,7 +265,10 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             color="primary"
             size="medium"
             fullWidth
-            onClick={() => this.props.toggleMessages()}
+            onClick={async () => {
+              await this.props.onChangeDisplayProfile(undefined);
+              this.props.toggleMessages();
+            }}
           >
             <ChatIcon className="iconSpacer" />
             Messages
