@@ -87,3 +87,15 @@
 .MuiListItemText-multiline {
   text-align: center;
 }
+
+#currency-selector-container {
+  text-align: center;
+}
+
+#currency-selector {
+  display: inline-bolck;
+}
+
+.MuiSelect-root.MuiSelect-select.MuiSelect-selectMenu.MuiInputBase-input.MuiInput-input {
+  text-align: center;
+}
