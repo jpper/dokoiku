@@ -8,7 +8,8 @@ import {
   ListItem,
   ListItemText,
   Divider,
-  CircularProgress
+  CircularProgress,
+  Typography
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 
@@ -83,25 +84,20 @@ export default class Reviews extends Component<any, any> {
                     <ListItemText
                       primary={
                         <React.Fragment>
-                          <p>
-                            <b>TripName:</b> {review.tripName}
-                          </p>
-                          <p>
-                            <b>Reviewer:</b> {review.reviewer}
-                          </p>
-                          <p>
-                            <b>Rating:</b>
-                          </p>
                           <Rating
                             name="readOnly"
                             value={review.rating}
                             readOnly
                           />
-
-                          <p>
-                            <b>Review:</b>
-                          </p>
-                          <p>{review.reviews}</p>
+                          <Typography>
+                            <b>TripName:</b> {review.tripName}
+                          </Typography>
+                          <Typography>{review.reviews}</Typography>
+                        </React.Fragment>
+                      }
+                      secondary={
+                        <React.Fragment>
+                          <Typography>by {review.reviewer}</Typography>
                         </React.Fragment>
                       }
                     />
