@@ -22,7 +22,7 @@ class Notes extends Component<any, any> {
     firepad.on("ready", function() {
       if (firepad.isHistoryEmpty()) {
         firepad.setHtml(
-          '<span style="font-size: 24px;">Rich-text editing with <span style="color: red">DokoIku Notes!</span></span><br/><br/>Collaborative-editing made easy.\n'
+          "This is where you can write your collaborative note real-time.\n"
         );
       }
     });

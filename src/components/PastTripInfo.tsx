@@ -34,7 +34,7 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/TripInfo.css";
-import "../styles/PastTripInfo.css";
+// import "../styles/PastTripInfo.css";
 import Reviews from "./Reviews";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 
@@ -275,7 +275,7 @@ class PastTripInfo extends React.Component<any, myStates> {
         ) : (
           <Grid container>
             {/* Trip details */}
-            <Grid item xs={5}>
+            <Grid item xs={3}>
               <Container>
                 <Card>
                   <div className="tripBasicInfo">
@@ -332,8 +332,8 @@ class PastTripInfo extends React.Component<any, myStates> {
                       }
                       placement="top-end"
                     >
-                      <Typography className="iconWrapper">
-                        Budget:{" "}
+                      <Typography className="noWrapper topPadding">
+                        <strong>Budget: </strong>
                         {
                           this.state.pastTrips[this.state.currentPastTripIndex]
                             .budget
@@ -457,8 +457,10 @@ class PastTripInfo extends React.Component<any, myStates> {
 
                   {/* Members */}
                   <div>
-                    <Typography variant="h5">Review for Members:</Typography>
-                    <List component="nav">
+                    <Typography className="noWrapper topPadding">
+                      <strong>Review for Members:</strong>
+                    </Typography>
+                    <div className="memberContainer">
                       {this.state.pastTrips[
                         this.state.currentPastTripIndex
                       ].memberIds.map((member: any, i: number) => {
@@ -588,7 +590,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                           </div>
                         );
                       })}
-                    </List>
+                    </div>
                   </div>
 
                   {/* Previous & Next Button */}
@@ -630,7 +632,7 @@ class PastTripInfo extends React.Component<any, myStates> {
             </Grid>
 
             {/* Map, Review Result */}
-            <Grid item xs={7}>
+            <Grid item xs={9}>
               {this.state.pageStatus === PageStatus.Map && (
                 <Map
                   trips={this.state.pastTrips}
