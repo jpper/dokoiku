@@ -30,6 +30,11 @@
   border: 5px solid #50597b;
 }
 
+#profile-picture:hover {
+  cursor: pointer;
+  opacity: 0.75;
+}
+
 #profile-picture-small {
   display: block;
   margin-left: auto;

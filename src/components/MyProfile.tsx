@@ -130,6 +130,10 @@ class MyProfile extends React.Component<
                 src={this.state.user.photoUrl}
                 id="profile-picture"
                 alt={this.state.user.nickname}
+                onClick={() => {
+                  const modal = document.getElementById("change-photo");
+                  modal.style.display = "block";
+                }}
               />
               <div className="spacer10"></div>
 
@@ -254,6 +258,39 @@ class MyProfile extends React.Component<
               </List>
 
               {/* MODALS SECTION */}
+              {/* FACEBOOK */}
+              <div className="modal" id="change-photo">
+                <div className="modal-content">
+                  <p>Change your profile picture</p>
+                  <input id="photo-url" placeholder="New photo URL" />
+                  <button
+                    onClick={() => {
+                      const url = (document.getElementById(
+                        "photo-url"
+                      ) as HTMLInputElement).value;
+                      myFirestore
+                        .collection("users")
+                        .doc(this.props.userId)
+                        .update({ photoUrl: url });
+                      const modal = document.getElementById("change-photo");
+                      modal.style.display = "none";
+                    }}
+                  >
+                    Submit
+                  </button>
+                  <br></br>
+                  <br></br>
+                  <button
+                    className="close"
+                    onClick={() => {
+                      const modal = document.getElementById("change-photo");
+                      modal.style.display = "none";
+                    }}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
               {/* FACEBOOK */}
               <div className="modal" id="add-facebook">
                 <div className="modal-content">
