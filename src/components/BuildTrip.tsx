@@ -273,7 +273,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               />
               <br />
               <br />
-              <label>Places:</label>
+              <label>Destinations:</label>
               {this.state.waypoints.length
                 ? this.state.waypoints.map((waypoint: any, index: number) => (
                     <div>
@@ -297,7 +297,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
               <br />
               <TextValidator
                 name="places"
-                label="Places"
+                label="Destination"
                 size="small"
                 variant="outlined"
                 value={this.state.addedWaypoint}
@@ -322,7 +322,7 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                   });
                 }}
               >
-                Add Place
+                Add Destination
               </Button>
               <br />
               <br />
