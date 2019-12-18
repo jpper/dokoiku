@@ -294,6 +294,14 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                 color="primary"
                 size="medium"
                 fullWidth
+                onClick={async () => {
+                  await this.props.clearToggle();
+                  await this.props.onChangeDisplayProfile(undefined);
+                  this.props.onChangeDisplayProfile(
+                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .ownerId
+                  );
+                }}
               >
                 <PersonIcon />
                 {

@@ -117,7 +117,11 @@ class Profile extends React.Component<
           </div>
 
           <List id="horizontal-list">
-            <ListItem button className="listItem" id="listItem-facebook">
+            <ListItem
+              button
+              className="listItem itemTextCentering"
+              id="listItem-facebook"
+            >
               {/* FACEBOOK */}
               {this.state.user.facebook ? (
                 <Link href={this.state.user.facebook} target="_blank">
@@ -150,7 +154,11 @@ class Profile extends React.Component<
               )}
             </ListItem>
 
-            <ListItem button className="listItem" id="listItem-twitter">
+            <ListItem
+              button
+              className="listItem itemTextCentering"
+              id="listItem-twitter"
+            >
               {/* TWITTER */}
               {this.state.user.twitter ? (
                 <Link href={this.state.user.twitter} target="_blank">
@@ -184,7 +192,11 @@ class Profile extends React.Component<
             </ListItem>
 
             {/* INSTA */}
-            <ListItem button id="listItem-instagram">
+            <ListItem
+              button
+              id="listItem-instagram"
+              className="itemTextCentering"
+            >
               {this.state.user.instagram ? (
                 <Link href={this.state.user.instagram} target="_blank">
                   <ListItemText
