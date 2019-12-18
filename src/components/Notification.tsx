@@ -12,6 +12,7 @@ import { myFirestore } from "../config/firebase";
 import { removeRequest } from "../redux/action";
 import firebase from "firebase";
 import Profile from "./Profile";
+import "../styles/Notification.css";
 
 type myProps = {
   requests: any;
@@ -125,11 +126,24 @@ class Notification extends React.Component<myProps, any> {
                           this.handlePopoverToggle();
                           this.props.onChangeDisplayProfile(user.id);
                           this.setAnchorEl(event.currentTarget);
+                          console.log(this.state.anchorEl);
                         }}
                       >
                         {user.nickname}{" "}
                       </Button>
+                      for{" "}
+                      {
+                        this.props.ongoingTrips.find(
+                          (trip: any) => trip.tripId === request.tripId
+                        ).name
+                      }
+                    </Typography>
+                    <div id="profile-popover">
                       <Popover
+                        style={{
+                          height: "500px",
+                          width: "500px"
+                        }}
                         anchorEl={this.state.anchorEl}
                         open={this.state.togglePopover}
                         onClose={() => {
@@ -147,13 +161,7 @@ class Notification extends React.Component<myProps, any> {
                       >
                         <Profile />
                       </Popover>
-                      for{" "}
-                      {
-                        this.props.ongoingTrips.find(
-                          (trip: any) => trip.tripId === request.tripId
-                        ).name
-                      }
-                    </Typography>
+                    </div>
                   </CardContent>
                   <CardActions>
                     <Button
