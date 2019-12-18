@@ -60,6 +60,7 @@ import backgroundImg from "../img/trip.jpg";
 import moment from "moment";
 import PrivacyPolicy from "./PrivacyPolicy";
 import iconImg from "../img/logo-dokoiku.png";
+import iconImgWhite from "../img/logo-dokoiku-title-white.png";
 
 type myProps = {
   userId: string;
@@ -394,6 +395,9 @@ class App extends React.Component<myProps, any> {
                         )}
                       </Menu>
                     </div>
+
+                    {/* App Title */}
+                    <img src={iconImgWhite} className="iconImgSmall"></img>
                   </Tabs>
 
                   {/* My Profile */}
@@ -600,9 +604,9 @@ class App extends React.Component<myProps, any> {
                       />
                       <About />
 
-                      <div className="iconImg-container">
-                        <img src={iconImg} className="iconImg"></img>
-                      </div>
+                      {/* <div className="iconImg-container">
+                        <img src={iconImgWhite} className="iconImg"></img>
+                      </div> */}
                     </div>
                   )}
                 </AppBar>
@@ -613,8 +617,7 @@ class App extends React.Component<myProps, any> {
                     <Login />
                   </div>
                 )}
-
-                <Link to="/privacy">
+                <Link to="/privacy" className="footer">
                   <Button variant="outlined" size="small" id="privacy-policy">
                     Privacy Policy
                   </Button>

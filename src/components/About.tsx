@@ -2,6 +2,7 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import "../styles/About.css";
 import "typeface-roboto";
+import iconImgWhite from "../img/logo-dokoiku-white.png";
 
 class About extends React.Component<{}, {}> {
   render() {
@@ -58,6 +59,10 @@ class About extends React.Component<{}, {}> {
             <li>GitHub</li>
           </a>
         </ul>
+
+        <div className="iconImg-container">
+          <img src={iconImgWhite} className="iconImg"></img>
+        </div>
       </div>
     );
   }

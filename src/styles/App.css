@@ -67,12 +67,6 @@ body {
   border-radius: 10px;
   border-width: 1px;
 }
-.about {
-  width: 80%;
-  text-align: left;
-  margin-left: 7%;
-  padding-left: 2%;
-}
 
 .tabPanel {
   color: black;
@@ -121,6 +115,16 @@ body {
 
 .iconImg {
   margin-top: 25px;
+  margin-bottom: 10px;
   width: 120px;
   height: 120px;
+}
+
+.iconImgSmall {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 50px;
+  width: auto;
+  height: 64px;
 }
