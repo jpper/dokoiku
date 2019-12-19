@@ -123,8 +123,8 @@ class EditTrip extends React.Component<EditProps, EditState> {
     return (
       <div>
         <div>
-          <div className="EditTrip">
-            <h1>Edit Trip</h1>
+          <div className="BuildTrip">
+            <h1>Update Trip</h1>
             <ValidatorForm
               onSubmit={() => {
                 //console.log(this.state.waypoints);
@@ -145,6 +145,7 @@ class EditTrip extends React.Component<EditProps, EditState> {
               <TextValidator
                 name="name"
                 label="Name"
+                size="small"
                 variant="outlined"
                 validators={["required"]}
                 errorMessages={["this field is required"]}
@@ -155,11 +156,11 @@ class EditTrip extends React.Component<EditProps, EditState> {
               />
               <br />
               <br />
-              <br />
               <TextValidator
                 name="start-date"
                 label="Start Date"
                 variant="outlined"
+                size="small"
                 type="date"
                 validators={[
                   "required",
@@ -179,12 +180,12 @@ class EditTrip extends React.Component<EditProps, EditState> {
               />
               <br />
               <br />
-              <br />
               <TextValidator
                 name="end-date"
                 label="End Date"
                 variant="outlined"
                 type="date"
+                size="small"
                 validators={["required", "endDateValidator"]}
                 errorMessages={[
                   "this field is required",
@@ -198,11 +199,11 @@ class EditTrip extends React.Component<EditProps, EditState> {
               />
               <br />
               <br />
-              <br />
               <TextValidator
                 name="start-location"
                 label="Start Location"
                 variant="outlined"
+                size="small"
                 validators={["required"]}
                 errorMessages={["this field is required"]}
                 value={this.state.startLocation}
@@ -212,8 +213,7 @@ class EditTrip extends React.Component<EditProps, EditState> {
               />
               <br />
               <br />
-              <br />
-              <label>Places:</label>
+              <label>Destinations:</label>
               {this.state.waypoints.length
                 ? this.state.waypoints.map((waypoint: any, index: number) => (
                     <div>
@@ -235,17 +235,16 @@ class EditTrip extends React.Component<EditProps, EditState> {
                 : null}
               <br />
               <br />
-              <br />
               <TextValidator
                 name="places"
                 label="Places"
                 variant="outlined"
+                size="small"
                 value={this.state.addedWaypoint}
                 onChange={(e: any) => {
                   this.setState({ addedWaypoint: e.currentTarget.value });
                 }}
               />
-              <br />
               <br />
               <br />
               <Button
@@ -263,15 +262,15 @@ class EditTrip extends React.Component<EditProps, EditState> {
                   });
                 }}
               >
-                Add Place
+                Add Destination
               </Button>
-              <br />
               <br />
               <br />
               <TextValidator
                 name="budget"
                 label="My Budget"
                 type="number"
+                size="small"
                 variant="outlined"
                 validators={["minNumber:0", "required"]}
                 errorMessages={["cannot be negative", "this field is required"]}
@@ -283,7 +282,6 @@ class EditTrip extends React.Component<EditProps, EditState> {
               />
               <br />
               <br />
-              <br />
               {this.state.name &&
               this.state.travelMode &&
               this.state.startDate &&
@@ -292,14 +290,13 @@ class EditTrip extends React.Component<EditProps, EditState> {
               this.state.waypoints.length &&
               this.state.budget > 0 ? (
                 <Button variant="contained" color="primary" type="submit">
-                  Edit My Trip
+                  Update My Trip
                 </Button>
               ) : (
                 <Button variant="contained" disabled>
                   Please Fill Out the Form
                 </Button>
               )}
-              <br />
               <br />
               <br />
               <Button
