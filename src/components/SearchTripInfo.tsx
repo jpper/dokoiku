@@ -4,6 +4,7 @@ import { Button, Tooltip } from "@material-ui/core";
 import moment from "moment";
 // import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
+import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI and styling
 import "../styles/Modal.css";
@@ -191,6 +192,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
               placement="top-end"
             >
               <Typography className="noWrapper topPadding">
+                <InfoIcon />
                 <strong>Budget: </strong>
                 {
                   this.props.searchTrips[this.props.currentSearchTripIndex]
