@@ -316,6 +316,7 @@ class App extends React.Component<myProps, any> {
                     centered
                     variant="scrollable"
                     className="tabs"
+                    textColor="secondary"
                     scrollButtons="on"
                     aria-label="scrollable force tabs example"
                   >

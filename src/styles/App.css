@@ -142,3 +142,11 @@ body {
   width: auto;
   height: 64px;
 }
+
+.MuiTab-textColorSecondary.Mui-selected {
+  color: #ffeb3b !important;
+}
+
+.MuiTab-textColorSecondary {
+  color: inherit !important;
+}
