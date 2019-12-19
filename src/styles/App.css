@@ -76,11 +76,12 @@ body {
 
 .tabPanel {
   color: black;
-  background: rgb(34, 193, 195);
+
+  background: rgb(214, 220, 255);
   background: linear-gradient(
-    180deg,
-    rgba(34, 193, 195, 1) 0%,
-    rgba(79, 116, 193, 1) 100%
+    0deg,
+    rgba(214, 220, 255, 1) 0%,
+    rgba(63, 80, 181, 1) 100%
   );
 }
 .iconWrapper {
