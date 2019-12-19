@@ -61,7 +61,7 @@ class About extends React.Component<{}, {}> {
         </ul>
 
         <div className="iconImg-container">
-          <img src={iconImgWhite} className="iconImg"></img>
+          <img src={iconImgWhite} className="iconImg-about"></img>
         </div>
       </div>
     );

@@ -603,10 +603,6 @@ class App extends React.Component<myProps, any> {
                         alt="backImg"
                       />
                       <About />
-
-                      {/* <div className="iconImg-container">
-                        <img src={iconImgWhite} className="iconImg"></img>
-                      </div> */}
                     </div>
                   )}
                 </AppBar>
@@ -617,11 +613,25 @@ class App extends React.Component<myProps, any> {
                     <Login />
                   </div>
                 )}
-                <Link to="/privacy" className="footer">
-                  <Button variant="outlined" size="small" id="privacy-policy">
-                    Privacy Policy
-                  </Button>
-                </Link>
+
+                {/* Privacy policy */}
+                {this.props.pageTabIndex === 0 ? (
+                  <Link to="/privacy" className="footer">
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      id="privacy-policy-about"
+                    >
+                      Privacy Policy
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link to="/privacy">
+                    <Button variant="outlined" size="small" id="privacy-policy">
+                      Privacy Policy
+                    </Button>
+                  </Link>
+                )}
               </div>
             );
           }}
