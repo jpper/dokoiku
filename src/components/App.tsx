@@ -432,7 +432,7 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.ongoingTrips.length ? (
                           <Grid container>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} sm={4}>
                               <Container>
                                 <Card className="tripInfo">
                                   <OngoingTripInfo />
@@ -440,7 +440,7 @@ class App extends React.Component<myProps, any> {
                               </Container>
                             </Grid>
                             {/* {if statement and changing props value here} */}
-                            <Grid item xs={9}>
+                            <Grid item xs={12} sm={8}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -534,14 +534,14 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.searchTrips.length ? (
                           <Grid container>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} sm={4}>
                               <Container>
                                 <Card className="tripInfo">
                                   <SearchTripInfo />
                                 </Card>
                               </Container>
                             </Grid>
-                            <Grid item xs={9}>
+                            <Grid item xs={12} sm={8}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (

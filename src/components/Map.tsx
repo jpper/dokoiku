@@ -7,6 +7,7 @@ import {
   Marker
 } from "@react-google-maps/api";
 import axios from "axios";
+import "../styles/Map.css";
 require("dotenv").config();
 
 type MapProps = {
@@ -79,7 +80,7 @@ class Map extends React.Component<MapProps, MapState> {
           googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAPS_API}`}
         >
           <GoogleMap
-            id="example-map"
+            id="map-style"
             mapContainerStyle={{
               height: "100%",
               width: "100%"

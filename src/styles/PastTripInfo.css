@@ -21,3 +21,9 @@
 .error-text {
   color: red !important;
 }
+
+.review-container {
+  background-color: white;
+  padding: 10px;
+  border-radius: 2px;
+}

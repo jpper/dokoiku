@@ -13,10 +13,6 @@ import axios from "axios";
 import {
   Grid,
   Typography,
-  List,
-  // ListItem,
-  // ListItemIcon,
-  // ListItemText,
   Modal,
   Fade,
   Backdrop,
@@ -642,7 +638,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                 />
               )}
               {this.state.pageStatus === PageStatus.Reviews && (
-                <>
+                <div className="review-container">
                   <Typography variant="h5">
                     Reviews for {this.props.userName}
                   </Typography>
@@ -654,7 +650,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                     }
                     userId={this.props.userId}
                   />
-                </>
+                </div>
               )}
               {this.state.pageStatus === PageStatus.Notes && (
                 <Notes
