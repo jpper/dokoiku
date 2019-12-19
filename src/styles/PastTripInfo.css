@@ -21,12 +21,3 @@
 .error-text {
   color: red !important;
 }
-
-.tripBasicInfo p {
-  border-style: solid;
-  border-color: rgb(180, 178, 178);
-  border-radius: 10px;
-  border-width: 1px;
-  margin-left: 3px;
-  margin-right: 3px;
-}

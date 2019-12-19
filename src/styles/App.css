@@ -63,12 +63,6 @@
   border-radius: 10px;
   border-width: 1px;
 }
-.about {
-  width: 80%;
-  text-align: left;
-  margin-left: 7%;
-  padding-left: 2%;
-}
 
 .tabPanel {
   color: black;
@@ -110,6 +104,13 @@
   border: none;
 }
 
+#privacy-policy-about {
+  width: calc(100% - 1.5em);
+  background-color: #3f50b5;
+  color: white;
+  border: none;
+}
+
 .iconImg-container {
   text-align: center !important;
   z-index: 100 !important;
@@ -117,6 +118,35 @@
 
 .iconImg {
   margin-top: 25px;
+  /* margin-bottom: 10px; */
   width: 120px;
   height: 120px;
+}
+
+.iconImg-about {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  width: 120px;
+  height: 120px;
+}
+
+.iconImgSmall {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 40px;
+  width: auto;
+  height: 64px;
+}
+
+.MuiTab-textColorSecondary.Mui-selected {
+  color: #ffeb3b !important;
+}
+
+.MuiTab-textColorSecondary {
+  color: inherit !important;
+}
+
+.PrivateTabIndicator-colorSecondary-74 {
+  background-color: #ffeb3b !important;
 }

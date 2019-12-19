@@ -60,6 +60,7 @@ import backgroundImg from "../img/trip.jpg";
 import moment from "moment";
 import PrivacyPolicy from "./PrivacyPolicy";
 import iconImg from "../img/logo-dokoiku.png";
+import iconImgWhite from "../img/logo-dokoiku-title-white.png";
 
 type myProps = {
   userId: string;
@@ -315,6 +316,7 @@ class App extends React.Component<myProps, any> {
                     centered
                     variant="scrollable"
                     className="tabs"
+                    textColor="secondary"
                     scrollButtons="on"
                     aria-label="scrollable force tabs example"
                   >
@@ -394,6 +396,9 @@ class App extends React.Component<myProps, any> {
                         )}
                       </Menu>
                     </div>
+
+                    {/* App Title */}
+                    <img src={iconImgWhite} className="iconImgSmall"></img>
                   </Tabs>
 
                   {/* My Profile */}
@@ -599,10 +604,6 @@ class App extends React.Component<myProps, any> {
                         alt="backImg"
                       />
                       <About />
-
-                      <div className="iconImg-container">
-                        <img src={iconImg} className="iconImg"></img>
-                      </div>
                     </div>
                   )}
                 </AppBar>
@@ -614,11 +615,24 @@ class App extends React.Component<myProps, any> {
                   </div>
                 )}
 
-                <Link to="/privacy">
-                  <Button variant="outlined" size="small" id="privacy-policy">
-                    Privacy Policy
-                  </Button>
-                </Link>
+                {/* Privacy policy */}
+                {this.props.pageTabIndex === 0 ? (
+                  <Link to="/privacy" className="footer">
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      id="privacy-policy-about"
+                    >
+                      Privacy Policy
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link to="/privacy">
+                    <Button variant="outlined" size="small" id="privacy-policy">
+                      Privacy Policy
+                    </Button>
+                  </Link>
+                )}
               </div>
             );
           }}
