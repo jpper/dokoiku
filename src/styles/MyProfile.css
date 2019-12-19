@@ -30,6 +30,11 @@
   border: 5px solid #50597b;
 }
 
+#profile-picture:hover {
+  cursor: pointer;
+  opacity: 0.75;
+}
+
 #profile-picture-small {
   display: block;
   margin-left: auto;
@@ -84,7 +89,7 @@
   font-size: 2.5rem !important;
 }
 
-.MuiListItemText-multiline {
+.itemTextCentering .MuiListItemText-multiline {
   text-align: center;
 }
 
@@ -99,4 +104,16 @@
 
 .MuiSelect-root.MuiSelect-select.MuiSelect-selectMenu.MuiInputBase-input.MuiInput-input {
   text-align: center;
+}
+
+#about-me-container {
+  text-align: center;
+}
+
+#about-others {
+  text-align: center;
+}
+
+.MyProfile {
+  background-color: white;
 }

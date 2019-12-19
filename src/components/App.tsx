@@ -59,6 +59,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import backgroundImg from "../img/trip.jpg";
 import moment from "moment";
 import PrivacyPolicy from "./PrivacyPolicy";
+import iconImg from "../img/logo-dokoiku.png";
 
 type myProps = {
   userId: string;
@@ -144,14 +145,8 @@ const mapDispatchToProps = (dispatch: any) => ({
               });
             }
           } else {
-            console.log("dispatching ADD_ONGOING_TRIP");
-            dispatch({
-              type: "ADD_ONGOING_TRIP",
-              ongoingTrip: change.doc.data()
-            });
-
-            // Dispatch ADD_PAST_TRIP here!
             const today = new Date();
+            // Dispatch ADD_PAST_TRIP here!
             if (
               today.getTime() >
               change.doc
@@ -159,7 +154,14 @@ const mapDispatchToProps = (dispatch: any) => ({
                 .endDate.toDate()
                 .getTime()
             ) {
+              console.log("dispatching ADD_PAST_TRIP");
               dispatch(addPastTrip(change.doc.data()));
+            } else {
+              console.log("dispatching ADD_ONGOING_TRIP");
+              dispatch({
+                type: "ADD_ONGOING_TRIP",
+                ongoingTrip: change.doc.data()
+              });
             }
           }
         }
@@ -411,6 +413,10 @@ class App extends React.Component<myProps, any> {
                         </Grid>
                       </>
                     )}
+
+                    <div className="iconImg-container">
+                      <img src={iconImg} className="iconImg"></img>
+                    </div>
                   </TabPanel>
 
                   {/* Ongoing Trips */}
@@ -509,6 +515,10 @@ class App extends React.Component<myProps, any> {
                         )}
                       </>
                     )}
+
+                    <div className="iconImg-container">
+                      <img src={iconImg} className="iconImg"></img>
+                    </div>
                   </TabPanel>
 
                   {/* Search Trip */}
@@ -549,11 +559,19 @@ class App extends React.Component<myProps, any> {
                         )}
                       </>
                     )}
+
+                    <div className="iconImg-container">
+                      <img src={iconImg} className="iconImg"></img>
+                    </div>
                   </TabPanel>
 
                   {/* Build Trip */}
                   <TabPanel value={this.props.pageTabIndex} index={4}>
                     {this.props.userId === "" ? <Login /> : <BuildTrip />}
+
+                    <div className="iconImg-container">
+                      <img src={iconImg} className="iconImg"></img>
+                    </div>
                   </TabPanel>
 
                   {/* Reviews */}
@@ -566,6 +584,10 @@ class App extends React.Component<myProps, any> {
                         <PastTripInfo />
                       </>
                     )}
+
+                    <div className="iconImg-container">
+                      <img src={iconImg} className="iconImg"></img>
+                    </div>
                   </TabPanel>
 
                   {/* About */}
@@ -577,6 +599,10 @@ class App extends React.Component<myProps, any> {
                         alt="backImg"
                       />
                       <About />
+
+                      <div className="iconImg-container">
+                        <img src={iconImg} className="iconImg"></img>
+                      </div>
                     </div>
                   )}
                 </AppBar>
@@ -587,6 +613,7 @@ class App extends React.Component<myProps, any> {
                     <Login />
                   </div>
                 )}
+
                 <Link to="/privacy">
                   <Button variant="outlined" size="small" id="privacy-policy">
                     Privacy Policy

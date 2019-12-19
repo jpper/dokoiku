@@ -32,5 +32,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 3px;
+  line-height: 50%;
+}
+
+.topPadding {
+  padding-top: 8px;
+}
+
+.ul-test {
+  margin-top: 0;
+  margin-bottom: 0;
 }

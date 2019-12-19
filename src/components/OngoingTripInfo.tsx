@@ -25,7 +25,7 @@ import {
 } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
-//import LocationOnIcon from "@material-ui/icons/LocationOn";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PersonIcon from "@material-ui/icons/Person";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
@@ -51,6 +51,7 @@ type myProps = {
   onChangeDisplayProfile: any;
   displayProfile: string;
   userCurrencyCode: string;
+  clearToggle: any;
 };
 
 type myState = {
@@ -133,206 +134,230 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
       return (
         <div className="TripInfo">
           {/* Title */}
-          <Typography variant="h3" className="typoH3">
-            <b>
-              {this.props.ongoingTrips[this.props.currentOngoingTripIndex].name}
-            </b>
-          </Typography>
-          {/* Country */}
-          <Typography className="iconWrapper">
-            <strong>Country: </strong>
-            <img
-              src={`https://www.countryflags.io/${this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].countryCode.toLowerCase()}/shiny/24.png`}
-              alt="flag"
-            ></img>
-            {
-              countriesToCurrencies.find(
-                (item: any) =>
+          <div style={{ maxHeight: 535, overflow: "scroll" }}>
+            <Typography variant="h4" className="noWrapper">
+              <b>
+                {
                   this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .countryCode === item.countryCode
-              ).country
-            }
-          </Typography>
-          {/* Starting Location */}
-          <Typography className="iconWrapper">
-            <DoubleArrowIcon />
-            <strong>Starting Location:</strong>
-
-            {` ${
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .startLocation
-            }`}
-          </Typography>
-          {/* Start Date */}
-          <Typography className="iconWrapper">
-            <DateRangeIcon />
-            <strong>Start Date: </strong>
-            {moment(
-              this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].startDate.toDate()
-            ).format("MMMM Do YYYY")}
-          </Typography>
-
-          {/* End Date */}
-          <Typography className="iconWrapper">
-            <DateRangeIcon />
-            <strong>End Date: </strong>
-            {moment(
-              this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].endDate.toDate()
-            ).format("MMMM Do YYYY")}
-          </Typography>
-
-          {/* WayPoints */}
-          <div>
-            <Typography className="noWrapper">
-              <strong className="boldText">Destinations:</strong>
+                    .name
+                }
+              </b>
             </Typography>
-            {this.props.ongoingTrips[
-              this.props.currentOngoingTripIndex
-            ].waypoints.map((l: any, i: number) => {
-              return (
-                <div>
-                  <Typography className="noWrapper">{l.location}</Typography>
-                </div>
-                // <ListItem key={i} className="tripLocation">
-                //   <ListItemText primary={l.location} />
-                // </ListItem>
-              );
-            })}
-          </div>
-
-          {/* Budget */}
-          <Tooltip
-            title={
-              this.props.userCurrencyCode !== "None"
-                ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
-                  " " +
-                  countriesToCurrencies
-                    .concat([
-                      {
-                        country: "None",
-                        countryCode: "None",
-                        currency: "None",
-                        currencyCode: "None"
-                      }
-                    ])
-                    .find(
-                      (item: any) =>
-                        this.props.userCurrencyCode === item.currencyCode
-                    ).currency
-                : ""
-            }
-            placement="top-end"
-          >
+            {/* Country */}
             <Typography className="iconWrapper">
-              <strong>Budget: </strong>
-              {
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .budget
-              }{" "}
+              <strong>Country: </strong>
+              <img
+                src={`https://www.countryflags.io/${this.props.ongoingTrips[
+                  this.props.currentOngoingTripIndex
+                ].countryCode.toLowerCase()}/shiny/24.png`}
+                alt="flag"
+              ></img>
               {
                 countriesToCurrencies.find(
                   (item: any) =>
                     this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                      .currencyCode === item.currencyCode
-                ).currency
+                      .countryCode === item.countryCode
+                ).country
               }
             </Typography>
-          </Tooltip>
-          <div className="spacer10"></div>
+            {/* Starting Location */}
+            <Typography className="noWrapper">
+              <DoubleArrowIcon />
+              <strong>Starting Location: </strong>
 
-          {/* Notes & Messages */}
-          <Button
-            variant="outlined"
-            color="primary"
-            size="medium"
-            fullWidth
-            onClick={async () => {
-              await this.props.onChangeDisplayProfile(undefined);
-              this.props.toggleNotes();
-            }}
-          >
-            <DescriptionIcon className="iconSpacer" />
-            Notes
-          </Button>
-          <br></br>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="medium"
-            fullWidth
-            onClick={async () => {
-              await this.props.onChangeDisplayProfile(undefined);
-              this.props.toggleMessages();
-            }}
-          >
-            <ChatIcon className="iconSpacer" />
-            Messages
-          </Button>
+              {` ${
+                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .startLocation
+              }`}
+            </Typography>
+            {/* Start Date */}
+            <Typography className="noWrapper">
+              <DateRangeIcon />
+              <strong>Start Date: </strong>
+              {moment(
+                this.props.ongoingTrips[
+                  this.props.currentOngoingTripIndex
+                ].startDate.toDate()
+              ).format("MMMM Do YYYY")}
+            </Typography>
 
-          <div className="spacer10"></div>
+            {/* End Date */}
+            <Typography className="noWrapper">
+              <DateRangeIcon />
+              <strong>End Date: </strong>
+              {moment(
+                this.props.ongoingTrips[
+                  this.props.currentOngoingTripIndex
+                ].endDate.toDate()
+              ).format("MMMM Do YYYY")}
+            </Typography>
 
-          <div>
-            <Typography variant="h5">Owned by:</Typography>
-            <div className="owner">
-              <Button
-                variant="outlined"
-                color="primary"
-                size="medium"
-                fullWidth
-              >
-                <PersonIcon />
+            {/* WayPoints */}
+            <div>
+              <Typography className="noWrapper">
+                <LocationOnIcon />
+                <strong className="boldText topPadding">Destinations:</strong>
+              </Typography>
+
+              <ul className="ul-test">
+                {this.props.ongoingTrips[
+                  this.props.currentOngoingTripIndex
+                ].waypoints.map((l: any, i: number) => {
+                  return (
+                    <>
+                      <Typography className="noWrapper">
+                        <li>{l.location}</li>
+                      </Typography>
+                    </>
+                    // <ListItem key={i} className="tripLocation">
+                    //   <ListItemText primary={l.location} />
+                    // </ListItem>
+                  );
+                })}
+              </ul>
+            </div>
+
+            {/* Budget */}
+            <Tooltip
+              title={
+                this.props.userCurrencyCode !== "None"
+                  ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
+                    " " +
+                    countriesToCurrencies
+                      .concat([
+                        {
+                          country: "None",
+                          countryCode: "None",
+                          currency: "None",
+                          currencyCode: "None"
+                        }
+                      ])
+                      .find(
+                        (item: any) =>
+                          this.props.userCurrencyCode === item.currencyCode
+                      ).currency
+                  : ""
+              }
+              placement="top-end"
+            >
+              <Typography className="noWrapper topPadding">
+                <strong>Budget: </strong>
                 {
-                  this.props.users.find(
-                    (user: any) =>
-                      user.id ===
+                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                    .budget
+                }{" "}
+                {
+                  countriesToCurrencies.find(
+                    (item: any) =>
+                      this.props.ongoingTrips[
+                        this.props.currentOngoingTripIndex
+                      ].currencyCode === item.currencyCode
+                  ).currency
+                }
+              </Typography>
+            </Tooltip>
+            <div className="spacer10"></div>
+
+            {/* Notes & Messages */}
+            <Button
+              variant="outlined"
+              color="primary"
+              size="medium"
+              fullWidth
+              onClick={async () => {
+                await this.props.onChangeDisplayProfile(undefined);
+                this.props.toggleNotes();
+              }}
+            >
+              <DescriptionIcon className="iconSpacer" />
+              Notes
+            </Button>
+            <br></br>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="medium"
+              fullWidth
+              onClick={async () => {
+                await this.props.onChangeDisplayProfile(undefined);
+                this.props.toggleMessages();
+              }}
+            >
+              <ChatIcon className="iconSpacer" />
+              Messages
+            </Button>
+
+            <div className="spacer10"></div>
+
+            <div>
+              <Typography className="noWrapper topPadding">
+                <strong>Owned by:</strong>
+              </Typography>
+              <div className="owner">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="medium"
+                  fullWidth
+                  onClick={async () => {
+                    await this.props.clearToggle();
+                    await this.props.onChangeDisplayProfile(undefined);
+                    this.props.onChangeDisplayProfile(
                       this.props.ongoingTrips[
                         this.props.currentOngoingTripIndex
                       ].ownerId
-                  ).nickname
-                }
-              </Button>
+                    );
+                  }}
+                >
+                  <PersonIcon />
+                  {
+                    this.props.users.find(
+                      (user: any) =>
+                        user.id ===
+                        this.props.ongoingTrips[
+                          this.props.currentOngoingTripIndex
+                        ].ownerId
+                    ).nickname
+                  }
+                </Button>
+              </div>
             </div>
-          </div>
-          <br />
+            <br />
 
-          {/* Members */}
-          <div>
-            <Typography variant="h5">
-              <strong>Members:</strong>
-            </Typography>
+            {/* Members */}
+            <div>
+              <Typography className="noWrapper topPadding">
+                <strong>Members:</strong>
+              </Typography>
 
-            <div className="memberContainer">
-              {this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].memberIds.map((m: any, i: number) => {
-                const nickname = this.props.users.find(
-                  (u: { id: any }) => u.id === m
-                ).nickname;
-                return (
-                  <div>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      size="medium"
-                      fullWidth
-                      key={i}
-                      onClick={async () => {
-                        await this.props.onChangeDisplayProfile(undefined);
-                        this.props.onChangeDisplayProfile(m);
-                      }}
-                    >
-                      <PersonIcon className="iconSpacer" />
-                      {nickname}
-                    </Button>
-                  </div>
-                );
-              })}
+              <div className="memberContainer">
+                {this.props.ongoingTrips[
+                  this.props.currentOngoingTripIndex
+                ].memberIds.map((m: any, i: number) => {
+                  const nickname = this.props.users.find(
+                    (u: { id: any }) => u.id === m
+                  ).nickname;
+                  return (
+                    <div>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                        key={i}
+                        onClick={async () => {
+                          await this.props.clearToggle();
+                          await this.props.onChangeDisplayProfile(undefined);
+                          this.props.onChangeDisplayProfile(m);
+                        }}
+                      >
+                        <PersonIcon className="iconSpacer" />
+                        {nickname}
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
           <br />
@@ -414,6 +439,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </Grid>
 
             {/* Previous & Next Button */}
+
             <Grid container>
               <Grid item xs={6}>
                 <Button
@@ -516,12 +542,20 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "RESET_TOGGLE_MESSAGES"
       });
       dispatch({
+        type: "CHANGE_DISPLAY_PROFILE",
+        displayProfile: undefined
+      });
+      dispatch({
         type: "PREVIOUS_ONGOING_TRIP"
       });
     },
     onNextTrip: () => {
       dispatch({
         type: "RESET_TOGGLE_MESSAGES"
+      });
+      dispatch({
+        type: "CHANGE_DISPLAY_PROFILE",
+        displayProfile: undefined
       });
       dispatch({
         type: "NEXT_ONGOING_TRIP"
@@ -535,6 +569,11 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "TOGGLE_MESSAGES"
       }),
+    clearToggle: () => {
+      dispatch({
+        type: "RESET_TOGGLE_MESSAGES"
+      });
+    },
     onShowEdit: () => dispatch({ type: "SHOW_EDIT" }),
     onChangeDisplayProfile: (profile: string) =>
       dispatch({

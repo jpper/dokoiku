@@ -101,11 +101,6 @@ class Profile extends React.Component<
             justify="center"
           >
             <Grid item>
-              <Typography variant="h6" id="typo-rating">
-                Rating
-              </Typography>
-            </Grid>
-            <Grid item>
               <Rating
                 value={this.state.rating ? this.state.rating : 0}
                 readOnly
@@ -117,8 +112,16 @@ class Profile extends React.Component<
 
           <div className="spacer10"></div>
 
+          <div id="about-others">
+            <h3>{this.state.user.aboutMe}</h3>
+          </div>
+
           <List id="horizontal-list">
-            <ListItem button className="listItem" id="listItem-facebook">
+            <ListItem
+              button
+              className="listItem itemTextCentering"
+              id="listItem-facebook"
+            >
               {/* FACEBOOK */}
               {this.state.user.facebook ? (
                 <Link href={this.state.user.facebook} target="_blank">
@@ -151,7 +154,11 @@ class Profile extends React.Component<
               )}
             </ListItem>
 
-            <ListItem button className="listItem" id="listItem-twitter">
+            <ListItem
+              button
+              className="listItem itemTextCentering"
+              id="listItem-twitter"
+            >
               {/* TWITTER */}
               {this.state.user.twitter ? (
                 <Link href={this.state.user.twitter} target="_blank">
@@ -185,7 +192,11 @@ class Profile extends React.Component<
             </ListItem>
 
             {/* INSTA */}
-            <ListItem button id="listItem-instagram">
+            <ListItem
+              button
+              id="listItem-instagram"
+              className="itemTextCentering"
+            >
               {this.state.user.instagram ? (
                 <Link href={this.state.user.instagram} target="_blank">
                   <ListItemText

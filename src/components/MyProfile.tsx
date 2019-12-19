@@ -17,7 +17,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  DialogActions
+  DialogActions,
+  TextField
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
@@ -42,6 +43,7 @@ class MyProfile extends React.Component<
     rating: number;
     userCurrencyCode: string;
     toggleDialog: boolean;
+    aboutMeText: string;
   }
 > {
   constructor(props: myProps) {
@@ -51,7 +53,8 @@ class MyProfile extends React.Component<
       showReview: false,
       rating: undefined,
       userCurrencyCode: this.props.userCurrencyCode,
-      toggleDialog: false
+      toggleDialog: false,
+      aboutMeText: undefined
     };
   }
 
@@ -127,6 +130,10 @@ class MyProfile extends React.Component<
                 src={this.state.user.photoUrl}
                 id="profile-picture"
                 alt={this.state.user.nickname}
+                onClick={() => {
+                  const modal = document.getElementById("change-photo");
+                  modal.style.display = "block";
+                }}
               />
               <div className="spacer10"></div>
 
@@ -154,7 +161,7 @@ class MyProfile extends React.Component<
 
               <List id="horizontal-list">
                 <ListItem
-                  className="listItem"
+                  className="listItem itemTextCentering"
                   id="listItem-facebook"
                   button
                   onClick={() => {
@@ -187,7 +194,7 @@ class MyProfile extends React.Component<
 
                 <ListItem
                   button
-                  className="listItem"
+                  className="listItem itemTextCentering"
                   id="listItem-twitter"
                   onClick={() => {
                     const modal = document.getElementById("add-twitter");
@@ -219,6 +226,7 @@ class MyProfile extends React.Component<
 
                 <ListItem
                   id="listItem-instagram"
+                  className="itemTextCentering"
                   button
                   onClick={() => {
                     const modal = document.getElementById("add-instagram");
@@ -250,6 +258,39 @@ class MyProfile extends React.Component<
               </List>
 
               {/* MODALS SECTION */}
+              {/* FACEBOOK */}
+              <div className="modal" id="change-photo">
+                <div className="modal-content">
+                  <p>Change your profile picture</p>
+                  <input id="photo-url" placeholder="New photo URL" />
+                  <button
+                    onClick={() => {
+                      const url = (document.getElementById(
+                        "photo-url"
+                      ) as HTMLInputElement).value;
+                      myFirestore
+                        .collection("users")
+                        .doc(this.props.userId)
+                        .update({ photoUrl: url });
+                      const modal = document.getElementById("change-photo");
+                      modal.style.display = "none";
+                    }}
+                  >
+                    Submit
+                  </button>
+                  <br></br>
+                  <br></br>
+                  <button
+                    className="close"
+                    onClick={() => {
+                      const modal = document.getElementById("change-photo");
+                      modal.style.display = "none";
+                    }}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
               {/* FACEBOOK */}
               <div className="modal" id="add-facebook">
                 <div className="modal-content">
@@ -360,6 +401,35 @@ class MyProfile extends React.Component<
               </div>
 
               <div className="spacer10"></div>
+
+              <div id="about-me-container">
+                <TextField
+                  id="about-me"
+                  variant="outlined"
+                  multiline
+                  label="About Me"
+                  rows="3"
+                  defaultValue={this.state.user.aboutMe}
+                  onChange={(e: any) => {
+                    this.setState({ aboutMeText: e.currentTarget.value });
+                  }}
+                />
+                <br />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    myFirestore
+                      .collection("users")
+                      .doc(this.props.userId)
+                      .update({ aboutMe: this.state.aboutMeText });
+                  }}
+                >
+                  Update
+                </Button>
+              </div>
+
+              <br />
 
               {/* <Typography variant="h6" align="center">
                 {"The currency I use: " +

@@ -89,161 +89,172 @@ class SearchTripInfo extends React.Component<myProps, myState> {
       return (
         <div className="TripInfo">
           {/* Title */}
-          <Typography variant="h3" className="typoH3">
-            <b>
-              {this.props.searchTrips[this.props.currentSearchTripIndex].name}
-            </b>
-          </Typography>
+          <div style={{ maxHeight: 480, overflow: "scroll" }}>
+            <Typography variant="h4" className="noWrapper">
+              <b>
+                {this.props.searchTrips[this.props.currentSearchTripIndex].name}
+              </b>
+            </Typography>
 
-          {/* Country */}
-          <Typography className="iconWrapper">
-            Country:{" "}
-            <img
-              src={`https://www.countryflags.io/${this.props.searchTrips[
-                this.props.currentSearchTripIndex
-              ].countryCode.toLowerCase()}/shiny/24.png`}
-              alt="flag"
-            ></img>
-            {
-              countriesToCurrencies.find(
-                (item: any) =>
-                  this.props.searchTrips[this.props.currentSearchTripIndex]
-                    .countryCode === item.countryCode
-              ).country
-            }
-          </Typography>
-
-          {/* Starting Location */}
-          <Typography className="iconWrapper">
-            <DoubleArrowIcon />
-            Starting Location:
-            {` ${
-              this.props.searchTrips[this.props.currentSearchTripIndex]
-                .startLocation
-            }`}
-          </Typography>
-
-          {/* Start Date */}
-          <Typography className="iconWrapper">
-            <DateRangeIcon />
-            Start Date:{" "}
-            {moment(
-              this.props.searchTrips[
-                this.props.currentSearchTripIndex
-              ].startDate.toDate()
-            ).format("MMMM Do YYYY")}
-          </Typography>
-
-          {/* End Date */}
-          <Typography className="iconWrapper">
-            <DateRangeIcon />
-            End Date:{" "}
-            {moment(
-              this.props.searchTrips[
-                this.props.currentSearchTripIndex
-              ].endDate.toDate()
-            ).format("MMMM Do YYYY")}
-          </Typography>
-
-          {/* WayPoints */}
-          <div>
-            <List>
-              <Typography variant="h5">Waypoints:</Typography>
-              {this.props.searchTrips[
-                this.props.currentSearchTripIndex
-              ].waypoints.map((l: any, i: number) => {
-                return (
-                  <ListItem key={i} className="tripLocation">
-                    <ListItemIcon>
-                      <LocationOnIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={l.location} />
-                  </ListItem>
-                );
-              })}
-            </List>
-          </div>
-
-          {/* Budget */}
-          <Tooltip
-            title={
-              this.props.userCurrencyCode !== "None"
-                ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
-                  " " +
-                  countriesToCurrencies
-                    .concat([
-                      {
-                        country: "None",
-                        countryCode: "None",
-                        currency: "None",
-                        currencyCode: "None"
-                      }
-                    ])
-                    .find(
-                      (item: any) =>
-                        this.props.userCurrencyCode === item.currencyCode
-                    ).currency
-                : ""
-            }
-            placement="top-end"
-          >
+            {/* Country */}
             <Typography className="iconWrapper">
-              Budget:{" "}
-              {this.props.searchTrips[this.props.currentSearchTripIndex].budget}{" "}
+              <strong>Country: </strong>
+              <img
+                src={`https://www.countryflags.io/${this.props.searchTrips[
+                  this.props.currentSearchTripIndex
+                ].countryCode.toLowerCase()}/shiny/24.png`}
+                alt="flag"
+              ></img>
               {
                 countriesToCurrencies.find(
                   (item: any) =>
                     this.props.searchTrips[this.props.currentSearchTripIndex]
-                      .currencyCode === item.currencyCode
-                ).currency
+                      .countryCode === item.countryCode
+                ).country
               }
             </Typography>
-          </Tooltip>
-          <div className="spacer10"></div>
 
-          <div>
-            <Typography variant="h5">Owned by:</Typography>
-            <div>
-              {[
+            {/* Starting Location */}
+            <Typography className="noWrapper">
+              <DoubleArrowIcon />
+              <strong>Starting Location: </strong>
+              {` ${
                 this.props.searchTrips[this.props.currentSearchTripIndex]
-                  .memberIds[0]
-              ].map((m: any, i: number) => {
-                const nickname = this.props.users.find(
-                  (u: { id: any }) => u.id === m
-                ).nickname;
-                return (
-                  <div>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      size="medium"
-                      fullWidth
-                      key={i}
-                      onClick={() => {
-                        this.props.onChangeDisplayProfile(m);
-                      }}
-                    >
-                      <PersonIcon className="iconSpacer" />
-                      {nickname}
-                    </Button>
-                  </div>
-                );
-              })}
+                  .startLocation
+              }`}
+            </Typography>
+
+            {/* Start Date */}
+            <Typography className="noWrapper">
+              <DateRangeIcon />
+              <strong>Start Date: </strong>
+              {moment(
+                this.props.searchTrips[
+                  this.props.currentSearchTripIndex
+                ].startDate.toDate()
+              ).format("MMMM Do YYYY")}
+            </Typography>
+
+            {/* End Date */}
+            <Typography className="noWrapper">
+              <DateRangeIcon />
+              <strong>End Date: </strong>
+              {moment(
+                this.props.searchTrips[
+                  this.props.currentSearchTripIndex
+                ].endDate.toDate()
+              ).format("MMMM Do YYYY")}
+            </Typography>
+
+            {/* WayPoints */}
+            <div>
+              <Typography className="noWrapper">
+                <LocationOnIcon />
+                <strong className="boldText topPadding">Destinations:</strong>
+              </Typography>
+              <ul className="ul-test">
+                {this.props.searchTrips[
+                  this.props.currentSearchTripIndex
+                ].waypoints.map((l: any, i: number) => {
+                  return (
+                    <>
+                      <Typography className="noWrapper">
+                        <li>{l.location}</li>
+                      </Typography>
+                    </>
+                  );
+                })}
+              </ul>
             </div>
-          </div>
-          <br />
-          <div>
-            <Typography variant="h5">Members:</Typography>
-            <div className="memberContainer">
-              {this.props.searchTrips[this.props.currentSearchTripIndex]
-                .memberIds.length === 1
-                ? "There is currently 1 member!"
-                : "There are currently " +
+
+            {/* Budget */}
+            <Tooltip
+              title={
+                this.props.userCurrencyCode !== "None"
+                  ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
+                    " " +
+                    countriesToCurrencies
+                      .concat([
+                        {
+                          country: "None",
+                          countryCode: "None",
+                          currency: "None",
+                          currencyCode: "None"
+                        }
+                      ])
+                      .find(
+                        (item: any) =>
+                          this.props.userCurrencyCode === item.currencyCode
+                      ).currency
+                  : ""
+              }
+              placement="top-end"
+            >
+              <Typography className="noWrapper topPadding">
+                <strong>Budget: </strong>
+                {
                   this.props.searchTrips[this.props.currentSearchTripIndex]
-                    .memberIds.length +
-                  " members!"}
+                    .budget
+                }{" "}
+                {
+                  countriesToCurrencies.find(
+                    (item: any) =>
+                      this.props.searchTrips[this.props.currentSearchTripIndex]
+                        .currencyCode === item.currencyCode
+                  ).currency
+                }
+              </Typography>
+            </Tooltip>
+            <div className="spacer10"></div>
+
+            <div>
+              <Typography className="noWrapper topPadding">
+                <strong>Owned by:</strong>
+              </Typography>
+              <div>
+                {[
+                  this.props.searchTrips[this.props.currentSearchTripIndex]
+                    .memberIds[0]
+                ].map((m: any, i: number) => {
+                  const nickname = this.props.users.find(
+                    (u: { id: any }) => u.id === m
+                  ).nickname;
+                  return (
+                    <div>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                        key={i}
+                        onClick={() => {
+                          this.props.onChangeDisplayProfile(m);
+                        }}
+                      >
+                        <PersonIcon className="iconSpacer" />
+                        {nickname}
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
             <br />
+            <div>
+              <Typography className="noWrapper topPadding">
+                <strong>Members:</strong>
+              </Typography>
+              <Typography className="noWrapper">
+                {this.props.searchTrips[this.props.currentSearchTripIndex]
+                  .memberIds.length === 1
+                  ? "1 member"
+                  : "" +
+                    this.props.searchTrips[this.props.currentSearchTripIndex]
+                      .memberIds.length +
+                    " members"}
+              </Typography>
+              <br />
+            </div>
           </div>
           <Button
             onClick={() => {
