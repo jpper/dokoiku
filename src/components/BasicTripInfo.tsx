@@ -10,6 +10,8 @@ import {
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import "../styles/TripInfo.css";
+import "../styles/Modal.css";
 // import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 
@@ -25,13 +27,13 @@ export default class BasicTripInfo extends React.Component<any, any> {
     return (
       <div className="basicTripInfo">
         {/* Title */}
-        <Typography variant="h3" className="typoH3">
+        <Typography variant="h4" className="noWrapper">
           <b>{this.props.tripTitle}</b>
         </Typography>
 
         {/* Country */}
         <Typography className="iconWrapper">
-          Country:{" "}
+          <strong>Country: </strong>
           <img
             src={`https://www.countryflags.io/${this.props.country.toLowerCase()}/shiny/24.png`}
             alt="flag"
@@ -44,38 +46,40 @@ export default class BasicTripInfo extends React.Component<any, any> {
         </Typography>
 
         {/* Starting Location */}
-        <Typography className="iconWrapper">
+        <Typography className="noWrapper">
           <DoubleArrowIcon />
-          Starting Location: {` ${this.props.location}`}
+          <strong>Starting Location: </strong> {` ${this.props.location}`}
         </Typography>
 
         {/* Start Date */}
-        <Typography className="iconWrapper">
+        <Typography className="noWrapper">
           <DateRangeIcon />
-          Start Date: {this.props.startDate}
+          <strong>Start Date: </strong> {this.props.startDate}
         </Typography>
 
         {/* End Date */}
-        <Typography className="iconWrapper">
+        <Typography className="noWrapper">
           <DateRangeIcon />
-          End Date: {this.props.endDate}
+          <strong>End Date: </strong> {this.props.endDate}
         </Typography>
 
         {/* WayPoints */}
         <div>
-          <List>
-            <Typography variant="h5">Waypoints:</Typography>
+          <Typography className="noWrapper">
+            <LocationOnIcon />
+            <strong className="boldText topPadding">Destinations:</strong>
+          </Typography>
+          <ul className="ul-test">
             {this.props.wayPoints.waypoints.map((l: any, i: number) => {
               return (
-                <ListItem key={i} className="tripLocation">
-                  <ListItemIcon>
-                    <LocationOnIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={l.location} />
-                </ListItem>
+                <>
+                  <Typography className="noWrapper">
+                    <li>{l.location}</li>
+                  </Typography>
+                </>
               );
             })}
-          </List>
+          </ul>
         </div>
 
         {/* Budget */}
