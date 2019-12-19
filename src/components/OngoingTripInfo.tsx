@@ -13,6 +13,7 @@ import moment from "moment";
 import { myFirestore } from "../config/firebase";
 import axios from "axios";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
+import InfoIcon from "@material-ui/icons/Info";
 // Material UI
 import "../styles/Modal.css";
 import {
@@ -241,6 +242,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               placement="top-end"
             >
               <Typography className="noWrapper topPadding">
+                <InfoIcon />
                 <strong>Budget: </strong>
                 {
                   this.props.ongoingTrips[this.props.currentOngoingTripIndex]
