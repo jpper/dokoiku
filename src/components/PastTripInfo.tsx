@@ -34,7 +34,7 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/TripInfo.css";
-// import "../styles/PastTripInfo.css";
+import "../styles/PastTripInfo.css";
 import Reviews from "./Reviews";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 
