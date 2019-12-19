@@ -572,7 +572,26 @@ class App extends React.Component<myProps, any> {
 
                   {/* Build Trip */}
                   <TabPanel value={this.props.pageTabIndex} index={4}>
-                    {this.props.userId === "" ? <Login /> : <BuildTrip />}
+                    {this.props.userId === "" ? (
+                      <Login />
+                    ) : (
+                      <>
+                        <Grid container>
+                          <Grid item sm={4}></Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={6}
+                            alignContent="center"
+                            alignItems="center"
+                            justify="center"
+                          >
+                            <BuildTrip />
+                          </Grid>
+                          <Grid item sm={2}></Grid>
+                        </Grid>
+                      </>
+                    )}
 
                     <div className="iconImg-container">
                       <img src={iconImg} className="iconImg"></img>
