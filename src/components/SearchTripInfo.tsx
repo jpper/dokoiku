@@ -356,7 +356,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
         </div>
       );
     } else {
-      return "Loading...";
+      return "Loading... Please try again shortly.";
     }
   }
 }

@@ -126,7 +126,7 @@ export default class Reviews extends Component<any, any> {
       return (
         <div>
           <CircularProgress />
-          <p>Loading...</p>
+          <p>Loading... Please try again shortly.</p>
         </div>
       );
     }
