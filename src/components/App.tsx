@@ -464,7 +464,7 @@ class App extends React.Component<myProps, any> {
                               </Container>
                             </Grid>
                             {/* {if statement and changing props value here} */}
-                            <Grid item xs={12} xl={8} sm={8} md={8} lg={9}>
+                            <Grid item xs={12} sm={8} md={8} lg={8} xl={9}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
