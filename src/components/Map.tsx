@@ -107,7 +107,13 @@ class Map extends React.Component<MapProps, MapState> {
                       position !==
                       this.state.positions[this.state.positions.length - 1]
                     ) {
-                      return <Marker key={index} position={position} />;
+                      const icon = {
+                        url: `https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red${index}.png`,
+                        scaledSize: new google.maps.Size(25, 40)
+                      };
+                      return (
+                        <Marker key={index} position={position} icon={icon} />
+                      );
                     }
                     return undefined; //put in this line to solve a linter error; delete if it causes trouble
                   })
