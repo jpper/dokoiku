@@ -398,7 +398,11 @@ class App extends React.Component<myProps, any> {
                     </div>
 
                     {/* App Title */}
-                    <img src={iconImgWhite} className="iconImgSmall"></img>
+                    <img
+                      src={iconImgWhite}
+                      className="iconImgSmall"
+                      alt="Dokoiku logo"
+                    ></img>
                   </Tabs>
 
                   {/* My Profile */}
@@ -420,7 +424,11 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
@@ -522,7 +530,11 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
@@ -566,7 +578,11 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
@@ -594,7 +610,11 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
@@ -610,7 +630,11 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
