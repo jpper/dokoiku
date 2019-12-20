@@ -7,14 +7,7 @@ import { myFirestore } from "../config/firebase";
 
 // Material UI and styling
 import "../styles/Modal.css";
-import {
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Typography
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";

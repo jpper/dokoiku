@@ -1,3 +1,7 @@
 .MuiRating-sizeSmall {
   font-size: 1.8rem !important;
 }
+
+.reviews {
+  background-color: white;
+}

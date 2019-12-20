@@ -13,10 +13,6 @@ import axios from "axios";
 import {
   Grid,
   Typography,
-  List,
-  // ListItem,
-  // ListItemIcon,
-  // ListItemText,
   Modal,
   Fade,
   Backdrop,
