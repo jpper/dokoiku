@@ -8,6 +8,7 @@ import Map from "./Map";
 import Notes from "./Notes";
 import ChatBoard from "./ChatBoard";
 import axios from "axios";
+import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI
 import {
@@ -330,6 +331,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                         placement="top-end"
                       >
                         <Typography className="noWrapper topPadding">
+                          <InfoIcon />
                           <strong>Budget: </strong>
                           {
                             this.state.pastTrips[
