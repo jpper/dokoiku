@@ -116,7 +116,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(setUserInfo(userName, userId, userPhoto)),
   getTrips: async (userId: string) => {
     //console.log("called");
-    const tripIds: any[] = [];
+    const tripIds: string[] = [];
     myFirestore
       .collection("users")
       .doc(userId)
@@ -139,11 +139,21 @@ const mapDispatchToProps = (dispatch: any) => ({
               console.log("dispatching ADD_PENDING_TRIP");
               dispatch(addPendingTrip(change.doc.data()));
             } else {
-              console.log("dispatching ADD_SEARCH_TRIP");
-              dispatch({
-                type: "ADD_SEARCH_TRIP",
-                searchTrip: change.doc.data()
-              });
+              const today = new Date();
+              // Dispatch ADD_PAST_TRIP here!
+              if (
+                today.getTime() <
+                change.doc
+                  .data()
+                  .startDate.toDate()
+                  .getTime()
+              ) {
+                console.log("dispatching ADD_SEARCH_TRIP");
+                dispatch({
+                  type: "ADD_SEARCH_TRIP",
+                  searchTrip: change.doc.data()
+                });
+              }
             }
           } else {
             const today = new Date();
