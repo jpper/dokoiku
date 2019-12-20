@@ -670,7 +670,7 @@ class App extends React.Component<myProps, any> {
 
                 {/* Privacy policy */}
                 {this.props.pageTabIndex === 0 ? (
-                  <Link to="/privacy" className="footer">
+                  <Link to="/privacy">
                     <Button
                       variant="outlined"
                       size="small"
