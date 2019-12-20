@@ -221,6 +221,9 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                   const nickname = this.props.users.find(
                     (u: { id: any }) => u.id === m
                   ).nickname;
+                  const photoUrl = this.props.users.find(
+                    (u: { id: any }) => u.id === m
+                  ).photoUrl;
                   return (
                     <div>
                       <Button
@@ -233,7 +236,17 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                           this.props.onChangeDisplayProfile(m);
                         }}
                       >
-                        <PersonIcon className="iconSpacer" />
+                        <img
+                          src={photoUrl}
+                          className="profile-picture"
+                          alt={nickname}
+                          onClick={() => {
+                            const modal = document.getElementById(
+                              "change-photo"
+                            );
+                            modal.style.display = "block";
+                          }}
+                        />
                         {nickname}
                       </Button>
                     </div>
