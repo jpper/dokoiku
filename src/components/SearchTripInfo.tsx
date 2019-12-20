@@ -62,8 +62,8 @@ class SearchTripInfo extends React.Component<myProps, myState> {
       `https://currency-exchange.p.rapidapi.com/exchange?q=1&from=${fromCurrency}&to=${toCurrency}`,
       {
         headers: {
-          "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
-          "x-rapidapi-key": "b6e4f9fc03msh80db2bc55980af4p181a67jsnb4b3c557714d"
+          "x-rapidapi-host": process.env.REACT_APP_X_RAPIDAPI_HOST,
+          "x-rapidapi-key": process.env.REACT_APP_X_RAPIDAPI_KEY
         }
       }
     );
