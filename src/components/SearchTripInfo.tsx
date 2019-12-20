@@ -292,7 +292,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                   size="small"
                   fullWidth
                   onClick={() => {
-                    this.props.onPreviousTrip();
+                    this.props.this.props.onPreviousTrip();
                     if (this.props.currentSearchTripIndex - 1 >= 0) {
                       this.exchangeCurrency(
                         this.props.searchTrips[
