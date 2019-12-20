@@ -8,6 +8,7 @@ import Map from "./Map";
 import Notes from "./Notes";
 import ChatBoard from "./ChatBoard";
 import axios from "axios";
+import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI
 import {
@@ -25,10 +26,12 @@ import {
   Divider
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
-import PersonIcon from "@material-ui/icons/Person";
+import MessageIcon from "@material-ui/icons/Message";
+import RateReviewIcon from "@material-ui/icons/RateReview";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import DescriptionIcon from "@material-ui/icons/Description";
+import MapIcon from "@material-ui/icons/Map";
 import "../styles/TripInfo.css";
 import "../styles/PastTripInfo.css";
 import Reviews from "./Reviews";
@@ -330,6 +333,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                         placement="top-end"
                       >
                         <Typography className="noWrapper topPadding">
+                          <InfoIcon />
                           <strong>Budget: </strong>
                           {
                             this.state.pastTrips[
@@ -370,7 +374,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                           size="medium"
                           fullWidth
                         >
-                          <DescriptionIcon className="iconSpacer" />
+                          <MapIcon className="iconSpacer" />
                           Map
                         </Button>
                       )}
@@ -385,7 +389,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                           fullWidth
                           onClick={this.onReviewButton}
                         >
-                          <DescriptionIcon className="iconSpacer" />
+                          <RateReviewIcon className="iconSpacer" />
                           Reviews for me
                         </Button>
                       ) : (
@@ -395,7 +399,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                           size="medium"
                           fullWidth
                         >
-                          <DescriptionIcon className="iconSpacer" />
+                          <RateReviewIcon className="iconSpacer" />
                           Reviews for me
                         </Button>
                       )}
@@ -435,7 +439,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                           fullWidth
                           onClick={this.onMessagesButton}
                         >
-                          <DescriptionIcon className="iconSpacer" />
+                          <MessageIcon className="iconSpacer" />
                           Messages
                         </Button>
                       ) : (
@@ -445,7 +449,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                           size="medium"
                           fullWidth
                         >
-                          <DescriptionIcon className="iconSpacer" />
+                          <MessageIcon className="iconSpacer" />
                           Messages
                         </Button>
                       )}
@@ -465,6 +469,9 @@ class PastTripInfo extends React.Component<any, myStates> {
                           const nickname = this.props.users.find(
                             (u: { id: any }) => u.id === member
                           ).nickname;
+                          const photoUrl = this.props.users.find(
+                            (u: { id: any }) => u.id === member
+                          ).photoUrl;
                           // skips own data here
                           if (member === this.props.userId) return;
 
@@ -487,7 +494,17 @@ class PastTripInfo extends React.Component<any, myStates> {
                                 key={i}
                                 onClick={() => this.onClickUser(i, member)}
                               >
-                                <PersonIcon className="iconSpacer" />
+                                <img
+                                  src={photoUrl}
+                                  className="profile-picture"
+                                  alt={nickname}
+                                  onClick={() => {
+                                    const modal = document.getElementById(
+                                      "change-photo"
+                                    );
+                                    modal.style.display = "block";
+                                  }}
+                                />
                                 {nickname}
                               </Button>
                               <Modal

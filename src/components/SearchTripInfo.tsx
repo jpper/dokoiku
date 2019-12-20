@@ -4,6 +4,7 @@ import { Button, Tooltip } from "@material-ui/core";
 import moment from "moment";
 // import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
+import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI and styling
 import "../styles/Modal.css";
@@ -191,6 +192,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
               placement="top-end"
             >
               <Typography className="noWrapper topPadding">
+                <InfoIcon />
                 <strong>Budget: </strong>
                 {
                   this.props.searchTrips[this.props.currentSearchTripIndex]
@@ -219,6 +221,9 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                   const nickname = this.props.users.find(
                     (u: { id: any }) => u.id === m
                   ).nickname;
+                  const photoUrl = this.props.users.find(
+                    (u: { id: any }) => u.id === m
+                  ).photoUrl;
                   return (
                     <div>
                       <Button
@@ -231,7 +236,17 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                           this.props.onChangeDisplayProfile(m);
                         }}
                       >
-                        <PersonIcon className="iconSpacer" />
+                        <img
+                          src={photoUrl}
+                          className="profile-picture"
+                          alt={nickname}
+                          onClick={() => {
+                            const modal = document.getElementById(
+                              "change-photo"
+                            );
+                            modal.style.display = "block";
+                          }}
+                        />
                         {nickname}
                       </Button>
                     </div>

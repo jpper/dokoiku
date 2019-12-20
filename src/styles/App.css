@@ -36,13 +36,18 @@
   width: 100px;
 }
 
+.MuiPaper-root.MuiPaper-elevation1.MuiCard-root.tripInfo.MuiPaper-rounded {
+  padding: 10px;
+  border-radius: 15px;
+}
+
 .TripInfo {
-  border-style: solid;
-  border-color: rgb(180, 178, 178);
-  border-radius: 10px;
-  border-width: 1px;
-  margin-left: 3px;
-  margin-right: 3px;
+  /* border-radius: 10px;
+  border-width: 10px;
+  /* margin-left: 3px;
+  margin-right: 3px; */
+  padding: 10px;
+  border-radius: 15px;
 }
 
 .waypointsContainer {
@@ -149,4 +154,9 @@
 
 .PrivateTabIndicator-colorSecondary-74 {
   background-color: #ffeb3b !important;
+}
+
+.MuiPaper-root.MuiPaper-elevation1.MuiCard-root.MuiPaper-rounded {
+  padding: 10px;
+  border-radius: 15px;
 }
