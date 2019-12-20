@@ -8,15 +8,12 @@ import Map from "./Map";
 import Notes from "./Notes";
 import ChatBoard from "./ChatBoard";
 import axios from "axios";
+import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI
 import {
   Grid,
   Typography,
-  List,
-  // ListItem,
-  // ListItemIcon,
-  // ListItemText,
   Modal,
   Fade,
   Backdrop,
@@ -247,8 +244,8 @@ class PastTripInfo extends React.Component<any, myStates> {
       `https://currency-exchange.p.rapidapi.com/exchange?q=1&from=${fromCurrency}&to=${toCurrency}`,
       {
         headers: {
-          "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
-          "x-rapidapi-key": "b6e4f9fc03msh80db2bc55980af4p181a67jsnb4b3c557714d"
+          "x-rapidapi-host": process.env.REACT_APP_X_RAPIDAPI_HOST,
+          "x-rapidapi-key": process.env.REACT_APP_X_RAPIDAPI_KEY
         }
       }
     );
@@ -277,7 +274,7 @@ class PastTripInfo extends React.Component<any, myStates> {
         ) : (
           <Grid container>
             {/* Trip details */}
-            <Grid item xs={3}>
+            <Grid item xs={12} sm={4}>
               <Container>
                 <Card>
                   <div style={{ maxHeight: 520, overflow: "scroll" }}>
@@ -336,6 +333,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                         placement="top-end"
                       >
                         <Typography className="noWrapper topPadding">
+                          <InfoIcon />
                           <strong>Budget: </strong>
                           {
                             this.state.pastTrips[
@@ -649,7 +647,7 @@ class PastTripInfo extends React.Component<any, myStates> {
             </Grid>
 
             {/* Map, Review Result */}
-            <Grid item xs={9}>
+            <Grid item xs={12} sm={8}>
               {this.state.pageStatus === PageStatus.Map && (
                 <Map
                   trips={this.state.pastTrips}
@@ -657,7 +655,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                 />
               )}
               {this.state.pageStatus === PageStatus.Reviews && (
-                <>
+                <div className="review-container">
                   <Typography variant="h5">
                     Reviews for {this.props.userName}
                   </Typography>
@@ -669,7 +667,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                     }
                     userId={this.props.userId}
                   />
-                </>
+                </div>
               )}
               {this.state.pageStatus === PageStatus.Notes && (
                 <Notes

@@ -13,6 +13,7 @@ import moment from "moment";
 import { myFirestore } from "../config/firebase";
 import axios from "axios";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
+import InfoIcon from "@material-ui/icons/Info";
 // Material UI
 import "../styles/Modal.css";
 import {
@@ -121,8 +122,8 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
       `https://currency-exchange.p.rapidapi.com/exchange?q=1&from=${fromCurrency}&to=${toCurrency}`,
       {
         headers: {
-          "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
-          "x-rapidapi-key": "b6e4f9fc03msh80db2bc55980af4p181a67jsnb4b3c557714d"
+          "x-rapidapi-host": process.env.REACT_APP_X_RAPIDAPI_HOST,
+          "x-rapidapi-key": process.env.REACT_APP_X_RAPIDAPI_KEY
         }
       }
     );
@@ -249,6 +250,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               placement="top-end"
             >
               <Typography className="noWrapper topPadding">
+                <InfoIcon />
                 <strong>Budget: </strong>
                 {
                   this.props.ongoingTrips[this.props.currentOngoingTripIndex]

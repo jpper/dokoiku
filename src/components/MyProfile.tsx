@@ -42,7 +42,8 @@ class MyProfile extends React.Component<
     showReview: any;
     rating: number;
     userCurrencyCode: string;
-    toggleDialog: boolean;
+    toggleCurrencyDialog: boolean;
+    toggleBioDialog: boolean;
     aboutMeText: string;
   }
 > {
@@ -53,7 +54,8 @@ class MyProfile extends React.Component<
       showReview: false,
       rating: undefined,
       userCurrencyCode: this.props.userCurrencyCode,
-      toggleDialog: false,
+      toggleCurrencyDialog: false,
+      toggleBioDialog: false,
       aboutMeText: undefined
     };
   }
@@ -99,9 +101,15 @@ class MyProfile extends React.Component<
     });
   };
 
-  handleToggle = () => {
+  handleToggleCurrencyDialog = () => {
     this.setState({
-      toggleDialog: !this.state.toggleDialog
+      toggleCurrencyDialog: !this.state.toggleCurrencyDialog
+    });
+  };
+
+  handleToggleBioDialog = () => {
+    this.setState({
+      toggleBioDialog: !this.state.toggleBioDialog
     });
   };
 
@@ -401,7 +409,7 @@ class MyProfile extends React.Component<
               </div>
 
               <div className="spacer10"></div>
-
+              <br />
               <div id="about-me-container">
                 <TextField
                   id="about-me"
@@ -415,7 +423,9 @@ class MyProfile extends React.Component<
                   }}
                 />
                 <br />
+                <br />
                 <Button
+                  style={{ width: "100px" }}
                   variant="contained"
                   color="primary"
                   onClick={() => {
@@ -423,6 +433,8 @@ class MyProfile extends React.Component<
                       .collection("users")
                       .doc(this.props.userId)
                       .update({ aboutMe: this.state.aboutMeText });
+
+                    this.handleToggleBioDialog();
                   }}
                 >
                   Update
@@ -462,30 +474,32 @@ class MyProfile extends React.Component<
                       ))}
                            
                   </Select>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                      this.props.updateUserCurrencyCode(
-                        this.state.userCurrencyCode,
-                        this.props.userId
-                      );
-                      this.handleToggle();
-                    }}
-                  >
-                    Change
-                  </Button>
                        
                 </FormControl>
+                <br />
+                <Button
+                  style={{ width: "100px" }}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    this.props.updateUserCurrencyCode(
+                      this.state.userCurrencyCode,
+                      this.props.userId
+                    );
+                    this.handleToggleCurrencyDialog();
+                  }}
+                >
+                  Update
+                </Button>
               </div>
               <Dialog
-                open={this.state.toggleDialog}
-                onClose={this.handleToggle}
+                open={this.state.toggleCurrencyDialog}
+                onClose={this.handleToggleCurrencyDialog}
               >
                 <DialogTitle>Notification</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    You have changed your currency to{" "}
+                    You just changed your currency to{" "}
                     {
                       countriesToCurrencies.find(
                         (item: any) =>
@@ -495,7 +509,24 @@ class MyProfile extends React.Component<
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={this.handleToggle}>Close</Button>
+                  <Button onClick={this.handleToggleCurrencyDialog}>
+                    Close
+                  </Button>
+                </DialogActions>
+              </Dialog>
+
+              <Dialog
+                open={this.state.toggleBioDialog}
+                onClose={this.handleToggleBioDialog}
+              >
+                <DialogTitle>Notification</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    You just updated your about me!
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleToggleBioDialog}>Close</Button>
                 </DialogActions>
               </Dialog>
 
