@@ -370,6 +370,7 @@ class App extends React.Component<myProps, any> {
                         )}
                       </IconButton>
                       <Menu
+                        className="userMenu"
                         id="personalMenu"
                         anchorEl={this.state.anchorEl}
                         open={Boolean(this.state.anchorEl)}
@@ -389,9 +390,14 @@ class App extends React.Component<myProps, any> {
                             </p>
                             <Notification />
                             <br />
-                            <PendingTripInfo />
-                            {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
-                            <MenuItem onClick={this.onLogout}>Logout</MenuItem>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              size="small"
+                              onClick={this.onLogout}
+                            >
+                              Logout
+                            </Button>
                           </>
                         )}
                       </Menu>
@@ -424,7 +430,7 @@ class App extends React.Component<myProps, any> {
                     </div>
                   </TabPanel>
 
-                  {/* Ongoing Trips */}
+                  {/* Upcoming Trips */}
                   <TabPanel value={this.props.pageTabIndex} index={2}>
                     {this.props.userId === "" ? (
                       <Login />

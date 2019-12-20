@@ -57,14 +57,22 @@ type myProps = {
 type myState = {
   toggleDialog: boolean;
   userCurrencyBudget: number;
+  pageStatus: PageStatus;
 };
+
+enum PageStatus {
+  Map,
+  Notes,
+  Messages
+}
 
 class OngoingTripInfo extends React.Component<myProps, myState> {
   constructor(props: myProps) {
     super(props);
     this.state = {
       toggleDialog: false,
-      userCurrencyBudget: 0
+      userCurrencyBudget: 0,
+      pageStatus: PageStatus.Map
     };
   }
   async deleteTrip(
@@ -597,6 +605,7 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "NEXT_ONGOING_TRIP"
       });
     },
+
     toggleNotes: () =>
       dispatch({
         type: "TOGGLE_NOTES"
