@@ -1,0 +1,10 @@
+{
+  "name": "gcb-slack-build-status-prod",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/pubsub": "^1.2.0",
+    "@slack/webhook": "^5.0.2"
+  }
+}
