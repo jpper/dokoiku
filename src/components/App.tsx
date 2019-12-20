@@ -456,7 +456,7 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.ongoingTrips.length ? (
                           <Grid container>
-                            <Grid item xs={12} sm={4}>
+                            <Grid item xs={12} xl={12} sm={12} md={5} lg={4}>
                               <Container>
                                 <Card className="tripInfo">
                                   <OngoingTripInfo />
@@ -464,7 +464,7 @@ class App extends React.Component<myProps, any> {
                               </Container>
                             </Grid>
                             {/* {if statement and changing props value here} */}
-                            <Grid item xs={12} sm={8}>
+                            <Grid item xs={12} xl={12} sm={12} md={7} lg={8}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -562,14 +562,14 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.searchTrips.length ? (
                           <Grid container>
-                            <Grid item xs={12} sm={4}>
+                            <Grid item xs={12} xl={12} sm={12} md={5} lg={4}>
                               <Container>
                                 <Card className="tripInfo">
                                   <SearchTripInfo />
                                 </Card>
                               </Container>
                             </Grid>
-                            <Grid item xs={12} sm={8}>
+                            <Grid item xs={12} xl={12} sm={12} md={7} lg={8}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -609,18 +609,20 @@ class App extends React.Component<myProps, any> {
                     ) : (
                       <>
                         <Grid container>
-                          <Grid item sm={4}></Grid>
+                          <Grid item sm={3} md={4}></Grid>
                           <Grid
                             item
                             xs={12}
+                            xl={12}
                             sm={6}
+                            md={4}
                             alignContent="center"
                             alignItems="center"
                             justify="center"
                           >
                             <BuildTrip />
                           </Grid>
-                          <Grid item sm={2}></Grid>
+                          <Grid item sm={3} md={4}></Grid>
                         </Grid>
                       </>
                     )}
