@@ -274,7 +274,7 @@ class PastTripInfo extends React.Component<any, myStates> {
         ) : (
           <Grid container>
             {/* Trip details */}
-            <Grid item xs={12} xl={12} sm={12} md={5} lg={4}>
+            <Grid item xs={12} xl={12} sm={5} md={5} lg={4}>
               <Container>
                 <Card>
                   <div style={{ maxHeight: 520, overflow: "scroll" }}>
@@ -647,7 +647,7 @@ class PastTripInfo extends React.Component<any, myStates> {
             </Grid>
 
             {/* Map, Review Result */}
-            <Grid item xs={12} xl={12} sm={12} md={7} lg={8}>
+            <Grid item xs={12} xl={12} sm={7} md={7} lg={8}>
               {this.state.pageStatus === PageStatus.Map && (
                 <Map
                   trips={this.state.pastTrips}
