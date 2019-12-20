@@ -522,7 +522,7 @@ class MyProfile extends React.Component<
                 <DialogTitle>Notification</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    You just updated your about me!
+                    You just updated your About Me!
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>

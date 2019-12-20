@@ -107,100 +107,98 @@ class Notification extends React.Component<myProps, any> {
     //console.log(this.props.requests);
     return (
       <div>
-        <Card>
-          {this.props.requests.length ? (
-            this.props.requests.map((request: any) => {
-              const user = this.props.users.find(
-                (user: any) => user.id === request.fromId
-              );
-              console.log(user);
-              return (
-                <div>
-                  <CardContent>
-                    <Typography>
-                      You have a request from{" "}
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={event => {
-                          this.handlePopoverToggle();
-                          this.props.onChangeDisplayProfile(user.id);
-                          this.setAnchorEl(event.currentTarget);
-                          console.log(this.state.anchorEl);
-                        }}
-                      >
-                        {user.nickname}{" "}
-                      </Button>
-                      for{" "}
-                      {
-                        this.props.ongoingTrips.find(
-                          (trip: any) => trip.tripId === request.tripId
-                        ).name
-                      }
-                    </Typography>
-                    <div id="profile-popover">
-                      <Popover
-                        style={{
-                          height: "500px",
-                          width: "500px"
-                        }}
-                        anchorEl={this.state.anchorEl}
-                        open={this.state.togglePopover}
-                        onClose={() => {
-                          this.handlePopoverToggle();
-                          this.props.onChangeDisplayProfile(null);
-                        }}
-                        anchorOrigin={{
-                          vertical: "top",
-                          horizontal: "left"
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "right"
-                        }}
-                      >
-                        <Profile />
-                      </Popover>
-                    </div>
-                  </CardContent>
-                  <CardActions>
+        {this.props.requests.length ? (
+          this.props.requests.map((request: any) => {
+            const user = this.props.users.find(
+              (user: any) => user.id === request.fromId
+            );
+            console.log(user);
+            return (
+              <div>
+                <CardContent>
+                  <Typography>
+                    You have a request from{" "}
                     <Button
-                      variant="contained"
-                      color="primary"
+                      variant="outlined"
                       size="small"
-                      onClick={e => {
-                        this.acceptRequest(
-                          this.props.userId,
-                          request.tripId,
-                          request.fromId
-                        );
+                      onClick={event => {
+                        this.handlePopoverToggle();
+                        this.props.onChangeDisplayProfile(user.id);
+                        this.setAnchorEl(event.currentTarget);
+                        console.log(this.state.anchorEl);
                       }}
                     >
-                      Accept
+                      {user.nickname}{" "}
                     </Button>
+                    for{" "}
+                    {
+                      this.props.ongoingTrips.find(
+                        (trip: any) => trip.tripId === request.tripId
+                      ).name
+                    }
+                  </Typography>
+                  <div id="profile-popover">
+                    <Popover
+                      style={{
+                        height: "500px",
+                        width: "500px"
+                      }}
+                      anchorEl={this.state.anchorEl}
+                      open={this.state.togglePopover}
+                      onClose={() => {
+                        this.handlePopoverToggle();
+                        this.props.onChangeDisplayProfile(null);
+                      }}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "left"
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right"
+                      }}
+                    >
+                      <Profile />
+                    </Popover>
+                  </div>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={e => {
+                      this.acceptRequest(
+                        this.props.userId,
+                        request.tripId,
+                        request.fromId
+                      );
+                    }}
+                  >
+                    Accept
+                  </Button>
 
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      size="small"
-                      onClick={e => {
-                        this.rejectRequest(
-                          this.props.userId,
-                          request.tripId,
-                          request.fromId
-                        );
-                      }}
-                    >
-                      Reject
-                    </Button>
-                  </CardActions>
-                </div>
-              );
-            })
-          ) : (
-            <div>You don't have any notifications.</div>
-          )}
-        </Card>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    size="small"
+                    onClick={e => {
+                      this.rejectRequest(
+                        this.props.userId,
+                        request.tripId,
+                        request.fromId
+                      );
+                    }}
+                  >
+                    Reject
+                  </Button>
+                </CardActions>
+              </div>
+            );
+          })
+        ) : (
+          <div>You don't have any notifications.</div>
+        )}
       </div>
     );
   }
