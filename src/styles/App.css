@@ -166,3 +166,13 @@
   padding: 10px;
   border-radius: 15px;
 }
+
+/* .userMenu {
+  padding: 2%;
+  border-radius: 2%;
+} */
+
+.MuiPaper-root.MuiMenu-paper.MuiPaper-elevation8.MuiPopover-paper.MuiPaper-rounded {
+  padding: 20px;
+  border-radius: 4%;
+}
