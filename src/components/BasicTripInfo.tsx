@@ -1,12 +1,6 @@
 import React from "react";
 
-import {
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText
-} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
@@ -33,7 +27,7 @@ export default class BasicTripInfo extends React.Component<any, any> {
 
         {/* Country */}
         <Typography className="iconWrapper">
-          <strong>Country: </strong>
+          <strong>Country:&nbsp; </strong>
           <img
             src={`https://www.countryflags.io/${this.props.country.toLowerCase()}/shiny/24.png`}
             alt="flag"
@@ -48,19 +42,19 @@ export default class BasicTripInfo extends React.Component<any, any> {
         {/* Starting Location */}
         <Typography className="noWrapper">
           <DoubleArrowIcon />
-          <strong>Starting Location: </strong> {` ${this.props.location}`}
+          <strong>Starting Location:&nbsp; </strong> {` ${this.props.location}`}
         </Typography>
 
         {/* Start Date */}
         <Typography className="noWrapper">
           <DateRangeIcon />
-          <strong>Start Date: </strong> {this.props.startDate}
+          <strong>Start Date: &nbsp;</strong> {this.props.startDate}
         </Typography>
 
         {/* End Date */}
         <Typography className="noWrapper">
           <DateRangeIcon />
-          <strong>End Date: </strong> {this.props.endDate}
+          <strong>End Date: &nbsp;</strong> {this.props.endDate}
         </Typography>
 
         {/* WayPoints */}

@@ -8,18 +8,10 @@ import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI and styling
 import "../styles/Modal.css";
-import {
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Typography
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import PersonIcon from "@material-ui/icons/Person";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
@@ -69,8 +61,8 @@ class SearchTripInfo extends React.Component<myProps, myState> {
       `https://currency-exchange.p.rapidapi.com/exchange?q=1&from=${fromCurrency}&to=${toCurrency}`,
       {
         headers: {
-          "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
-          "x-rapidapi-key": "b6e4f9fc03msh80db2bc55980af4p181a67jsnb4b3c557714d"
+          "x-rapidapi-host": process.env.REACT_APP_X_RAPIDAPI_HOST,
+          "x-rapidapi-key": process.env.REACT_APP_X_RAPIDAPI_KEY
         }
       }
     );
@@ -99,7 +91,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
 
             {/* Country */}
             <Typography className="iconWrapper">
-              <strong>Country: </strong>
+              <strong>Country: &nbsp;</strong>
               <img
                 src={`https://www.countryflags.io/${this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -118,7 +110,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* Starting Location */}
             <Typography className="noWrapper">
               <DoubleArrowIcon />
-              <strong>Starting Location: </strong>
+              <strong>Starting Location: &nbsp;</strong>
               {` ${
                 this.props.searchTrips[this.props.currentSearchTripIndex]
                   .startLocation
@@ -128,7 +120,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* Start Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>Start Date: </strong>
+              <strong>Start Date: &nbsp;</strong>
               {moment(
                 this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -139,7 +131,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* End Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>End Date: </strong>
+              <strong>End Date: &nbsp;</strong>
               {moment(
                 this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -193,7 +185,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             >
               <Typography className="noWrapper topPadding">
                 <InfoIcon />
-                <strong>Budget: </strong>
+                <strong>Budget:&nbsp; </strong>
                 {
                   this.props.searchTrips[this.props.currentSearchTripIndex]
                     .budget

@@ -266,7 +266,9 @@ class Profile extends React.Component<
           {this.state.showReview && (
             <>
               <Typography variant="h5">
-                Reviews for {this.state.user.nickname}
+                <div className="reviews-container">
+                  Reviews for {this.state.user.nickname}
+                </div>
               </Typography>
               <Divider />
               <Reviews userId={this.state.user.id} />

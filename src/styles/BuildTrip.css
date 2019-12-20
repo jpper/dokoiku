@@ -1,12 +1,13 @@
-.MuiFormHelperText-root.MuiFormHelperText-contained.Mui-error.MuiFormHelperText-filled {
-  border-width: 0;
+.BuildTrip {
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  /* padding: 10px; */
+  border-radius: 10px;
 }
 
-.BuildTrip {
-  width: 90%;
-  text-align: center;
-  margin-left: 35%;
-  background-color: white;
+.buildTrip-container {
   padding: 10px;
-  border-radius: 10px;
+  padding-right: 30px;
+  padding-left: 30px;
 }

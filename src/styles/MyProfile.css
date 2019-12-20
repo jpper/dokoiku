@@ -115,4 +115,9 @@
 
 .MyProfile {
   background-color: white;
+  border-radius: 10px;
+}
+
+.reviews-container {
+  background-color: white;
 }

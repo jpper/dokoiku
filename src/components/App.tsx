@@ -380,6 +380,7 @@ class App extends React.Component<myProps, any> {
                         )}
                       </IconButton>
                       <Menu
+                        className="userMenu"
                         id="personalMenu"
                         anchorEl={this.state.anchorEl}
                         open={Boolean(this.state.anchorEl)}
@@ -399,16 +400,25 @@ class App extends React.Component<myProps, any> {
                             </p>
                             <Notification />
                             <br />
-                            <PendingTripInfo />
-                            {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
-                            <MenuItem onClick={this.onLogout}>Logout</MenuItem>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              size="small"
+                              onClick={this.onLogout}
+                            >
+                              Logout
+                            </Button>
                           </>
                         )}
                       </Menu>
                     </div>
 
                     {/* App Title */}
-                    <img src={iconImgWhite} className="iconImgSmall"></img>
+                    <img
+                      src={iconImgWhite}
+                      className="iconImgSmall"
+                      alt="Dokoiku logo"
+                    ></img>
                   </Tabs>
 
                   {/* My Profile */}
@@ -430,11 +440,15 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
-                  {/* Ongoing Trips */}
+                  {/* Upcoming Trips */}
                   <TabPanel value={this.props.pageTabIndex} index={2}>
                     {this.props.userId === "" ? (
                       <Login />
@@ -442,7 +456,7 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.ongoingTrips.length ? (
                           <Grid container>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} xl={5} sm={5} md={5} lg={4}>
                               <Container>
                                 <Card className="tripInfo">
                                   <OngoingTripInfo />
@@ -450,7 +464,7 @@ class App extends React.Component<myProps, any> {
                               </Container>
                             </Grid>
                             {/* {if statement and changing props value here} */}
-                            <Grid item xs={9}>
+                            <Grid item xs={12} xl={7} sm={7} md={7} lg={8}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -532,7 +546,11 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
@@ -544,14 +562,14 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.searchTrips.length ? (
                           <Grid container>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} xl={5} sm={5} md={5} lg={4}>
                               <Container>
                                 <Card className="tripInfo">
                                   <SearchTripInfo />
                                 </Card>
                               </Container>
                             </Grid>
-                            <Grid item xs={9}>
+                            <Grid item xs={12} xl={7} sm={7} md={7} lg={8}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -576,16 +594,45 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
                   {/* Build Trip */}
                   <TabPanel value={this.props.pageTabIndex} index={4}>
-                    {this.props.userId === "" ? <Login /> : <BuildTrip />}
+                    {this.props.userId === "" ? (
+                      <Login />
+                    ) : (
+                      <>
+                        <Grid container>
+                          <Grid item sm={3} md={4} xl={4}></Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            xl={6}
+                            sm={6}
+                            md={4}
+                            alignContent="center"
+                            alignItems="center"
+                            justify="center"
+                          >
+                            <BuildTrip />
+                          </Grid>
+                          <Grid item sm={3} md={4} xl={4}></Grid>
+                        </Grid>
+                      </>
+                    )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
@@ -601,7 +648,11 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
