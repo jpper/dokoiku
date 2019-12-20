@@ -484,79 +484,80 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </Grid>
 
             {/* Previous & Next Button */}
+            {this.props.ongoingTrips.length > 1 ? (
+              <Grid container>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    size="small"
+                    fullWidth
+                    onClick={() => {
+                      this.props.onPreviousTrip();
+                      if (this.props.currentOngoingTripIndex - 1 >= 0) {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex - 1
+                          ].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex - 1
+                          ].budget
+                        );
+                      } else {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[
+                            this.props.ongoingTrips.length - 1
+                          ].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[
+                            this.props.ongoingTrips.length - 1
+                          ].budget
+                        );
+                      }
+                    }}
+                  >
+                    <ArrowBackIosIcon />
+                    Previous
+                  </Button>
+                </Grid>
 
-            <Grid container>
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  color="default"
-                  size="small"
-                  fullWidth
-                  onClick={() => {
-                    this.props.onPreviousTrip();
-                    if (this.props.currentOngoingTripIndex - 1 >= 0) {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex - 1
-                        ].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex - 1
-                        ].budget
-                      );
-                    } else {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[
-                          this.props.ongoingTrips.length - 1
-                        ].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[
-                          this.props.ongoingTrips.length - 1
-                        ].budget
-                      );
-                    }
-                  }}
-                >
-                  <ArrowBackIosIcon />
-                  Previous
-                </Button>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    size="small"
+                    fullWidth
+                    onClick={() => {
+                      this.props.onNextTrip();
+                      if (
+                        this.props.currentOngoingTripIndex + 1 <
+                        this.props.ongoingTrips.length
+                      ) {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex + 1
+                          ].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex + 1
+                          ].budget
+                        );
+                      } else {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[0].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[0].budget
+                        );
+                      }
+                    }}
+                  >
+                    Next
+                    <ArrowForwardIosIcon />
+                  </Button>
+                </Grid>
               </Grid>
-
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  color="default"
-                  size="small"
-                  fullWidth
-                  onClick={() => {
-                    this.props.onNextTrip();
-                    if (
-                      this.props.currentOngoingTripIndex + 1 <
-                      this.props.ongoingTrips.length
-                    ) {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex + 1
-                        ].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex + 1
-                        ].budget
-                      );
-                    } else {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[0].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[0].budget
-                      );
-                    }
-                  }}
-                >
-                  Next
-                  <ArrowForwardIosIcon />
-                </Button>
-              </Grid>
-            </Grid>
+            ) : null}
           </Grid>
         </div>
       );

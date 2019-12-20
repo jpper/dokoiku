@@ -609,43 +609,44 @@ class PastTripInfo extends React.Component<any, myStates> {
                     </div>
                   </div>
                   {/* Previous & Next Button */}
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Button
-                        variant="contained"
-                        color="default"
-                        size="small"
-                        fullWidth
-                        onClick={() => {
-                          this.clearButtonStatus();
-                          this.prevPastTrip();
-                        }}
-                      >
-                        <ArrowBackIosIcon />
-                        Previous
-                      </Button>
-                    </Grid>
+                  {this.state.pastTrips.length > 1 ? (
+                    <Grid container>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="contained"
+                          color="default"
+                          size="small"
+                          fullWidth
+                          onClick={() => {
+                            this.clearButtonStatus();
+                            this.prevPastTrip();
+                          }}
+                        >
+                          <ArrowBackIosIcon />
+                          Previous
+                        </Button>
+                      </Grid>
 
-                    <Grid item xs={6}>
-                      <Button
-                        variant="contained"
-                        color="default"
-                        size="small"
-                        fullWidth
-                        onClick={() => {
-                          this.clearButtonStatus();
-                          this.nextPastTrip();
-                        }}
-                      >
-                        Next
-                        <ArrowForwardIosIcon />
-                      </Button>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="contained"
+                          color="default"
+                          size="small"
+                          fullWidth
+                          onClick={() => {
+                            this.clearButtonStatus();
+                            this.nextPastTrip();
+                          }}
+                        >
+                          Next
+                          <ArrowForwardIosIcon />
+                        </Button>
+                      </Grid>
                     </Grid>
-                  </Grid>
+                  ) : null}
                 </Card>
               </Container>
             </Grid>
-
             {/* Map, Review Result */}
             <Grid item xs={12} xl={7} sm={7} md={7} lg={8}>
               {this.state.pageStatus === PageStatus.Map && (
