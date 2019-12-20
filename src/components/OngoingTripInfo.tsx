@@ -13,6 +13,7 @@ import moment from "moment";
 import { myFirestore } from "../config/firebase";
 import axios from "axios";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
+import InfoIcon from "@material-ui/icons/Info";
 // Material UI
 import "../styles/Modal.css";
 import {
@@ -26,7 +27,6 @@ import {
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import PersonIcon from "@material-ui/icons/Person";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
@@ -57,14 +57,22 @@ type myProps = {
 type myState = {
   toggleDialog: boolean;
   userCurrencyBudget: number;
+  pageStatus: PageStatus;
 };
+
+enum PageStatus {
+  Map,
+  Notes,
+  Messages
+}
 
 class OngoingTripInfo extends React.Component<myProps, myState> {
   constructor(props: myProps) {
     super(props);
     this.state = {
       toggleDialog: false,
-      userCurrencyBudget: 0
+      userCurrencyBudget: 0,
+      pageStatus: PageStatus.Map
     };
   }
   async deleteTrip(
@@ -113,8 +121,8 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
       `https://currency-exchange.p.rapidapi.com/exchange?q=1&from=${fromCurrency}&to=${toCurrency}`,
       {
         headers: {
-          "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
-          "x-rapidapi-key": "b6e4f9fc03msh80db2bc55980af4p181a67jsnb4b3c557714d"
+          "x-rapidapi-host": process.env.REACT_APP_X_RAPIDAPI_HOST,
+          "x-rapidapi-key": process.env.REACT_APP_X_RAPIDAPI_KEY
         }
       }
     );
@@ -134,226 +142,270 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
       return (
         <div className="TripInfo">
           {/* Title */}
-          <Typography variant="h4" className="noWrapper">
-            <b>
-              {this.props.ongoingTrips[this.props.currentOngoingTripIndex].name}
-            </b>
-          </Typography>
-          {/* Country */}
-          <Typography className="iconWrapper">
-            <strong>Country: </strong>
-            <img
-              src={`https://www.countryflags.io/${this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].countryCode.toLowerCase()}/shiny/24.png`}
-              alt="flag"
-            ></img>
-            {
-              countriesToCurrencies.find(
-                (item: any) =>
+          <div style={{ maxHeight: 535, overflow: "scroll" }}>
+            <Typography variant="h4" className="noWrapper">
+              <b>
+                {
                   this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .countryCode === item.countryCode
-              ).country
-            }
-          </Typography>
-          {/* Starting Location */}
-          <Typography className="noWrapper">
-            <DoubleArrowIcon />
-            <strong>Starting Location: </strong>
-
-            {` ${
-              this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                .startLocation
-            }`}
-          </Typography>
-          {/* Start Date */}
-          <Typography className="noWrapper">
-            <DateRangeIcon />
-            <strong>Start Date: </strong>
-            {moment(
-              this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].startDate.toDate()
-            ).format("MMMM Do YYYY")}
-          </Typography>
-
-          {/* End Date */}
-          <Typography className="noWrapper">
-            <DateRangeIcon />
-            <strong>End Date: </strong>
-            {moment(
-              this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].endDate.toDate()
-            ).format("MMMM Do YYYY")}
-          </Typography>
-
-          {/* WayPoints */}
-          <div>
-            <Typography className="noWrapper">
-              <LocationOnIcon />
-              <strong className="boldText topPadding">Destinations:</strong>
+                    .name
+                }
+              </b>
             </Typography>
-
-            <ul className="ul-test">
-              {this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].waypoints.map((l: any, i: number) => {
-                return (
-                  <>
-                    <Typography className="noWrapper">
-                      <li>{l.location}</li>
-                    </Typography>
-                  </>
-                  // <ListItem key={i} className="tripLocation">
-                  //   <ListItemText primary={l.location} />
-                  // </ListItem>
-                );
-              })}
-            </ul>
-          </div>
-
-          {/* Budget */}
-          <Tooltip
-            title={
-              this.props.userCurrencyCode !== "None"
-                ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
-                  " " +
-                  countriesToCurrencies
-                    .concat([
-                      {
-                        country: "None",
-                        countryCode: "None",
-                        currency: "None",
-                        currencyCode: "None"
-                      }
-                    ])
-                    .find(
-                      (item: any) =>
-                        this.props.userCurrencyCode === item.currencyCode
-                    ).currency
-                : ""
-            }
-            placement="top-end"
-          >
-            <Typography className="noWrapper topPadding">
-              <strong>Budget: </strong>
-              {
-                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                  .budget
-              }{" "}
+            {/* Country */}
+            <Typography className="iconWrapper">
+              <strong>Country: &nbsp;</strong>
+              <img
+                src={`https://www.countryflags.io/${this.props.ongoingTrips[
+                  this.props.currentOngoingTripIndex
+                ].countryCode.toLowerCase()}/shiny/24.png`}
+                alt="flag"
+              ></img>
               {
                 countriesToCurrencies.find(
                   (item: any) =>
                     this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                      .currencyCode === item.currencyCode
-                ).currency
+                      .countryCode === item.countryCode
+                ).country
               }
             </Typography>
-          </Tooltip>
-          <div className="spacer10"></div>
+            {/* Starting Location */}
+            <Typography className="noWrapper">
+              <DoubleArrowIcon />
+              <strong>Starting Location: &nbsp;</strong>
 
-          {/* Notes & Messages */}
-          <Button
-            variant="outlined"
-            color="primary"
-            size="medium"
-            fullWidth
-            onClick={async () => {
-              await this.props.onChangeDisplayProfile(undefined);
-              this.props.toggleNotes();
-            }}
-          >
-            <DescriptionIcon className="iconSpacer" />
-            Notes
-          </Button>
-          <br></br>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="medium"
-            fullWidth
-            onClick={async () => {
-              await this.props.onChangeDisplayProfile(undefined);
-              this.props.toggleMessages();
-            }}
-          >
-            <ChatIcon className="iconSpacer" />
-            Messages
-          </Button>
-
-          <div className="spacer10"></div>
-
-          <div>
-            <Typography className="noWrapper topPadding">
-              <strong>Owned by:</strong>
+              {` ${
+                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .startLocation
+              }`}
             </Typography>
-            <div className="owner">
-              <Button
-                variant="outlined"
-                color="primary"
-                size="medium"
-                fullWidth
-                onClick={async () => {
-                  await this.props.clearToggle();
-                  await this.props.onChangeDisplayProfile(undefined);
-                  this.props.onChangeDisplayProfile(
-                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                      .ownerId
+            {/* Start Date */}
+            <Typography className="noWrapper">
+              <DateRangeIcon />
+              <strong>Start Date: &nbsp; </strong>
+              {moment(
+                this.props.ongoingTrips[
+                  this.props.currentOngoingTripIndex
+                ].startDate.toDate()
+              ).format("MMMM Do YYYY")}
+            </Typography>
+
+            {/* End Date */}
+            <Typography className="noWrapper">
+              <DateRangeIcon />
+              <strong>End Date: &nbsp; </strong>
+              {moment(
+                this.props.ongoingTrips[
+                  this.props.currentOngoingTripIndex
+                ].endDate.toDate()
+              ).format("MMMM Do YYYY")}
+            </Typography>
+
+            {/* WayPoints */}
+            <div>
+              <Typography className="noWrapper">
+                <LocationOnIcon />
+                <strong className="boldText topPadding">Destinations:</strong>
+              </Typography>
+
+              <ul className="ul-test">
+                {this.props.ongoingTrips[
+                  this.props.currentOngoingTripIndex
+                ].waypoints.map((l: any, i: number) => {
+                  return (
+                    <>
+                      <Typography className="noWrapper">
+                        <li>{l.location}</li>
+                      </Typography>
+                    </>
+                    // <ListItem key={i} className="tripLocation">
+                    //   <ListItemText primary={l.location} />
+                    // </ListItem>
                   );
-                }}
-              >
-                <PersonIcon />
+                })}
+              </ul>
+            </div>
+
+            {/* Budget */}
+            <Tooltip
+              title={
+                this.props.userCurrencyCode !== "None"
+                  ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
+                    " " +
+                    countriesToCurrencies
+                      .concat([
+                        {
+                          country: "None",
+                          countryCode: "None",
+                          currency: "None",
+                          currencyCode: "None"
+                        }
+                      ])
+                      .find(
+                        (item: any) =>
+                          this.props.userCurrencyCode === item.currencyCode
+                      ).currency
+                  : ""
+              }
+              placement="top-end"
+            >
+              <Typography className="noWrapper topPadding">
+                <InfoIcon />
+                <strong>Budget: &nbsp;</strong>
                 {
-                  this.props.users.find(
-                    (user: any) =>
-                      user.id ===
+                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                    .budget
+                }{" "}
+                {
+                  countriesToCurrencies.find(
+                    (item: any) =>
+                      this.props.ongoingTrips[
+                        this.props.currentOngoingTripIndex
+                      ].currencyCode === item.currencyCode
+                  ).currency
+                }
+              </Typography>
+            </Tooltip>
+            <div className="spacer10"></div>
+
+            {/* Notes & Messages */}
+            <Button
+              variant="outlined"
+              color="primary"
+              size="medium"
+              fullWidth
+              onClick={async () => {
+                await this.props.onChangeDisplayProfile(undefined);
+                this.props.toggleNotes();
+              }}
+            >
+              <DescriptionIcon className="iconSpacer" />
+              Notes
+            </Button>
+            <br></br>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="medium"
+              fullWidth
+              onClick={async () => {
+                await this.props.onChangeDisplayProfile(undefined);
+                this.props.toggleMessages();
+              }}
+            >
+              <ChatIcon className="iconSpacer" />
+              Messages
+            </Button>
+
+            <div className="spacer10"></div>
+
+            <div>
+              <Typography className="noWrapper topPadding">
+                <strong>Owned by:</strong>
+              </Typography>
+              <div className="owner">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="medium"
+                  fullWidth
+                  onClick={async () => {
+                    await this.props.clearToggle();
+                    await this.props.onChangeDisplayProfile(undefined);
+                    this.props.onChangeDisplayProfile(
                       this.props.ongoingTrips[
                         this.props.currentOngoingTripIndex
                       ].ownerId
-                  ).nickname
-                }
-              </Button>
+                    );
+                  }}
+                >
+                  <img
+                    src={
+                      this.props.users.find(
+                        (user: any) =>
+                          user.id ===
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex
+                          ].ownerId
+                      ).photoUrl
+                    }
+                    className="profile-picture"
+                    alt={
+                      this.props.users.find(
+                        (user: any) =>
+                          user.id ===
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex
+                          ].ownerId
+                      ).nickname
+                    }
+                    onClick={() => {
+                      const modal = document.getElementById("change-photo");
+                      modal.style.display = "block";
+                    }}
+                  />
+                  {
+                    this.props.users.find(
+                      (user: any) =>
+                        user.id ===
+                        this.props.ongoingTrips[
+                          this.props.currentOngoingTripIndex
+                        ].ownerId
+                    ).nickname
+                  }
+                </Button>
+              </div>
+            </div>
+            <br />
+
+            {/* Members */}
+            <div>
+              <Typography className="noWrapper topPadding">
+                <strong>Members:</strong>
+              </Typography>
+
+              <div className="memberContainer">
+                {this.props.ongoingTrips[
+                  this.props.currentOngoingTripIndex
+                ].memberIds.map((m: any, i: number) => {
+                  const nickname = this.props.users.find(
+                    (u: { id: any }) => u.id === m
+                  ).nickname;
+                  const photoUrl = this.props.users.find(
+                    (u: { id: any }) => u.id === m
+                  ).photoUrl;
+                  return (
+                    <div>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                        key={i}
+                        onClick={async () => {
+                          await this.props.clearToggle();
+                          await this.props.onChangeDisplayProfile(undefined);
+                          this.props.onChangeDisplayProfile(m);
+                        }}
+                      >
+                        <img
+                          src={photoUrl}
+                          className="profile-picture"
+                          alt={nickname}
+                          onClick={() => {
+                            const modal = document.getElementById(
+                              "change-photo"
+                            );
+                            modal.style.display = "block";
+                          }}
+                        />
+                        {nickname}
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
-          <br />
-
-          {/* Members */}
-          <div>
-            <Typography className="noWrapper topPadding">
-              <strong>Members:</strong>
-            </Typography>
-
-            <div className="memberContainer">
-              {this.props.ongoingTrips[
-                this.props.currentOngoingTripIndex
-              ].memberIds.map((m: any, i: number) => {
-                const nickname = this.props.users.find(
-                  (u: { id: any }) => u.id === m
-                ).nickname;
-                return (
-                  <div>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      size="medium"
-                      fullWidth
-                      key={i}
-                      onClick={async () => {
-                        await this.props.clearToggle();
-                        await this.props.onChangeDisplayProfile(undefined);
-                        this.props.onChangeDisplayProfile(m);
-                      }}
-                    >
-                      <PersonIcon className="iconSpacer" />
-                      {nickname}
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <br />
           {/* Update & Delete button */}
           <Grid container>
             <Grid item xs={6}>
@@ -432,79 +484,80 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </Grid>
 
             {/* Previous & Next Button */}
+            {this.props.ongoingTrips.length > 1 ? (
+              <Grid container>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    size="small"
+                    fullWidth
+                    onClick={() => {
+                      this.props.onPreviousTrip();
+                      if (this.props.currentOngoingTripIndex - 1 >= 0) {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex - 1
+                          ].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex - 1
+                          ].budget
+                        );
+                      } else {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[
+                            this.props.ongoingTrips.length - 1
+                          ].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[
+                            this.props.ongoingTrips.length - 1
+                          ].budget
+                        );
+                      }
+                    }}
+                  >
+                    <ArrowBackIosIcon />
+                    Previous
+                  </Button>
+                </Grid>
 
-            <Grid container>
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  color="default"
-                  size="small"
-                  fullWidth
-                  onClick={() => {
-                    this.props.onPreviousTrip();
-                    if (this.props.currentOngoingTripIndex - 1 >= 0) {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex - 1
-                        ].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex - 1
-                        ].budget
-                      );
-                    } else {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[
-                          this.props.ongoingTrips.length - 1
-                        ].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[
-                          this.props.ongoingTrips.length - 1
-                        ].budget
-                      );
-                    }
-                  }}
-                >
-                  <ArrowBackIosIcon />
-                  Previous
-                </Button>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    size="small"
+                    fullWidth
+                    onClick={() => {
+                      this.props.onNextTrip();
+                      if (
+                        this.props.currentOngoingTripIndex + 1 <
+                        this.props.ongoingTrips.length
+                      ) {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex + 1
+                          ].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex + 1
+                          ].budget
+                        );
+                      } else {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[0].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[0].budget
+                        );
+                      }
+                    }}
+                  >
+                    Next
+                    <ArrowForwardIosIcon />
+                  </Button>
+                </Grid>
               </Grid>
-
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  color="default"
-                  size="small"
-                  fullWidth
-                  onClick={() => {
-                    this.props.onNextTrip();
-                    if (
-                      this.props.currentOngoingTripIndex + 1 <
-                      this.props.ongoingTrips.length
-                    ) {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex + 1
-                        ].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex + 1
-                        ].budget
-                      );
-                    } else {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[0].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[0].budget
-                      );
-                    }
-                  }}
-                >
-                  Next
-                  <ArrowForwardIosIcon />
-                </Button>
-              </Grid>
-            </Grid>
+            ) : null}
           </Grid>
         </div>
       );
@@ -554,6 +607,7 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "NEXT_ONGOING_TRIP"
       });
     },
+
     toggleNotes: () =>
       dispatch({
         type: "TOGGLE_NOTES"

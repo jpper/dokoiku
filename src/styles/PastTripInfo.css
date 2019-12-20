@@ -11,7 +11,7 @@
 }
 .textarea {
   width: 100% !important;
-  min-width: 400px !important;
+  min-width: 300px !important;
   font-size: 16px !important;
 }
 #transition-modal-title {
@@ -22,11 +22,8 @@
   color: red !important;
 }
 
-.tripBasicInfo p {
-  border-style: solid;
-  border-color: rgb(180, 178, 178);
-  border-radius: 10px;
-  border-width: 1px;
-  margin-left: 3px;
-  margin-right: 3px;
+.review-container {
+  background-color: white;
+  padding: 10px;
+  border-radius: 2px;
 }

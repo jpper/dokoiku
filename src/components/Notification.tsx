@@ -5,11 +5,14 @@ import {
   Card,
   CardContent,
   CardActions,
-  Typography
+  Typography,
+  Popover
 } from "@material-ui/core";
 import { myFirestore } from "../config/firebase";
 import { removeRequest } from "../redux/action";
 import firebase from "firebase";
+import Profile from "./Profile";
+import "../styles/Notification.css";
 
 type myProps = {
   requests: any;
@@ -44,6 +47,13 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 class Notification extends React.Component<myProps, any> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      togglePopover: false,
+      anchorEl: null
+    };
+  }
   acceptRequest = (ownerId: string, tripId: string, fromId: string) => {
     this.props.removeRequest(tripId, fromId);
     myFirestore
@@ -81,13 +91,29 @@ class Notification extends React.Component<myProps, any> {
       .delete();
   };
 
+  handlePopoverToggle = () => {
+    this.setState({
+      togglePopover: !this.state.togglePopover
+    });
+  };
+
+  setAnchorEl = (anchorEl: any) => {
+    this.setState({
+      anchorEl
+    });
+  };
+
   render() {
     //console.log(this.props.requests);
     return (
       <div>
-        <Card>
-          {this.props.requests.length ? (
-            this.props.requests.map((request: any) => (
+        {this.props.requests.length ? (
+          this.props.requests.map((request: any) => {
+            const user = this.props.users.find(
+              (user: any) => user.id === request.fromId
+            );
+            console.log(user);
+            return (
               <div>
                 <CardContent>
                   <Typography>
@@ -95,15 +121,14 @@ class Notification extends React.Component<myProps, any> {
                     <Button
                       variant="outlined"
                       size="small"
-                      onClick={() =>
-                        this.props.onChangeDisplayProfile(request.fromId)
-                      }
+                      onClick={event => {
+                        this.handlePopoverToggle();
+                        this.props.onChangeDisplayProfile(user.id);
+                        this.setAnchorEl(event.currentTarget);
+                        console.log(this.state.anchorEl);
+                      }}
                     >
-                      {
-                        this.props.users.find(
-                          (user: any) => user.id === request.fromId
-                        ).nickname
-                      }{" "}
+                      {user.nickname}{" "}
                     </Button>
                     for{" "}
                     {
@@ -112,6 +137,30 @@ class Notification extends React.Component<myProps, any> {
                       ).name
                     }
                   </Typography>
+                  <div id="profile-popover">
+                    <Popover
+                      style={{
+                        height: "500px",
+                        width: "500px"
+                      }}
+                      anchorEl={this.state.anchorEl}
+                      open={this.state.togglePopover}
+                      onClose={() => {
+                        this.handlePopoverToggle();
+                        this.props.onChangeDisplayProfile(null);
+                      }}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "left"
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right"
+                      }}
+                    >
+                      <Profile />
+                    </Popover>
+                  </div>
                 </CardContent>
                 <CardActions>
                   <Button
@@ -145,11 +194,11 @@ class Notification extends React.Component<myProps, any> {
                   </Button>
                 </CardActions>
               </div>
-            ))
-          ) : (
-            <div>You don't have any notifications.</div>
-          )}
-        </Card>
+            );
+          })
+        ) : (
+          <div>You don't have any notifications.</div>
+        )}
       </div>
     );
   }

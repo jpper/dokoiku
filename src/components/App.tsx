@@ -60,6 +60,7 @@ import backgroundImg from "../img/trip.jpg";
 import moment from "moment";
 import PrivacyPolicy from "./PrivacyPolicy";
 import iconImg from "../img/logo-dokoiku.png";
+import iconImgWhite from "../img/logo-dokoiku-title-white.png";
 
 type myProps = {
   userId: string;
@@ -115,7 +116,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(setUserInfo(userName, userId, userPhoto)),
   getTrips: async (userId: string) => {
     //console.log("called");
-    const tripIds: any[] = [];
+    const tripIds: string[] = [];
     myFirestore
       .collection("users")
       .doc(userId)
@@ -138,11 +139,21 @@ const mapDispatchToProps = (dispatch: any) => ({
               console.log("dispatching ADD_PENDING_TRIP");
               dispatch(addPendingTrip(change.doc.data()));
             } else {
-              console.log("dispatching ADD_SEARCH_TRIP");
-              dispatch({
-                type: "ADD_SEARCH_TRIP",
-                searchTrip: change.doc.data()
-              });
+              const today = new Date();
+              // Dispatch ADD_PAST_TRIP here!
+              if (
+                today.getTime() <
+                change.doc
+                  .data()
+                  .startDate.toDate()
+                  .getTime()
+              ) {
+                console.log("dispatching ADD_SEARCH_TRIP");
+                dispatch({
+                  type: "ADD_SEARCH_TRIP",
+                  searchTrip: change.doc.data()
+                });
+              }
             }
           } else {
             const today = new Date();
@@ -315,6 +326,7 @@ class App extends React.Component<myProps, any> {
                     centered
                     variant="scrollable"
                     className="tabs"
+                    textColor="secondary"
                     scrollButtons="on"
                     aria-label="scrollable force tabs example"
                   >
@@ -368,6 +380,7 @@ class App extends React.Component<myProps, any> {
                         )}
                       </IconButton>
                       <Menu
+                        className="userMenu"
                         id="personalMenu"
                         anchorEl={this.state.anchorEl}
                         open={Boolean(this.state.anchorEl)}
@@ -387,13 +400,25 @@ class App extends React.Component<myProps, any> {
                             </p>
                             <Notification />
                             <br />
-                            <PendingTripInfo />
-                            {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
-                            <MenuItem onClick={this.onLogout}>Logout</MenuItem>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              size="small"
+                              onClick={this.onLogout}
+                            >
+                              Logout
+                            </Button>
                           </>
                         )}
                       </Menu>
                     </div>
+
+                    {/* App Title */}
+                    <img
+                      src={iconImgWhite}
+                      className="iconImgSmall"
+                      alt="Dokoiku logo"
+                    ></img>
                   </Tabs>
 
                   {/* My Profile */}
@@ -415,11 +440,15 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
-                  {/* Ongoing Trips */}
+                  {/* Upcoming Trips */}
                   <TabPanel value={this.props.pageTabIndex} index={2}>
                     {this.props.userId === "" ? (
                       <Login />
@@ -427,7 +456,7 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.ongoingTrips.length ? (
                           <Grid container>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} sm={4} md={4} lg={4} xl={3}>
                               <Container>
                                 <Card className="tripInfo">
                                   <OngoingTripInfo />
@@ -435,7 +464,7 @@ class App extends React.Component<myProps, any> {
                               </Container>
                             </Grid>
                             {/* {if statement and changing props value here} */}
-                            <Grid item xs={9}>
+                            <Grid item xs={12} sm={8} md={8} lg={8} xl={9}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -517,7 +546,11 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
@@ -529,14 +562,14 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.searchTrips.length ? (
                           <Grid container>
-                            <Grid item xs={3}>
+                            <Grid item xs={12} sm={4} md={4} lg={4} xl={3}>
                               <Container>
                                 <Card className="tripInfo">
                                   <SearchTripInfo />
                                 </Card>
                               </Container>
                             </Grid>
-                            <Grid item xs={9}>
+                            <Grid item xs={12} sm={8} md={8} lg={8} xl={9}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -561,16 +594,46 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
                   {/* Build Trip */}
                   <TabPanel value={this.props.pageTabIndex} index={4}>
-                    {this.props.userId === "" ? <Login /> : <BuildTrip />}
+                    {this.props.userId === "" ? (
+                      <Login />
+                    ) : (
+                      <>
+                        <Grid container>
+                          <Grid item sm={4} md={4} lg={4} xl={5}></Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            md={4}
+                            lg={4}
+                            xl={2}
+                            alignContent="center"
+                            alignItems="center"
+                            justify="center"
+                          >
+                            <BuildTrip />
+                          </Grid>
+                          <Grid item sm={4} md={4} lg={4} xl={5}></Grid>
+                        </Grid>
+                      </>
+                    )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
@@ -586,7 +649,11 @@ class App extends React.Component<myProps, any> {
                     )}
 
                     <div className="iconImg-container">
-                      <img src={iconImg} className="iconImg"></img>
+                      <img
+                        src={iconImg}
+                        className="iconImg"
+                        alt="Dokoiku logo"
+                      ></img>
                     </div>
                   </TabPanel>
 
@@ -599,10 +666,6 @@ class App extends React.Component<myProps, any> {
                         alt="backImg"
                       />
                       <About />
-
-                      <div className="iconImg-container">
-                        <img src={iconImg} className="iconImg"></img>
-                      </div>
                     </div>
                   )}
                 </AppBar>
@@ -614,11 +677,24 @@ class App extends React.Component<myProps, any> {
                   </div>
                 )}
 
-                <Link to="/privacy">
-                  <Button variant="outlined" size="small" id="privacy-policy">
-                    Privacy Policy
-                  </Button>
-                </Link>
+                {/* Privacy policy */}
+                {this.props.pageTabIndex === 0 ? (
+                  <Link to="/privacy" className="footer">
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      id="privacy-policy-about"
+                    >
+                      Privacy Policy
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link to="/privacy">
+                    <Button variant="outlined" size="small" id="privacy-policy">
+                      Privacy Policy
+                    </Button>
+                  </Link>
+                )}
               </div>
             );
           }}

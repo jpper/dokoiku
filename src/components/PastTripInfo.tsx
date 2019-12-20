@@ -8,15 +8,12 @@ import Map from "./Map";
 import Notes from "./Notes";
 import ChatBoard from "./ChatBoard";
 import axios from "axios";
+import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI
 import {
   Grid,
   Typography,
-  List,
-  // ListItem,
-  // ListItemIcon,
-  // ListItemText,
   Modal,
   Fade,
   Backdrop,
@@ -29,12 +26,14 @@ import {
   Divider
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
-import PersonIcon from "@material-ui/icons/Person";
+import MessageIcon from "@material-ui/icons/Message";
+import RateReviewIcon from "@material-ui/icons/RateReview";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import DescriptionIcon from "@material-ui/icons/Description";
+import MapIcon from "@material-ui/icons/Map";
 import "../styles/TripInfo.css";
-// import "../styles/PastTripInfo.css";
+import "../styles/PastTripInfo.css";
 import Reviews from "./Reviews";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 
@@ -245,8 +244,8 @@ class PastTripInfo extends React.Component<any, myStates> {
       `https://currency-exchange.p.rapidapi.com/exchange?q=1&from=${fromCurrency}&to=${toCurrency}`,
       {
         headers: {
-          "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
-          "x-rapidapi-key": "b6e4f9fc03msh80db2bc55980af4p181a67jsnb4b3c557714d"
+          "x-rapidapi-host": process.env.REACT_APP_X_RAPIDAPI_HOST,
+          "x-rapidapi-key": process.env.REACT_APP_X_RAPIDAPI_KEY
         }
       }
     );
@@ -275,204 +274,210 @@ class PastTripInfo extends React.Component<any, myStates> {
         ) : (
           <Grid container>
             {/* Trip details */}
-            <Grid item xs={3}>
+            <Grid item xs={12} sm={4} md={4} lg={4} xl={3}>
               <Container>
                 <Card>
-                  <div className="tripBasicInfo">
-                    <BasicTripInfo
-                      country={
-                        this.state.pastTrips[this.state.currentPastTripIndex]
-                          .countryCode
-                      }
-                      tripTitle={
-                        this.state.pastTrips[this.state.currentPastTripIndex]
-                          .name
-                      }
-                      startDate={moment(
-                        this.state.pastTrips[
-                          this.state.currentPastTripIndex
-                        ].startDate.toDate()
-                      ).format("MMMM Do YYYY")}
-                      endDate={moment(
-                        this.state.pastTrips[
-                          this.state.currentPastTripIndex
-                        ].endDate.toDate()
-                      ).format("MMMM Do YYYY")}
-                      location={
-                        this.state.pastTrips[this.state.currentPastTripIndex]
-                          .startLocation
-                      }
-                      wayPoints={
-                        this.state.pastTrips[this.state.currentPastTripIndex]
-                      }
-                    />
-
-                    {/* Budget */}
-                    <Tooltip
-                      title={
-                        this.props.userCurrencyCode !== "None"
-                          ? Math.round(this.state.userCurrencyBudget * 100) /
-                              100 +
-                            " " +
-                            countriesToCurrencies
-                              .concat([
-                                {
-                                  country: "None",
-                                  countryCode: "None",
-                                  currency: "None",
-                                  currencyCode: "None"
-                                }
-                              ])
-                              .find(
-                                (item: any) =>
-                                  this.props.userCurrencyCode ===
-                                  item.currencyCode
-                              ).currency
-                          : ""
-                      }
-                      placement="top-end"
-                    >
-                      <Typography className="noWrapper topPadding">
-                        <strong>Budget: </strong>
-                        {
+                  <div style={{ maxHeight: 520, overflow: "scroll" }}>
+                    <div className="tripBasicInfo">
+                      <BasicTripInfo
+                        country={
                           this.state.pastTrips[this.state.currentPastTripIndex]
-                            .budget
-                        }{" "}
-                        {
-                          countriesToCurrencies.find(
-                            (item: any) =>
-                              this.state.pastTrips[
-                                this.state.currentPastTripIndex
-                              ].currencyCode === item.currencyCode
-                          ).currency
+                            .countryCode
                         }
+                        tripTitle={
+                          this.state.pastTrips[this.state.currentPastTripIndex]
+                            .name
+                        }
+                        startDate={moment(
+                          this.state.pastTrips[
+                            this.state.currentPastTripIndex
+                          ].startDate.toDate()
+                        ).format("MMMM Do YYYY")}
+                        endDate={moment(
+                          this.state.pastTrips[
+                            this.state.currentPastTripIndex
+                          ].endDate.toDate()
+                        ).format("MMMM Do YYYY")}
+                        location={
+                          this.state.pastTrips[this.state.currentPastTripIndex]
+                            .startLocation
+                        }
+                        wayPoints={
+                          this.state.pastTrips[this.state.currentPastTripIndex]
+                        }
+                      />
+
+                      {/* Budget */}
+                      <Tooltip
+                        title={
+                          this.props.userCurrencyCode !== "None"
+                            ? Math.round(this.state.userCurrencyBudget * 100) /
+                                100 +
+                              " " +
+                              countriesToCurrencies
+                                .concat([
+                                  {
+                                    country: "None",
+                                    countryCode: "None",
+                                    currency: "None",
+                                    currencyCode: "None"
+                                  }
+                                ])
+                                .find(
+                                  (item: any) =>
+                                    this.props.userCurrencyCode ===
+                                    item.currencyCode
+                                ).currency
+                            : ""
+                        }
+                        placement="top-end"
+                      >
+                        <Typography className="noWrapper topPadding">
+                          <InfoIcon />
+                          <strong>Budget:&nbsp; </strong>
+                          {
+                            this.state.pastTrips[
+                              this.state.currentPastTripIndex
+                            ].budget
+                          }{" "}
+                          {
+                            countriesToCurrencies.find(
+                              (item: any) =>
+                                this.state.pastTrips[
+                                  this.state.currentPastTripIndex
+                                ].currencyCode === item.currencyCode
+                            ).currency
+                          }
+                        </Typography>
+                      </Tooltip>
+                    </div>
+
+                    <div className="spacer10"></div>
+
+                    {/* Notes & Messages */}
+                    <Grid item>
+                      {this.state.pageStatus !== PageStatus.Map ? (
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="medium"
+                          fullWidth
+                          onClick={this.onMapButton}
+                        >
+                          <DescriptionIcon className="iconSpacer" />
+                          Map
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="medium"
+                          fullWidth
+                        >
+                          <MapIcon className="iconSpacer" />
+                          Map
+                        </Button>
+                      )}
+                    </Grid>
+
+                    <Grid item>
+                      {this.state.pageStatus !== PageStatus.Reviews ? (
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="medium"
+                          fullWidth
+                          onClick={this.onReviewButton}
+                        >
+                          <RateReviewIcon className="iconSpacer" />
+                          Reviews for me
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="medium"
+                          fullWidth
+                        >
+                          <RateReviewIcon className="iconSpacer" />
+                          Reviews for me
+                        </Button>
+                      )}
+                    </Grid>
+
+                    <Grid item>
+                      {this.state.pageStatus !== PageStatus.Notes ? (
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="medium"
+                          fullWidth
+                          onClick={this.onNotesButton}
+                        >
+                          <DescriptionIcon className="iconSpacer" />
+                          Notes
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="medium"
+                          fullWidth
+                        >
+                          <DescriptionIcon className="iconSpacer" />
+                          Notes
+                        </Button>
+                      )}
+                    </Grid>
+
+                    <Grid item>
+                      {this.state.pageStatus !== PageStatus.Messages ? (
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="medium"
+                          fullWidth
+                          onClick={this.onMessagesButton}
+                        >
+                          <MessageIcon className="iconSpacer" />
+                          Messages
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="medium"
+                          fullWidth
+                        >
+                          <MessageIcon className="iconSpacer" />
+                          Messages
+                        </Button>
+                      )}
+                    </Grid>
+
+                    <div className="spacer10"></div>
+
+                    {/* Members */}
+                    <div>
+                      <Typography className="noWrapper topPadding">
+                        <strong>Review for Members:</strong>
                       </Typography>
-                    </Tooltip>
-                  </div>
+                      <div className="memberContainer">
+                        {this.state.pastTrips[
+                          this.state.currentPastTripIndex
+                        ].memberIds.map((member: any, i: number) => {
+                          const nickname = this.props.users.find(
+                            (u: { id: any }) => u.id === member
+                          ).nickname;
+                          const photoUrl = this.props.users.find(
+                            (u: { id: any }) => u.id === member
+                          ).photoUrl;
+                          // skips own data here
+                          if (member === this.props.userId) return;
 
-                  <div className="spacer10"></div>
-
-                  {/* Notes & Messages */}
-                  <Grid item>
-                    {this.state.pageStatus !== PageStatus.Map ? (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        size="medium"
-                        fullWidth
-                        onClick={this.onMapButton}
-                      >
-                        <DescriptionIcon className="iconSpacer" />
-                        Map
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="medium"
-                        fullWidth
-                      >
-                        <DescriptionIcon className="iconSpacer" />
-                        Map
-                      </Button>
-                    )}
-                  </Grid>
-
-                  <Grid item>
-                    {this.state.pageStatus !== PageStatus.Reviews ? (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        size="medium"
-                        fullWidth
-                        onClick={this.onReviewButton}
-                      >
-                        <DescriptionIcon className="iconSpacer" />
-                        Reviews for me
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="medium"
-                        fullWidth
-                      >
-                        <DescriptionIcon className="iconSpacer" />
-                        Reviews for me
-                      </Button>
-                    )}
-                  </Grid>
-
-                  <Grid item>
-                    {this.state.pageStatus !== PageStatus.Notes ? (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        size="medium"
-                        fullWidth
-                        onClick={this.onNotesButton}
-                      >
-                        <DescriptionIcon className="iconSpacer" />
-                        Notes
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="medium"
-                        fullWidth
-                      >
-                        <DescriptionIcon className="iconSpacer" />
-                        Notes
-                      </Button>
-                    )}
-                  </Grid>
-
-                  <Grid item>
-                    {this.state.pageStatus !== PageStatus.Messages ? (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        size="medium"
-                        fullWidth
-                        onClick={this.onMessagesButton}
-                      >
-                        <DescriptionIcon className="iconSpacer" />
-                        Messages
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="medium"
-                        fullWidth
-                      >
-                        <DescriptionIcon className="iconSpacer" />
-                        Messages
-                      </Button>
-                    )}
-                  </Grid>
-
-                  <div className="spacer10"></div>
-
-                  {/* Members */}
-                  <div>
-                    <Typography className="noWrapper topPadding">
-                      <strong>Review for Members:</strong>
-                    </Typography>
-                    <div className="memberContainer">
-                      {this.state.pastTrips[
-                        this.state.currentPastTripIndex
-                      ].memberIds.map((member: any, i: number) => {
-                        const nickname = this.props.users.find(
-                          (u: { id: any }) => u.id === member
-                        ).nickname;
-                        // skips own data here
-                        if (member === this.props.userId) return;
-
-                        return (
-                          <div key={i}>
-                            {/* <ListItem
+                          return (
+                            <div key={i}>
+                              {/* <ListItem
                               button
                               onClick={() => this.onClickUser(i, member)}
                             >
@@ -481,158 +486,169 @@ class PastTripInfo extends React.Component<any, myStates> {
                               </ListItemIcon>
                               <ListItemText>{nickname}</ListItemText>
                             </ListItem> */}
-                            <Button
-                              variant="outlined"
-                              color="primary"
-                              size="medium"
-                              fullWidth
-                              key={i}
-                              onClick={() => this.onClickUser(i, member)}
-                            >
-                              <PersonIcon className="iconSpacer" />
-                              {nickname}
-                            </Button>
-                            <Modal
-                              className="modalWindow"
-                              open={this.handleOpen(i)}
-                              onClose={this.handleClose}
-                              closeAfterTransition
-                              BackdropComponent={Backdrop}
-                              BackdropProps={{
-                                timeout: 500
-                              }}
-                            >
-                              <Fade in={this.handleOpen(i)}>
-                                <div className="modalFade">
-                                  <Box
-                                    component="fieldset"
-                                    mb={0}
-                                    borderColor="transparent"
-                                  >
-                                    <h2 id="transition-modal-title">
-                                      Review for {nickname}
-                                    </h2>
-                                  </Box>
-
-                                  {/* Error */}
-                                  {this.state.isError && (
+                              <Button
+                                variant="outlined"
+                                color="primary"
+                                size="medium"
+                                fullWidth
+                                key={i}
+                                onClick={() => this.onClickUser(i, member)}
+                              >
+                                <img
+                                  src={photoUrl}
+                                  className="profile-picture"
+                                  alt={nickname}
+                                  onClick={() => {
+                                    const modal = document.getElementById(
+                                      "change-photo"
+                                    );
+                                    modal.style.display = "block";
+                                  }}
+                                />
+                                {nickname}
+                              </Button>
+                              <Modal
+                                className="modalWindow"
+                                open={this.handleOpen(i)}
+                                onClose={this.handleClose}
+                                closeAfterTransition
+                                BackdropComponent={Backdrop}
+                                BackdropProps={{
+                                  timeout: 500
+                                }}
+                              >
+                                <Fade in={this.handleOpen(i)}>
+                                  <div className="modalFade">
                                     <Box
                                       component="fieldset"
                                       mb={0}
                                       borderColor="transparent"
                                     >
-                                      <Typography className="error-text">
-                                        Textarea or Rating is empty...
-                                      </Typography>
+                                      <h2 id="transition-modal-title">
+                                        Review for {nickname}
+                                      </h2>
                                     </Box>
-                                  )}
 
-                                  <Box
-                                    component="fieldset"
-                                    mb={1}
-                                    borderColor="transparent"
-                                  >
-                                    <Typography component="legend">
-                                      Rating
-                                    </Typography>
-                                    <Rating
-                                      name="simple-controlled"
-                                      value={this.state.rating}
-                                      onChange={(event, newValue) => {
-                                        this.setState({
-                                          rating: newValue
-                                        });
-                                      }}
-                                    />
-                                  </Box>
-                                  <Box
-                                    component="fieldset"
-                                    mb={0}
-                                    borderColor="transparent"
-                                  >
-                                    <Typography component="legend">
-                                      Review Message
-                                    </Typography>
+                                    {/* Error */}
+                                    {this.state.isError && (
+                                      <Box
+                                        component="fieldset"
+                                        mb={0}
+                                        borderColor="transparent"
+                                      >
+                                        <Typography className="error-text">
+                                          Textarea or Rating is empty...
+                                        </Typography>
+                                      </Box>
+                                    )}
 
-                                    <TextareaAutosize
-                                      className="textarea"
-                                      placeholder="Write your review"
-                                      rows={10}
-                                      onChange={e => this.SetMessage(e)}
-                                      value={this.state.message}
-                                    />
-                                  </Box>
-                                  <Box
-                                    component="fieldset"
-                                    mb={0}
-                                    borderColor="transparent"
-                                  >
-                                    <Button
-                                      variant="contained"
-                                      color="default"
-                                      onClick={this.handleClose}
+                                    <Box
+                                      component="fieldset"
+                                      mb={1}
+                                      borderColor="transparent"
                                     >
-                                      Cancel
-                                    </Button>
-                                    <Button
-                                      variant="contained"
-                                      color="primary"
-                                      onClick={event => {
-                                        this.onSubmit(event, member);
-                                      }}
+                                      <Typography component="legend">
+                                        Rating
+                                      </Typography>
+                                      <Rating
+                                        name="simple-controlled"
+                                        value={this.state.rating}
+                                        onChange={(event, newValue) => {
+                                          this.setState({
+                                            rating: newValue
+                                          });
+                                        }}
+                                      />
+                                    </Box>
+                                    <Box
+                                      component="fieldset"
+                                      mb={0}
+                                      borderColor="transparent"
                                     >
-                                      Submit
-                                    </Button>
-                                  </Box>
-                                </div>
-                              </Fade>
-                            </Modal>
-                          </div>
-                        );
-                      })}
+                                      <Typography component="legend">
+                                        Review Message
+                                      </Typography>
+
+                                      <TextareaAutosize
+                                        className="textarea"
+                                        placeholder="Write your review"
+                                        rows={10}
+                                        onChange={e => this.SetMessage(e)}
+                                        value={this.state.message}
+                                      />
+                                    </Box>
+                                    <Box
+                                      component="fieldset"
+                                      mb={0}
+                                      borderColor="transparent"
+                                    >
+                                      <Button
+                                        variant="contained"
+                                        color="default"
+                                        onClick={this.handleClose}
+                                      >
+                                        Cancel
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={event => {
+                                          this.onSubmit(event, member);
+                                        }}
+                                      >
+                                        Submit
+                                      </Button>
+                                    </Box>
+                                  </div>
+                                </Fade>
+                              </Modal>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
-
                   {/* Previous & Next Button */}
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Button
-                        variant="contained"
-                        color="default"
-                        size="small"
-                        fullWidth
-                        onClick={() => {
-                          this.clearButtonStatus();
-                          this.prevPastTrip();
-                        }}
-                      >
-                        <ArrowBackIosIcon />
-                        Previous
-                      </Button>
-                    </Grid>
+                  {this.state.pastTrips.length > 1 ? (
+                    <Grid container>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="contained"
+                          color="default"
+                          size="small"
+                          fullWidth
+                          onClick={() => {
+                            this.clearButtonStatus();
+                            this.prevPastTrip();
+                          }}
+                        >
+                          <ArrowBackIosIcon />
+                          Previous
+                        </Button>
+                      </Grid>
 
-                    <Grid item xs={6}>
-                      <Button
-                        variant="contained"
-                        color="default"
-                        size="small"
-                        fullWidth
-                        onClick={() => {
-                          this.clearButtonStatus();
-                          this.nextPastTrip();
-                        }}
-                      >
-                        Next
-                        <ArrowForwardIosIcon />
-                      </Button>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="contained"
+                          color="default"
+                          size="small"
+                          fullWidth
+                          onClick={() => {
+                            this.clearButtonStatus();
+                            this.nextPastTrip();
+                          }}
+                        >
+                          Next
+                          <ArrowForwardIosIcon />
+                        </Button>
+                      </Grid>
                     </Grid>
-                  </Grid>
+                  ) : null}
                 </Card>
               </Container>
             </Grid>
-
             {/* Map, Review Result */}
-            <Grid item xs={9}>
+            <Grid item xs={12} sm={8} md={8} lg={8} xl={9}>
               {this.state.pageStatus === PageStatus.Map && (
                 <Map
                   trips={this.state.pastTrips}
@@ -640,7 +656,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                 />
               )}
               {this.state.pageStatus === PageStatus.Reviews && (
-                <>
+                <div className="review-container">
                   <Typography variant="h5">
                     Reviews for {this.props.userName}
                   </Typography>
@@ -652,7 +668,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                     }
                     userId={this.props.userId}
                   />
-                </>
+                </div>
               )}
               {this.state.pageStatus === PageStatus.Notes && (
                 <Notes

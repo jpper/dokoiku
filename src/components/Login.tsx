@@ -46,7 +46,8 @@ const mapDispatchToProps = (dispatch: any) => ({
                 id: userResult.uid,
                 nickname: userResult.displayName,
                 aboutMe: "",
-                photoUrl: userResult.photoURL
+                photoUrl: userResult.photoURL,
+                currencyCode: "JPY"
               })
               .then(data => {
                 // Write user info to local
@@ -59,6 +60,18 @@ const mapDispatchToProps = (dispatch: any) => ({
                 );
               });
           } else {
+            // update user info everytime
+            myFirestore
+              .collection("users")
+              .doc(userResult.uid)
+              .update({
+                nickname: userResult.displayName,
+                photoUrl: userResult.photoURL
+              })
+              .then(res => {
+                console.log("Update User info");
+              });
+
             dispatch(
               setUserInfo(
                 userResult.displayName,
