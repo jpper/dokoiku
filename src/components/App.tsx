@@ -204,6 +204,10 @@ const mapDispatchToProps = (dispatch: any) => ({
   logout: () => dispatch({ type: "LOGOUT" }),
   setPageTabIndex: (index: any) => {
     dispatch(setPageTabIndex(index));
+    dispatch({
+      type: "CHANGE_DISPLAY_PROFILE",
+      displayProfile: undefined
+    });
   },
   getUserCurrencyCode: (userId: string) => {
     myFirestore
@@ -455,90 +459,94 @@ class App extends React.Component<myProps, any> {
                     ) : (
                       <>
                         {this.props.ongoingTrips.length ? (
-                          <Grid container>
-                            <Grid item xs={12} sm={4}>
-                              <Container>
-                                <Card className="tripInfo">
-                                  <OngoingTripInfo />
-                                </Card>
-                              </Container>
-                            </Grid>
-                            {/* {if statement and changing props value here} */}
-                            <Grid item xs={12} sm={8}>
-                              {this.props.displayProfile ? (
-                                <Profile />
-                              ) : (
-                                !this.props.showChat &&
-                                !this.props.showEdit &&
-                                this.props.ongoingTrips.length &&
-                                this.props.mapTripMessage === 0 && (
-                                  <Map
-                                    trips={this.props.ongoingTrips}
-                                    currentTripIndex={
-                                      this.props.currentOngoingTripIndex
+                          <>
+                            {/* {this.changeMapTripInfoToZero()} */}
+
+                            <Grid container>
+                              <Grid item xs={12} sm={4}>
+                                <Container>
+                                  <Card className="tripInfo">
+                                    <OngoingTripInfo />
+                                  </Card>
+                                </Container>
+                              </Grid>
+                              {/* {if statement and changing props value here} */}
+                              <Grid item xs={12} sm={8}>
+                                {this.props.displayProfile ? (
+                                  <Profile />
+                                ) : (
+                                  !this.props.showChat &&
+                                  !this.props.showEdit &&
+                                  this.props.ongoingTrips.length &&
+                                  this.props.mapTripMessage === 0 && (
+                                    <Map
+                                      trips={this.props.ongoingTrips}
+                                      currentTripIndex={
+                                        this.props.currentOngoingTripIndex
+                                      }
+                                    />
+                                  )
+                                )}
+                                {this.props.mapTripMessage === 1 && (
+                                  <Notes
+                                    tripId={
+                                      this.props.ongoingTrips[
+                                        this.props.currentOngoingTripIndex
+                                      ].tripId
                                     }
                                   />
-                                )
-                              )}
-                              {this.props.mapTripMessage === 1 && (
-                                <Notes
-                                  tripId={
-                                    this.props.ongoingTrips[
-                                      this.props.currentOngoingTripIndex
-                                    ].tripId
-                                  }
-                                />
-                              )}
+                                )}
 
-                              {this.props.mapTripMessage === 2 && (
-                                <ChatBoard
-                                  tripId={this.props.ongoingTrips[
-                                    this.props.currentOngoingTripIndex
-                                  ].tripId.trim()}
-                                />
-                              )}
+                                {this.props.mapTripMessage === 2 && (
+                                  <ChatBoard
+                                    tripId={this.props.ongoingTrips[
+                                      this.props.currentOngoingTripIndex
+                                    ].tripId.trim()}
+                                  />
+                                )}
 
-                              {this.props.showEdit ? (
-                                <EditTrip
-                                  name={
-                                    this.props.ongoingTrips[
-                                      this.props.currentOngoingTripIndex
-                                    ].name
-                                  }
-                                  startDate={moment(
-                                    this.props.ongoingTrips[
-                                      this.props.currentOngoingTripIndex
-                                    ].startDate.toDate()
-                                  ).format("YYYY-MM-DD")}
-                                  endDate={moment(
-                                    this.props.ongoingTrips[
-                                      this.props.currentOngoingTripIndex
-                                    ].endDate.toDate()
-                                  ).format("YYYY-MM-DD")}
-                                  startLocation={
-                                    this.props.ongoingTrips[
-                                      this.props.currentOngoingTripIndex
-                                    ].startLocation
-                                  }
-                                  budget={
-                                    this.props.ongoingTrips[
-                                      this.props.currentOngoingTripIndex
-                                    ].budget
-                                  }
-                                  waypoints={
-                                    this.props.ongoingTrips[
-                                      this.props.currentOngoingTripIndex
-                                    ].waypoints
-                                  }
-                                  tripId={
-                                    this.props.ongoingTrips[
-                                      this.props.currentOngoingTripIndex
-                                    ].tripId
-                                  }
-                                />
-                              ) : null}
+                                {this.props.showEdit ? (
+                                  <EditTrip
+                                    name={
+                                      this.props.ongoingTrips[
+                                        this.props.currentOngoingTripIndex
+                                      ].name
+                                    }
+                                    startDate={moment(
+                                      this.props.ongoingTrips[
+                                        this.props.currentOngoingTripIndex
+                                      ].startDate.toDate()
+                                    ).format("YYYY-MM-DD")}
+                                    endDate={moment(
+                                      this.props.ongoingTrips[
+                                        this.props.currentOngoingTripIndex
+                                      ].endDate.toDate()
+                                    ).format("YYYY-MM-DD")}
+                                    startLocation={
+                                      this.props.ongoingTrips[
+                                        this.props.currentOngoingTripIndex
+                                      ].startLocation
+                                    }
+                                    budget={
+                                      this.props.ongoingTrips[
+                                        this.props.currentOngoingTripIndex
+                                      ].budget
+                                    }
+                                    waypoints={
+                                      this.props.ongoingTrips[
+                                        this.props.currentOngoingTripIndex
+                                      ].waypoints
+                                    }
+                                    tripId={
+                                      this.props.ongoingTrips[
+                                        this.props.currentOngoingTripIndex
+                                      ].tripId
+                                    }
+                                  />
+                                ) : null}
+                              </Grid>
                             </Grid>
-                          </Grid>
+                          </>
                         ) : (
                           <div>Please join a trip or create your own.</div>
                         )}
@@ -573,17 +581,12 @@ class App extends React.Component<myProps, any> {
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
-                                !this.props.showChat &&
-                                !this.props.showEdit &&
-                                this.props.searchTrips.length &&
-                                this.props.mapTripMessage === 0 && (
-                                  <Map
-                                    trips={this.props.searchTrips}
-                                    currentTripIndex={
-                                      this.props.currentSearchTripIndex
-                                    }
-                                  />
-                                )
+                                <Map
+                                  trips={this.props.searchTrips}
+                                  currentTripIndex={
+                                    this.props.currentSearchTripIndex
+                                  }
+                                />
                               )}
                             </Grid>
                           </Grid>

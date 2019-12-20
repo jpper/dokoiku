@@ -115,8 +115,15 @@
 
 .MyProfile {
   background-color: white;
+  /* padding: 10px;
+  border-radius: 15px; */
 }
 
 .reviews-container {
   background-color: white;
+}
+
+.MuiPaper-root.MuiPaper-elevation8.MuiPopover-paper.MuiPaper-rounded {
+  padding: 10px;
+  border-radius: 15px;
 }

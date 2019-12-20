@@ -11,8 +11,9 @@ import {
 import { myFirestore } from "../config/firebase";
 import { removeRequest } from "../redux/action";
 import firebase from "firebase";
-import Profile from "./Profile";
 import "../styles/Notification.css";
+import { borderRadius } from "@material-ui/system";
+import ProfilePopover from "./ProfilePopover";
 
 type myProps = {
   requests: any;
@@ -141,7 +142,9 @@ class Notification extends React.Component<myProps, any> {
                     <Popover
                       style={{
                         height: "500px",
-                        width: "500px"
+                        width: "500px",
+                        padding: "15px",
+                        borderRadius: "10px"
                       }}
                       anchorEl={this.state.anchorEl}
                       open={this.state.togglePopover}
@@ -158,7 +161,7 @@ class Notification extends React.Component<myProps, any> {
                         horizontal: "right"
                       }}
                     >
-                      <Profile />
+                      <ProfilePopover />
                     </Popover>
                   </div>
                 </CardContent>
