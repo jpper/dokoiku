@@ -72,6 +72,8 @@
     rgba(214, 220, 255, 1) 0%,
     rgba(63, 80, 181, 1) 100%
   );
+  /* Still deciding on a background image -- this is a placeholder for now */
+  background-image: url("https://static.vecteezy.com/system/resources/previews/000/523/851/large_2x/vector-abstract-swirl-cloud-seamless-pattern-blue-sky-background.jpg");
   padding-bottom: 2px !important;
 }
 .iconWrapper {
