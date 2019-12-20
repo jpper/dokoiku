@@ -92,7 +92,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
 
             {/* Country */}
             <Typography className="iconWrapper">
-              <strong>Country: </strong>
+              <strong>Country: &nbsp;</strong>
               <img
                 src={`https://www.countryflags.io/${this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -111,7 +111,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* Starting Location */}
             <Typography className="noWrapper">
               <DoubleArrowIcon />
-              <strong>Starting Location: </strong>
+              <strong>Starting Location: &nbsp;</strong>
               {` ${
                 this.props.searchTrips[this.props.currentSearchTripIndex]
                   .startLocation
@@ -121,7 +121,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* Start Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>Start Date: </strong>
+              <strong>Start Date: &nbsp;</strong>
               {moment(
                 this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -132,7 +132,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* End Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>End Date: </strong>
+              <strong>End Date: &nbsp;</strong>
               {moment(
                 this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -186,7 +186,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             >
               <Typography className="noWrapper topPadding">
                 <InfoIcon />
-                <strong>Budget: </strong>
+                <strong>Budget:&nbsp; </strong>
                 {
                   this.props.searchTrips[this.props.currentSearchTripIndex]
                     .budget

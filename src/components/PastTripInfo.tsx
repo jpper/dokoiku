@@ -334,7 +334,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                       >
                         <Typography className="noWrapper topPadding">
                           <InfoIcon />
-                          <strong>Budget: </strong>
+                          <strong>Budget:&nbsp; </strong>
                           {
                             this.state.pastTrips[
                               this.state.currentPastTripIndex
