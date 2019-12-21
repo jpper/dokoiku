@@ -27,7 +27,6 @@ import {
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import PersonIcon from "@material-ui/icons/Person";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
@@ -485,81 +484,82 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </Grid>
 
             {/* Previous & Next Button */}
+            {this.props.ongoingTrips.length > 1 ? (
+              <Grid container>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    size="small"
+                    fullWidth
+                    onClick={() => {
+                      this.props.onPreviousTrip();
+                      this.props.onChangeDisplayProfile(undefined);
+                      if (this.props.currentOngoingTripIndex - 1 >= 0) {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex - 1
+                          ].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex - 1
+                          ].budget
+                        );
+                      } else {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[
+                            this.props.ongoingTrips.length - 1
+                          ].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[
+                            this.props.ongoingTrips.length - 1
+                          ].budget
+                        );
+                      }
+                    }}
+                  >
+                    <ArrowBackIosIcon />
+                    Previous
+                  </Button>
+                </Grid>
 
-            <Grid container>
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  color="default"
-                  size="small"
-                  fullWidth
-                  onClick={() => {
-                    this.props.onPreviousTrip();
-                    this.props.onChangeDisplayProfile(undefined);
-                    if (this.props.currentOngoingTripIndex - 1 >= 0) {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex - 1
-                        ].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex - 1
-                        ].budget
-                      );
-                    } else {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[
-                          this.props.ongoingTrips.length - 1
-                        ].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[
-                          this.props.ongoingTrips.length - 1
-                        ].budget
-                      );
-                    }
-                  }}
-                >
-                  <ArrowBackIosIcon />
-                  Previous
-                </Button>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    size="small"
+                    fullWidth
+                    onClick={() => {
+                      this.props.onNextTrip();
+                      this.props.onChangeDisplayProfile(undefined);
+                      if (
+                        this.props.currentOngoingTripIndex + 1 <
+                        this.props.ongoingTrips.length
+                      ) {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex + 1
+                          ].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[
+                            this.props.currentOngoingTripIndex + 1
+                          ].budget
+                        );
+                      } else {
+                        this.exchangeCurrency(
+                          this.props.ongoingTrips[0].currencyCode,
+                          this.props.userCurrencyCode,
+                          this.props.ongoingTrips[0].budget
+                        );
+                      }
+                    }}
+                  >
+                    Next
+                    <ArrowForwardIosIcon />
+                  </Button>
+                </Grid>
               </Grid>
-
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  color="default"
-                  size="small"
-                  fullWidth
-                  onClick={() => {
-                    this.props.onNextTrip();
-                    this.props.onChangeDisplayProfile(undefined);
-                    if (
-                      this.props.currentOngoingTripIndex + 1 <
-                      this.props.ongoingTrips.length
-                    ) {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex + 1
-                        ].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[
-                          this.props.currentOngoingTripIndex + 1
-                        ].budget
-                      );
-                    } else {
-                      this.exchangeCurrency(
-                        this.props.ongoingTrips[0].currencyCode,
-                        this.props.userCurrencyCode,
-                        this.props.ongoingTrips[0].budget
-                      );
-                    }
-                  }}
-                >
-                  Next
-                  <ArrowForwardIosIcon />
-                </Button>
-              </Grid>
-            </Grid>
+            ) : null}
           </Grid>
         </div>
       );

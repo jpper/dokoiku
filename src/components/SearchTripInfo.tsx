@@ -12,7 +12,6 @@ import { Grid, Typography } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import PersonIcon from "@material-ui/icons/Person";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
@@ -284,76 +283,79 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           </Button>
 
           {/* Previous & Next Button */}
-          <Grid container>
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="default"
-                size="small"
-                fullWidth
-                onClick={() => {
-                  this.props.onPreviousTrip();
-                  if (this.props.currentSearchTripIndex - 1 >= 0) {
-                    this.exchangeCurrency(
-                      this.props.searchTrips[
-                        this.props.currentSearchTripIndex - 1
-                      ].currencyCode,
-                      this.props.userCurrencyCode,
-                      this.props.searchTrips[
-                        this.props.currentSearchTripIndex - 1
-                      ].budget
-                    );
-                  } else {
-                    this.exchangeCurrency(
-                      this.props.searchTrips[this.props.searchTrips.length - 1]
-                        .currencyCode,
-                      this.props.userCurrencyCode,
-                      this.props.searchTrips[this.props.searchTrips.length - 1]
-                        .budget
-                    );
-                  }
-                }}
-              >
-                <ArrowBackIosIcon />
-                Previous
-              </Button>
+          {this.props.searchTrips.length > 1 ? (
+            <Grid container>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  size="small"
+                  fullWidth
+                  onClick={() => {
+                    this.props.onPreviousTrip();
+                    if (this.props.currentSearchTripIndex - 1 >= 0) {
+                      this.exchangeCurrency(
+                        this.props.searchTrips[
+                          this.props.currentSearchTripIndex - 1
+                        ].currencyCode,
+                        this.props.userCurrencyCode,
+                        this.props.searchTrips[
+                          this.props.currentSearchTripIndex - 1
+                        ].budget
+                      );
+                    } else {
+                      this.exchangeCurrency(
+                        this.props.searchTrips[
+                          this.props.searchTrips.length - 1
+                        ].currencyCode,
+                        this.props.userCurrencyCode,
+                        this.props.searchTrips[
+                          this.props.searchTrips.length - 1
+                        ].budget
+                      );
+                    }
+                  }}
+                >
+                  <ArrowBackIosIcon />
+                  Previous
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  size="small"
+                  fullWidth
+                  onClick={() => {
+                    this.props.onNextTrip();
+                    if (
+                      this.props.currentSearchTripIndex + 1 <
+                      this.props.searchTrips.length
+                    ) {
+                      this.exchangeCurrency(
+                        this.props.searchTrips[
+                          this.props.currentSearchTripIndex + 1
+                        ].currencyCode,
+                        this.props.userCurrencyCode,
+                        this.props.searchTrips[
+                          this.props.currentSearchTripIndex + 1
+                        ].budget
+                      );
+                    } else {
+                      this.exchangeCurrency(
+                        this.props.searchTrips[0].currencyCode,
+                        this.props.userCurrencyCode,
+                        this.props.searchTrips[0].budget
+                      );
+                    }
+                  }}
+                >
+                  Next
+                  <ArrowForwardIosIcon />
+                </Button>
+              </Grid>
             </Grid>
-
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="default"
-                size="small"
-                fullWidth
-                onClick={() => {
-                  this.props.onNextTrip();
-                  if (
-                    this.props.currentSearchTripIndex + 1 <
-                    this.props.searchTrips.length
-                  ) {
-                    this.exchangeCurrency(
-                      this.props.searchTrips[
-                        this.props.currentSearchTripIndex + 1
-                      ].currencyCode,
-                      this.props.userCurrencyCode,
-                      this.props.searchTrips[
-                        this.props.currentSearchTripIndex + 1
-                      ].budget
-                    );
-                  } else {
-                    this.exchangeCurrency(
-                      this.props.searchTrips[0].currencyCode,
-                      this.props.userCurrencyCode,
-                      this.props.searchTrips[0].budget
-                    );
-                  }
-                }}
-              >
-                Next
-                <ArrowForwardIosIcon />
-              </Button>
-            </Grid>
-          </Grid>
+          ) : null}
         </div>
       );
     } else {
