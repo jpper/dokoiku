@@ -192,6 +192,12 @@ const reducer = (state: any = initialState, action: Action): any => {
         users: action.users
       };
     }
+    case "CLEAR_PROFILE": {
+      return {
+        ...state,
+        displayProfile: undefined
+      };
+    }
     //toggle notes and messages for ongoing trip view
     //0 = map, 1 = notes, 2 = msg
     case "TOGGLE_NOTES": {
@@ -286,6 +292,7 @@ const reducer = (state: any = initialState, action: Action): any => {
         displayProfile: action.displayProfile
       };
     }
+
     case "REMOVE_REQUEST": {
       console.log(action.fromId);
       const newRequests = state.requests.filter(

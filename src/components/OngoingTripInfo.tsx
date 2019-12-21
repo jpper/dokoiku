@@ -494,6 +494,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                     fullWidth
                     onClick={() => {
                       this.props.onPreviousTrip();
+                      this.props.onChangeDisplayProfile(undefined);
                       if (this.props.currentOngoingTripIndex - 1 >= 0) {
                         this.exchangeCurrency(
                           this.props.ongoingTrips[
@@ -530,6 +531,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                     fullWidth
                     onClick={() => {
                       this.props.onNextTrip();
+                      this.props.onChangeDisplayProfile(undefined);
                       if (
                         this.props.currentOngoingTripIndex + 1 <
                         this.props.ongoingTrips.length

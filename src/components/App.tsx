@@ -204,6 +204,10 @@ const mapDispatchToProps = (dispatch: any) => ({
   logout: () => dispatch({ type: "LOGOUT" }),
   setPageTabIndex: (index: any) => {
     dispatch(setPageTabIndex(index));
+    dispatch({
+      type: "CHANGE_DISPLAY_PROFILE",
+      displayProfile: undefined
+    });
   },
   getUserCurrencyCode: (userId: string) => {
     myFirestore
@@ -489,7 +493,6 @@ class App extends React.Component<myProps, any> {
                                   }
                                 />
                               )}
-
                               {this.props.mapTripMessage === 2 && (
                                 <ChatBoard
                                   tripId={this.props.ongoingTrips[
@@ -573,17 +576,12 @@ class App extends React.Component<myProps, any> {
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
-                                !this.props.showChat &&
-                                !this.props.showEdit &&
-                                this.props.searchTrips.length &&
-                                this.props.mapTripMessage === 0 && (
-                                  <Map
-                                    trips={this.props.searchTrips}
-                                    currentTripIndex={
-                                      this.props.currentSearchTripIndex
-                                    }
-                                  />
-                                )
+                                <Map
+                                  trips={this.props.searchTrips}
+                                  currentTripIndex={
+                                    this.props.currentSearchTripIndex
+                                  }
+                                />
                               )}
                             </Grid>
                           </Grid>
