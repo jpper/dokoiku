@@ -1,11 +1,15 @@
 const { region } = require("firebase-functions");
 const { credential } = require("firebase-admin");
 const axios = require("axios");
+const { IncomingWebhook } = require("@slack/webhook");
 
 const GCLOUD_REGION = "asia-east2";
 const GCLOUD_TIMEZONE = "Asia/Tokyo";
 const GCLOUD_PROJECT_ID = "project-gopherdor";
 const GCLOUD_BACKET_NAME = "gopherdor-firestore-backup";
+
+const url = process.env.SLACK_WEBHOOK_URL;
+const webhook = new IncomingWebhook(url);
 
 module.exports.backupFirestoreToStorage = region(GCLOUD_REGION)
   .pubsub.schedule("0 3 * * *")
@@ -21,6 +25,11 @@ module.exports.backupFirestoreToStorage = region(GCLOUD_REGION)
         { outputUriPrefix: `gs://${GCLOUD_BACKET_NAME}` },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );
+
+      const message = {
+        text: `Successfully backup FireStore data to Cloud Storage in GCP.`
+      };
+      webhook.send(message);
       console.log(response);
     } catch (err) {
       console.error(err);

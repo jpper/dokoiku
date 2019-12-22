@@ -29,6 +29,7 @@ gcloud firestore export gs://gopherdor-firestore-backup
 ### Import
 
 ```bash
+gcloud config set project project-gopherdor
 gcloud firestore import gs://gopherdor-firestore-backup/2019-12-22T12:07:48_23056/
 ```
 
