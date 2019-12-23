@@ -132,7 +132,6 @@ class EditTrip extends React.Component<EditProps, EditState> {
     this.setState({
       toggleDialog: true
     });
-    console.log(this.state.toggleDialog);
   }
   render() {
     return (
