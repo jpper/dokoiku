@@ -1,6 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Tooltip } from "@material-ui/core";
+import {
+  Button,
+  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogActions
+} from "@material-ui/core";
 import moment from "moment";
 // import firebase from "firebase";
 import { myFirestore } from "../config/firebase";
@@ -8,10 +16,18 @@ import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI and styling
 import "../styles/Modal.css";
-import { Grid, Typography } from "@material-ui/core";
+import {
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography
+} from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import PersonIcon from "@material-ui/icons/Person";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
@@ -34,22 +50,24 @@ type myProps = {
 };
 
 type myState = {
-  togglePending: boolean;
+  toggleDialog: boolean;
   userCurrencyBudget: number;
+  pendingStatus: boolean[];
 };
 
 class SearchTripInfo extends React.Component<myProps, myState> {
   constructor(props: myProps) {
     super(props);
     this.state = {
-      togglePending: false,
-      userCurrencyBudget: 0
+      toggleDialog: false,
+      userCurrencyBudget: 0,
+      pendingStatus: this.props.searchTrips.map(() => false)
     };
   }
 
   handleToggle = () => {
     this.setState({
-      togglePending: true
+      toggleDialog: !this.state.toggleDialog
     });
   };
   exchangeCurrency = async (
@@ -61,8 +79,8 @@ class SearchTripInfo extends React.Component<myProps, myState> {
       `https://currency-exchange.p.rapidapi.com/exchange?q=1&from=${fromCurrency}&to=${toCurrency}`,
       {
         headers: {
-          "x-rapidapi-host": process.env.REACT_APP_X_RAPIDAPI_HOST,
-          "x-rapidapi-key": process.env.REACT_APP_X_RAPIDAPI_KEY
+          "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
+          "x-rapidapi-key": "b6e4f9fc03msh80db2bc55980af4p181a67jsnb4b3c557714d"
         }
       }
     );
@@ -91,7 +109,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
 
             {/* Country */}
             <Typography className="iconWrapper">
-              <strong>Country: &nbsp;</strong>
+              <strong>Country: </strong>
               <img
                 src={`https://www.countryflags.io/${this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -110,7 +128,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* Starting Location */}
             <Typography className="noWrapper">
               <DoubleArrowIcon />
-              <strong>Starting Location: &nbsp;</strong>
+              <strong>Starting Location: </strong>
               {` ${
                 this.props.searchTrips[this.props.currentSearchTripIndex]
                   .startLocation
@@ -120,7 +138,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* Start Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>Start Date: &nbsp;</strong>
+              <strong>Start Date: </strong>
               {moment(
                 this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -131,7 +149,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* End Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>End Date: &nbsp;</strong>
+              <strong>End Date: </strong>
               {moment(
                 this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -185,7 +203,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             >
               <Typography className="noWrapper topPadding">
                 <InfoIcon />
-                <strong>Budget:&nbsp; </strong>
+                <strong>Budget: </strong>
                 {
                   this.props.searchTrips[this.props.currentSearchTripIndex]
                     .budget
@@ -271,7 +289,13 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                 this.props.userId,
                 this.props.searchTrips[this.props.currentSearchTripIndex].tripId
               );
+              const newPendingState = this.state.pendingStatus;
+              newPendingState[this.props.currentSearchTripIndex] = true;
+              this.setState({
+                pendingStatus: newPendingState
+              });
               this.handleToggle();
+              console.log(newPendingState);
             }}
             variant="contained"
             color="primary"
@@ -279,9 +303,24 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             fullWidth
           >
             <GroupAddIcon />
-            {this.state.togglePending ? "PENDING..." : "JOIN!"}
+            {this.state.pendingStatus[this.props.currentSearchTripIndex]
+              ? "Pending"
+              : "JOIN!"}
           </Button>
-
+          {this.state.toggleDialog ? (
+            <Dialog open={this.state.toggleDialog}>
+              <DialogTitle>Successfully Joined</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Congratulations! You just joined a new trip! Go to your
+                  upcoming trips and take a look!
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleToggle}>Close</Button>
+              </DialogActions>
+            </Dialog>
+          ) : null}
           {/* Previous & Next Button */}
           {this.props.searchTrips.length > 1 ? (
             <Grid container>
