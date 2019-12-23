@@ -1,7 +1,15 @@
 import React from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
-import { Button, IconButton } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { firestore } from "firebase";
@@ -46,7 +54,6 @@ const mapDispatchToProps = (dispatch: any) => {
           waypoints,
           budget
         });
-      window.location.reload();
     }
   };
 };
@@ -73,6 +80,7 @@ type EditState = {
   waypoints: any;
   addedWaypoint: string;
   budget: number;
+  toggleDialog: boolean;
 };
 
 class EditTrip extends React.Component<EditProps, EditState> {
@@ -86,7 +94,8 @@ class EditTrip extends React.Component<EditProps, EditState> {
       startLocation: this.props.startLocation,
       waypoints: this.props.waypoints,
       addedWaypoint: "",
-      budget: this.props.budget
+      budget: this.props.budget,
+      toggleDialog: false
     };
   }
   componentWillMount() {
@@ -116,7 +125,13 @@ class EditTrip extends React.Component<EditProps, EditState> {
       startLocation: "",
       waypoints: [],
       addedWaypoint: "",
-      budget: 0
+      budget: 0,
+      toggleDialog: false
+    });
+  }
+  handleToggle() {
+    this.setState({
+      toggleDialog: !this.state.toggleDialog
     });
   }
   render() {
@@ -137,8 +152,9 @@ class EditTrip extends React.Component<EditProps, EditState> {
                   this.state.budget,
                   this.props.tripId
                 );
+                this.handleToggle();
                 this.clearState();
-                this.props.onClosePopup();
+                //this.props.onClosePopup();
               }}
               onError={errors => console.log(errors)}
             >
@@ -299,6 +315,25 @@ class EditTrip extends React.Component<EditProps, EditState> {
               )}
               <br />
               <br />
+              <Dialog open={this.state.toggleDialog}>
+                <DialogTitle>Successfully updated</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Congratulations! You just updated your trip.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={() => {
+                      this.handleToggle();
+                      document.location.reload();
+                    }}
+                  >
+                    Close
+                  </Button>
+                </DialogActions>
+              </Dialog>
+
               <Button
                 variant="contained"
                 color="secondary"
