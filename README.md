@@ -5,16 +5,40 @@
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [For Developers](#for-developers)
+2. [How to Use](#how-to-use)
+3. [For Developers](#for-developers)
    <!-- 3. [Navigating the App](#navigating-the-app) -->
-3. [Technology Used](#technology-used)
-4. [Future Features](#future-features)
-5. [Contributors](#contributors)
+4. [Technology Used](#technology-used)
+5. [Future Features](#future-features)
+6. [Contributors](#contributors)
 
 ## Introduction
 
-This is a full-stack, single page application that allows users to connect with each other to plan trips.
-It is also [available on Google App Engine](https://gopherdor-frontend-101.appspot.com/).
+Dokoiku is a full-stack, single page application that allows users to connect with each other to plan trips.
+It is also [available on Google App Engine](https://dokoiku.genoatlas.com/).
+
+## How to Use
+
+<h3><b>Search Trips:</b></h3>
+        <p>
+          Browse trips that other users have created. When you find a trip you
+          like, hit the "JOIN" button to request to join!
+        </p>
+        <h3><b>Build Trip:</b></h3>
+        <p>
+          Create a trip of your own! Input information including destinations,
+          dates, and budget. Other users will be able to request to join.
+        </p>
+        <h3><b>Upcoming Trips:</b></h3>
+        <p>
+          Plan the trips you are a member of! Use the Notes and Messages
+          features to coordinate with members of your trip.
+        </p>
+        <h3><b>Profile:</b></h3>
+        <p>
+          Customize your profile! You can also include links to your social
+          media accounts!
+        </p>
 
 ## For Developers
 
@@ -53,10 +77,10 @@ Backend and Deployment:
 
 ## Future Features
 
-- Direct messaging
+- Friend requests and direct messaging
+- Google Calendar integration
 - Location sharing
 - Multiple modes of transit
-- Expanded user profile
 
 ...and more!
 
