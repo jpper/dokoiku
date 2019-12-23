@@ -74,6 +74,7 @@ Backend and Deployment:
 
 - Google Cloud Platform
 - Firebase
+- Rakuten Rapid API
 
 ## Future Features
 
