@@ -22,7 +22,7 @@ class Notes extends Component<any, any> {
     firepad.on("ready", function() {
       if (firepad.isHistoryEmpty()) {
         firepad.setHtml(
-          "This is where you can write your collaborative note real-time.\n"
+          "This your group's collaborative document, with real-time editing.\nHappy planning!"
         );
       }
     });
