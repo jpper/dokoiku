@@ -12,7 +12,7 @@ import { myFirestore } from "../config/firebase";
 import { removeRequest } from "../redux/action";
 import firebase from "firebase";
 import "../styles/Notification.css";
-import { borderRadius } from "@material-ui/system";
+
 import ProfilePopover from "./ProfilePopover";
 
 type myProps = {
@@ -105,7 +105,6 @@ class Notification extends React.Component<myProps, any> {
   };
 
   render() {
-    //console.log(this.props.requests);
     return (
       <div>
         {this.props.requests.length ? (

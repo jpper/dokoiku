@@ -8,7 +8,6 @@ import Map from "./Map";
 import Notes from "./Notes";
 import ChatBoard from "./ChatBoard";
 import axios from "axios";
-import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI
 import {
@@ -75,11 +74,9 @@ class PastTripInfo extends React.Component<any, myStates> {
   }
 
   componentDidMount() {
-    console.log("PAST_TRIP_INFO");
     this.setState({
       pastTrips: this.props.pastTrips
     });
-    console.log(this.props.pastTrips);
 
     // Setup modal window status (Open/ Close)
     let initialStatus = Array(this.state.pastTrips.length);
@@ -91,7 +88,7 @@ class PastTripInfo extends React.Component<any, myStates> {
 
   prevPastTrip = () => {
     let prevIndex: number;
-    console.log(this.state.pastTrips);
+
     if (this.state.currentPastTripIndex === 0) {
       prevIndex = this.state.pastTrips.length - 1;
     } else {
@@ -173,7 +170,6 @@ class PastTripInfo extends React.Component<any, myStates> {
     const reviewer = this.props.userId;
     const reviewId = tripId + "_" + reviewer + "_" + reviewee;
     const postDate = firestore.Timestamp.fromDate(new Date());
-    console.log(reviewee);
 
     myFirestore
       .collection("users")
@@ -251,7 +247,7 @@ class PastTripInfo extends React.Component<any, myStates> {
         }
       }
     );
-    console.log(result.data);
+
     const userCurrencyBudget = result.data * budget;
     this.setState({ userCurrencyBudget });
   };
@@ -269,7 +265,7 @@ class PastTripInfo extends React.Component<any, myStates> {
 
   render() {
     return (
-      <div className="pastTripInfo">
+      <div>
         {this.state.pastTrips.length === 0 ||
         this.props.userCurrencyCode === "" ? (
           <p>No past trips</p>
@@ -278,7 +274,7 @@ class PastTripInfo extends React.Component<any, myStates> {
             {/* Trip details */}
             <Grid item xs={12} sm={4} md={4} lg={4} xl={3}>
               <Container>
-                <Card>
+                <Card className="pastTripInfo">
                   <div style={{ maxHeight: 520, overflow: "scroll" }}>
                     <div className="tripBasicInfo">
                       <BasicTripInfo
@@ -478,7 +474,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                             (u: { id: any }) => u.id === member
                           ).photoUrl;
                           // skips own data here
-                          if (member === this.props.userId) return;
+                          if (member === this.props.userId) return null;
 
                           return (
                             <div key={i}>
