@@ -60,23 +60,31 @@ const mapDispatchToProps = (dispatch: any) => ({
                 );
               });
           } else {
-            // update user info everytime
-            myFirestore
+            // Get profile from FireStore database
+            const userData = await myFirestore
               .collection("users")
               .doc(userResult.uid)
-              .update({
-                nickname: userResult.displayName,
-                photoUrl: userResult.photoURL
-              })
-              .then(res => {
-                console.log("Update User info");
-              });
+              .get();
+
+            // update user info everytime
+            // myFirestore
+            //   .collection("users")
+            //   .doc(userResult.uid)
+            //   .update({
+            //     nickname: userResult.displayName,
+            //     photoUrl: userResult.photoURL
+            //   })
+            //   .then(res => {
+            //     console.log("Update User info");
+            //   });
+
+            console.log(userResult.photoURL);
 
             dispatch(
               setUserInfo(
                 userResult.displayName,
                 userResult.uid,
-                userResult.photoURL
+                userData.data().photoUrl
               )
             );
           }
@@ -147,9 +155,18 @@ class Login extends Component<Props, Status> {
   }
 
   checkLogin = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user !== null) {
-        this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        const userData = await myFirestore
+          .collection("users")
+          .doc(user.uid)
+          .get();
+
+        this.props.setUserInfo(
+          user.displayName,
+          user.uid,
+          userData.data().photoUrl
+        );
         this.props.getTrips(user.uid);
       }
     });

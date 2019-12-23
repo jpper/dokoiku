@@ -271,9 +271,18 @@ class App extends React.Component<myProps, any> {
   }
 
   checkLogin = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user !== null) {
-        this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        const userData = await myFirestore
+          .collection("users")
+          .doc(user.uid)
+          .get();
+
+        this.props.setUserInfo(
+          user.displayName,
+          user.uid,
+          userData.data().photoUrl
+        );
         this.props.getTrips(user.uid);
         this.props.getRequests(user.uid);
         this.props.getUserCurrencyCode(user.uid);
@@ -471,7 +480,7 @@ class App extends React.Component<myProps, any> {
                               </Container>
                             </Grid>
                             {/* {if statement and changing props value here} */}
-                            <Grid item xs={12} xl={8} sm={8} md={8} lg={9}>
+                            <Grid item xs={12} sm={8} md={8} lg={8} xl={9}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -680,7 +689,7 @@ class App extends React.Component<myProps, any> {
 
                 {/* Privacy policy */}
                 {this.props.pageTabIndex === 0 ? (
-                  <Link to="/privacy" className="footer">
+                  <Link to="/privacy">
                     <Button
                       variant="outlined"
                       size="small"

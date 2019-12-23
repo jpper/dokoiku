@@ -82,6 +82,9 @@ class Map extends React.Component<MapProps, MapState> {
       }
     }
   }
+  componentWillUpdate() {
+    if (!this.state.foundRoute) this.setState({ foundRoute: true });
+  }
   render() {
     if (this.state.isResponse) {
       return !this.state.foundRoute ? (
@@ -90,8 +93,12 @@ class Map extends React.Component<MapProps, MapState> {
             Sorry! We could not find a route for your trip.
           </Typography>
           <CardMedia
+            style={{
+              width: "0",
+              paddingTop: "1000", // 16:9,
+              marginTop: "10"
+            }}
             image="https://japanesequizzes.com/wp-content/uploads/2019/08/How-to-say-Sorry-in-Japanese.png"
-            title="Paella dish"
           />
         </Card>
       ) : (

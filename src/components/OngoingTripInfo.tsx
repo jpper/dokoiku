@@ -28,6 +28,7 @@ import {
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import PersonIcon from "@material-ui/icons/Person";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
@@ -58,22 +59,14 @@ type myProps = {
 type myState = {
   toggleDialog: boolean;
   userCurrencyBudget: number;
-  pageStatus: PageStatus;
 };
-
-enum PageStatus {
-  Map,
-  Notes,
-  Messages
-}
 
 class OngoingTripInfo extends React.Component<myProps, myState> {
   constructor(props: myProps) {
     super(props);
     this.state = {
       toggleDialog: false,
-      userCurrencyBudget: 0,
-      pageStatus: PageStatus.Map
+      userCurrencyBudget: 0
     };
   }
   async deleteTrip(
@@ -154,7 +147,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </Typography>
             {/* Country */}
             <Typography className="iconWrapper">
-              <strong>Country: &nbsp;</strong>
+              <strong>Country: </strong>
               <img
                 src={`https://www.countryflags.io/${this.props.ongoingTrips[
                   this.props.currentOngoingTripIndex
@@ -172,7 +165,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             {/* Starting Location */}
             <Typography className="noWrapper">
               <DoubleArrowIcon />
-              <strong>Starting Location: &nbsp;</strong>
+              <strong>Starting Location: </strong>
 
               {` ${
                 this.props.ongoingTrips[this.props.currentOngoingTripIndex]
@@ -182,7 +175,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             {/* Start Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>Start Date: &nbsp; </strong>
+              <strong>Start Date: </strong>
               {moment(
                 this.props.ongoingTrips[
                   this.props.currentOngoingTripIndex
@@ -193,7 +186,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             {/* End Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>End Date: &nbsp; </strong>
+              <strong>End Date: </strong>
               {moment(
                 this.props.ongoingTrips[
                   this.props.currentOngoingTripIndex
@@ -612,7 +605,6 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "NEXT_ONGOING_TRIP"
       });
     },
-
     toggleNotes: () =>
       dispatch({
         type: "TOGGLE_NOTES"

@@ -18,7 +18,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  TextField
+  TextField,
+  Modal,
+  Backdrop,
+  Box,
+  Fade
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
@@ -35,18 +39,27 @@ type myProps = {
   updateUserCurrencyCode: any;
 };
 
-class MyProfile extends React.Component<
-  myProps,
-  {
-    user: any;
-    showReview: any;
-    rating: number;
-    userCurrencyCode: string;
-    toggleCurrencyDialog: boolean;
-    toggleBioDialog: boolean;
-    aboutMeText: string;
-  }
-> {
+enum snsTypes {
+  None,
+  Facebook,
+  Twitter,
+  Instagram,
+  Photo
+}
+
+type myStates = {
+  user: any;
+  showReview: any;
+  rating: number;
+  userCurrencyCode: string;
+  toggleCurrencyDialog: boolean;
+  toggleBioDialog: boolean;
+  aboutMeText: string;
+  snsType: snsTypes;
+  snsUrl: string;
+};
+
+class MyProfile extends React.Component<myProps, myStates> {
   constructor(props: myProps) {
     super(props);
     this.state = {
@@ -56,7 +69,9 @@ class MyProfile extends React.Component<
       userCurrencyCode: this.props.userCurrencyCode,
       toggleCurrencyDialog: false,
       toggleBioDialog: false,
-      aboutMeText: undefined
+      aboutMeText: undefined,
+      snsType: snsTypes.None,
+      snsUrl: ""
     };
   }
 
@@ -113,6 +128,75 @@ class MyProfile extends React.Component<
     });
   };
 
+  clearSnsType = () => {
+    this.setState({
+      snsType: snsTypes.None
+    });
+    this.setState({
+      snsUrl: ""
+    });
+  };
+
+  clickPhoto = () => {
+    this.setState({
+      snsType: snsTypes.Photo
+    });
+  };
+
+  updatePhotoUrl = () => {
+    myFirestore
+      .collection("users")
+      .doc(this.props.userId)
+      .update({ photoUrl: this.state.snsUrl });
+
+    this.clearSnsType();
+  };
+
+  clickFacebook = () => {
+    this.setState({
+      snsType: snsTypes.Facebook
+    });
+  };
+
+  updateFacebookUrl = () => {
+    myFirestore
+      .collection("users")
+      .doc(this.props.userId)
+      .update({ facebook: this.state.snsUrl });
+
+    this.clearSnsType();
+  };
+
+  clickTwitter = () => {
+    this.setState({
+      snsType: snsTypes.Twitter
+    });
+  };
+
+  updateTwitterUrl = () => {
+    myFirestore
+      .collection("users")
+      .doc(this.props.userId)
+      .update({ twitter: this.state.snsUrl });
+
+    this.clearSnsType();
+  };
+
+  clickInstagram = () => {
+    this.setState({
+      snsType: snsTypes.Instagram
+    });
+  };
+
+  updateInstagramUrl = () => {
+    myFirestore
+      .collection("users")
+      .doc(this.props.userId)
+      .update({ instagram: this.state.snsUrl });
+
+    this.clearSnsType();
+  };
+
   render() {
     if (this.state.user && this.state.userCurrencyCode) {
       this.calculateRating(this.props.userId);
@@ -138,10 +222,7 @@ class MyProfile extends React.Component<
                 src={this.state.user.photoUrl}
                 id="profile-picture"
                 alt={this.state.user.nickname}
-                onClick={() => {
-                  const modal = document.getElementById("change-photo");
-                  modal.style.display = "block";
-                }}
+                onClick={this.clickPhoto}
               />
               <div className="spacer10"></div>
 
@@ -168,14 +249,12 @@ class MyProfile extends React.Component<
               <div className="spacer10"></div>
 
               <List id="horizontal-list">
+                {/* Facebook */}
                 <ListItem
                   className="listItem itemTextCentering"
                   id="listItem-facebook"
                   button
-                  onClick={() => {
-                    const modal = document.getElementById("add-facebook");
-                    modal.style.display = "block";
-                  }}
+                  onClick={this.clickFacebook}
                 >
                   <ListItemText
                     primary={
@@ -200,14 +279,12 @@ class MyProfile extends React.Component<
                   />
                 </ListItem>
 
+                {/* Twitter */}
                 <ListItem
                   button
                   className="listItem itemTextCentering"
                   id="listItem-twitter"
-                  onClick={() => {
-                    const modal = document.getElementById("add-twitter");
-                    modal.style.display = "block";
-                  }}
+                  onClick={this.clickTwitter}
                 >
                   <ListItemText
                     primary={
@@ -236,10 +313,7 @@ class MyProfile extends React.Component<
                   id="listItem-instagram"
                   className="itemTextCentering"
                   button
-                  onClick={() => {
-                    const modal = document.getElementById("add-instagram");
-                    modal.style.display = "block";
-                  }}
+                  onClick={this.clickInstagram}
                 >
                   <ListItemText
                     primary={
@@ -266,147 +340,272 @@ class MyProfile extends React.Component<
               </List>
 
               {/* MODALS SECTION */}
-              {/* FACEBOOK */}
-              <div className="modal" id="change-photo">
-                <div className="modal-content">
-                  <p>Change your profile picture</p>
-                  <input id="photo-url" placeholder="New photo URL" />
-                  <button
-                    onClick={() => {
-                      const url = (document.getElementById(
-                        "photo-url"
-                      ) as HTMLInputElement).value;
-                      myFirestore
-                        .collection("users")
-                        .doc(this.props.userId)
-                        .update({ photoUrl: url });
-                      const modal = document.getElementById("change-photo");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Submit
-                  </button>
-                  <br></br>
-                  <br></br>
-                  <button
-                    className="close"
-                    onClick={() => {
-                      const modal = document.getElementById("change-photo");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-              {/* FACEBOOK */}
-              <div className="modal" id="add-facebook">
-                <div className="modal-content">
-                  <p>Add a link to your Facebook:</p>
-                  <h4>
-                    This information will be visible to members of your trips.
-                  </h4>
-                  <input id="fb-url" placeholder="Paste URL here" />
-                  <button
-                    onClick={() => {
-                      const url = (document.getElementById(
-                        "fb-url"
-                      ) as HTMLInputElement).value;
-                      myFirestore
-                        .collection("users")
-                        .doc(this.props.userId)
-                        .update({ facebook: url });
-                      const modal = document.getElementById("add-facebook");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Submit
-                  </button>
-                  <br></br>
-                  <br></br>
-                  <button
-                    className="close"
-                    onClick={() => {
-                      const modal = document.getElementById("add-facebook");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
+              {/* Photo URL */}
+              <Modal
+                className="modalWindow"
+                open={this.state.snsType === snsTypes.Photo}
+                onClose={this.clearSnsType}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                  timeout: 500
+                }}
+              >
+                <Fade in={this.state.snsType === snsTypes.Photo}>
+                  <div className="modalFade">
+                    <Box
+                      component="fieldset"
+                      mb={0}
+                      pb={0}
+                      borderColor="transparent"
+                    >
+                      <Typography variant="h5">
+                        Change your profile picture
+                      </Typography>
+                    </Box>
+                    <Box component="fieldset" mb={0} borderColor="transparent">
+                      <TextField
+                        placeholder="Write your Photo URL"
+                        label="Your Photo URL"
+                        rows={10}
+                        fullWidth
+                        onChange={e => {
+                          this.setState({
+                            snsUrl: e.target.value
+                          });
+                        }}
+                        value={this.state.snsUrl}
+                      />
+                    </Box>
+                    <Box component="fieldset" mb={0} borderColor="transparent">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.updatePhotoUrl}
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="default"
+                        onClick={this.clearSnsType}
+                      >
+                        Close
+                      </Button>
+                    </Box>
+                  </div>
+                </Fade>
+              </Modal>
+
+              {/* Facebook URL */}
+              <Modal
+                className="modalWindow"
+                open={this.state.snsType === snsTypes.Facebook}
+                onClose={this.clearSnsType}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                  timeout: 500
+                }}
+              >
+                <Fade in={this.state.snsType === snsTypes.Facebook}>
+                  <div className="modalFade">
+                    <Box
+                      component="fieldset"
+                      mb={0}
+                      pb={0}
+                      borderColor="transparent"
+                    >
+                      <Typography variant="h5">
+                        Add a link to your Facebook:
+                      </Typography>
+                    </Box>
+                    <Box
+                      component="fieldset"
+                      mt={0}
+                      mb={0}
+                      pt={0}
+                      pb={0}
+                      borderColor="transparent"
+                    >
+                      <Typography variant="body1">
+                        This information will be visible to members of your
+                        trips.
+                      </Typography>
+                    </Box>
+                    <Box component="fieldset" mb={0} borderColor="transparent">
+                      <TextField
+                        label="Facebook URL"
+                        placeholder="Write your Facebook URL"
+                        rows={10}
+                        fullWidth
+                        onChange={e => {
+                          this.setState({
+                            snsUrl: e.target.value
+                          });
+                        }}
+                        value={this.state.snsUrl}
+                      />
+                    </Box>
+                    <Box component="fieldset" mb={0} borderColor="transparent">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.updateFacebookUrl}
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="default"
+                        onClick={this.clearSnsType}
+                      >
+                        Close
+                      </Button>
+                    </Box>
+                  </div>
+                </Fade>
+              </Modal>
+
+              {/* Twitter URL */}
+              <Modal
+                className="modalWindow"
+                open={this.state.snsType === snsTypes.Twitter}
+                onClose={this.clearSnsType}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                  timeout: 500
+                }}
+              >
+                <Fade in={this.state.snsType === snsTypes.Twitter}>
+                  <div className="modalFade">
+                    <Box
+                      component="fieldset"
+                      mb={0}
+                      pb={0}
+                      borderColor="transparent"
+                    >
+                      <Typography variant="h5">
+                        Add a link to your Twitter:
+                      </Typography>
+                    </Box>
+                    <Box
+                      component="fieldset"
+                      mt={0}
+                      mb={0}
+                      pt={0}
+                      pb={0}
+                      borderColor="transparent"
+                    >
+                      <Typography variant="body1">
+                        This information will be visible to members of your
+                        trips.
+                      </Typography>
+                    </Box>
+                    <Box component="fieldset" mb={0} borderColor="transparent">
+                      <TextField
+                        label="Twitter URL"
+                        placeholder="Write your Twitter URL"
+                        fullWidth
+                        rows={10}
+                        onChange={e => {
+                          this.setState({
+                            snsUrl: e.target.value
+                          });
+                        }}
+                        value={this.state.snsUrl}
+                      />
+                    </Box>
+                    <Box component="fieldset" mb={0} borderColor="transparent">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.updateTwitterUrl}
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="default"
+                        onClick={this.clearSnsType}
+                      >
+                        Close
+                      </Button>
+                    </Box>
+                  </div>
+                </Fade>
+              </Modal>
+
               {/* INSTAGRAM */}
-              <div className="modal" id="add-instagram">
-                <div className="modal-content">
-                  <p>Add a link to your Instagram:</p>
-                  <h4>
-                    This information will be visible to members of your trips.
-                  </h4>
-                  <input id="instagram-url" placeholder="Paste URL here" />
-                  <button
-                    onClick={() => {
-                      const url = (document.getElementById(
-                        "instagram-url"
-                      ) as HTMLInputElement).value;
-                      myFirestore
-                        .collection("users")
-                        .doc(this.props.userId)
-                        .update({ instagram: url });
-                      const modal = document.getElementById("add-instagram");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Submit
-                  </button>
-                  <br></br>
-                  <br></br>
-                  <button
-                    className="close"
-                    onClick={() => {
-                      const modal = document.getElementById("add-instagram");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-              {/* TWITTER */}
-              <div className="modal" id="add-twitter">
-                <div className="modal-content">
-                  <p>Add a link to your Twitter:</p>
-                  <h4>
-                    This information will be visible to members of your trips.
-                  </h4>
-                  <input id="twitter-url" placeholder="Paste URL here" />
-                  <button
-                    onClick={() => {
-                      const url = (document.getElementById(
-                        "twitter-url"
-                      ) as HTMLInputElement).value;
-                      myFirestore
-                        .collection("users")
-                        .doc(this.props.userId)
-                        .update({ twitter: url });
-                      const modal = document.getElementById("add-twitter");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Submit
-                  </button>
-                  <br></br>
-                  <br></br>
-                  <button
-                    className="close"
-                    onClick={() => {
-                      const modal = document.getElementById("add-twitter");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
+              <Modal
+                className="modalWindow"
+                open={this.state.snsType === snsTypes.Instagram}
+                onClose={this.clearSnsType}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                  timeout: 500
+                }}
+              >
+                <Fade in={this.state.snsType === snsTypes.Instagram}>
+                  <div className="modalFade">
+                    <Box
+                      component="fieldset"
+                      mb={0}
+                      pb={0}
+                      borderColor="transparent"
+                    >
+                      <Typography variant="h5">
+                        Add a link to your Instagram:
+                      </Typography>
+                    </Box>
+                    <Box
+                      component="fieldset"
+                      mt={0}
+                      mb={0}
+                      pt={0}
+                      pb={0}
+                      borderColor="transparent"
+                    >
+                      <Typography variant="body1">
+                        This information will be visible to members of your
+                        trips.
+                      </Typography>
+                    </Box>
+                    <Box component="fieldset" mb={0} borderColor="transparent">
+                      <TextField
+                        label="Instagram URL"
+                        placeholder="Write your Instagram URL"
+                        rows={10}
+                        fullWidth
+                        onChange={e => {
+                          this.setState({
+                            snsUrl: e.target.value
+                          });
+                        }}
+                        value={this.state.snsUrl}
+                      />
+                    </Box>
+                    <Box component="fieldset" mb={0} borderColor="transparent">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.updateInstagramUrl}
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="default"
+                        onClick={this.clearSnsType}
+                      >
+                        Close
+                      </Button>
+                    </Box>
+                  </div>
+                </Fade>
+              </Modal>
 
               <div className="spacer10"></div>
               <br />
