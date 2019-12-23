@@ -86,7 +86,7 @@ const mapDispatchToProps = (dispatch: any) => ({
       .doc(uuidv4())
       .set(message)
       .then(() => {
-        console.log("successful!");
+        // console.log("successful!");
       })
       .catch(err => {
         console.log(err);

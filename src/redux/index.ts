@@ -139,8 +139,6 @@ const reducer = (state: any = initialState, action: Action): any => {
       };
     }
     case "ADD_SEARCH_TRIP": {
-      // console.log(state.searchTrip);
-      // console.log(action.searchTrip);
       return {
         ...state,
         searchTrips: [...state.searchTrips, action.searchTrip]
@@ -202,24 +200,18 @@ const reducer = (state: any = initialState, action: Action): any => {
     //0 = map, 1 = notes, 2 = msg
     case "TOGGLE_NOTES": {
       if (state.mapTripMessage === 0) {
-        console.log("Toggle notes 0");
-        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 1
         };
       }
       if (state.mapTripMessage === 1) {
-        console.log("Toggle notes 1");
-        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 0
         };
       }
       if (state.mapTripMessage === 2) {
-        console.log("Toggle notes 2");
-        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 1
@@ -229,24 +221,18 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
     case "TOGGLE_MESSAGES": {
       if (state.mapTripMessage === 0) {
-        console.log("Toggle messages: 1");
-        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 2
         };
       }
       if (state.mapTripMessage === 1) {
-        console.log("Toggle messages: 1");
-        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 2
         };
       }
       if (state.mapTripMessage === 2) {
-        console.log("Toggle messages: 1");
-        console.log("STATE: ", state.mapTripMessage);
         return {
           ...state,
           mapTripMessage: 0
@@ -294,7 +280,6 @@ const reducer = (state: any = initialState, action: Action): any => {
     }
 
     case "REMOVE_REQUEST": {
-      console.log(action.fromId);
       const newRequests = state.requests.filter(
         (request: any) =>
           !(

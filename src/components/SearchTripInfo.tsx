@@ -10,24 +10,16 @@ import {
   DialogActions
 } from "@material-ui/core";
 import moment from "moment";
-// import firebase from "firebase";
+
 import { myFirestore } from "../config/firebase";
-import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI and styling
 import "../styles/Modal.css";
-import {
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Typography
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import PersonIcon from "@material-ui/icons/Person";
+
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
@@ -86,7 +78,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
         }
       }
     );
-    //console.log(result.data);
+
     const userCurrencyBudget = result.data * budget;
     this.setState({ userCurrencyBudget });
   };
@@ -298,7 +290,6 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                 pendingStatus: newPendingState
               });
               this.handleToggle();
-              console.log(newPendingState);
             }}
             variant="contained"
             color="primary"
