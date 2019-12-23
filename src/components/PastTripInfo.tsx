@@ -32,6 +32,8 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import DescriptionIcon from "@material-ui/icons/Description";
 import MapIcon from "@material-ui/icons/Map";
+import HelpIcon from "@material-ui/icons/Help";
+import PaymentIcon from "@material-ui/icons/Payment";
 import "../styles/TripInfo.css";
 import "../styles/PastTripInfo.css";
 import Reviews from "./Reviews";
@@ -308,48 +310,51 @@ class PastTripInfo extends React.Component<any, myStates> {
                       />
 
                       {/* Budget */}
-                      <Tooltip
-                        title={
-                          this.props.userCurrencyCode !== "None"
-                            ? Math.round(this.state.userCurrencyBudget * 100) /
-                                100 +
-                              " " +
-                              countriesToCurrencies
-                                .concat([
-                                  {
-                                    country: "None",
-                                    countryCode: "None",
-                                    currency: "None",
-                                    currencyCode: "None"
-                                  }
-                                ])
-                                .find(
-                                  (item: any) =>
-                                    this.props.userCurrencyCode ===
-                                    item.currencyCode
-                                ).currency
-                            : ""
+
+                      <Typography className="noWrapper topPadding">
+                        <PaymentIcon />
+                        <strong>Budget:&nbsp; </strong>
+                        {
+                          this.state.pastTrips[this.state.currentPastTripIndex]
+                            .budget
+                        }{" "}
+                        {
+                          countriesToCurrencies.find(
+                            (item: any) =>
+                              this.state.pastTrips[
+                                this.state.currentPastTripIndex
+                              ].currencyCode === item.currencyCode
+                          ).currency
                         }
-                        placement="top-end"
-                      >
-                        <Typography className="noWrapper topPadding">
-                          <InfoIcon />
-                          <strong>Budget:&nbsp; </strong>
-                          {
-                            this.state.pastTrips[
-                              this.state.currentPastTripIndex
-                            ].budget
-                          }{" "}
-                          {
-                            countriesToCurrencies.find(
-                              (item: any) =>
-                                this.state.pastTrips[
-                                  this.state.currentPastTripIndex
-                                ].currencyCode === item.currencyCode
-                            ).currency
+                        <Tooltip
+                          title={
+                            this.props.userCurrencyCode !== "None"
+                              ? Math.round(
+                                  this.state.userCurrencyBudget * 100
+                                ) /
+                                  100 +
+                                " " +
+                                countriesToCurrencies
+                                  .concat([
+                                    {
+                                      country: "None",
+                                      countryCode: "None",
+                                      currency: "None",
+                                      currencyCode: "None"
+                                    }
+                                  ])
+                                  .find(
+                                    (item: any) =>
+                                      this.props.userCurrencyCode ===
+                                      item.currencyCode
+                                  ).currency
+                              : ""
                           }
-                        </Typography>
-                      </Tooltip>
+                          placement="top-end"
+                        >
+                          <HelpIcon color="primary" fontSize="small" />
+                        </Tooltip>
+                      </Typography>
                     </div>
 
                     <div className="spacer10"></div>

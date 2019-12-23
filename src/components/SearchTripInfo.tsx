@@ -31,6 +31,8 @@ import PersonIcon from "@material-ui/icons/Person";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
+import HelpIcon from "@material-ui/icons/Help";
+import PaymentIcon from "@material-ui/icons/Payment";
 import "../styles/TripInfo.css";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 import axios from "axios";
@@ -179,44 +181,45 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             </div>
 
             {/* Budget */}
-            <Tooltip
-              title={
-                this.props.userCurrencyCode !== "None"
-                  ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
-                    " " +
-                    countriesToCurrencies
-                      .concat([
-                        {
-                          country: "None",
-                          countryCode: "None",
-                          currency: "None",
-                          currencyCode: "None"
-                        }
-                      ])
-                      .find(
-                        (item: any) =>
-                          this.props.userCurrencyCode === item.currencyCode
-                      ).currency
-                  : ""
+            <Typography className="noWrapper topPadding">
+              <PaymentIcon />
+              <strong>Budget:&nbsp; </strong>
+              {
+                this.props.searchTrips[this.props.currentSearchTripIndex].budget
+              }{" "}
+              {
+                countriesToCurrencies.find(
+                  (item: any) =>
+                    this.props.searchTrips[this.props.currentSearchTripIndex]
+                      .currencyCode === item.currencyCode
+                ).currency
               }
-              placement="top-end"
-            >
-              <Typography className="noWrapper topPadding">
-                <InfoIcon />
-                <strong>Budget: </strong>
-                {
-                  this.props.searchTrips[this.props.currentSearchTripIndex]
-                    .budget
-                }{" "}
-                {
-                  countriesToCurrencies.find(
-                    (item: any) =>
-                      this.props.searchTrips[this.props.currentSearchTripIndex]
-                        .currencyCode === item.currencyCode
-                  ).currency
+              <Tooltip
+                title={
+                  this.props.userCurrencyCode !== "None"
+                    ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
+                      " " +
+                      countriesToCurrencies
+                        .concat([
+                          {
+                            country: "None",
+                            countryCode: "None",
+                            currency: "None",
+                            currencyCode: "None"
+                          }
+                        ])
+                        .find(
+                          (item: any) =>
+                            this.props.userCurrencyCode === item.currencyCode
+                        ).currency
+                    : ""
                 }
-              </Typography>
-            </Tooltip>
+                placement="top-end"
+              >
+                <HelpIcon color="primary" fontSize="small" />
+              </Tooltip>
+            </Typography>
+
             <div className="spacer10"></div>
 
             <div>
@@ -332,6 +335,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                   fullWidth
                   onClick={() => {
                     this.props.onPreviousTrip();
+                    this.props.onChangeDisplayProfile(undefined);
                     if (this.props.currentSearchTripIndex - 1 >= 0) {
                       this.exchangeCurrency(
                         this.props.searchTrips[
@@ -367,6 +371,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                   fullWidth
                   onClick={() => {
                     this.props.onNextTrip();
+                    this.props.onChangeDisplayProfile(undefined);
                     if (
                       this.props.currentSearchTripIndex + 1 <
                       this.props.searchTrips.length

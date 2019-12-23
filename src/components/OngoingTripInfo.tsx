@@ -13,7 +13,8 @@ import moment from "moment";
 import { myFirestore } from "../config/firebase";
 import axios from "axios";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
-import InfoIcon from "@material-ui/icons/Info";
+import HelpIcon from "@material-ui/icons/Help";
+import PaymentIcon from "@material-ui/icons/Payment";
 // Material UI
 import "../styles/Modal.css";
 import {
@@ -219,46 +220,47 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </div>
 
             {/* Budget */}
-            <Tooltip
-              title={
-                this.props.userCurrencyCode !== "None"
-                  ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
-                    " " +
-                    countriesToCurrencies
-                      .concat([
-                        {
-                          country: "None",
-                          countryCode: "None",
-                          currency: "None",
-                          currencyCode: "None"
-                        }
-                      ])
-                      .find(
-                        (item: any) =>
-                          this.props.userCurrencyCode === item.currencyCode
-                      ).currency
-                  : ""
+
+            <Typography className="noWrapper topPadding">
+              <PaymentIcon />
+              <strong>Budget: &nbsp;</strong>
+              {
+                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .budget
+              }{" "}
+              {
+                countriesToCurrencies.find(
+                  (item: any) =>
+                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .currencyCode === item.currencyCode
+                ).currency
               }
-              placement="top-end"
-            >
-              <Typography className="noWrapper topPadding">
-                <InfoIcon />
-                <strong>Budget: </strong>
-                <br />
-                {
-                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .budget
-                }{" "}
-                {
-                  countriesToCurrencies.find(
-                    (item: any) =>
-                      this.props.ongoingTrips[
-                        this.props.currentOngoingTripIndex
-                      ].currencyCode === item.currencyCode
-                  ).currency
+              <Tooltip
+                title={
+                  this.props.userCurrencyCode !== "None"
+                    ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
+                      " " +
+                      countriesToCurrencies
+                        .concat([
+                          {
+                            country: "None",
+                            countryCode: "None",
+                            currency: "None",
+                            currencyCode: "None"
+                          }
+                        ])
+                        .find(
+                          (item: any) =>
+                            this.props.userCurrencyCode === item.currencyCode
+                        ).currency
+                    : ""
                 }
-              </Typography>
-            </Tooltip>
+                placement="top-end"
+              >
+                <HelpIcon color="primary" fontSize="small" />
+              </Tooltip>
+            </Typography>
+
             <div className="spacer10"></div>
 
             {/* Notes & Messages */}
