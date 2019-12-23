@@ -267,9 +267,18 @@ class App extends React.Component<myProps, any> {
   }
 
   checkLogin = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user !== null) {
-        this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        const userData = await myFirestore
+          .collection("users")
+          .doc(user.uid)
+          .get();
+
+        this.props.setUserInfo(
+          user.displayName,
+          user.uid,
+          userData.data().photoUrl
+        );
         this.props.getTrips(user.uid);
         this.props.getRequests(user.uid);
         this.props.getUserCurrencyCode(user.uid);

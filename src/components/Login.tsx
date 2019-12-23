@@ -78,6 +78,8 @@ const mapDispatchToProps = (dispatch: any) => ({
             //     console.log("Update User info");
             //   });
 
+            console.log(userResult.photoURL);
+
             dispatch(
               setUserInfo(
                 userResult.displayName,
@@ -153,9 +155,18 @@ class Login extends Component<Props, Status> {
   }
 
   checkLogin = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user !== null) {
-        this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        const userData = await myFirestore
+          .collection("users")
+          .doc(user.uid)
+          .get();
+
+        this.props.setUserInfo(
+          user.displayName,
+          user.uid,
+          userData.data().photoUrl
+        );
         this.props.getTrips(user.uid);
       }
     });
