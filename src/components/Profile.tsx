@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import "../styles/MyProfile.css";
-// import { myFirestore } from "../config/firebase";
 import {
   Button,
   Typography,
@@ -17,15 +16,24 @@ import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
 import "typeface-roboto";
 
+type User = {
+  id: string;
+  nickname: string;
+  photoUrl: string;
+  [propName: string]: any;
+};
+
 type myProps = {
   displayProfile: string;
-  users: any;
-  onChangeDisplayProfile: any;
+  users: Array<User>;
+  onChangeDisplayProfile(
+    profile: string
+  ): { type: string; displayProfile: string };
 };
 
 class Profile extends React.Component<
   myProps,
-  { user: any; showReview: any; rating: number }
+  { user: User; showReview: boolean; rating: number }
 > {
   constructor(props: myProps) {
     super(props);
@@ -55,7 +63,7 @@ class Profile extends React.Component<
     if (this.state.user === undefined && this.props.users.length) {
       this.setState({
         user: this.props.users.find(
-          (u: { id: any }) => u.id === this.props.displayProfile
+          (u: { id: string }) => u.id === this.props.displayProfile
         )
       });
     }
@@ -65,7 +73,7 @@ class Profile extends React.Component<
     if (this.state.user === undefined && this.props.users.length) {
       this.setState({
         user: this.props.users.find(
-          (u: { id: any }) => u.id === this.props.displayProfile
+          (u: { id: string }) => u.id === this.props.displayProfile
         )
       });
     }
@@ -282,7 +290,10 @@ class Profile extends React.Component<
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: {
+  displayProfile: string;
+  users: Array<User>;
+}) => {
   return {
     displayProfile: state.displayProfile,
     users: state.users

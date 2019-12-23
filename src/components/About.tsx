@@ -96,7 +96,6 @@ function About() {
           Dokoiku is a full-stack, single-page app that was created as a senior
           project during the Immersive Bootcamp at Code Chrysalis.
         </p>
-
         <ul>
           The Dokoiku Team:
           <a href="https://github.com/followdiallo">
@@ -115,22 +114,11 @@ function About() {
             <li>Ziyu Chen</li>
           </a>
         </ul>
-      </div>
-
-      {/* <ul>
-        Technology used:
-        <li>Google Cloud Platform (Google App Engine, Cloud Build)</li>
-        <li>Firebase Authentication</li>
-        <li>Firebase Cloud FireStore</li>
-        <li>Firebase RealTime Database</li>
-        <li>React</li>
-        <li>Redux</li>
-        <li>Typescript</li>
-        <li>Material UI</li>
-        <a href="https://github.com/cc10-team-gryffindor">
-          <li>GitHub</li>
+        GitHub:{" "}
+        <a href="https://github.com/team-dokoiku/dokoiku">
+          <GitHubIcon fontSize="large" />
         </a>
-      </ul> */}
+      </div>
 
       <div className="iconImg-container">
         <img
