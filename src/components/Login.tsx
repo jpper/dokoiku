@@ -18,7 +18,11 @@ import MailIcon from "@material-ui/icons/Mail";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import "../styles/Login.css";
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: {
+  userName: string;
+  userId: string;
+  userPhoto: string;
+}) => ({
   userName: state.userName,
   userId: state.userId,
   userPhoto: state.userPhoto
@@ -123,7 +127,7 @@ type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 class Login extends Component<Props, Status> {
-  constructor(props: any) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       isLoading: false,
