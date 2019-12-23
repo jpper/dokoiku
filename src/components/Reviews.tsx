@@ -15,8 +15,26 @@ import {
 import Rating from "@material-ui/lab/Rating";
 import "../styles/Reviews.css";
 
-export default class Reviews extends Component<any, any> {
-  constructor(props: any) {
+type myProps = {
+  userId: string;
+  tripId?: string;
+};
+
+type myStates = {
+  reviewInfo: ReviewInfo[];
+  isLoading: boolean;
+};
+
+interface ReviewInfo {
+  tripName: string;
+  reviewer: string;
+  reviews: string;
+  rating: number;
+  date: string;
+}
+
+export default class Reviews extends Component<myProps, myStates> {
+  constructor(props: myProps) {
     super(props);
     this.state = {
       reviewInfo: [],
@@ -48,7 +66,7 @@ export default class Reviews extends Component<any, any> {
     });
   }
 
-  setReviewInfo = async (res: any) => {
+  setReviewInfo = async (res: firebase.firestore.QueryDocumentSnapshot) => {
     const reviewerResult = await res.data().reviewer.get();
     const reviewerName = reviewerResult.data().nickname;
 
@@ -80,7 +98,7 @@ export default class Reviews extends Component<any, any> {
         <div className="reviews">
           {/* <p>Reviews</p> */}
           <List>
-            {this.state.reviewInfo.map((review: any, index: any) => {
+            {this.state.reviewInfo.map((review: ReviewInfo, index: number) => {
               return (
                 <div key={index}>
                   {index > 0 && <Divider />}
