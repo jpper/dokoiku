@@ -204,6 +204,10 @@ const mapDispatchToProps = (dispatch: any) => ({
   logout: () => dispatch({ type: "LOGOUT" }),
   setPageTabIndex: (index: any) => {
     dispatch(setPageTabIndex(index));
+    dispatch({
+      type: "CHANGE_DISPLAY_PROFILE",
+      displayProfile: undefined
+    });
   },
   getUserCurrencyCode: (userId: string) => {
     myFirestore
@@ -380,6 +384,7 @@ class App extends React.Component<myProps, any> {
                         )}
                       </IconButton>
                       <Menu
+                        className="userMenu"
                         id="personalMenu"
                         anchorEl={this.state.anchorEl}
                         open={Boolean(this.state.anchorEl)}
@@ -399,9 +404,14 @@ class App extends React.Component<myProps, any> {
                             </p>
                             <Notification />
                             <br />
-                            <PendingTripInfo />
-                            {/* <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
-                            <MenuItem onClick={this.onLogout}>Logout</MenuItem>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              size="small"
+                              onClick={this.onLogout}
+                            >
+                              Logout
+                            </Button>
                           </>
                         )}
                       </Menu>
@@ -442,7 +452,7 @@ class App extends React.Component<myProps, any> {
                     </div>
                   </TabPanel>
 
-                  {/* Ongoing Trips */}
+                  {/* Upcoming Trips */}
                   <TabPanel value={this.props.pageTabIndex} index={2}>
                     {this.props.userId === "" ? (
                       <Login />
@@ -450,7 +460,7 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.ongoingTrips.length ? (
                           <Grid container>
-                            <Grid item xs={12} sm={4}>
+                            <Grid item xs={12} sm={4} md={4} lg={4} xl={3}>
                               <Container>
                                 <Card className="tripInfo">
                                   <OngoingTripInfo />
@@ -458,7 +468,7 @@ class App extends React.Component<myProps, any> {
                               </Container>
                             </Grid>
                             {/* {if statement and changing props value here} */}
-                            <Grid item xs={12} sm={8}>
+                            <Grid item xs={12} sm={8} md={8} lg={8} xl={9}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
@@ -483,7 +493,6 @@ class App extends React.Component<myProps, any> {
                                   }
                                 />
                               )}
-
                               {this.props.mapTripMessage === 2 && (
                                 <ChatBoard
                                   tripId={this.props.ongoingTrips[
@@ -556,28 +565,23 @@ class App extends React.Component<myProps, any> {
                       <>
                         {this.props.searchTrips.length ? (
                           <Grid container>
-                            <Grid item xs={12} sm={4}>
+                            <Grid item xs={12} sm={4} md={4} lg={4} xl={3}>
                               <Container>
                                 <Card className="tripInfo">
                                   <SearchTripInfo />
                                 </Card>
                               </Container>
                             </Grid>
-                            <Grid item xs={12} sm={8}>
+                            <Grid item xs={12} sm={8} md={8} lg={8} xl={9}>
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
-                                !this.props.showChat &&
-                                !this.props.showEdit &&
-                                this.props.searchTrips.length &&
-                                this.props.mapTripMessage === 0 && (
-                                  <Map
-                                    trips={this.props.searchTrips}
-                                    currentTripIndex={
-                                      this.props.currentSearchTripIndex
-                                    }
-                                  />
-                                )
+                                <Map
+                                  trips={this.props.searchTrips}
+                                  currentTripIndex={
+                                    this.props.currentSearchTripIndex
+                                  }
+                                />
                               )}
                             </Grid>
                           </Grid>
@@ -603,18 +607,21 @@ class App extends React.Component<myProps, any> {
                     ) : (
                       <>
                         <Grid container>
-                          <Grid item sm={4}></Grid>
+                          <Grid item sm={4} md={4} lg={4} xl={5}></Grid>
                           <Grid
                             item
                             xs={12}
-                            sm={6}
+                            sm={4}
+                            md={4}
+                            lg={4}
+                            xl={2}
                             alignContent="center"
                             alignItems="center"
                             justify="center"
                           >
                             <BuildTrip />
                           </Grid>
-                          <Grid item sm={2}></Grid>
+                          <Grid item sm={4} md={4} lg={4} xl={5}></Grid>
                         </Grid>
                       </>
                     )}

@@ -152,243 +152,248 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
   render() {
     return (
       <div className="BuildTrip">
-        <div>
-          <div>
-            <h1>Build Trip</h1>
-            <ValidatorForm
-              onSubmit={() => {
-                this.props.onAddTrip(
-                  this.state.name,
-                  this.state.countryCode,
-                  this.state.currencyCode,
-                  this.props.userId,
-                  this.state.startDate,
-                  this.state.endDate,
-                  this.state.startLocation,
-                  this.state.waypoints,
-                  this.state.budget
-                );
-                this.clearState();
-                this.handleDialogToggle();
+        <div className="buildTrip-container">
+          <h1>Build Trip</h1>
+          <ValidatorForm
+            onSubmit={() => {
+              this.props.onAddTrip(
+                this.state.name,
+                this.state.countryCode,
+                this.state.currencyCode,
+                this.props.userId,
+                this.state.startDate,
+                this.state.endDate,
+                this.state.startLocation,
+                this.state.waypoints,
+                this.state.budget
+              );
+              this.clearState();
+              this.handleDialogToggle();
+            }}
+            onError={errors => console.log(errors)}
+          >
+            <TextValidator
+              name="name"
+              label="Name"
+              variant="outlined"
+              fullWidth
+              validators={["required"]}
+              errorMessages={["this field is required"]}
+              value={this.state.name}
+              size="small"
+              onChange={(e: any) => {
+                this.setState({ name: e.currentTarget.value });
               }}
-              onError={errors => console.log(errors)}
-            >
-              <TextValidator
-                name="name"
-                label="Name"
-                variant="outlined"
-                validators={["required"]}
-                errorMessages={["this field is required"]}
-                value={this.state.name}
-                size="small"
-                onChange={(e: any) => {
-                  this.setState({ name: e.currentTarget.value });
-                }}
-              />
-              <br />
-              <br />
-              <FormControl>
-                <InputLabel>Country</InputLabel>
-                <Select
-                  onChange={e => {
-                    const [countryCode, currencyCode] = String(
-                      e.target.value
-                    ).split("||");
-                    this.setState({
-                      countryCode,
-                      currencyCode
-                    });
-                    // console.log(this.state.countryCode);
-                    // console.log(this.state.currencyCode);
-                  }}
-                >
-                  {countriesToCurrencies.map((item: any) => (
-                    <MenuItem
-                      value={[item.countryCode, item.currencyCode].join("||")}
-                    >
-                      {item.country}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <div id="helper-text">
-                  Cannot be changed once trip has been created
-                </div>
-              </FormControl>
-              <br />
-              <br />
-              <TextValidator
-                name="start-date"
-                label="Start Date"
-                variant="outlined"
-                type="date"
-                size="small"
-                validators={[
-                  "required",
-                  "startDateValidator",
-                  "startDateValidator2"
-                ]}
-                errorMessages={[
-                  "this field is required",
-                  "start date must be from today",
-                  "start date must not be after end date"
-                ]}
-                InputLabelProps={{ shrink: true }}
-                value={this.state.startDate}
-                onChange={(e: any) => {
-                  this.setState({ startDate: e.currentTarget.value });
-                }}
-              />
-              <br />
-              <br />
-              <TextValidator
-                name="end-date"
-                label="End Date"
-                variant="outlined"
-                type="date"
-                size="small"
-                validators={["required", "endDateValidator"]}
-                errorMessages={[
-                  "this field is required",
-                  "end date must not be before start date"
-                ]}
-                InputLabelProps={{ shrink: true }}
-                value={this.state.endDate}
-                onChange={(e: any) => {
-                  this.setState({ endDate: e.currentTarget.value });
-                }}
-              />
-              <br />
-              <br />
-              <TextValidator
-                name="start-location"
-                label="Start Location"
-                variant="outlined"
-                size="small"
-                validators={["required"]}
-                errorMessages={["this field is required"]}
-                value={this.state.startLocation}
-                onChange={(e: any) => {
-                  this.setState({ startLocation: e.currentTarget.value });
-                }}
-              />
-              <br />
-              <br />
-              <label>Destinations:</label>
-              {this.state.waypoints.length
-                ? this.state.waypoints.map((waypoint: any, index: number) => (
-                    <div>
-                      <div>{waypoint.location}</div>
-                      <IconButton
-                        onClick={() =>
-                          this.setState({
-                            waypoints: [
-                              ...this.state.waypoints.slice(0, index),
-                              ...this.state.waypoints.slice(index + 1)
-                            ]
-                          })
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </div>
-                  ))
-                : null}
-              <br />
-              <br />
-              <TextValidator
-                name="places"
-                label="Destination"
-                size="small"
-                variant="outlined"
-                value={this.state.addedWaypoint}
-                onChange={(e: any) => {
-                  this.setState({ addedWaypoint: e.currentTarget.value });
-                }}
-              />
-              <br />
-              <br />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => {
+            />
+            <br />
+            <br />
+            <FormControl>
+              <InputLabel>Country</InputLabel>
+              <Select
+                fullWidth
+                onChange={e => {
+                  const [countryCode, currencyCode] = String(
+                    e.target.value
+                  ).split("||");
                   this.setState({
-                    waypoints: this.state.waypoints.concat([
-                      {
-                        location: this.state.addedWaypoint,
-                        stopover: true
-                      }
-                    ]),
-                    addedWaypoint: ""
+                    countryCode,
+                    currencyCode
                   });
+                  // console.log(this.state.countryCode);
+                  // console.log(this.state.currencyCode);
                 }}
               >
-                Add Destination
-              </Button>
-              <br />
-              <br />
+                {countriesToCurrencies.map((item: any) => (
+                  <MenuItem
+                    value={[item.countryCode, item.currencyCode].join("||")}
+                  >
+                    {item.country}
+                  </MenuItem>
+                ))}
+              </Select>
+              <div id="helper-text">
+                Cannot be changed once trip has been created
+              </div>
+            </FormControl>
+            <br />
+            <br />
+            <TextValidator
+              name="start-date"
+              label="Start Date"
+              fullWidth
+              variant="outlined"
+              type="date"
+              size="small"
+              validators={[
+                "required",
+                "startDateValidator",
+                "startDateValidator2"
+              ]}
+              errorMessages={[
+                "this field is required",
+                "start date must be from today",
+                "start date must not be after end date"
+              ]}
+              InputLabelProps={{ shrink: true }}
+              value={this.state.startDate}
+              onChange={(e: any) => {
+                this.setState({ startDate: e.currentTarget.value });
+              }}
+            />
+            <br />
+            <br />
+            <TextValidator
+              name="end-date"
+              label="End Date"
+              fullWidth
+              variant="outlined"
+              type="date"
+              size="small"
+              validators={["required", "endDateValidator"]}
+              errorMessages={[
+                "this field is required",
+                "end date must not be before start date"
+              ]}
+              InputLabelProps={{ shrink: true }}
+              value={this.state.endDate}
+              onChange={(e: any) => {
+                this.setState({ endDate: e.currentTarget.value });
+              }}
+            />
+            <br />
+            <br />
+            <TextValidator
+              name="start-location"
+              label="Start Location"
+              fullWidth
+              variant="outlined"
+              size="small"
+              validators={["required"]}
+              errorMessages={["this field is required"]}
+              value={this.state.startLocation}
+              onChange={(e: any) => {
+                this.setState({ startLocation: e.currentTarget.value });
+              }}
+            />
+            <br />
+            <br />
+            <label>Destinations:</label>
+            {this.state.waypoints.length
+              ? this.state.waypoints.map((waypoint: any, index: number) => (
+                  <div>
+                    <div>{waypoint.location}</div>
+                    <IconButton
+                      onClick={() =>
+                        this.setState({
+                          waypoints: [
+                            ...this.state.waypoints.slice(0, index),
+                            ...this.state.waypoints.slice(index + 1)
+                          ]
+                        })
+                      }
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </div>
+                ))
+              : null}
+            <br />
+            <br />
+            <TextValidator
+              name="places"
+              label="Destination"
+              size="small"
+              fullWidth
+              variant="outlined"
+              value={this.state.addedWaypoint}
+              onChange={(e: any) => {
+                this.setState({ addedWaypoint: e.currentTarget.value });
+              }}
+            />
+            <br />
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                this.setState({
+                  waypoints: this.state.waypoints.concat([
+                    {
+                      location: this.state.addedWaypoint,
+                      stopover: true
+                    }
+                  ]),
+                  addedWaypoint: ""
+                });
+              }}
+            >
+              Add Destination
+            </Button>
+            <br />
+            <br />
 
-              <TextValidator
-                name="budget"
-                size="small"
-                label={`My Budget ${
-                  this.state.currencyCode
-                    ? "(" +
-                      countriesToCurrencies.find(
-                        (item: any) =>
-                          this.state.currencyCode === item.currencyCode
-                      ).currency +
-                      ")"
-                    : ""
-                }`}
-                type="number"
-                variant="outlined"
-                validators={["minNumber:0", "required"]}
-                errorMessages={["cannot be negative", "this field is required"]}
-                InputProps={{ inputProps: { min: 0 } }}
-                value={this.state.budget}
-                onChange={(e: any) => {
-                  this.setState({ budget: e.currentTarget.value });
+            <TextValidator
+              name="budget"
+              size="small"
+              fullWidth
+              label={`My Budget ${
+                this.state.currencyCode
+                  ? "(" +
+                    countriesToCurrencies.find(
+                      (item: any) =>
+                        this.state.currencyCode === item.currencyCode
+                    ).currency +
+                    ")"
+                  : ""
+              }`}
+              type="number"
+              variant="outlined"
+              validators={["minNumber:0", "required"]}
+              errorMessages={["cannot be negative", "this field is required"]}
+              InputProps={{ inputProps: { min: 0 } }}
+              value={this.state.budget}
+              onChange={(e: any) => {
+                this.setState({ budget: e.currentTarget.value });
+              }}
+            />
+            <br />
+            <br />
+            {this.state.name &&
+            this.state.countryCode &&
+            this.state.travelMode &&
+            this.state.startDate &&
+            this.state.endDate &&
+            this.state.startLocation &&
+            this.state.waypoints.length &&
+            this.state.budget > 0 ? (
+              <Button variant="contained" color="primary" type="submit">
+                Submit My Trip
+              </Button>
+            ) : (
+              <Button variant="contained" disabled>
+                Please Fill Out the Form
+              </Button>
+            )}
+          </ValidatorForm>
+          <Dialog open={this.state.toggleDialog}>
+            <DialogTitle>Successfully Built!</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Congratulations! You just built a new trip! Go to your upcoming
+                trips and add some notes!
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  this.handleDialogToggle();
+                  document.location.reload();
                 }}
-              />
-              <br />
-              <br />
-              {this.state.name &&
-              this.state.countryCode &&
-              this.state.travelMode &&
-              this.state.startDate &&
-              this.state.endDate &&
-              this.state.startLocation &&
-              this.state.waypoints.length &&
-              this.state.budget > 0 ? (
-                <Button variant="contained" color="primary" type="submit">
-                  Submit My Trip
-                </Button>
-              ) : (
-                <Button variant="contained" disabled>
-                  Please Fill Out the Form
-                </Button>
-              )}
-            </ValidatorForm>
-            <Dialog open={this.state.toggleDialog}>
-              <DialogTitle>Successfully Built!</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  Congratulations! You just built a new trip! Go to your
-                  upcoming trips and add some notes!
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={() => {
-                    this.handleDialogToggle();
-                    document.location.reload();
-                  }}
-                >
-                  Okay
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
+              >
+                Okay
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </div>
     );

@@ -91,7 +91,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
 
             {/* Country */}
             <Typography className="iconWrapper">
-              <strong>Country: </strong>
+              <strong>Country: &nbsp;</strong>
               <img
                 src={`https://www.countryflags.io/${this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -110,7 +110,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* Starting Location */}
             <Typography className="noWrapper">
               <DoubleArrowIcon />
-              <strong>Starting Location: </strong>
+              <strong>Starting Location: &nbsp;</strong>
               {` ${
                 this.props.searchTrips[this.props.currentSearchTripIndex]
                   .startLocation
@@ -120,7 +120,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* Start Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>Start Date: </strong>
+              <strong>Start Date: &nbsp;</strong>
               {moment(
                 this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -131,7 +131,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* End Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>End Date: </strong>
+              <strong>End Date: &nbsp;</strong>
               {moment(
                 this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -185,7 +185,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             >
               <Typography className="noWrapper topPadding">
                 <InfoIcon />
-                <strong>Budget: </strong>
+                <strong>Budget:&nbsp; </strong>
                 {
                   this.props.searchTrips[this.props.currentSearchTripIndex]
                     .budget
@@ -283,76 +283,79 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           </Button>
 
           {/* Previous & Next Button */}
-          <Grid container>
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="default"
-                size="small"
-                fullWidth
-                onClick={() => {
-                  this.props.onPreviousTrip();
-                  if (this.props.currentSearchTripIndex - 1 >= 0) {
-                    this.exchangeCurrency(
-                      this.props.searchTrips[
-                        this.props.currentSearchTripIndex - 1
-                      ].currencyCode,
-                      this.props.userCurrencyCode,
-                      this.props.searchTrips[
-                        this.props.currentSearchTripIndex - 1
-                      ].budget
-                    );
-                  } else {
-                    this.exchangeCurrency(
-                      this.props.searchTrips[this.props.searchTrips.length - 1]
-                        .currencyCode,
-                      this.props.userCurrencyCode,
-                      this.props.searchTrips[this.props.searchTrips.length - 1]
-                        .budget
-                    );
-                  }
-                }}
-              >
-                <ArrowBackIosIcon />
-                Previous
-              </Button>
+          {this.props.searchTrips.length > 1 ? (
+            <Grid container>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  size="small"
+                  fullWidth
+                  onClick={() => {
+                    this.props.onPreviousTrip();
+                    if (this.props.currentSearchTripIndex - 1 >= 0) {
+                      this.exchangeCurrency(
+                        this.props.searchTrips[
+                          this.props.currentSearchTripIndex - 1
+                        ].currencyCode,
+                        this.props.userCurrencyCode,
+                        this.props.searchTrips[
+                          this.props.currentSearchTripIndex - 1
+                        ].budget
+                      );
+                    } else {
+                      this.exchangeCurrency(
+                        this.props.searchTrips[
+                          this.props.searchTrips.length - 1
+                        ].currencyCode,
+                        this.props.userCurrencyCode,
+                        this.props.searchTrips[
+                          this.props.searchTrips.length - 1
+                        ].budget
+                      );
+                    }
+                  }}
+                >
+                  <ArrowBackIosIcon />
+                  Previous
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  size="small"
+                  fullWidth
+                  onClick={() => {
+                    this.props.onNextTrip();
+                    if (
+                      this.props.currentSearchTripIndex + 1 <
+                      this.props.searchTrips.length
+                    ) {
+                      this.exchangeCurrency(
+                        this.props.searchTrips[
+                          this.props.currentSearchTripIndex + 1
+                        ].currencyCode,
+                        this.props.userCurrencyCode,
+                        this.props.searchTrips[
+                          this.props.currentSearchTripIndex + 1
+                        ].budget
+                      );
+                    } else {
+                      this.exchangeCurrency(
+                        this.props.searchTrips[0].currencyCode,
+                        this.props.userCurrencyCode,
+                        this.props.searchTrips[0].budget
+                      );
+                    }
+                  }}
+                >
+                  Next
+                  <ArrowForwardIosIcon />
+                </Button>
+              </Grid>
             </Grid>
-
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="default"
-                size="small"
-                fullWidth
-                onClick={() => {
-                  this.props.onNextTrip();
-                  if (
-                    this.props.currentSearchTripIndex + 1 <
-                    this.props.searchTrips.length
-                  ) {
-                    this.exchangeCurrency(
-                      this.props.searchTrips[
-                        this.props.currentSearchTripIndex + 1
-                      ].currencyCode,
-                      this.props.userCurrencyCode,
-                      this.props.searchTrips[
-                        this.props.currentSearchTripIndex + 1
-                      ].budget
-                    );
-                  } else {
-                    this.exchangeCurrency(
-                      this.props.searchTrips[0].currencyCode,
-                      this.props.userCurrencyCode,
-                      this.props.searchTrips[0].budget
-                    );
-                  }
-                }}
-              >
-                Next
-                <ArrowForwardIosIcon />
-              </Button>
-            </Grid>
-          </Grid>
+          ) : null}
         </div>
       );
     } else {

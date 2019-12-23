@@ -7,7 +7,10 @@ import {
   Marker
 } from "@react-google-maps/api";
 import axios from "axios";
+import { Card, Typography, CardMedia } from "@material-ui/core";
+
 import "../styles/Map.css";
+
 require("dotenv").config();
 
 type MapProps = {
@@ -19,6 +22,7 @@ interface MapState {
   response: any;
   positions: any;
   isResponse: boolean;
+  foundRoute: boolean;
 }
 
 class Map extends React.Component<MapProps, MapState> {
@@ -27,7 +31,8 @@ class Map extends React.Component<MapProps, MapState> {
     this.state = {
       response: null,
       positions: [],
-      isResponse: true
+      isResponse: true,
+      foundRoute: true
     };
     this.directionsCallback = this.directionsCallback.bind(this);
   }
@@ -36,6 +41,9 @@ class Map extends React.Component<MapProps, MapState> {
     return (
       nextProps.currentTripIndex !== this.props.currentTripIndex ||
       this.state.response === null ||
+      !nextState.response.routes[0] ||
+      (!this.state.response.routes[0] &&
+        nextState.response.routes[0].overview_polyline) ||
       nextState.response.routes[0].overview_polyline !==
         this.state.response.routes[0].overview_polyline ||
       nextState.positions[0] !== this.state.positions[0]
@@ -64,17 +72,36 @@ class Map extends React.Component<MapProps, MapState> {
               ...data.map(
                 (response: any) => response.data.result.geometry.location
               )
-            ]
+            ],
+            foundRoute: true
           });
         });
       } else {
         console.log(response);
+        this.setState({ positions: [], response, foundRoute: false });
       }
     }
   }
+  componentWillUpdate() {
+    if (!this.state.foundRoute) this.setState({ foundRoute: true });
+  }
   render() {
     if (this.state.isResponse) {
-      return (
+      return !this.state.foundRoute ? (
+        <Card>
+          <Typography>
+            Sorry! We could not find a route for your trip.
+          </Typography>
+          <CardMedia
+            style={{
+              width: "0",
+              paddingTop: "1000", // 16:9,
+              marginTop: "10"
+            }}
+            image="https://japanesequizzes.com/wp-content/uploads/2019/08/How-to-say-Sorry-in-Japanese.png"
+          />
+        </Card>
+      ) : (
         <LoadScript
           id="script-loader"
           googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAPS_API}`}
@@ -85,10 +112,10 @@ class Map extends React.Component<MapProps, MapState> {
               height: "100%",
               width: "100%"
             }}
-            zoom={6}
+            zoom={0}
             center={{
-              lat: 35.689722,
-              lng: 139.692222
+              lat: 28.891194,
+              lng: 171.966131
             }}
           >
             {this.state.positions.length
@@ -132,12 +159,14 @@ class Map extends React.Component<MapProps, MapState> {
               }}
               callback={this.directionsCallback}
             />
-            <DirectionsRenderer
-              options={{
-                directions: this.state.response,
-                suppressMarkers: true
-              }}
-            ></DirectionsRenderer>
+            {this.state.response ? (
+              <DirectionsRenderer
+                options={{
+                  directions: this.state.response,
+                  suppressMarkers: true
+                }}
+              ></DirectionsRenderer>
+            ) : null}
           </GoogleMap>
         </LoadScript>
       );
