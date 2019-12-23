@@ -60,23 +60,29 @@ const mapDispatchToProps = (dispatch: any) => ({
                 );
               });
           } else {
-            // update user info everytime
-            myFirestore
+            // Get profile from FireStore database
+            const userData = await myFirestore
               .collection("users")
               .doc(userResult.uid)
-              .update({
-                nickname: userResult.displayName,
-                photoUrl: userResult.photoURL
-              })
-              .then(res => {
-                console.log("Update User info");
-              });
+              .get();
+
+            // update user info everytime
+            // myFirestore
+            //   .collection("users")
+            //   .doc(userResult.uid)
+            //   .update({
+            //     nickname: userResult.displayName,
+            //     photoUrl: userResult.photoURL
+            //   })
+            //   .then(res => {
+            //     console.log("Update User info");
+            //   });
 
             dispatch(
               setUserInfo(
                 userResult.displayName,
                 userResult.uid,
-                userResult.photoURL
+                userData.data().photoUrl
               )
             );
           }
