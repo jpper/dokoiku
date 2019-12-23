@@ -429,12 +429,14 @@ class MyProfile extends React.Component<
                   variant="contained"
                   color="primary"
                   onClick={() => {
-                    myFirestore
-                      .collection("users")
-                      .doc(this.props.userId)
-                      .update({ aboutMe: this.state.aboutMeText });
+                    if (this.state.aboutMeText) {
+                      myFirestore
+                        .collection("users")
+                        .doc(this.props.userId)
+                        .update({ aboutMe: this.state.aboutMeText });
 
-                    this.handleToggleBioDialog();
+                      this.handleToggleBioDialog();
+                    }
                   }}
                 >
                   Update
