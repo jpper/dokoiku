@@ -77,7 +77,6 @@ class Map extends React.Component<MapProps, MapState> {
           });
         });
       } else {
-        console.log(response);
         this.setState({ positions: [], response, foundRoute: false });
       }
     }
