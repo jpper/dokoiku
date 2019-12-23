@@ -213,7 +213,7 @@ class MyProfile extends React.Component<myProps, myStates> {
               >
                 Go back to Profile
               </Button>
-              <Reviews userId={this.state.user.id} />
+              <Reviews userId={this.state.user.id} tripId={null} />
             </>
           ) : (
             <>
