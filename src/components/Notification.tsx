@@ -115,7 +115,7 @@ class Notification extends React.Component<myProps, any> {
             );
             console.log(user);
             return (
-              <div>
+              <Card>
                 <CardContent>
                   <Typography>
                     You have a request from{" "}
@@ -130,7 +130,7 @@ class Notification extends React.Component<myProps, any> {
                       }}
                     >
                       {user.nickname}{" "}
-                    </Button>
+                    </Button>{" "}
                     for{" "}
                     {
                       this.props.ongoingTrips.find(
@@ -196,7 +196,7 @@ class Notification extends React.Component<myProps, any> {
                     Reject
                   </Button>
                 </CardActions>
-              </div>
+              </Card>
             );
           })
         ) : (

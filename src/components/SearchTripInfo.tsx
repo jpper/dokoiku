@@ -293,6 +293,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                   fullWidth
                   onClick={() => {
                     this.props.onPreviousTrip();
+                    this.props.onChangeDisplayProfile(undefined);
                     if (this.props.currentSearchTripIndex - 1 >= 0) {
                       this.exchangeCurrency(
                         this.props.searchTrips[
@@ -328,6 +329,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                   fullWidth
                   onClick={() => {
                     this.props.onNextTrip();
+                    this.props.onChangeDisplayProfile(undefined);
                     if (
                       this.props.currentSearchTripIndex + 1 <
                       this.props.searchTrips.length
