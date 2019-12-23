@@ -130,8 +130,9 @@ class EditTrip extends React.Component<EditProps, EditState> {
   }
   handleToggle() {
     this.setState({
-      toggleDialog: !this.state.toggleDialog
+      toggleDialog: true
     });
+    console.log(this.state.toggleDialog);
   }
   render() {
     return (
@@ -151,8 +152,6 @@ class EditTrip extends React.Component<EditProps, EditState> {
                   this.props.tripId
                 );
                 this.handleToggle();
-                this.clearState();
-                //this.props.onClosePopup();
               }}
               onError={errors => console.log(errors)}
             >
@@ -313,24 +312,6 @@ class EditTrip extends React.Component<EditProps, EditState> {
               )}
               <br />
               <br />
-              <Dialog open={this.state.toggleDialog}>
-                <DialogTitle>Successfully updated</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Congratulations! You just updated your trip.
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button
-                    onClick={() => {
-                      this.handleToggle();
-                      document.location.reload();
-                    }}
-                  >
-                    Close
-                  </Button>
-                </DialogActions>
-              </Dialog>
 
               <Button
                 variant="contained"
@@ -340,6 +321,24 @@ class EditTrip extends React.Component<EditProps, EditState> {
                 Close
               </Button>
             </ValidatorForm>
+            <Dialog open={this.state.toggleDialog}>
+              <DialogTitle>Successfully updated</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  You just updated your trip.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    this.clearState();
+                    document.location.reload();
+                  }}
+                >
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </div>
       </div>
