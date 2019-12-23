@@ -352,7 +352,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                           }
                           placement="top-end"
                         >
-                          <HelpIcon />
+                          <HelpIcon color="primary" fontSize="small" />
                         </Tooltip>
                       </Typography>
                     </div>

@@ -198,7 +198,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                 }
                 placement="top-end"
               >
-                <HelpIcon />
+                <HelpIcon color="primary" fontSize="small" />
               </Tooltip>
             </Typography>
 

@@ -352,7 +352,10 @@ class App extends React.Component<myProps, any> {
                         onClick={this.handleClick}
                       >
                         {this.props.requests.length ? (
-                          <Badge variant="dot" color="secondary">
+                          <Badge
+                            badgeContent={this.props.requests.length}
+                            color="secondary"
+                          >
                             {this.props.userPhoto === "" ? (
                               <>
                                 <AccountCircleIcon fontSize="large" />
