@@ -126,3 +126,31 @@
   padding: 10px;
   border-radius: 15px;
 }
+
+.modalWindow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modalFade {
+  background-color: white;
+  border: 2px solid #000;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
+  padding: 10px;
+}
+#transition-modal-title {
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+}
+
+.box-cut-bottom {
+  padding-bottom: 0px !important;
+}
+.box-cut-top {
+  padding-top: 0px !important;
+}
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
