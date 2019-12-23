@@ -11,8 +11,9 @@ import {
 import { myFirestore } from "../config/firebase";
 import { removeRequest } from "../redux/action";
 import firebase from "firebase";
-import Profile from "./Profile";
 import "../styles/Notification.css";
+
+import ProfilePopover from "./ProfilePopover";
 
 type myProps = {
   requests: any;
@@ -104,7 +105,6 @@ class Notification extends React.Component<myProps, any> {
   };
 
   render() {
-    //console.log(this.props.requests);
     return (
       <div>
         {this.props.requests.length ? (
@@ -112,9 +112,18 @@ class Notification extends React.Component<myProps, any> {
             const user = this.props.users.find(
               (user: any) => user.id === request.fromId
             );
-            console.log(user);
+            const foundRequest = this.props.ongoingTrips.find(
+              (trip: any) => trip.tripId === request.tripId
+            );
+            if (!foundRequest) {
+              this.rejectRequest(
+                this.props.userId,
+                request.tripId,
+                request.fromId
+              );
+            }
             return (
-              <div>
+              <Card>
                 <CardContent>
                   <Typography>
                     You have a request from{" "}
@@ -125,23 +134,19 @@ class Notification extends React.Component<myProps, any> {
                         this.handlePopoverToggle();
                         this.props.onChangeDisplayProfile(user.id);
                         this.setAnchorEl(event.currentTarget);
-                        console.log(this.state.anchorEl);
                       }}
                     >
                       {user.nickname}{" "}
-                    </Button>
-                    for{" "}
-                    {
-                      this.props.ongoingTrips.find(
-                        (trip: any) => trip.tripId === request.tripId
-                      ).name
-                    }
+                    </Button>{" "}
+                    for {foundRequest ? foundRequest.name : null}
                   </Typography>
                   <div id="profile-popover">
                     <Popover
                       style={{
                         height: "500px",
-                        width: "500px"
+                        width: "500px",
+                        padding: "15px",
+                        borderRadius: "10px"
                       }}
                       anchorEl={this.state.anchorEl}
                       open={this.state.togglePopover}
@@ -158,7 +163,7 @@ class Notification extends React.Component<myProps, any> {
                         horizontal: "right"
                       }}
                     >
-                      <Profile />
+                      <ProfilePopover />
                     </Popover>
                   </div>
                 </CardContent>
@@ -193,7 +198,7 @@ class Notification extends React.Component<myProps, any> {
                     Reject
                   </Button>
                 </CardActions>
-              </div>
+              </Card>
             );
           })
         ) : (

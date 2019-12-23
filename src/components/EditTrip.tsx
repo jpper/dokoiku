@@ -1,7 +1,15 @@
 import React from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
-import { Button, IconButton } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { firestore } from "firebase";
@@ -46,7 +54,6 @@ const mapDispatchToProps = (dispatch: any) => {
           waypoints,
           budget
         });
-      window.location.reload();
     }
   };
 };
@@ -73,6 +80,7 @@ type EditState = {
   waypoints: any;
   addedWaypoint: string;
   budget: number;
+  toggleDialog: boolean;
 };
 
 class EditTrip extends React.Component<EditProps, EditState> {
@@ -86,11 +94,11 @@ class EditTrip extends React.Component<EditProps, EditState> {
       startLocation: this.props.startLocation,
       waypoints: this.props.waypoints,
       addedWaypoint: "",
-      budget: this.props.budget
+      budget: this.props.budget,
+      toggleDialog: false
     };
   }
   componentWillMount() {
-    //console.log(this.props.startDate);
     ValidatorForm.addValidationRule("startDateValidator", (value: string) => {
       const startDate = new Date(value).setHours(0, 0, 0, 0);
       const today = new Date().setHours(0, 0, 0, 0);
@@ -116,7 +124,13 @@ class EditTrip extends React.Component<EditProps, EditState> {
       startLocation: "",
       waypoints: [],
       addedWaypoint: "",
-      budget: 0
+      budget: 0,
+      toggleDialog: false
+    });
+  }
+  handleToggle() {
+    this.setState({
+      toggleDialog: true
     });
   }
   render() {
@@ -127,7 +141,6 @@ class EditTrip extends React.Component<EditProps, EditState> {
             <h1>Update Trip</h1>
             <ValidatorForm
               onSubmit={() => {
-                //console.log(this.state.waypoints);
                 this.props.onEditTrip(
                   this.state.name,
                   this.state.startDate,
@@ -137,8 +150,7 @@ class EditTrip extends React.Component<EditProps, EditState> {
                   this.state.budget,
                   this.props.tripId
                 );
-                this.clearState();
-                this.props.onClosePopup();
+                this.handleToggle();
               }}
               onError={errors => console.log(errors)}
             >
@@ -299,6 +311,7 @@ class EditTrip extends React.Component<EditProps, EditState> {
               )}
               <br />
               <br />
+
               <Button
                 variant="contained"
                 color="secondary"
@@ -307,6 +320,24 @@ class EditTrip extends React.Component<EditProps, EditState> {
                 Close
               </Button>
             </ValidatorForm>
+            <Dialog open={this.state.toggleDialog}>
+              <DialogTitle>Successfully updated</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  You just updated your trip.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    this.clearState();
+                    document.location.reload();
+                  }}
+                >
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </div>
       </div>

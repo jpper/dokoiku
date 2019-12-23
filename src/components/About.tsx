@@ -4,31 +4,67 @@ import "../styles/About.css";
 import "typeface-roboto";
 import iconImgWhite from "../img/logo-dokoiku-white.png";
 
-class About extends React.Component<{}, {}> {
-  render() {
-    return (
-      <div className="about">
-        <Typography variant="h1">
-          Welcome to <b>Dokoiku</b>
-        </Typography>
+import SearchIcon from "@material-ui/icons/Search";
+import BuildIcon from "@material-ui/icons/Build";
+import PeopleIcon from "@material-ui/icons/People";
+import PaletteIcon from "@material-ui/icons/Palette";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
-        <div className="spacer10"></div>
+function About() {
+  return (
+    <div className="about">
+      <Typography variant="h1">
+        <b>Dokoiku</b>
+      </Typography>
+      <h1>The app for people to connect and share trips</h1>
+      <br />
+      <div className="calls-to-action">
+        <h3>
+          <SearchIcon fontSize="large" />{" "}
+          <b>
+            <u>SEARCH</u>
+          </b>
+          {"  "}
+          trips that other users have created.
+        </h3>
+        <h3>
+          <BuildIcon fontSize="large" />{" "}
+          <b>
+            <u>BUILD</u>
+          </b>
+          {"  "}
+          and share your own trips.
+        </h3>
+        <h3>
+          <PeopleIcon fontSize="large" />{" "}
+          <b>
+            <u>CONNECT</u>
+          </b>
+          {"  "}
+          with your fellow travelers.
+        </h3>
+        <h3>
+          <PaletteIcon fontSize="large" />{" "}
+          <b>
+            <u>CUSTOMIZE</u>
+          </b>
+          {"  "}
+          your profile.
+        </h3>
+      </div>
 
-        <Typography variant="h5">
-          Dokoiku is an app for people who want to connect and share a trip
-          together.
-        </Typography>
-
-        <div className="spacer50"></div>
-
-        <Typography variant="h6">
-          It is a full-stack, single-page app that was created as a senior
-          project during the Immersive Bootcamp at Code Chrysalis. <br></br> It
-          was created by five people in about ten full days of work.
-        </Typography>
-
+      <br />
+      <br />
+      <br />
+      <br />
+      <div className="about-dokoiku">
+        <h2>About Dokoiku</h2>
+        <p>
+          Dokoiku is a full-stack, single-page app that was created as a senior
+          project during the Immersive Bootcamp at Code Chrysalis.
+        </p>
         <ul>
-          Team:
+          The Dokoiku Team:
           <a href="https://github.com/followdiallo">
             <li>Diallo Spears</li>
           </a>
@@ -45,31 +81,21 @@ class About extends React.Component<{}, {}> {
             <li>Ziyu Chen</li>
           </a>
         </ul>
-        <ul>
-          Technology used:
-          <li>Google Cloud Platform (Google App Engine, Cloud Build)</li>
-          <li>Firebase Authentication</li>
-          <li>Firebase Cloud FireStore</li>
-          <li>Firebase RealTime Database</li>
-          <li>React</li>
-          <li>Redux</li>
-          <li>Typescript</li>
-          <li>Material UI</li>
-          <a href="https://github.com/cc10-team-gryffindor">
-            <li>GitHub</li>
-          </a>
-        </ul>
-
-        <div className="iconImg-container">
-          <img
-            src={iconImgWhite}
-            className="iconImg-about"
-            alt="Dokoiku logo"
-          ></img>
-        </div>
+        GitHub:{" "}
+        <a href="https://github.com/team-dokoiku/dokoiku">
+          <GitHubIcon fontSize="large" />
+        </a>
       </div>
-    );
-  }
+
+      <div className="iconImg-container">
+        <img
+          src={iconImgWhite}
+          className="iconImg-about"
+          alt="Dokoiku logo"
+        ></img>
+      </div>
+    </div>
+  );
 }
 
 export default About;

@@ -10,7 +10,7 @@ import BuildTrip from "./BuildTrip";
 import EditTrip from "./EditTrip";
 import Login from "./Login";
 import Notification from "./Notification";
-import PendingTripInfo from "./PendingTripInfo";
+
 import MyProfile from "./MyProfile";
 import Profile from "./Profile";
 import firebase from "firebase";
@@ -38,7 +38,6 @@ import {
   Grid,
   Avatar,
   Menu,
-  MenuItem,
   Card,
   Container,
   Badge,
@@ -115,7 +114,6 @@ const mapDispatchToProps = (dispatch: any) => ({
   setUserInfo: (userName: string, userId: string, userPhoto: string) =>
     dispatch(setUserInfo(userName, userId, userPhoto)),
   getTrips: async (userId: string) => {
-    //console.log("called");
     const tripIds: string[] = [];
     myFirestore
       .collection("users")
@@ -125,7 +123,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         snapShot.docChanges().forEach(change => {
           if (change.type === "added") {
             tripIds.push(change.doc.data().tripId);
-            //console.log(tripIds);
           }
         });
       });
@@ -133,10 +130,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     myFirestore.collection("trips").onSnapshot(snapShot => {
       snapShot.docChanges().forEach(change => {
         if (change.type === "added") {
-          //console.log(change.doc.data().tripId);
           if (change.doc.data().memberIds.indexOf(userId) === -1) {
             if (tripIds.includes(change.doc.data().tripId)) {
-              console.log("dispatching ADD_PENDING_TRIP");
               dispatch(addPendingTrip(change.doc.data()));
             } else {
               const today = new Date();
@@ -148,7 +143,6 @@ const mapDispatchToProps = (dispatch: any) => ({
                   .startDate.toDate()
                   .getTime()
               ) {
-                console.log("dispatching ADD_SEARCH_TRIP");
                 dispatch({
                   type: "ADD_SEARCH_TRIP",
                   searchTrip: change.doc.data()
@@ -165,10 +159,8 @@ const mapDispatchToProps = (dispatch: any) => ({
                 .endDate.toDate()
                 .getTime()
             ) {
-              console.log("dispatching ADD_PAST_TRIP");
               dispatch(addPastTrip(change.doc.data()));
             } else {
-              console.log("dispatching ADD_ONGOING_TRIP");
               dispatch({
                 type: "ADD_ONGOING_TRIP",
                 ongoingTrip: change.doc.data()
@@ -195,7 +187,6 @@ const mapDispatchToProps = (dispatch: any) => ({
       .onSnapshot(snapShot => {
         snapShot.docChanges().forEach(change => {
           if (change.type === "added") {
-            console.log(change.doc.data());
             dispatch(addRequest(change.doc.data()));
           }
         });
@@ -204,6 +195,10 @@ const mapDispatchToProps = (dispatch: any) => ({
   logout: () => dispatch({ type: "LOGOUT" }),
   setPageTabIndex: (index: any) => {
     dispatch(setPageTabIndex(index));
+    dispatch({
+      type: "CHANGE_DISPLAY_PROFILE",
+      displayProfile: undefined
+    });
   },
   getUserCurrencyCode: (userId: string) => {
     myFirestore
@@ -245,9 +240,6 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-// type Props = ReturnType<typeof mapStateToProps> &
-//   ReturnType<typeof mapDispatchToProps>;
-
 class App extends React.Component<myProps, any> {
   constructor(props: myProps) {
     super(props);
@@ -260,16 +252,25 @@ class App extends React.Component<myProps, any> {
     this.checkLogin();
   }
 
-  componentWillUpdate() {
+  UNSAFE_componentWillUpdate() {
     if (this.props.pageTabIndex === -1) {
       this.props.setPageTabIndex(0);
     }
   }
 
   checkLogin = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user !== null) {
-        this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        const userData = await myFirestore
+          .collection("users")
+          .doc(user.uid)
+          .get();
+
+        this.props.setUserInfo(
+          user.displayName,
+          user.uid,
+          userData.data().photoUrl
+        );
         this.props.getTrips(user.uid);
         this.props.getRequests(user.uid);
         this.props.getUserCurrencyCode(user.uid);
@@ -307,7 +308,6 @@ class App extends React.Component<myProps, any> {
     this.props.setUserInfo("", "", "");
     firebase.auth().signOut();
     this.props.logout();
-    console.log("LOGOUT!!!");
   };
 
   render() {
@@ -323,7 +323,6 @@ class App extends React.Component<myProps, any> {
                   <Tabs
                     value={this.props.pageTabIndex}
                     onChange={this.handleChange}
-                    centered
                     variant="scrollable"
                     className="tabs"
                     textColor="secondary"
@@ -348,7 +347,10 @@ class App extends React.Component<myProps, any> {
                         onClick={this.handleClick}
                       >
                         {this.props.requests.length ? (
-                          <Badge variant="dot" color="secondary">
+                          <Badge
+                            badgeContent={this.props.requests.length}
+                            color="secondary"
+                          >
                             {this.props.userPhoto === "" ? (
                               <>
                                 <AccountCircleIcon fontSize="large" />
@@ -391,7 +393,14 @@ class App extends React.Component<myProps, any> {
                             <p className="textUsername">
                               Hello, <b>Anonymous</b>
                             </p>
-                            <MenuItem onClick={this.onLogin}>Login</MenuItem>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              size="small"
+                              onClick={this.onLogin}
+                            >
+                              Login
+                            </Button>
                           </>
                         ) : (
                           <>
@@ -489,7 +498,6 @@ class App extends React.Component<myProps, any> {
                                   }
                                 />
                               )}
-
                               {this.props.mapTripMessage === 2 && (
                                 <ChatBoard
                                   tripId={this.props.ongoingTrips[
@@ -573,17 +581,12 @@ class App extends React.Component<myProps, any> {
                               {this.props.displayProfile ? (
                                 <Profile />
                               ) : (
-                                !this.props.showChat &&
-                                !this.props.showEdit &&
-                                this.props.searchTrips.length &&
-                                this.props.mapTripMessage === 0 && (
-                                  <Map
-                                    trips={this.props.searchTrips}
-                                    currentTripIndex={
-                                      this.props.currentSearchTripIndex
-                                    }
-                                  />
-                                )
+                                <Map
+                                  trips={this.props.searchTrips}
+                                  currentTripIndex={
+                                    this.props.currentSearchTripIndex
+                                  }
+                                />
                               )}
                             </Grid>
                           </Grid>
@@ -608,19 +611,14 @@ class App extends React.Component<myProps, any> {
                       <Login />
                     ) : (
                       <>
-                        <Grid container>
+                        <Grid
+                          container
+                          alignContent="center"
+                          alignItems="center"
+                          justify="center"
+                        >
                           <Grid item sm={4} md={4} lg={4} xl={5}></Grid>
-                          <Grid
-                            item
-                            xs={12}
-                            sm={4}
-                            md={4}
-                            lg={4}
-                            xl={2}
-                            alignContent="center"
-                            alignItems="center"
-                            justify="center"
-                          >
+                          <Grid item xs={12} sm={4} md={4} lg={4} xl={2}>
                             <BuildTrip />
                           </Grid>
                           <Grid item sm={4} md={4} lg={4} xl={5}></Grid>
@@ -679,7 +677,7 @@ class App extends React.Component<myProps, any> {
 
                 {/* Privacy policy */}
                 {this.props.pageTabIndex === 0 ? (
-                  <Link to="/privacy" className="footer">
+                  <Link to="/privacy">
                     <Button
                       variant="outlined"
                       size="small"

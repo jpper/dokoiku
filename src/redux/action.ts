@@ -18,6 +18,10 @@ export const clearMessages = () => ({
   type: "CLEAR_MESSAGES"
 });
 
+export const clearProfile = () => ({
+  type: "CLEAR_PROFILE"
+});
+
 export const toggleNotes = (value: number) => ({
   type: "TOGGLE_NOTES",
   value

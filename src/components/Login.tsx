@@ -18,7 +18,11 @@ import MailIcon from "@material-ui/icons/Mail";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import "../styles/Login.css";
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: {
+  userName: string;
+  userId: string;
+  userPhoto: string;
+}) => ({
   userName: state.userName,
   userId: state.userId,
   userPhoto: state.userPhoto
@@ -60,23 +64,17 @@ const mapDispatchToProps = (dispatch: any) => ({
                 );
               });
           } else {
-            // update user info everytime
-            myFirestore
+            // Get profile from FireStore database
+            const userData = await myFirestore
               .collection("users")
               .doc(userResult.uid)
-              .update({
-                nickname: userResult.displayName,
-                photoUrl: userResult.photoURL
-              })
-              .then(res => {
-                console.log("Update User info");
-              });
+              .get();
 
             dispatch(
               setUserInfo(
                 userResult.displayName,
                 userResult.uid,
-                userResult.photoURL
+                userData.data().photoUrl
               )
             );
           }
@@ -95,13 +93,11 @@ const mapDispatchToProps = (dispatch: any) => ({
       snapShot.docChanges().forEach(change => {
         if (change.type === "added") {
           if (change.doc.data().memberIds.indexOf(userId) === -1) {
-            console.log("dispatching ADD_SEARCH_TRIP");
             dispatch({
               type: "ADD_SEARCH_TRIP",
               searchTrip: change.doc.data()
             });
           } else {
-            console.log("dispatching ADD_ONGOING_TRIP");
             dispatch({
               type: "ADD_ONGOING_TRIP",
               ongoingTrip: change.doc.data()
@@ -131,7 +127,7 @@ type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 class Login extends Component<Props, Status> {
-  constructor(props: any) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       isLoading: false,
@@ -147,9 +143,18 @@ class Login extends Component<Props, Status> {
   }
 
   checkLogin = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user !== null) {
-        this.props.setUserInfo(user.displayName, user.uid, user.photoURL);
+        const userData = await myFirestore
+          .collection("users")
+          .doc(user.uid)
+          .get();
+
+        this.props.setUserInfo(
+          user.displayName,
+          user.uid,
+          userData.data().photoUrl
+        );
         this.props.getTrips(user.uid);
       }
     });

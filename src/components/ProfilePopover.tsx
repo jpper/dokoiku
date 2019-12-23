@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import "../styles/MyProfile.css";
+// import { myFirestore } from "../config/firebase";
 import {
   Button,
   Typography,
@@ -16,24 +17,15 @@ import Rating from "@material-ui/lab/Rating";
 import Reviews from "./Reviews";
 import "typeface-roboto";
 
-type User = {
-  id: string;
-  nickname: string;
-  photoUrl: string;
-  [propName: string]: any;
-};
-
 type myProps = {
   displayProfile: string;
-  users: Array<User>;
-  onChangeDisplayProfile(
-    profile: string
-  ): { type: string; displayProfile: string };
+  users: any;
+  onChangeDisplayProfile: any;
 };
 
-class Profile extends React.Component<
+class ProfilePopover extends React.Component<
   myProps,
-  { user: User; showReview: boolean; rating: number }
+  { user: any; showReview: any; rating: number }
 > {
   constructor(props: myProps) {
     super(props);
@@ -63,7 +55,7 @@ class Profile extends React.Component<
     if (this.state.user === undefined && this.props.users.length) {
       this.setState({
         user: this.props.users.find(
-          (u: { id: string }) => u.id === this.props.displayProfile
+          (u: { id: any }) => u.id === this.props.displayProfile
         )
       });
     }
@@ -73,7 +65,7 @@ class Profile extends React.Component<
     if (this.state.user === undefined && this.props.users.length) {
       this.setState({
         user: this.props.users.find(
-          (u: { id: string }) => u.id === this.props.displayProfile
+          (u: { id: any }) => u.id === this.props.displayProfile
         )
       });
     }
@@ -290,10 +282,7 @@ class Profile extends React.Component<
   }
 }
 
-const mapStateToProps = (state: {
-  displayProfile: string;
-  users: Array<User>;
-}) => {
+const mapStateToProps = (state: any) => {
   return {
     displayProfile: state.displayProfile,
     users: state.users
@@ -310,4 +299,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilePopover);
