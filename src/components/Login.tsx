@@ -66,20 +66,6 @@ const mapDispatchToProps = (dispatch: any) => ({
               .doc(userResult.uid)
               .get();
 
-            // update user info everytime
-            // myFirestore
-            //   .collection("users")
-            //   .doc(userResult.uid)
-            //   .update({
-            //     nickname: userResult.displayName,
-            //     photoUrl: userResult.photoURL
-            //   })
-            //   .then(res => {
-            //     console.log("Update User info");
-            //   });
-
-            console.log(userResult.photoURL);
-
             dispatch(
               setUserInfo(
                 userResult.displayName,
@@ -103,13 +89,11 @@ const mapDispatchToProps = (dispatch: any) => ({
       snapShot.docChanges().forEach(change => {
         if (change.type === "added") {
           if (change.doc.data().memberIds.indexOf(userId) === -1) {
-            console.log("dispatching ADD_SEARCH_TRIP");
             dispatch({
               type: "ADD_SEARCH_TRIP",
               searchTrip: change.doc.data()
             });
           } else {
-            console.log("dispatching ADD_ONGOING_TRIP");
             dispatch({
               type: "ADD_ONGOING_TRIP",
               ongoingTrip: change.doc.data()

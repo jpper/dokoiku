@@ -17,18 +17,11 @@ import HelpIcon from "@material-ui/icons/Help";
 import PaymentIcon from "@material-ui/icons/Payment";
 // Material UI
 import "../styles/Modal.css";
-import {
-  Grid,
-  // List,
-  // ListItem,
-  // ListItemIcon,
-  // ListItemText,
-  Typography
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import PersonIcon from "@material-ui/icons/Person";
+
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
@@ -120,7 +113,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
         }
       }
     );
-    //console.log(result.data);
+
     const userCurrencyBudget = result.data * budget;
     this.setState({ userCurrencyBudget });
   };
