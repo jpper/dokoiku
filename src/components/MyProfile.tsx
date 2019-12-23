@@ -43,7 +43,8 @@ enum snsTypes {
   None,
   Facebook,
   Twitter,
-  Instagram
+  Instagram,
+  Photo
 }
 
 type myStates = {
@@ -136,6 +137,21 @@ class MyProfile extends React.Component<myProps, myStates> {
     });
   };
 
+  clickPhoto = () => {
+    this.setState({
+      snsType: snsTypes.Photo
+    });
+  };
+
+  updatePhotoUrl = () => {
+    myFirestore
+      .collection("users")
+      .doc(this.props.userId)
+      .update({ photoUrl: this.state.snsUrl });
+
+    this.clearSnsType();
+  };
+
   clickFacebook = () => {
     this.setState({
       snsType: snsTypes.Facebook
@@ -151,6 +167,12 @@ class MyProfile extends React.Component<myProps, myStates> {
     this.clearSnsType();
   };
 
+  clickTwitter = () => {
+    this.setState({
+      snsType: snsTypes.Twitter
+    });
+  };
+
   updateTwitterUrl = () => {
     myFirestore
       .collection("users")
@@ -160,6 +182,12 @@ class MyProfile extends React.Component<myProps, myStates> {
     this.clearSnsType();
   };
 
+  clickInstagram = () => {
+    this.setState({
+      snsType: snsTypes.Instagram
+    });
+  };
+
   updateInstagramUrl = () => {
     myFirestore
       .collection("users")
@@ -167,18 +195,6 @@ class MyProfile extends React.Component<myProps, myStates> {
       .update({ instagram: this.state.snsUrl });
 
     this.clearSnsType();
-  };
-
-  clickTwitter = () => {
-    this.setState({
-      snsType: snsTypes.Twitter
-    });
-  };
-
-  clickInstagram = () => {
-    this.setState({
-      snsType: snsTypes.Instagram
-    });
   };
 
   render() {
@@ -206,10 +222,7 @@ class MyProfile extends React.Component<myProps, myStates> {
                 src={this.state.user.photoUrl}
                 id="profile-picture"
                 alt={this.state.user.nickname}
-                onClick={() => {
-                  const modal = document.getElementById("change-photo");
-                  modal.style.display = "block";
-                }}
+                onClick={this.clickPhoto}
               />
               <div className="spacer10"></div>
 
@@ -327,39 +340,62 @@ class MyProfile extends React.Component<myProps, myStates> {
               </List>
 
               {/* MODALS SECTION */}
-              {/* FACEBOOK */}
-              <div className="modal" id="change-photo">
-                <div className="modal-content">
-                  <p>Change your profile picture</p>
-                  <input id="photo-url" placeholder="New photo URL" />
-                  <button
-                    onClick={() => {
-                      const url = (document.getElementById(
-                        "photo-url"
-                      ) as HTMLInputElement).value;
-                      myFirestore
-                        .collection("users")
-                        .doc(this.props.userId)
-                        .update({ photoUrl: url });
-                      const modal = document.getElementById("change-photo");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Submit
-                  </button>
-                  <br></br>
-                  <br></br>
-                  <button
-                    className="close"
-                    onClick={() => {
-                      const modal = document.getElementById("change-photo");
-                      modal.style.display = "none";
-                    }}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
+              {/* Photo URL */}
+              <Modal
+                className="modalWindow"
+                open={this.state.snsType === snsTypes.Photo}
+                onClose={this.clearSnsType}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                  timeout: 500
+                }}
+              >
+                <Fade in={this.state.snsType === snsTypes.Photo}>
+                  <div className="modalFade">
+                    <Box
+                      component="fieldset"
+                      mb={0}
+                      pb={0}
+                      borderColor="transparent"
+                    >
+                      <Typography variant="h5">
+                        Change your profile picture
+                      </Typography>
+                    </Box>
+                    <Box component="fieldset" mb={0} borderColor="transparent">
+                      <TextField
+                        placeholder="Write your Photo URL"
+                        label="Your Photo URL"
+                        rows={10}
+                        fullWidth
+                        onChange={e => {
+                          this.setState({
+                            snsUrl: e.target.value
+                          });
+                        }}
+                        value={this.state.snsUrl}
+                      />
+                    </Box>
+                    <Box component="fieldset" mb={0} borderColor="transparent">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.updatePhotoUrl}
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="default"
+                        onClick={this.clearSnsType}
+                      >
+                        Close
+                      </Button>
+                    </Box>
+                  </div>
+                </Fade>
+              </Modal>
 
               {/* Facebook URL */}
               <Modal
@@ -389,6 +425,7 @@ class MyProfile extends React.Component<myProps, myStates> {
                       mt={0}
                       mb={0}
                       pt={0}
+                      pb={0}
                       borderColor="transparent"
                     >
                       <Typography variant="body1">
@@ -397,12 +434,11 @@ class MyProfile extends React.Component<myProps, myStates> {
                       </Typography>
                     </Box>
                     <Box component="fieldset" mb={0} borderColor="transparent">
-                      <Typography component="legend">Facebook URL</Typography>
-
                       <TextField
-                        className="textarea"
+                        label="Facebook URL"
                         placeholder="Write your Facebook URL"
                         rows={10}
+                        fullWidth
                         onChange={e => {
                           this.setState({
                             snsUrl: e.target.value
@@ -459,6 +495,7 @@ class MyProfile extends React.Component<myProps, myStates> {
                       mt={0}
                       mb={0}
                       pt={0}
+                      pb={0}
                       borderColor="transparent"
                     >
                       <Typography variant="body1">
@@ -467,11 +504,10 @@ class MyProfile extends React.Component<myProps, myStates> {
                       </Typography>
                     </Box>
                     <Box component="fieldset" mb={0} borderColor="transparent">
-                      <Typography component="legend">Twitter URL</Typography>
-
                       <TextField
-                        className="textarea"
+                        label="Twitter URL"
                         placeholder="Write your Twitter URL"
+                        fullWidth
                         rows={10}
                         onChange={e => {
                           this.setState({
@@ -529,6 +565,7 @@ class MyProfile extends React.Component<myProps, myStates> {
                       mt={0}
                       mb={0}
                       pt={0}
+                      pb={0}
                       borderColor="transparent"
                     >
                       <Typography variant="body1">
@@ -537,12 +574,11 @@ class MyProfile extends React.Component<myProps, myStates> {
                       </Typography>
                     </Box>
                     <Box component="fieldset" mb={0} borderColor="transparent">
-                      <Typography component="legend">Instagram URL</Typography>
-
                       <TextField
-                        className="textarea"
+                        label="Instagram URL"
                         placeholder="Write your Instagram URL"
                         rows={10}
+                        fullWidth
                         onChange={e => {
                           this.setState({
                             snsUrl: e.target.value
