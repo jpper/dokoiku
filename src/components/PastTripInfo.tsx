@@ -269,7 +269,7 @@ class PastTripInfo extends React.Component<any, myStates> {
 
   render() {
     return (
-      <div className="pastTripInfo">
+      <div>
         {this.state.pastTrips.length === 0 ||
         this.props.userCurrencyCode === "" ? (
           <p>No past trips</p>
@@ -278,7 +278,7 @@ class PastTripInfo extends React.Component<any, myStates> {
             {/* Trip details */}
             <Grid item xs={12} sm={4} md={4} lg={4} xl={3}>
               <Container>
-                <Card>
+                <Card className="pastTripInfo">
                   <div style={{ maxHeight: 520, overflow: "scroll" }}>
                     <div className="tripBasicInfo">
                       <BasicTripInfo
