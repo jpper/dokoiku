@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import "../styles/Notes.css";
 import { myFirebase } from "../config/firebase";
 
-class Notes extends Component<any, any> {
+type myProps = {
+  tripId: string;
+};
+
+class Notes extends Component<myProps, {}> {
   componentDidMount() {
     const windowMod: any = window;
 
@@ -36,8 +40,8 @@ class Notes extends Component<any, any> {
     // set an asynchronous listener to retrieve realtime data
     ref.on(
       "value",
-      function(snapshot) {},
-      function(errorObject: any) {}
+      function(snapshot: firebase.database.DataSnapshot) {},
+      function(errorObject: Object) {}
     );
     return ref;
   }
