@@ -6,11 +6,33 @@ import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import "../styles/TripInfo.css";
 import "../styles/Modal.css";
-// import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 
-export default class BasicTripInfo extends React.Component<any, any> {
-  constructor(props: any) {
+type myProps = {
+  tripTitle: string;
+  country: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  wayPoints: wayPoints;
+};
+type wayPoints = {
+  waypoints: waypoints[];
+};
+
+type waypoints = {
+  location: string;
+  stopover: boolean;
+};
+type myState = {
+  userCurrencyBudget: number;
+};
+type item = {
+  countryCode: string;
+};
+
+export default class BasicTripInfo extends React.Component<myProps, myState> {
+  constructor(props: myProps) {
     super(props);
     this.state = {
       userCurrencyBudget: 0
@@ -33,9 +55,9 @@ export default class BasicTripInfo extends React.Component<any, any> {
             alt="flag"
           ></img>
           {
-            countriesToCurrencies.find(
-              (item: any) => this.props.country === item.countryCode
-            ).country
+            countriesToCurrencies.find((item: item) => {
+              return this.props.country === item.countryCode;
+            }).country
           }
         </Typography>
 
@@ -64,7 +86,7 @@ export default class BasicTripInfo extends React.Component<any, any> {
             <strong className="boldText topPadding">Destinations:</strong>
           </Typography>
           <ul className="ul-test">
-            {this.props.wayPoints.waypoints.map((l: any, i: number) => {
+            {this.props.wayPoints.waypoints.map((l: waypoints, i: number) => {
               return (
                 <>
                   <Typography className="noWrapper">

@@ -30,7 +30,7 @@ import countriesToCurrencies from "../data/countries_to_currencies.json";
 import axios from "axios";
 
 type myProps = {
-  searchTrips: any;
+  searchTrips: searchTrips[];
   users: any;
   currentSearchTripIndex: number;
   onShowChat: any;
@@ -41,6 +41,16 @@ type myProps = {
   onChangeDisplayProfile: any;
   displayProfile: string;
   userCurrencyCode: string;
+};
+
+type searchTrips = {
+  currencyCode: string;
+  budget: number;
+  name: string;
+  countryCode: string;
+  startLocation: string;
+  startDate: Date;
+  endDate: Date;
 };
 
 type myState = {
@@ -90,6 +100,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
     );
   }
   render() {
+    console.log(this.props.searchTrips);
     if (this.props.users.length && this.props.userCurrencyCode) {
       return (
         <div className="TripInfo">
