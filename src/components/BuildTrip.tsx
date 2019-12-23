@@ -199,8 +199,6 @@ class BuildTrip extends React.Component<BuildProps, BuildState> {
                     countryCode,
                     currencyCode
                   });
-                  // console.log(this.state.countryCode);
-                  // console.log(this.state.currencyCode);
                 }}
               >
                 {countriesToCurrencies.map((item: any) => (

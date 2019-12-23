@@ -13,20 +13,15 @@ import moment from "moment";
 import { myFirestore } from "../config/firebase";
 import axios from "axios";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
-import InfoIcon from "@material-ui/icons/Info";
+import HelpIcon from "@material-ui/icons/Help";
+import PaymentIcon from "@material-ui/icons/Payment";
 // Material UI
 import "../styles/Modal.css";
-import {
-  Grid,
-  // List,
-  // ListItem,
-  // ListItemIcon,
-  // ListItemText,
-  Typography
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import UpdateIcon from "@material-ui/icons/Update";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
@@ -57,22 +52,14 @@ type myProps = {
 type myState = {
   toggleDialog: boolean;
   userCurrencyBudget: number;
-  pageStatus: PageStatus;
 };
-
-enum PageStatus {
-  Map,
-  Notes,
-  Messages
-}
 
 class OngoingTripInfo extends React.Component<myProps, myState> {
   constructor(props: myProps) {
     super(props);
     this.state = {
       toggleDialog: false,
-      userCurrencyBudget: 0,
-      pageStatus: PageStatus.Map
+      userCurrencyBudget: 0
     };
   }
   async deleteTrip(
@@ -126,7 +113,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
         }
       }
     );
-    //console.log(result.data);
+
     const userCurrencyBudget = result.data * budget;
     this.setState({ userCurrencyBudget });
   };
@@ -153,7 +140,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </Typography>
             {/* Country */}
             <Typography className="iconWrapper">
-              <strong>Country: &nbsp;</strong>
+              <strong>Country: </strong>
               <img
                 src={`https://www.countryflags.io/${this.props.ongoingTrips[
                   this.props.currentOngoingTripIndex
@@ -171,7 +158,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             {/* Starting Location */}
             <Typography className="noWrapper">
               <DoubleArrowIcon />
-              <strong>Starting Location: &nbsp;</strong>
+              <strong>Starting Location: </strong>
 
               {` ${
                 this.props.ongoingTrips[this.props.currentOngoingTripIndex]
@@ -181,7 +168,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             {/* Start Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>Start Date: &nbsp; </strong>
+              <strong>Start Date: </strong>
               {moment(
                 this.props.ongoingTrips[
                   this.props.currentOngoingTripIndex
@@ -192,7 +179,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             {/* End Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>End Date: &nbsp; </strong>
+              <strong>End Date: </strong>
               {moment(
                 this.props.ongoingTrips[
                   this.props.currentOngoingTripIndex
@@ -226,45 +213,47 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
             </div>
 
             {/* Budget */}
-            <Tooltip
-              title={
-                this.props.userCurrencyCode !== "None"
-                  ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
-                    " " +
-                    countriesToCurrencies
-                      .concat([
-                        {
-                          country: "None",
-                          countryCode: "None",
-                          currency: "None",
-                          currencyCode: "None"
-                        }
-                      ])
-                      .find(
-                        (item: any) =>
-                          this.props.userCurrencyCode === item.currencyCode
-                      ).currency
-                  : ""
+
+            <Typography className="noWrapper topPadding">
+              <PaymentIcon />
+              <strong>Budget: &nbsp;</strong>
+              {
+                this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                  .budget
+              }{" "}
+              {
+                countriesToCurrencies.find(
+                  (item: any) =>
+                    this.props.ongoingTrips[this.props.currentOngoingTripIndex]
+                      .currencyCode === item.currencyCode
+                ).currency
               }
-              placement="top-end"
-            >
-              <Typography className="noWrapper topPadding">
-                <InfoIcon />
-                <strong>Budget: &nbsp;</strong>
-                {
-                  this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-                    .budget
-                }{" "}
-                {
-                  countriesToCurrencies.find(
-                    (item: any) =>
-                      this.props.ongoingTrips[
-                        this.props.currentOngoingTripIndex
-                      ].currencyCode === item.currencyCode
-                  ).currency
+              <Tooltip
+                title={
+                  this.props.userCurrencyCode !== "None"
+                    ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
+                      " " +
+                      countriesToCurrencies
+                        .concat([
+                          {
+                            country: "None",
+                            countryCode: "None",
+                            currency: "None",
+                            currencyCode: "None"
+                          }
+                        ])
+                        .find(
+                          (item: any) =>
+                            this.props.userCurrencyCode === item.currencyCode
+                        ).currency
+                    : ""
                 }
-              </Typography>
-            </Tooltip>
+                placement="top-end"
+              >
+                <HelpIcon color="primary" fontSize="small" />
+              </Tooltip>
+            </Typography>
+
             <div className="spacer10"></div>
 
             {/* Notes & Messages */}
@@ -609,7 +598,6 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "NEXT_ONGOING_TRIP"
       });
     },
-
     toggleNotes: () =>
       dispatch({
         type: "TOGGLE_NOTES"

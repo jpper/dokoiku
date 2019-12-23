@@ -1,10 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Tooltip } from "@material-ui/core";
+import {
+  Button,
+  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogActions
+} from "@material-ui/core";
 import moment from "moment";
-// import firebase from "firebase";
+
 import { myFirestore } from "../config/firebase";
-import InfoIcon from "@material-ui/icons/Info";
 
 // Material UI and styling
 import "../styles/Modal.css";
@@ -12,9 +19,12 @@ import { Grid, Typography } from "@material-ui/core";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
+import HelpIcon from "@material-ui/icons/Help";
+import PaymentIcon from "@material-ui/icons/Payment";
 import "../styles/TripInfo.css";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 import axios from "axios";
@@ -34,22 +44,24 @@ type myProps = {
 };
 
 type myState = {
-  togglePending: boolean;
+  toggleDialog: boolean;
   userCurrencyBudget: number;
+  pendingStatus: boolean[];
 };
 
 class SearchTripInfo extends React.Component<myProps, myState> {
   constructor(props: myProps) {
     super(props);
     this.state = {
-      togglePending: false,
-      userCurrencyBudget: 0
+      toggleDialog: false,
+      userCurrencyBudget: 0,
+      pendingStatus: this.props.searchTrips.map(() => false)
     };
   }
 
   handleToggle = () => {
     this.setState({
-      togglePending: true
+      toggleDialog: !this.state.toggleDialog
     });
   };
   exchangeCurrency = async (
@@ -66,7 +78,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
         }
       }
     );
-    //console.log(result.data);
+
     const userCurrencyBudget = result.data * budget;
     this.setState({ userCurrencyBudget });
   };
@@ -91,7 +103,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
 
             {/* Country */}
             <Typography className="iconWrapper">
-              <strong>Country: &nbsp;</strong>
+              <strong>Country: </strong>
               <img
                 src={`https://www.countryflags.io/${this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -110,7 +122,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* Starting Location */}
             <Typography className="noWrapper">
               <DoubleArrowIcon />
-              <strong>Starting Location: &nbsp;</strong>
+              <strong>Starting Location: </strong>
               {` ${
                 this.props.searchTrips[this.props.currentSearchTripIndex]
                   .startLocation
@@ -120,7 +132,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* Start Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>Start Date: &nbsp;</strong>
+              <strong>Start Date: </strong>
               {moment(
                 this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -131,7 +143,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             {/* End Date */}
             <Typography className="noWrapper">
               <DateRangeIcon />
-              <strong>End Date: &nbsp;</strong>
+              <strong>End Date: </strong>
               {moment(
                 this.props.searchTrips[
                   this.props.currentSearchTripIndex
@@ -161,44 +173,45 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             </div>
 
             {/* Budget */}
-            <Tooltip
-              title={
-                this.props.userCurrencyCode !== "None"
-                  ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
-                    " " +
-                    countriesToCurrencies
-                      .concat([
-                        {
-                          country: "None",
-                          countryCode: "None",
-                          currency: "None",
-                          currencyCode: "None"
-                        }
-                      ])
-                      .find(
-                        (item: any) =>
-                          this.props.userCurrencyCode === item.currencyCode
-                      ).currency
-                  : ""
+            <Typography className="noWrapper topPadding">
+              <PaymentIcon />
+              <strong>Budget:&nbsp; </strong>
+              {
+                this.props.searchTrips[this.props.currentSearchTripIndex].budget
+              }{" "}
+              {
+                countriesToCurrencies.find(
+                  (item: any) =>
+                    this.props.searchTrips[this.props.currentSearchTripIndex]
+                      .currencyCode === item.currencyCode
+                ).currency
               }
-              placement="top-end"
-            >
-              <Typography className="noWrapper topPadding">
-                <InfoIcon />
-                <strong>Budget:&nbsp; </strong>
-                {
-                  this.props.searchTrips[this.props.currentSearchTripIndex]
-                    .budget
-                }{" "}
-                {
-                  countriesToCurrencies.find(
-                    (item: any) =>
-                      this.props.searchTrips[this.props.currentSearchTripIndex]
-                        .currencyCode === item.currencyCode
-                  ).currency
+              <Tooltip
+                title={
+                  this.props.userCurrencyCode !== "None"
+                    ? Math.round(this.state.userCurrencyBudget * 100) / 100 +
+                      " " +
+                      countriesToCurrencies
+                        .concat([
+                          {
+                            country: "None",
+                            countryCode: "None",
+                            currency: "None",
+                            currencyCode: "None"
+                          }
+                        ])
+                        .find(
+                          (item: any) =>
+                            this.props.userCurrencyCode === item.currencyCode
+                        ).currency
+                    : ""
                 }
-              </Typography>
-            </Tooltip>
+                placement="top-end"
+              >
+                <HelpIcon color="primary" fontSize="small" />
+              </Tooltip>
+            </Typography>
+
             <div className="spacer10"></div>
 
             <div>
@@ -271,6 +284,11 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                 this.props.userId,
                 this.props.searchTrips[this.props.currentSearchTripIndex].tripId
               );
+              const newPendingState = this.state.pendingStatus;
+              newPendingState[this.props.currentSearchTripIndex] = true;
+              this.setState({
+                pendingStatus: newPendingState
+              });
               this.handleToggle();
             }}
             variant="contained"
@@ -279,9 +297,24 @@ class SearchTripInfo extends React.Component<myProps, myState> {
             fullWidth
           >
             <GroupAddIcon />
-            {this.state.togglePending ? "PENDING..." : "JOIN!"}
+            {this.state.pendingStatus[this.props.currentSearchTripIndex]
+              ? "Pending"
+              : "JOIN!"}
           </Button>
-
+          {this.state.toggleDialog ? (
+            <Dialog open={this.state.toggleDialog}>
+              <DialogTitle>Successfully Joined</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Congratulations! You just joined a new trip! Go to your
+                  upcoming trips and take a look!
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleToggle}>Close</Button>
+              </DialogActions>
+            </Dialog>
+          ) : null}
           {/* Previous & Next Button */}
           {this.props.searchTrips.length > 1 ? (
             <Grid container>
@@ -293,6 +326,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                   fullWidth
                   onClick={() => {
                     this.props.onPreviousTrip();
+                    this.props.onChangeDisplayProfile(undefined);
                     if (this.props.currentSearchTripIndex - 1 >= 0) {
                       this.exchangeCurrency(
                         this.props.searchTrips[
@@ -328,6 +362,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                   fullWidth
                   onClick={() => {
                     this.props.onNextTrip();
+                    this.props.onChangeDisplayProfile(undefined);
                     if (
                       this.props.currentSearchTripIndex + 1 <
                       this.props.searchTrips.length
