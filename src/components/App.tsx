@@ -49,7 +49,6 @@ import BuildIcon from "@material-ui/icons/Build";
 import InfoIcon from "@material-ui/icons/Info";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
-// FIXME: This is just for testing Reviews!! */
 // import ChatIcon from "@material-ui/icons/Chat";
 import RateReviewIcon from "@material-ui/icons/RateReview";
 import PastTripInfo from "./PastTripInfo";
@@ -336,8 +335,6 @@ class App extends React.Component<myProps, myState> {
                     <Tab label="Upcoming Trips" icon={<CardTravelIcon />} />
                     <Tab label="Search Trips" icon={<SearchIcon />} />
                     <Tab label="Build Trip" icon={<BuildIcon />} />
-
-                    {/* FIXME: This is just for testing Reviews!! */}
                     <Tab label="Past Trips" icon={<RateReviewIcon />} />
 
                     {/* User Icon */}
@@ -638,7 +635,6 @@ class App extends React.Component<myProps, myState> {
                   </TabPanel>
 
                   {/* Reviews */}
-                  {/* FIXME: This is just for testing Reviews!! */}
                   <TabPanel value={this.props.pageTabIndex} index={5}>
                     {this.props.userId === "" ? (
                       <Login />

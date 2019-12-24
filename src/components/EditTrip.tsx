@@ -1,6 +1,8 @@
-import React from "react";
+import React, { Dispatch, ChangeEvent } from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
+import { Waypoint } from "../redux/stateTypes";
+
 import {
   Button,
   IconButton,
@@ -15,14 +17,19 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { firestore } from "firebase";
 import "../styles/BuildTrip.css";
 
-const mapStateToProps = (state: any) => {
+type MapStateToProps = {
+  userId: string;
+  showEdit: boolean;
+};
+
+const mapStateToProps = (state: MapStateToProps) => {
   return {
     userId: state.userId,
     showEdit: state.showEdit
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     onShowEdit: (index: number) =>
       dispatch({
@@ -38,8 +45,8 @@ const mapDispatchToProps = (dispatch: any) => {
       startDate: string,
       endDate: string,
       startLocation: string,
-      waypoints: any,
-      budget: string,
+      waypoints: Waypoint[],
+      budget: number,
       tripId: string
     ) => {
       await myFirestore
@@ -63,11 +70,19 @@ type EditProps = {
   startDate: string | null;
   endDate: string | null;
   startLocation: string;
-  waypoints: any;
+  waypoints: Waypoint[];
   budget: number;
-  onClosePopup: any;
-  onShowEdit: any;
-  onEditTrip: any;
+  onClosePopup: () => void;
+  onShowEdit: (index: number) => void;
+  onEditTrip: (
+    name: string,
+    startDate: string,
+    endDate: string,
+    startLocation: string,
+    waypoints: Waypoint[],
+    budget: number,
+    tripId: string
+  ) => void;
   userId: string;
   tripId: string;
 };
@@ -77,7 +92,7 @@ type EditState = {
   startDate: string | null;
   endDate: string | null;
   startLocation: string;
-  waypoints: any;
+  waypoints: Waypoint[];
   addedWaypoint: string;
   budget: number;
   toggleDialog: boolean;
@@ -162,7 +177,9 @@ class EditTrip extends React.Component<EditProps, EditState> {
                 validators={["required"]}
                 errorMessages={["this field is required"]}
                 value={this.state.name}
-                onChange={(e: any) => {
+                onChange={(
+                  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                ) => {
                   this.setState({ name: e.currentTarget.value });
                 }}
               />
@@ -186,7 +203,9 @@ class EditTrip extends React.Component<EditProps, EditState> {
                 ]}
                 InputLabelProps={{ shrink: true }}
                 value={this.state.startDate}
-                onChange={(e: any) => {
+                onChange={(
+                  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                ) => {
                   this.setState({ startDate: e.currentTarget.value });
                 }}
               />
@@ -205,7 +224,9 @@ class EditTrip extends React.Component<EditProps, EditState> {
                 ]}
                 InputLabelProps={{ shrink: true }}
                 value={this.state.endDate}
-                onChange={(e: any) => {
+                onChange={(
+                  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                ) => {
                   this.setState({ endDate: e.currentTarget.value });
                 }}
               />
@@ -219,7 +240,9 @@ class EditTrip extends React.Component<EditProps, EditState> {
                 validators={["required"]}
                 errorMessages={["this field is required"]}
                 value={this.state.startLocation}
-                onChange={(e: any) => {
+                onChange={(
+                  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                ) => {
                   this.setState({ startLocation: e.currentTarget.value });
                 }}
               />
@@ -227,23 +250,25 @@ class EditTrip extends React.Component<EditProps, EditState> {
               <br />
               <label>Destinations:</label>
               {this.state.waypoints.length
-                ? this.state.waypoints.map((waypoint: any, index: number) => (
-                    <div>
-                      <div>{waypoint.location}</div>
-                      <IconButton
-                        onClick={() =>
-                          this.setState({
-                            waypoints: [
-                              ...this.state.waypoints.slice(0, index),
-                              ...this.state.waypoints.slice(index + 1)
-                            ]
-                          })
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </div>
-                  ))
+                ? this.state.waypoints.map(
+                    (waypoint: Waypoint, index: number) => (
+                      <div>
+                        <div>{waypoint.location}</div>
+                        <IconButton
+                          onClick={() =>
+                            this.setState({
+                              waypoints: [
+                                ...this.state.waypoints.slice(0, index),
+                                ...this.state.waypoints.slice(index + 1)
+                              ]
+                            })
+                          }
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </div>
+                    )
+                  )
                 : null}
               <br />
               <br />
@@ -253,7 +278,9 @@ class EditTrip extends React.Component<EditProps, EditState> {
                 variant="outlined"
                 size="small"
                 value={this.state.addedWaypoint}
-                onChange={(e: any) => {
+                onChange={(
+                  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                ) => {
                   this.setState({ addedWaypoint: e.currentTarget.value });
                 }}
               />
@@ -288,8 +315,10 @@ class EditTrip extends React.Component<EditProps, EditState> {
                 errorMessages={["cannot be negative", "this field is required"]}
                 InputProps={{ inputProps: { min: 0 } }}
                 value={this.state.budget}
-                onChange={(e: any) => {
-                  this.setState({ budget: e.currentTarget.value });
+                onChange={(
+                  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                ) => {
+                  this.setState({ budget: Number(e.currentTarget.value) });
                 }}
               />
               <br />
