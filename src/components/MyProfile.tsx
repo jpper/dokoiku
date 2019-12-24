@@ -30,14 +30,14 @@ import { setPageTabIndex, setUserCurrencyCode } from "../redux/action";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 import _ from "lodash";
 import "typeface-roboto";
-import { User } from "../redux/storeTypes";
+import { User } from "../redux/stateTypes";
 
-type myProps = {
+type MyProps = {
   userId: string;
   users: User[];
   userCurrencyCode: string;
-  setPageTabIndex: any;
-  updateUserCurrencyCode: any;
+  setPageTabIndex: (index: number) => void;
+  updateUserCurrencyCode: (currencyCode: string, userId: string) => void;
 };
 
 enum snsTypes {
@@ -48,9 +48,9 @@ enum snsTypes {
   Photo
 }
 
-type myStates = {
-  user: any;
-  showReview: any;
+type MyStates = {
+  user: User;
+  showReview: boolean;
   rating: number;
   userCurrencyCode: string;
   toggleCurrencyDialog: boolean;
@@ -60,8 +60,8 @@ type myStates = {
   snsUrl: string;
 };
 
-class MyProfile extends React.Component<myProps, myStates> {
-  constructor(props: myProps) {
+class MyProfile extends React.Component<MyProps, MyStates> {
+  constructor(props: MyProps) {
     super(props);
     this.state = {
       user: undefined,

@@ -5,4 +5,6 @@ export interface User {
   id: string;
   nickname: string;
   photoUrl: string;
+  instagram: string;
+  twitter: string;
 }
