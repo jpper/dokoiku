@@ -37,7 +37,22 @@ import "../styles/TripInfo.css";
 import "../styles/PastTripInfo.css";
 import Reviews from "./Reviews";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
-import { Trip } from "../redux/stateTypes";
+import { Trip, User } from "../redux/stateTypes";
+import { CountryToCurrency } from "../data/types";
+
+type MyProps = {
+  pastTrips: Trip[];
+  currentOngoingTripIndex: number;
+  userId: string;
+  userName: string;
+  users: User[];
+  mapTripMessage: number;
+  userCurrencyCode: string;
+  onPreviousTrip: () => void;
+  onNextTrip: () => void;
+  toggleNotes: () => void;
+  toggleMessages: () => void;
+};
 
 enum PageStatus {
   Map,
@@ -58,8 +73,8 @@ interface myStates {
   userCurrencyBudget: number;
 }
 
-class PastTripInfo extends React.Component<any, myStates> {
-  constructor(props: any) {
+class PastTripInfo extends React.Component<MyProps, myStates> {
+  constructor(props: MyProps) {
     super(props);
     this.state = {
       modalStatus: [],
@@ -112,7 +127,7 @@ class PastTripInfo extends React.Component<any, myStates> {
     });
   };
 
-  onClickUser = (index: number, member: any) => {
+  onClickUser = (index: number, member: string) => {
     this.setState({
       targetUser: index
     });
@@ -121,7 +136,7 @@ class PastTripInfo extends React.Component<any, myStates> {
     this.checkPrevReview(member);
   };
 
-  checkPrevReview = async (reviewee: any) => {
+  checkPrevReview = async (reviewee: string) => {
     const tripId = this.state.pastTrips[
       this.state.currentPastTripIndex
     ].tripId.trim();
@@ -148,7 +163,7 @@ class PastTripInfo extends React.Component<any, myStates> {
     return false;
   };
 
-  SetMessage = (e: any) => {
+  SetMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     this.setState({
       message: e.target.value
     });
@@ -164,7 +179,10 @@ class PastTripInfo extends React.Component<any, myStates> {
     });
   };
 
-  saveReviews = (event: any, reviewee: any) => {
+  saveReviews = (
+    event: React.FormEvent<HTMLButtonElement>,
+    reviewee: string
+  ) => {
     const tripId = this.state.pastTrips[
       this.state.currentPastTripIndex
     ].tripId.trim();
@@ -191,7 +209,7 @@ class PastTripInfo extends React.Component<any, myStates> {
     return true;
   };
 
-  onSubmit = (event: any, reviewee: any) => {
+  onSubmit = (event: React.FormEvent<HTMLButtonElement>, reviewee: string) => {
     // If textarea or rating is empty, error
     if (!this.checkInput()) {
       this.setState({
@@ -253,17 +271,6 @@ class PastTripInfo extends React.Component<any, myStates> {
     this.setState({ userCurrencyBudget });
   };
 
-  componentWillMount() {
-    if (this.props.ongoingTrips > 0) {
-      this.exchangeCurrency(
-        this.props.ongoingTrips[this.props.currentOngoingTripIndex]
-          .currencyCode,
-        this.props.userCurrencyCode,
-        this.props.ongoingTrips[this.props.currentOngoingTripIndex].budget
-      );
-    }
-  }
-
   render() {
     return (
       <div>
@@ -317,7 +324,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                         }{" "}
                         {
                           countriesToCurrencies.find(
-                            (item: any) =>
+                            (item: CountryToCurrency) =>
                               this.state.pastTrips[
                                 this.state.currentPastTripIndex
                               ].currencyCode === item.currencyCode
@@ -341,7 +348,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                                     }
                                   ])
                                   .find(
-                                    (item: any) =>
+                                    (item: CountryToCurrency) =>
                                       this.props.userCurrencyCode ===
                                       item.currencyCode
                                   ).currency
@@ -467,15 +474,14 @@ class PastTripInfo extends React.Component<any, myStates> {
                       <div className="memberContainer">
                         {this.state.pastTrips[
                           this.state.currentPastTripIndex
-                        ].memberIds.map((member: any, i: number) => {
-                          const nickname = this.props.users.find(
-                            (u: { id: any }) => u.id === member
-                          ).nickname;
-                          const photoUrl = this.props.users.find(
-                            (u: { id: any }) => u.id === member
-                          ).photoUrl;
+                        ].memberIds.map((memberId: string, i: number) => {
+                          const user = this.props.users.find(
+                            (u: { id: string }) => u.id === memberId
+                          );
+                          const nickname = user.nickname;
+                          const photoUrl = user.photoUrl;
                           // skips own data here
-                          if (member === this.props.userId) return null;
+                          if (memberId === this.props.userId) return null;
 
                           return (
                             <div key={i}>
@@ -494,7 +500,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                                 size="medium"
                                 fullWidth
                                 key={i}
-                                onClick={() => this.onClickUser(i, member)}
+                                onClick={() => this.onClickUser(i, memberId)}
                               >
                                 <img
                                   src={photoUrl}
@@ -595,7 +601,7 @@ class PastTripInfo extends React.Component<any, myStates> {
                                         variant="contained"
                                         color="primary"
                                         onClick={event => {
-                                          this.onSubmit(event, member);
+                                          this.onSubmit(event, memberId);
                                         }}
                                       >
                                         Submit
