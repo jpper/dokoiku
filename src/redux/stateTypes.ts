@@ -1,4 +1,4 @@
-export interface User {
+export type User = {
   aboutMe: string;
   currencyCode: string;
   facebook: string;
@@ -7,24 +7,24 @@ export interface User {
   photoUrl: string;
   instagram: string;
   twitter: string;
-}
+};
 
-type waypoint = {
+export type Waypoint = {
   location: string;
   stopover: boolean;
 };
 
-export interface Trip {
+export type Trip = {
   name: string;
   countryCode: string;
   currencyCode: string;
   startDate: firebase.firestore.Timestamp;
   endDate: firebase.firestore.Timestamp;
   startLocation: string;
-  waypoints: waypoint[];
+  waypoints: Waypoint[];
   budget: number;
   memberIds: string[];
   ownerId: string;
   travelMode: string;
   tripId: string;
-}
+};
