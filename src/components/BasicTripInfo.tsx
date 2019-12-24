@@ -8,7 +8,7 @@ import "../styles/TripInfo.css";
 import "../styles/Modal.css";
 // import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
-import { User, Trip, Waypoint, Request } from "../redux/stateTypes";
+import { Trip, Waypoint } from "../redux/stateTypes";
 
 type myProps = {
   tripTitle: string;

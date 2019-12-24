@@ -306,11 +306,10 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           </Button>
           {this.state.toggleDialog ? (
             <Dialog open={this.state.toggleDialog}>
-              <DialogTitle>Successfully Joined</DialogTitle>
+              <DialogTitle>Request Sent</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Congratulations! You just joined a new trip! Go to your
-                  upcoming trips and take a look!
+                  Your request to join this trip has been sent!
                 </DialogContentText>
               </DialogContent>
               <DialogActions>

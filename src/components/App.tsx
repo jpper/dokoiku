@@ -59,7 +59,7 @@ import moment from "moment";
 import PrivacyPolicy from "./PrivacyPolicy";
 import iconImg from "../img/logo-dokoiku.png";
 import iconImgWhite from "../img/logo-dokoiku-title-white.png";
-import { User, Trip, Waypoint, Request } from "../redux/stateTypes";
+import { Trip, Request } from "../redux/stateTypes";
 
 type myProps = {
   userId: string;

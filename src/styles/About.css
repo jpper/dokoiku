@@ -2,13 +2,26 @@
   position: relative;
   color: white;
   background-color: rgba(0, 0, 0, 0.3);
-  /* width: 80%; */
   text-align: left;
   padding-right: 10%;
   padding-left: 10%;
   padding-top: 40px;
   padding-bottom: 8px;
 }
+
+.about-dokoiku {
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  list-style: none;
+  list-style-position: inside;
+}
+
+ul {
+  margin-left: -5%;
+}
+
 .spacer50 {
   margin-top: 50px;
 }
@@ -23,7 +36,3 @@ a:link {
 a:visited {
   color: white;
 }
-
-/* .calls-to-action {
-  text-align: center;
-} */
