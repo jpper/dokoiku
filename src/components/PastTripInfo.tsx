@@ -40,7 +40,7 @@ import countriesToCurrencies from "../data/countries_to_currencies.json";
 import { Trip, User } from "../redux/stateTypes";
 import { CountryToCurrency } from "../data/types";
 
-type MyProps = {
+type MapStateToProps = {
   pastTrips: Trip[];
   currentOngoingTripIndex: number;
   userId: string;
@@ -48,6 +48,9 @@ type MyProps = {
   users: User[];
   mapTripMessage: number;
   userCurrencyCode: string;
+};
+
+type MapDispatchToProps = {
   onPreviousTrip: () => void;
   onNextTrip: () => void;
   toggleNotes: () => void;
@@ -61,7 +64,7 @@ enum PageStatus {
   Messages
 }
 
-interface myStates {
+interface States {
   modalStatus: boolean[];
   targetUser: number;
   rating: number;
@@ -73,8 +76,10 @@ interface myStates {
   userCurrencyBudget: number;
 }
 
-class PastTripInfo extends React.Component<MyProps, myStates> {
-  constructor(props: MyProps) {
+type Props = MapStateToProps & MapDispatchToProps;
+
+class PastTripInfo extends React.Component<Props, States> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       modalStatus: [],
