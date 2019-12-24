@@ -30,10 +30,11 @@ import { setPageTabIndex, setUserCurrencyCode } from "../redux/action";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 import _ from "lodash";
 import "typeface-roboto";
+import { User } from "../redux/storeTypes";
 
 type myProps = {
   userId: string;
-  users: any;
+  users: User[];
   userCurrencyCode: string;
   setPageTabIndex: any;
   updateUserCurrencyCode: any;

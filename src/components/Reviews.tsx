@@ -30,7 +30,7 @@ interface ReviewsState {
 
 interface ReviewsProps {
   userId: string;
-  tripId: string | null;
+  tripId?: string;
 }
 
 export default class Reviews extends Component<ReviewsProps, ReviewsState> {
