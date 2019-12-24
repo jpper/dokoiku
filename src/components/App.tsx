@@ -59,32 +59,36 @@ import moment from "moment";
 import PrivacyPolicy from "./PrivacyPolicy";
 import iconImg from "../img/logo-dokoiku.png";
 import iconImgWhite from "../img/logo-dokoiku-title-white.png";
+import { User, Trip, Waypoint, Request } from "../redux/stateTypes";
 
 type myProps = {
   userId: string;
   userName: string;
   userPhoto: string;
-  ongoingTrips: any;
-  searchTrips: any;
-  pastTrips: any;
+  ongoingTrips: Trip[];
+  searchTrips: Trip[];
+  pastTrips: Trip[];
   currentOngoingTripIndex: number;
   currentSearchTripIndex: number;
   currentPastTripIndex: number;
   showChat: boolean;
   showEdit: boolean;
-  onShowChat?: any;
+  onShowChat?: () => void;
   currentProfile: number;
-  setUserInfo: any;
-  login: any;
-  mapTripMessage: any;
-  getTrips: any;
-  getRequests: any;
-  requests: any;
-  logout: any;
+  setUserInfo: (userName: string, userId: string, userPhoto: string) => void;
+  mapTripMessage: number;
+  getTrips: (userId: string) => void;
+  getRequests: (userId: string) => void;
+  requests: Request[];
+  logout: () => void;
   displayProfile: string;
-  pageTabIndex: any;
-  setPageTabIndex: any;
-  getUserCurrencyCode: any;
+  pageTabIndex: number;
+  setPageTabIndex: (index: number) => void;
+  getUserCurrencyCode: (userId: string) => void;
+};
+
+type myState = {
+  anchorEl: any;
 };
 
 const mapStateToProps = (state: any) => {
@@ -102,7 +106,6 @@ const mapStateToProps = (state: any) => {
     showEdit: state.showEdit,
     currentProfile: state.currentProfile,
     mapTripMessage: state.mapTripMessage,
-    login: state.login,
     requests: state.requests,
     displayProfile: state.displayProfile,
     pageTabIndex: state.pageTabIndex
@@ -192,7 +195,7 @@ const mapDispatchToProps = (dispatch: any) => ({
       });
   },
   logout: () => dispatch({ type: "LOGOUT" }),
-  setPageTabIndex: (index: any) => {
+  setPageTabIndex: (index: number) => {
     dispatch(setPageTabIndex(index));
     dispatch({
       type: "CHANGE_DISPLAY_PROFILE",
@@ -214,8 +217,8 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 interface TabPanelProps {
   children?: React.ReactNode;
-  index?: any;
-  value?: any;
+  index?: number;
+  value?: number;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -239,19 +242,18 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-class App extends React.Component<myProps, any> {
+class App extends React.Component<myProps, myState> {
   constructor(props: myProps) {
     super(props);
     this.state = {
-      value: 1
+      anchorEl: null
     };
   }
-
   componentDidMount() {
     this.checkLogin();
   }
 
-  UNSAFE_componentWillUpdate() {
+  componentWillUpdate() {
     if (this.props.pageTabIndex === -1) {
       this.props.setPageTabIndex(0);
     }
