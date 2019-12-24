@@ -2,7 +2,6 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import "../styles/About.css";
 import "typeface-roboto";
-import iconImgWhite from "../img/logo-dokoiku-white.png";
 
 import SearchIcon from "@material-ui/icons/Search";
 import BuildIcon from "@material-ui/icons/Build";
@@ -52,16 +51,13 @@ function About() {
           your profile.
         </h3>
       </div>
-
-      <br />
-      <br />
       <br />
       <br />
       <div className="about-dokoiku">
         <h2>About Dokoiku</h2>
         <p>
           Dokoiku is a full-stack, single-page app that was created as a senior
-          project during the Immersive Bootcamp at Code Chrysalis.
+          project Code Chrysalis's Immersive Bootcamp.
         </p>
         <ul>
           The Dokoiku Team:
@@ -81,18 +77,9 @@ function About() {
             <li>Ziyu Chen</li>
           </a>
         </ul>
-        GitHub:{" "}
         <a href="https://github.com/team-dokoiku/dokoiku">
           <GitHubIcon fontSize="large" />
         </a>
-      </div>
-
-      <div className="iconImg-container">
-        <img
-          src={iconImgWhite}
-          className="iconImg-about"
-          alt="Dokoiku logo"
-        ></img>
       </div>
     </div>
   );

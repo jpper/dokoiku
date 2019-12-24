@@ -27,6 +27,7 @@
     "dotenv": "^8.2.0",
     "env-cmd": "^10.0.1",
     "firebase": "^7.5.0",
+    "firestore": "^1.1.6",
     "lodash": "^4.17.15",
     "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.24.0",

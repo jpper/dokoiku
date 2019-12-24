@@ -29,18 +29,21 @@ import "../styles/TripInfo.css";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
 import axios from "axios";
 
+import { User, Trip, Waypoint } from "../redux/stateTypes";
+import { CountryToCurrency } from "../data/types";
+
 type myProps = {
-  searchTrips: any;
-  users: any;
+  searchTrips: Trip[];
+  users: User[];
   currentSearchTripIndex: number;
-  onShowChat: any;
-  onPreviousTrip: any;
-  onNextTrip: any;
-  onJoinTrip?: any;
   userId: string;
-  onChangeDisplayProfile: any;
   displayProfile: string;
   userCurrencyCode: string;
+  onShowChat: () => void;
+  onPreviousTrip: () => void;
+  onNextTrip: () => void;
+  onJoinTrip: (ownerId: string, userId: string, tripId: string) => void;
+  onChangeDisplayProfile: (profile: string) => void;
 };
 
 type myState = {
@@ -112,7 +115,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
               ></img>
               {
                 countriesToCurrencies.find(
-                  (item: any) =>
+                  (item: CountryToCurrency) =>
                     this.props.searchTrips[this.props.currentSearchTripIndex]
                       .countryCode === item.countryCode
                 ).country
@@ -160,11 +163,11 @@ class SearchTripInfo extends React.Component<myProps, myState> {
               <ul className="ul-test">
                 {this.props.searchTrips[
                   this.props.currentSearchTripIndex
-                ].waypoints.map((l: any, i: number) => {
+                ].waypoints.map((waypoint: Waypoint) => {
                   return (
                     <>
                       <Typography className="noWrapper">
-                        <li>{l.location}</li>
+                        <li>{waypoint.location}</li>
                       </Typography>
                     </>
                   );
@@ -181,7 +184,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
               }{" "}
               {
                 countriesToCurrencies.find(
-                  (item: any) =>
+                  (item: CountryToCurrency) =>
                     this.props.searchTrips[this.props.currentSearchTripIndex]
                       .currencyCode === item.currencyCode
                 ).currency
@@ -201,7 +204,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                           }
                         ])
                         .find(
-                          (item: any) =>
+                          (item: CountryToCurrency) =>
                             this.props.userCurrencyCode === item.currencyCode
                         ).currency
                     : ""
@@ -222,12 +225,12 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                 {[
                   this.props.searchTrips[this.props.currentSearchTripIndex]
                     .memberIds[0]
-                ].map((m: any, i: number) => {
+                ].map((memberId: string, i: number) => {
                   const nickname = this.props.users.find(
-                    (u: { id: any }) => u.id === m
+                    (u: { id: string }) => u.id === memberId
                   ).nickname;
                   const photoUrl = this.props.users.find(
-                    (u: { id: any }) => u.id === m
+                    (u: { id: string }) => u.id === memberId
                   ).photoUrl;
                   return (
                     <div>
@@ -238,7 +241,7 @@ class SearchTripInfo extends React.Component<myProps, myState> {
                         fullWidth
                         key={i}
                         onClick={() => {
-                          this.props.onChangeDisplayProfile(m);
+                          this.props.onChangeDisplayProfile(memberId);
                         }}
                       >
                         <img
@@ -303,11 +306,10 @@ class SearchTripInfo extends React.Component<myProps, myState> {
           </Button>
           {this.state.toggleDialog ? (
             <Dialog open={this.state.toggleDialog}>
-              <DialogTitle>Successfully Joined</DialogTitle>
+              <DialogTitle>Request Sent</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Congratulations! You just joined a new trip! Go to your
-                  upcoming trips and take a look!
+                  Your request to join this trip has been sent!
                 </DialogContentText>
               </DialogContent>
               <DialogActions>

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Dispatch } from "react";
 import { connect } from "react-redux";
+import { Request, Trip, User } from "../redux/stateTypes";
 import {
   Button,
   Card,
@@ -15,17 +16,20 @@ import "../styles/Notification.css";
 
 import ProfilePopover from "./ProfilePopover";
 
-type myProps = {
-  requests: any;
-  users: any;
-  ongoingTrips: any;
+type MapStateToProps = {
+  requests: Request[];
+  users: User[];
+  ongoingTrips: Trip[];
   userId: string;
-  removeRequest: any;
-  onChangeDisplayProfile: any;
   displayProfile: string;
 };
 
-const mapStateToProps = (state: any) => {
+type myStates = {
+  togglePopover: boolean;
+  anchorEl: HTMLButtonElement;
+};
+
+const mapStateToProps = (state: MapStateToProps) => {
   return {
     requests: state.requests,
     users: state.users,
@@ -34,7 +38,7 @@ const mapStateToProps = (state: any) => {
     displayProfile: state.displayProfile
   };
 };
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     removeRequest: (tripId: string, fromId: string) => {
       dispatch(removeRequest(tripId, fromId));
@@ -47,8 +51,11 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-class Notification extends React.Component<myProps, any> {
-  constructor(props: any) {
+type Props = ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps>;
+
+class Notification extends React.Component<Props, myStates> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       togglePopover: false,
@@ -98,7 +105,7 @@ class Notification extends React.Component<myProps, any> {
     });
   };
 
-  setAnchorEl = (anchorEl: any) => {
+  setAnchorEl = (anchorEl: HTMLButtonElement) => {
     this.setState({
       anchorEl
     });
@@ -108,12 +115,12 @@ class Notification extends React.Component<myProps, any> {
     return (
       <div>
         {this.props.requests.length ? (
-          this.props.requests.map((request: any) => {
+          this.props.requests.map((request: Request) => {
             const user = this.props.users.find(
-              (user: any) => user.id === request.fromId
+              (user: User) => user.id === request.fromId
             );
             const foundRequest = this.props.ongoingTrips.find(
-              (trip: any) => trip.tripId === request.tripId
+              (trip: Trip) => trip.tripId === request.tripId
             );
             if (!foundRequest) {
               this.rejectRequest(

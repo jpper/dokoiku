@@ -1,6 +1,33 @@
 import { createStore } from "redux";
+import { Message, Trip, User, Request } from "./stateTypes";
 
-const initialState: any = {
+export type State = {
+  userId: string;
+  userName: string;
+  userPhoto: string;
+  userCurrencyCode: string;
+  currentTripMessages: Message[];
+  messageListener: any;
+  ongoingTrips: Trip[];
+  searchTrips: Trip[];
+  pendingTrips: Trip[];
+  pastTrips: Trip[];
+  currentOngoingTripIndex: number;
+  currentSearchTripIndex: number;
+  currentPastTripIndex: number;
+  users: User[];
+  showChat: boolean;
+  showEdit: boolean;
+  currentProfile: number;
+  mapTripMessage: number;
+  showPastTrips: boolean;
+  showReviews: boolean;
+  requests: Request[];
+  displayProfile: string | undefined;
+  pageTabIndex: number;
+};
+
+const initialState: State = {
   userId: "",
   userName: "",
   userPhoto: "",
@@ -31,7 +58,7 @@ interface Action {
   [key: string]: any;
 }
 
-const reducer = (state: any = initialState, action: Action): any => {
+const reducer = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case "NEXT_SEARCH_TRIP": {
       let nextIndex: number;

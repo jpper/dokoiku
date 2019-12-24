@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Dispatch } from "react";
 import { connect } from "react-redux";
+import { User } from "../redux/stateTypes";
 import "../styles/MyProfile.css";
 // import { myFirestore } from "../config/firebase";
 import {
@@ -19,15 +20,20 @@ import "typeface-roboto";
 
 type myProps = {
   displayProfile: string;
-  users: any;
-  onChangeDisplayProfile: any;
+  users: User[];
 };
 
-class ProfilePopover extends React.Component<
-  myProps,
-  { user: any; showReview: any; rating: number }
-> {
-  constructor(props: myProps) {
+type myStates = {
+  user: User;
+  showReview: boolean;
+  rating: number;
+};
+
+type Props = ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps>;
+
+class ProfilePopover extends React.Component<Props, myStates> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       user: undefined,
@@ -55,7 +61,7 @@ class ProfilePopover extends React.Component<
     if (this.state.user === undefined && this.props.users.length) {
       this.setState({
         user: this.props.users.find(
-          (u: { id: any }) => u.id === this.props.displayProfile
+          (u: { id: string }) => u.id === this.props.displayProfile
         )
       });
     }
@@ -65,7 +71,7 @@ class ProfilePopover extends React.Component<
     if (this.state.user === undefined && this.props.users.length) {
       this.setState({
         user: this.props.users.find(
-          (u: { id: any }) => u.id === this.props.displayProfile
+          (u: { id: string }) => u.id === this.props.displayProfile
         )
       });
     }
@@ -282,14 +288,14 @@ class ProfilePopover extends React.Component<
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: myProps) => {
   return {
     displayProfile: state.displayProfile,
     users: state.users
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     onChangeDisplayProfile: (profile: string) =>
       dispatch({

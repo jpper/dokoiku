@@ -10,7 +10,6 @@ import axios from "axios";
 import { Card, Typography, CardMedia } from "@material-ui/core";
 
 import "../styles/Map.css";
-
 require("dotenv").config();
 
 type MapProps = {
@@ -37,7 +36,7 @@ class Map extends React.Component<MapProps, MapState> {
     this.directionsCallback = this.directionsCallback.bind(this);
   }
 
-  shouldComponentUpdate(nextProps: any, nextState: any) {
+  shouldComponentUpdate(nextProps: MapProps, nextState: MapState) {
     return (
       nextProps.currentTripIndex !== this.props.currentTripIndex ||
       this.state.response === null ||
@@ -120,7 +119,7 @@ class Map extends React.Component<MapProps, MapState> {
             {this.state.positions.length
               ? this.state.positions
                   .slice(1)
-                  .map((position: any, index: number) => {
+                  .map((position: google.maps.LatLng, index: number) => {
                     if (position === this.state.positions[1]) {
                       const icon = {
                         url:
