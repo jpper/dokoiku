@@ -8,9 +8,27 @@ import "../styles/TripInfo.css";
 import "../styles/Modal.css";
 // import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
+import { Trip, Waypoint } from "../redux/stateTypes";
 
-export default class BasicTripInfo extends React.Component<any, any> {
-  constructor(props: any) {
+type myProps = {
+  tripTitle: string;
+  country: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  wayPoints: Trip;
+};
+
+type item = {
+  countryCode: string;
+};
+
+type myState = {
+  userCurrencyBudget: number;
+};
+
+export default class BasicTripInfo extends React.Component<myProps, myState> {
+  constructor(props: myProps) {
     super(props);
     this.state = {
       userCurrencyBudget: 0
@@ -34,7 +52,7 @@ export default class BasicTripInfo extends React.Component<any, any> {
           ></img>
           {
             countriesToCurrencies.find(
-              (item: any) => this.props.country === item.countryCode
+              (item: item) => this.props.country === item.countryCode
             ).country
           }
         </Typography>
@@ -64,7 +82,7 @@ export default class BasicTripInfo extends React.Component<any, any> {
             <strong className="boldText topPadding">Destinations:</strong>
           </Typography>
           <ul className="ul-test">
-            {this.props.wayPoints.waypoints.map((l: any, i: number) => {
+            {this.props.wayPoints.waypoints.map((l: Waypoint, i: number) => {
               return (
                 <>
                   <Typography className="noWrapper">

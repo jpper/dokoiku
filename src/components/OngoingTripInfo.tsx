@@ -30,32 +30,34 @@ import ChatIcon from "@material-ui/icons/Chat";
 import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/TripInfo.css";
 
-type myProps = {
-  ongoingTrips: any;
+import { User, Trip, Waypoint } from "../redux/stateTypes";
+import { CountryToCurrency } from "../data/types";
+
+type MyProps = {
+  ongoingTrips: Trip[];
   currentOngoingTripIndex: number;
-  onShowChat: any;
-  onPreviousTrip: any;
-  onShowEdit: any;
-  onNextTrip: any;
-  onJoinTrip?: any;
+  mapTripMessage: number;
   userId: string;
-  users: any;
-  toggleNotes: any;
-  toggleMessages: any;
-  mapTripMessage: any;
-  onChangeDisplayProfile: any;
   displayProfile: string;
   userCurrencyCode: string;
-  clearToggle: any;
+  users: User[];
+  onShowChat: () => void;
+  onPreviousTrip: () => void;
+  onShowEdit: () => void;
+  onNextTrip: () => void;
+  toggleNotes: () => void;
+  toggleMessages: () => void;
+  onChangeDisplayProfile: (profile: string | undefined) => void;
+  clearToggle: () => void;
 };
 
-type myState = {
+type MyState = {
   toggleDialog: boolean;
   userCurrencyBudget: number;
 };
 
-class OngoingTripInfo extends React.Component<myProps, myState> {
-  constructor(props: myProps) {
+class OngoingTripInfo extends React.Component<MyProps, MyState> {
+  constructor(props: MyProps) {
     super(props);
     this.state = {
       toggleDialog: false,
@@ -69,12 +71,12 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
     ownerId: string
   ) {
     if (userId === ownerId) {
-      const request_query = myFirestore
+      const requestQuery = myFirestore
         .collection("users")
         .doc(ownerId)
         .collection("requests")
         .where("tripId", "==", tripId);
-      request_query.get().then((data: any) => {
+      requestQuery.get().then((data: firebase.firestore.QuerySnapshot) => {
         data.forEach((doc: any) => {
           doc.ref.delete();
         });
@@ -149,7 +151,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               ></img>
               {
                 countriesToCurrencies.find(
-                  (item: any) =>
+                  (item: CountryToCurrency) =>
                     this.props.ongoingTrips[this.props.currentOngoingTripIndex]
                       .countryCode === item.countryCode
                 ).country
@@ -197,11 +199,11 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               <ul className="ul-test">
                 {this.props.ongoingTrips[
                   this.props.currentOngoingTripIndex
-                ].waypoints.map((l: any, i: number) => {
+                ].waypoints.map((waypoint: Waypoint) => {
                   return (
                     <>
                       <Typography className="noWrapper">
-                        <li>{l.location}</li>
+                        <li>{waypoint.location}</li>
                       </Typography>
                     </>
                     // <ListItem key={i} className="tripLocation">
@@ -223,7 +225,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               }{" "}
               {
                 countriesToCurrencies.find(
-                  (item: any) =>
+                  (item: CountryToCurrency) =>
                     this.props.ongoingTrips[this.props.currentOngoingTripIndex]
                       .currencyCode === item.currencyCode
                 ).currency
@@ -243,7 +245,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                           }
                         ])
                         .find(
-                          (item: any) =>
+                          (item: CountryToCurrency) =>
                             this.props.userCurrencyCode === item.currencyCode
                         ).currency
                     : ""
@@ -310,7 +312,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                   <img
                     src={
                       this.props.users.find(
-                        (user: any) =>
+                        (user: User) =>
                           user.id ===
                           this.props.ongoingTrips[
                             this.props.currentOngoingTripIndex
@@ -320,7 +322,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                     className="profile-picture"
                     alt={
                       this.props.users.find(
-                        (user: any) =>
+                        (user: User) =>
                           user.id ===
                           this.props.ongoingTrips[
                             this.props.currentOngoingTripIndex
@@ -334,7 +336,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                   />
                   {
                     this.props.users.find(
-                      (user: any) =>
+                      (user: User) =>
                         user.id ===
                         this.props.ongoingTrips[
                           this.props.currentOngoingTripIndex
@@ -355,13 +357,12 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
               <div className="memberContainer">
                 {this.props.ongoingTrips[
                   this.props.currentOngoingTripIndex
-                ].memberIds.map((m: any, i: number) => {
-                  const nickname = this.props.users.find(
-                    (u: { id: any }) => u.id === m
-                  ).nickname;
-                  const photoUrl = this.props.users.find(
-                    (u: { id: any }) => u.id === m
-                  ).photoUrl;
+                ].memberIds.map((memberId: string, i: number) => {
+                  const user = this.props.users.find(
+                    (u: { id: string }) => u.id === memberId
+                  );
+                  const nickname = user.nickname;
+                  const photoUrl = user.photoUrl;
                   return (
                     <div>
                       <Button
@@ -373,7 +374,7 @@ class OngoingTripInfo extends React.Component<myProps, myState> {
                         onClick={async () => {
                           await this.props.clearToggle();
                           await this.props.onChangeDisplayProfile(undefined);
-                          this.props.onChangeDisplayProfile(m);
+                          this.props.onChangeDisplayProfile(memberId);
                         }}
                       >
                         <img

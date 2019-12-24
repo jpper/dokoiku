@@ -15,7 +15,25 @@ import {
 import Rating from "@material-ui/lab/Rating";
 import "../styles/Reviews.css";
 
-export default class Reviews extends Component<any, any> {
+interface Review {
+  tripName: string;
+  reviewer: string;
+  reviews: string;
+  rating: number;
+  date: string;
+}
+
+interface ReviewsState {
+  reviewInfo: Review[];
+  isLoading: boolean;
+}
+
+interface ReviewsProps {
+  userId: string;
+  tripId?: string;
+}
+
+export default class Reviews extends Component<ReviewsProps, ReviewsState> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -32,7 +50,7 @@ export default class Reviews extends Component<any, any> {
       .get();
 
     await result.docs.forEach(async res => {
-      if (this.props.tripId === undefined) {
+      if (this.props.tripId === null) {
         await this.setReviewInfo(res);
         return;
       }
@@ -48,7 +66,7 @@ export default class Reviews extends Component<any, any> {
     });
   }
 
-  setReviewInfo = async (res: any) => {
+  setReviewInfo = async (res: firebase.firestore.QueryDocumentSnapshot) => {
     const reviewerResult = await res.data().reviewer.get();
     const reviewerName = reviewerResult.data().nickname;
 
@@ -80,7 +98,7 @@ export default class Reviews extends Component<any, any> {
         <div className="reviews">
           {/* <p>Reviews</p> */}
           <List>
-            {this.state.reviewInfo.map((review: any, index: any) => {
+            {this.state.reviewInfo.map((review: Review, index: number) => {
               return (
                 <div key={index}>
                   {index > 0 && <Divider />}
