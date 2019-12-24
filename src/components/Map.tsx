@@ -10,12 +10,10 @@ import axios from "axios";
 import { Card, Typography, CardMedia } from "@material-ui/core";
 
 import "../styles/Map.css";
-import { Trip } from "../redux/stateTypes";
-
 require("dotenv").config();
 
 type MapProps = {
-  trips: Trip[];
+  trips: any;
   currentTripIndex: number;
 };
 
@@ -154,7 +152,8 @@ class Map extends React.Component<MapProps, MapState> {
                   .startLocation,
                 waypoints: this.props.trips[this.props.currentTripIndex]
                   .waypoints,
-                travelMode: google.maps.TravelMode.DRIVING
+                travelMode: this.props.trips[this.props.currentTripIndex]
+                  .travelMode
               }}
               callback={this.directionsCallback}
             />
