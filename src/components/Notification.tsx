@@ -15,14 +15,23 @@ import Profile from "./Profile";
 import "../styles/Notification.css";
 
 type myProps = {
-  requests: any;
-  users: any;
+  requests: Array<string>;
+  users: Users;
   ongoingTrips: any;
   userId: string;
   removeRequest: any;
   onChangeDisplayProfile: any;
   displayProfile: string;
 };
+
+//advanced types
+type Users = {
+  id: string;
+}
+
+type User = {
+  id: string;
+}
 
 const mapStateToProps = (state: any) => {
   return {
@@ -110,7 +119,7 @@ class Notification extends React.Component<myProps, any> {
         {this.props.requests.length ? (
           this.props.requests.map((request: any) => {
             const user = this.props.users.find(
-              (user: any) => user.id === request.fromId
+              (user: User) => user.id === request.fromId
             );
             console.log(user);
             return (
