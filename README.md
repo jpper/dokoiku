@@ -2,20 +2,27 @@
 
 ### A senior project for Code Chrysalis
 
+![Screenshot](./screenshots/screenshot1.png)
+
+---
+
 ## Table of Contents
 
 1. [Introduction](#introduction)
 2. [How to Use](#how-to-use)
 3. [For Developers](#for-developers)
-   <!-- 3. [Navigating the App](#navigating-the-app) -->
 4. [Technology Used](#technology-used)
 5. [Future Features](#future-features)
 6. [Contributors](#contributors)
+
+---
 
 ## Introduction
 
 Dokoiku is a full-stack, single page application that allows users to connect with each other to plan trips.
 It is also [available on Google App Engine](https://dokoiku.genoatlas.com/).
+
+---
 
 ## How to Use
 
@@ -34,11 +41,17 @@ It is also [available on Google App Engine](https://dokoiku.genoatlas.com/).
           Plan the trips you are a member of! Use the Notes and Messages
           features to coordinate with members of your trip.
         </p>
+        <h3><b>Past Trips:</b></h3>
+        <p>
+          Look back at your past trips, and write reviews for users you traveled with.
+        </p>
         <h3><b>Profile:</b></h3>
         <p>
           Customize your profile! You can also include links to your social
           media accounts!
         </p>
+
+---
 
 ## For Developers
 
@@ -58,7 +71,7 @@ yarn start
 
 Then go to **localhost:3000** to see the app.
 
-<!-- ## Navigating the App -->
+---
 
 ## Technology Used
 
@@ -76,6 +89,8 @@ Backend and Deployment:
 - Firebase
 - Rakuten Rapid API
 
+---
+
 ## Future Features
 
 - Friend requests and direct messaging
@@ -84,6 +99,8 @@ Backend and Deployment:
 - Multiple modes of transit
 
 ...and more!
+
+---
 
 ## Contributors
 
