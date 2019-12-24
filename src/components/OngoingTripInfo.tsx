@@ -30,32 +30,33 @@ import ChatIcon from "@material-ui/icons/Chat";
 import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/TripInfo.css";
 
-type myProps = {
-  ongoingTrips: any;
+import { User, Trip } from "../redux/stateTypes";
+
+type MyProps = {
+  ongoingTrips: Trip[];
   currentOngoingTripIndex: number;
-  onShowChat: any;
-  onPreviousTrip: any;
-  onShowEdit: any;
-  onNextTrip: any;
-  onJoinTrip?: any;
+  mapTripMessage: number;
   userId: string;
-  users: any;
-  toggleNotes: any;
-  toggleMessages: any;
-  mapTripMessage: any;
-  onChangeDisplayProfile: any;
   displayProfile: string;
   userCurrencyCode: string;
-  clearToggle: any;
+  users: User[];
+  onShowChat: () => void;
+  onPreviousTrip: () => void;
+  onShowEdit: () => void;
+  onNextTrip: () => void;
+  toggleNotes: () => void;
+  toggleMessages: () => void;
+  onChangeDisplayProfile: (profile: string | undefined) => void;
+  clearToggle: () => void;
 };
 
-type myState = {
+type MyState = {
   toggleDialog: boolean;
   userCurrencyBudget: number;
 };
 
-class OngoingTripInfo extends React.Component<myProps, myState> {
-  constructor(props: myProps) {
+class OngoingTripInfo extends React.Component<MyProps, MyState> {
+  constructor(props: MyProps) {
     super(props);
     this.state = {
       toggleDialog: false,

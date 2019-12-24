@@ -15,17 +15,7 @@ import {
 import Rating from "@material-ui/lab/Rating";
 import "../styles/Reviews.css";
 
-type myProps = {
-  userId: string;
-  tripId?: string;
-};
-
-type myStates = {
-  reviewInfo: ReviewInfo[];
-  isLoading: boolean;
-};
-
-interface ReviewInfo {
+interface Review {
   tripName: string;
   reviewer: string;
   reviews: string;
@@ -33,8 +23,18 @@ interface ReviewInfo {
   date: string;
 }
 
-export default class Reviews extends Component<myProps, myStates> {
-  constructor(props: myProps) {
+interface ReviewsState {
+  reviewInfo: Review[];
+  isLoading: boolean;
+}
+
+interface ReviewsProps {
+  userId: string;
+  tripId?: string;
+}
+
+export default class Reviews extends Component<ReviewsProps, ReviewsState> {
+  constructor(props: any) {
     super(props);
     this.state = {
       reviewInfo: [],
@@ -50,7 +50,7 @@ export default class Reviews extends Component<myProps, myStates> {
       .get();
 
     await result.docs.forEach(async res => {
-      if (this.props.tripId === undefined) {
+      if (this.props.tripId === null) {
         await this.setReviewInfo(res);
         return;
       }
@@ -98,7 +98,7 @@ export default class Reviews extends Component<myProps, myStates> {
         <div className="reviews">
           {/* <p>Reviews</p> */}
           <List>
-            {this.state.reviewInfo.map((review: ReviewInfo, index: number) => {
+            {this.state.reviewInfo.map((review: Review, index: number) => {
               return (
                 <div key={index}>
                   {index > 0 && <Divider />}

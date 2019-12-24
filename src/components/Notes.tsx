@@ -6,9 +6,16 @@ type myProps = {
   tripId: string;
 };
 
+declare global {
+  interface Window {
+    CodeMirror: any;
+    Firepad: any;
+  }
+}
+
 class Notes extends Component<myProps, {}> {
   componentDidMount() {
-    const windowMod: any = window;
+    const windowMod: Window & typeof globalThis = window;
 
     //// Get Firebase Database reference.
     const firepadRef = this.getExampleRef();
