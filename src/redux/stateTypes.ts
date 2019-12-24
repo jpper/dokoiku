@@ -29,15 +29,12 @@ export type Trip = {
   tripId: string;
 };
 
-<<<<<<< HEAD
-=======
 export type Message = {
   content: string;
   fromId: string;
   moment: firebase.firestore.Timestamp;
 };
 
->>>>>>> 167d9772624a14dcf528874e0dd840536880bd92
 export type Request = {
   fromId: string;
   tripId: string;
