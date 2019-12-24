@@ -51,7 +51,6 @@ export default class Reviews extends Component<ReviewsProps, ReviewsState> {
 
     await result.docs.forEach(async res => {
       if (this.props.tripId === null || this.props.tripId === undefined) {
-        console.log("TEST");
         await this.setReviewInfo(res);
         return;
       }
@@ -72,9 +71,7 @@ export default class Reviews extends Component<ReviewsProps, ReviewsState> {
     const reviewerName = reviewerResult.data().nickname;
 
     const tripResult = await res.data().tripId.get();
-    console.log("TEST");
     if (!tripResult.exists) return; // If past trips delete, skip the info
-    console.log("TEST2");
     const tripName = tripResult.data().name;
 
     const reviews = await res.data().message;
