@@ -66,7 +66,7 @@ export default class Reviews extends Component<ReviewsProps, ReviewsState> {
     });
   }
 
-  setReviewInfo = async (res: any) => {
+  setReviewInfo = async (res: firebase.firestore.QueryDocumentSnapshot) => {
     const reviewerResult = await res.data().reviewer.get();
     const reviewerName = reviewerResult.data().nickname;
 
@@ -98,7 +98,7 @@ export default class Reviews extends Component<ReviewsProps, ReviewsState> {
         <div className="reviews">
           {/* <p>Reviews</p> */}
           <List>
-            {this.state.reviewInfo.map((review: any, index: any) => {
+            {this.state.reviewInfo.map((review: Review, index: number) => {
               return (
                 <div key={index}>
                   {index > 0 && <Divider />}

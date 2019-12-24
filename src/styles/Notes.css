@@ -4,3 +4,7 @@
   margin: auto;
   min-height: 400px;
 }
+
+a.powered-by-firepad {
+  display: none !important;
+}

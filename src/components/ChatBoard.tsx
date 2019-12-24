@@ -1,7 +1,7 @@
 import moment from "moment";
 import uuidv4 from "uuid/v4";
 import { firestore } from "firebase";
-import React, { Component } from "react";
+import React, { Component, Dispatch, ChangeEvent } from "react";
 import { myFirestore } from "../config/firebase";
 import { connect } from "react-redux";
 import {
@@ -27,18 +27,32 @@ import {
 import SendIcon from "@material-ui/icons/Send";
 import "../styles/ChatBoard.css";
 
-const mapStateToProps = (state: any) => ({
+type MapStateToProps = {
+  userId: string;
+  userName: string;
+  currentTripMessages: firestore.DocumentData[];
+  messageListener: () => void;
+};
+
+type MapDispatchToProps = {
+  clearMessage: () => void;
+  clearListener: () => void;
+  getMessages: () => void;
+  sendMessage: () => void;
+};
+
+const mapStateToProps = (state: MapStateToProps) => ({
   userId: state.userId,
   userName: state.userName,
   tripMessages: state.currentTripMessages,
   messageListener: state.messageListener
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
   clearMessage: () => {
     dispatch(clearMessages());
   },
-  clearListener: (listener: any) => {
+  clearListener: (listener: Function) => {
     if (listener !== undefined) {
       // Stop listening for changes
       listener();
@@ -57,7 +71,7 @@ const mapDispatchToProps = (dispatch: any) => ({
               change.doc
                 .data()
                 .fromId.get()
-                .then((doc: any) => {
+                .then((doc: firestore.DocumentData) => {
                   const msg = change.doc.data();
                   msg.nickname = doc.data().nickname;
                   msg.photoUrl = doc.data().photoUrl;
@@ -102,11 +116,11 @@ interface ChatBoardState {
 
 type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> & {
-    tripId: any;
+    tripId: string;
   };
 
 class ChatBoard extends Component<Props, ChatBoardState> {
-  private messagesEnd: any;
+  private messagesEnd: HTMLDivElement;
 
   constructor(props: Props) {
     super(props);
@@ -133,7 +147,7 @@ class ChatBoard extends Component<Props, ChatBoardState> {
     this.scrollToBottom();
   }
 
-  handleChange(e: any) {
+  handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     this.setState({
       messageToBeSent: e.currentTarget.value
     });
@@ -153,7 +167,7 @@ class ChatBoard extends Component<Props, ChatBoardState> {
             <Card className="card">
               <List>
                 {this.props.tripMessages.length ? (
-                  this.props.tripMessages.map((msg: any) => (
+                  this.props.tripMessages.map((msg: firestore.DocumentData) => (
                     <div key={msg.moment.seconds}>
                       <ListItem alignItems="flex-start">
                         <ListItemAvatar>
