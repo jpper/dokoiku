@@ -50,7 +50,7 @@ export default class Reviews extends Component<ReviewsProps, ReviewsState> {
       .get();
 
     await result.docs.forEach(async res => {
-      if (this.props.tripId === null) {
+      if (this.props.tripId === null || this.props.tripId === undefined) {
         await this.setReviewInfo(res);
         return;
       }
