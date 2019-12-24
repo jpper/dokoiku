@@ -28,3 +28,8 @@ export type Trip = {
   travelMode: string;
   tripId: string;
 };
+
+export type Request = {
+  fromId: string;
+  tripId: string;
+};
