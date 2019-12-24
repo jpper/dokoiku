@@ -37,6 +37,7 @@ import "../styles/TripInfo.css";
 import "../styles/PastTripInfo.css";
 import Reviews from "./Reviews";
 import countriesToCurrencies from "../data/countries_to_currencies.json";
+import { Trip } from "../redux/stateTypes";
 
 enum PageStatus {
   Map,
@@ -46,15 +47,15 @@ enum PageStatus {
 }
 
 interface myStates {
-  modalStatus: any;
+  modalStatus: boolean[];
   targetUser: number;
   rating: number;
   message: string;
   isError: boolean;
   pageStatus: PageStatus;
-  pastTrips: any[];
+  pastTrips: Trip[];
   currentPastTripIndex: number;
-  userCurrencyBudget: any;
+  userCurrencyBudget: number;
 }
 
 class PastTripInfo extends React.Component<any, myStates> {
