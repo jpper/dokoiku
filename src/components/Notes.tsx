@@ -8,7 +8,7 @@ type myProps = {
 
 declare global {
   interface Window {
-    CodeMirror: any;
+    CodeMirror: (arg0: HTMLElement, arg1: Object) => void;
     Firepad: any;
   }
 }
