@@ -61,23 +61,11 @@ function About() {
         </p>
         <ul>
           The Dokoiku Team:
-          <a href="https://github.com/followdiallo">
-            <li>Diallo Spears</li>
-          </a>
-          <a href="https://github.com/Imamachi-n">
-            <li>Naoto Imamachi</li>
-          </a>
-          <a href="https://github.com/nlandon2">
-            <li>Nate Landon</li>
-          </a>
-          <a href="https://github.com/baruishi">
-            <li>Waldemar Ishibashi</li>
-          </a>
-          <a href="https://github.com/Ziyu-Chen">
-            <li>Ziyu Chen</li>
+          <a href="https://github.com/jpper">
+            <li>Jonathan Perry</li>
           </a>
         </ul>
-        <a href="https://github.com/team-dokoiku/dokoiku">
+        <a href="https://github.com/jpper/dokoiku">
           <GitHubIcon fontSize="large" />
         </a>
       </div>
